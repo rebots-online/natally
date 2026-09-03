@@ -1,0 +1,14 @@
+# natally — house rules: tracked dist/ (release surface), everything toolchain-internal ignored
+node_modules/
+src-tauri/target/
+target/
+src-tauri/gen/android/app/build/
+build/
+dist/
+!/dist/
+.env
+.tmp/
+STAGING_*
+.codegraph/
+.playwright-mcp/
+*.log
