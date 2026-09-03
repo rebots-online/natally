@@ -21,7 +21,7 @@ silently override earlier ones; they cite them.
 | # | Assumption |
 |---|---|
 | A1 | The **web PWA leg has no voice**: browsers can only play through the WebView, which D7 forbids. The web leg ships charts + text companion; the voice control shows honest absence. |
-| A2 | Namespace `mba.robin.natally`; origin `https://forgejo.robin.mba/rcheung/natally.git`; branch `master`; license AGPL-3.0-or-later (forced by sweph-wasm). |
+| A2 | Namespace `mba.robin.natally`; origin `https://forgejo.robin.mba/rcheung/natally.git`; branch `master`. ~~License AGPL-3.0-or-later~~ superseded by D9. |
 | A3 | Frozen model mirror `RobinsAIWorld/natally-models` on Hugging Face (GGUF, Kokoro ONNX, voices, `manifest.json` with sha256). A working HF write token is an operator precondition (both PATs in Admin-Manual returned 401 on 2026-08-18). |
 | A4 | Dark only: the character is drawn for night; gold seams need a dark ground. |
 
@@ -38,3 +38,18 @@ one-to-one once `src/` exists.
 - CC13 holds: GitHub is a code-only mirror; **no LFS objects are pushed to GitHub**
   (`GIT_LFS_SKIP_PUSH=1`). Release binaries in `dist/` stay LFS-tracked and wait for forgejo.
   The mascot source loop (485 KB) was taken out of LFS so the footage lives in plain git.
+
+## 2026-09-03 — License and visibility (operator)
+
+| # | Decision | Rules out |
+|---|---|---|
+| D9 | **License is proprietary** (all rights reserved). The GitHub repo `rebots-online/natally` is **public** so reading tools (e.g. NotebookLM) can reach it: source-available, not open-source. | AGPL; any copyleft dependency shipped without a commercial license. |
+
+**Open consequence for architecture (must be resolved before `DOCS/ARCHITECTURE.md`):**
+Swiss Ephemeris (`sweph-wasm`, the engine Kintsugi used) is AGPL-3.0 unless Astrodienst's paid
+Swiss Ephemeris Professional License is purchased. Under D9 the architecture picks exactly one of:
+(a) **purchase the Astrodienst professional license** and keep Swiss Ephemeris (arcsecond
+accuracy, Chiron, all house systems for free), or (b) **`astronomy-engine` (MIT)** for planetary
+positions plus in-house house-system math (Placidus, Koch, Equal, Whole Sign, etc. are pure
+spherical trigonometry) and no Chiron unless a separate minor-body solution is added.
+Recommendation: (a) if the one-time fee fits; otherwise (b) with Chiron listed as honest absence.

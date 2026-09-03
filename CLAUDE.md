@@ -37,6 +37,9 @@ WebView audio** (D7). Full decision log: `DOCS/DECISIONS.md`.
 - Type floor 12 px; one navigation system; one conversation; the Stage's mascot states are
   driven only by real events.
 
+## License
+Proprietary (D9). No copyleft dependency ships without a commercial license; the ephemeris choice is an open architecture decision recorded in `DOCS/DECISIONS.md`.
+
 ## Current state
 Pre-implementation: governance files, `scripts/update-version.sh`, and the Figma design pass.
 No `src/`, no `src-tauri/`, no codegraph index yet (nothing to index).

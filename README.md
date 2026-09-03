@@ -7,7 +7,7 @@ conversation. Charts are the things she shows you while she talks.
 - Identity: `mba.robin.natally` (Tauri identifier, Android applicationId, package name)
 - Targets: Linux (AppImage, deb), Windows 11 (exe + NSIS cross-built on Linux; msi + msix on a
   Windows host), Android (apk, aab), web (charts + text companion; voice is native-only)
-- License: **AGPL-3.0-or-later** (Swiss Ephemeris via `sweph-wasm` is AGPL; see `LICENSE`)
+- License: **Proprietary** (all rights reserved; source published for reading and reference only, see `LICENSE`)
 - Origin: `https://forgejo.robin.mba/rcheung/natally.git`, branch `master`
 
 ## What ships in v1
@@ -45,4 +45,4 @@ Kintsugi (`mba.robin.kintsugitarot`) is the only reference project. natally is a
 rewrite: lessons from Kintsugi are recorded as decisions and fixtures; no code is copied.
 The mascot artwork is the operator's own and is shared with Kintsugi by design.
 
-Copyright (C) 2026 Robin L. M. Cheung, MBA.
+Copyright (C) 2026 Robin L. M. Cheung, MBA. All rights reserved. Proprietary.
