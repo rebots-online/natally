@@ -119,6 +119,18 @@
   "screen-plate-natal": {
    "withHouses": "18:212",
    "timeUnknown": "18:280"
+  },
+  "screen-atlas-natal": {
+   "mobile": "19:2",
+   "timeUnknown": "19:382"
+  },
+  "screen-atlas-synastry": {
+   "mobile": "20:2",
+   "oneWithoutTime": "20:232"
+  },
+  "screen-atlas-today": {
+   "mobile": "21:2",
+   "noPerson": "21:172"
   }
  },
  "completedSteps": [
@@ -138,7 +150,10 @@
   "P4.screen-conversation",
   "P4.screen-first-light",
   "P4.screen-splash",
-  "P4.screen-plate-natal"
+  "P4.screen-plate-natal",
+  "P4.screen-atlas-natal",
+  "P4.screen-atlas-synastry",
+  "P4.screen-atlas-today"
  ],
  "remotes": {
   "github": "https://github.com/rebots-online/natally.git (push target while forgejo is down)",

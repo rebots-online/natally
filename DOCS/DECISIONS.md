@@ -65,3 +65,10 @@ spec prose only, `~/forgejo/natally/` is an empty stray (index metadata only, no
 operator confirms it was never created as a project; left in place per I-0).
 **Action:** operator surfaces the side project from the Windows machine; architecture then
 decides between it, the Astrodienst professional license, and a permissive engine.
+
+## 2026-09-03 — Roadmap after the design pass (operator)
+
+| # | Direction | Notes |
+|---|---|---|
+| R1 | **Alby Market web-only edition first.** Once the look and the engine are clean, ship a web-only build listed on the Alby Market (no native voice on web per A1; charts + text companion). | Precedes the multiplatform v1 Milestone 1 in priority. Architecture must keep the web leg a first-class build target with its own stamped artifact. |
+| R2 | **x402 / Alby-marketplace-aligned edition next.** Integrate x402 (HTTP 402 Lightning payments) in the marketplace-aligned version. | Billing stays a v2 checklist; the interface seam (`billing.consume`) is designed in at architecture so R2 does not re-architect. |
