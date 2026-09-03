@@ -29,3 +29,12 @@ silently override earlier ones; they cite them.
 
 Recorded in `LIBS/UI/FIGMA/DESIGN.md` and `TOKENS.md`; the code `@theme` block mirrors them
 one-to-one once `src/` exists.
+
+## 2026-09-03 — Remote arrangement while forgejo is down (operator)
+
+- `forgejo.robin.mba` is unreachable "until further notice". Commits push **frequently to
+  GitHub `rebots-online/natally`** (remote `github`) for now. `origin` stays pointed at forgejo
+  for when it returns (Admin-Manual: forgejo-authoritative, CC13).
+- CC13 holds: GitHub is a code-only mirror; **no LFS objects are pushed to GitHub**
+  (`GIT_LFS_SKIP_PUSH=1`). Release binaries in `dist/` stay LFS-tracked and wait for forgejo.
+  The mascot source loop (485 KB) was taken out of LFS so the footage lives in plain git.
