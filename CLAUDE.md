@@ -38,7 +38,7 @@ WebView audio** (D7). Full decision log: `DOCS/DECISIONS.md`.
   driven only by real events.
 
 ## License
-Proprietary (D9). No copyleft dependency ships without a commercial license; the ephemeris choice is an open architecture decision recorded in `DOCS/DECISIONS.md`.
+AGPL-3.0-or-later for now, proprietary as the target once the in-house ephemeris replaces Swiss Ephemeris (D9). The ephemeris successor is a pending operator input recorded in `DOCS/DECISIONS.md`.
 
 ## Current state
 Pre-implementation: governance files, `scripts/update-version.sh`, and the Figma design pass.

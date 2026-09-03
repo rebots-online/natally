@@ -104,6 +104,21 @@
    "Speaking": "13:215",
    "Asleep": "13:332",
    "Error": "13:448"
+  },
+  "screen-first-light": {
+   "name": "15:2",
+   "date": "15:44",
+   "place": "15:94",
+   "timeUnknown": "15:148"
+  },
+  "screen-splash": {
+   "loading": "17:11",
+   "ready": "17:22",
+   "desktop": "17:33"
+  },
+  "screen-plate-natal": {
+   "withHouses": "18:212",
+   "timeUnknown": "18:280"
   }
  },
  "completedSteps": [
@@ -120,7 +135,10 @@
   "P3.TurnYou",
   "P3.Plate",
   "P3.Wheel",
-  "P4.screen-conversation"
+  "P4.screen-conversation",
+  "P4.screen-first-light",
+  "P4.screen-splash",
+  "P4.screen-plate-natal"
  ],
  "remotes": {
   "github": "https://github.com/rebots-online/natally.git (push target while forgejo is down)",
@@ -162,5 +180,9 @@
   "retrograde": "5:114",
   "applying": "5:117",
   "separating": "5:120"
- }
+ },
+ "pendingFixes": [
+  "first-light candidate rows: hug height after VERTICAL switch",
+  "sample birth date 1990-04-20 -> 1990-05-02 (Sun 12\u00b0 Taurus consistency) in Plate provenance + first-light answer"
+ ]
 }

@@ -43,7 +43,7 @@ one-to-one once `src/` exists.
 
 | # | Decision | Rules out |
 |---|---|---|
-| D9 | **License is proprietary** (all rights reserved). The GitHub repo `rebots-online/natally` is **public** so reading tools (e.g. NotebookLM) can reach it: source-available, not open-source. | AGPL; any copyleft dependency shipped without a commercial license. |
+| D9 | **License: AGPL-3.0-or-later for now, proprietary as the target.** While Swiss Ephemeris (`sweph-wasm`, AGPL) is the engine, the repo stays AGPL and **public** (`rebots-online/natally`; public also serves reading tools such as NotebookLM). Once the operator's in-house ephemeris supersedes Swiss Ephemeris, the license moves to proprietary (amended 2026-09-03 after the operator's clarification). | Shipping proprietary with an AGPL ephemeris. |
 
 **Open consequence for architecture (must be resolved before `DOCS/ARCHITECTURE.md`):**
 Swiss Ephemeris (`sweph-wasm`, the engine Kintsugi used) is AGPL-3.0 unless Astrodienst's paid
@@ -53,3 +53,15 @@ accuracy, Chiron, all house systems for free), or (b) **`astronomy-engine` (MIT)
 positions plus in-house house-system math (Placidus, Koch, Equal, Whole Sign, etc. are pure
 spherical trigonometry) and no Chiron unless a separate minor-body solution is added.
 Recommendation: (a) if the one-time fee fits; otherwise (b) with Chiron listed as honest absence.
+
+### Ephemeris successor — pending operator input (2026-09-03)
+
+The operator recalls an in-house project intended to supersede vendoring Swiss Ephemeris
+("maybe a side project with GLM on the other computer, in Windows, the past week"). Searched
+this workstation (msi4090): **not present**. Candidates found here are unrelated:
+`~/Downloads/jules_Kintsugi-Unbroken_Add-Astrology-API-SwissEphemerust-…` is a July Jules diff
+adding a Rust *binding* to Swiss Ephemeris (still AGPL), `~/github/astrosyn-tauri/` is 2025
+spec prose only, `~/forgejo/natally/` is an empty stray (index metadata only, no source;
+operator confirms it was never created as a project; left in place per I-0).
+**Action:** operator surfaces the side project from the Windows machine; architecture then
+decides between it, the Astrodienst professional license, and a permissive engine.
