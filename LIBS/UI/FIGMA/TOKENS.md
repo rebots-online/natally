@@ -58,3 +58,19 @@ Floor for any other text: 12 px.
 `glyphs/natally-glyphs.svg` — 36 stroke glyphs (12 signs, 11 bodies, 2 nodes, 7 aspects, retrograde,
 applying, separating) on a 24×24 grid, stroke 1.5, round caps, `currentColor`. Imported into
 Figma as components on the **Glyphs** page; used at 16 / 20 / 28.
+
+## Components (page `Components`, node ids in `natally v1`)
+
+| Component | Node | Variants / notes |
+|---|---|---|
+| Button | 6:8 | primary (gilt) · secondary (hairline) · quiet |
+| Chip | 6:13 | context chip; active = orbglow hairline |
+| TopBar | 6:16 | menu · wordmark · context chip |
+| Composer | 6:24 | plus · field · voice · one gilt send |
+| Stage | 7:20 | State = Asleep 7:3 · Waking 7:5 · Idle 7:9 · Thinking 7:12 · Speaking 7:16 (Listening, Delighted, Error composed per `mascot/STATES.md`) |
+| Turn/Her | 9:3 | gilt glyph in the margin, page text |
+| Turn/You | 9:12 | right-aligned, orbglow hairline |
+| Plate | 9:15 | title · body slot · provenance foot (`Placidus · 1990-05-02 14:32 · Malmö`) · Open |
+| Wheel/structure | 10:5 | 272 px, AC/MC labels, cusps are placed by the engine at runtime |
+
+Pages: Cover 0:1 · Tokens · Components · Journeys 4:18 · Glyphs · one page per `screen-*`. Frame ids per screen are listed in each `screens/<id>/SCREEN.md`; the full map is `STATE-LEDGER.json`.

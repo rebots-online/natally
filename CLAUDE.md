@@ -8,7 +8,7 @@ only Kintsugi** (`~/CascadeProjects/Kintsugi-Unbroken/tauri2/`). Kintsugi is stu
 lessons and anti-patterns; **no code is ported** (D2). No other project is a source or a
 reference (D1). The companion (chatbot) and the animated mascot **named natally** are the
 core USP (D4, D5, D6). Voice is required, Kokoro, native on all installed platforms, **never
-WebView audio** (D7). Full decision log: `DOCS/DECISIONS.md`.
+WebView audio** (D7); on the web leg Kokoro runs in-browser via onnxruntime-web and `speechSynthesis` is never called (D7a). Full decision log: `DOCS/DECISIONS.md`.
 
 ## Phase gates (I2, TC12)
 1. `LIBS/UI/FIGMA/` holds the frozen screen set + `DESIGN.md` + `TOKENS.md`. The operator
@@ -41,5 +41,13 @@ WebView audio** (D7). Full decision log: `DOCS/DECISIONS.md`.
 AGPL-3.0-or-later for now, proprietary as the target once the in-house ephemeris replaces Swiss Ephemeris (D9). The ephemeris successor is a pending operator input recorded in `DOCS/DECISIONS.md`.
 
 ## Current state
-Pre-implementation: governance files, `scripts/update-version.sh`, and the Figma design pass.
-No `src/`, no `src-tauri/`, no codegraph index yet (nothing to index).
+
+- **2026-09-03 — Phase 0.5 done, frozen, awaiting operator clearance (TC12 §9).** Figma file
+  `natally v1` (key `TmZDFVgkUeeL1VEYWtuaJL`): tokens, type ramp, glyph set, nine components,
+  eleven `screen-*` frame sets (+ desktop conversation), Journeys page. Renders, `SCREEN.md`,
+  `TOKENS.md`, `STATE-LEDGER.json` under `LIBS/UI/FIGMA/`.
+- Nothing under `src/` yet. `DOCS/ARCHITECTURE.md`, `CHECKLIST.md`, `DOCS/TEST_RUBRIC.md` begin
+  only after the operator says "cleared".
+- Open items: ephemeris successor (operator's Windows machine); HF write token for
+  `RobinsAIWorld/natally-models`; forgejo return (push `origin` + LFS); R1 Alby Market
+  web-only edition planning.

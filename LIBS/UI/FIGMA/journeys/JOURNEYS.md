@@ -17,3 +17,7 @@ other surface exists.
 
 The **Journeys** page in the Figma file draws J1, J2, J4 and J6 as frame-to-frame flows; the
 others are single transitions already visible on their screens.
+
+## Figma
+
+Page `Journeys` (4:18), frame `Journeys` 27:2 — rows J1 27:5 · J2 27:25 · J4 27:55 · J6 27:80. Render: `journeys.png`. J3, J5, J7, J8, J9 are text-only here; their screens are all in the frozen set and they add no frame the four drawn rows do not already touch.

@@ -3,3 +3,8 @@
 **Variants:** mobile (stacked tables) · desktop (Atlas panel beside the conversation) · time unknown (Houses table replaced by honest absence) · engine error.
 **Content classes:** computed-fact tables; authored-static column labels.
 **Journeys:** J2, J9 (back returns to the conversation at the same scroll).
+
+## Frames (Figma `natally v1`)
+
+- `mobile` — node `19:2` — https://www.figma.com/design/TmZDFVgkUeeL1VEYWtuaJL?node-id=19-2
+- `timeUnknown` — node `19:382` — https://www.figma.com/design/TmZDFVgkUeeL1VEYWtuaJL?node-id=19-382

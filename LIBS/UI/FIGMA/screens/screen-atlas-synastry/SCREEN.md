@@ -3,3 +3,8 @@
 **Variants:** mobile · desktop · one person without birth time (overlays into that person's houses shown as honest absence; the other direction still computed).
 **Content classes:** computed-fact only.
 **Journeys:** J4.
+
+## Frames (Figma `natally v1`)
+
+- `mobile` — node `20:2` — https://www.figma.com/design/TmZDFVgkUeeL1VEYWtuaJL?node-id=20-2
+- `oneWithoutTime` — node `20:232` — https://www.figma.com/design/TmZDFVgkUeeL1VEYWtuaJL?node-id=20-232

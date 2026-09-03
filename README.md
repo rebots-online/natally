@@ -18,7 +18,7 @@ conversation. Charts are the things she shows you while she talks.
 | Synastry | Two people; cross-chart aspects with orbs; true house overlays from cusps; no scores, no labels |
 | Today | Current sky against a natal chart; hits with orb and applying/separating |
 | Companion | On-device language model (native llama.cpp on desktop and Android; WASM on web) speaking only from computed facts; a three-tier prompt fence; honest absence when no model is present |
-| Voice | Kokoro, synthesised and played natively in Rust on every installed platform; never WebView audio |
+| Voice | Kokoro on every leg. Native: synthesised and played in Rust. Web: Kokoro in the browser via onnxruntime-web. The browser's own speech engine is never used (D7, D7a) |
 | Mascot | natally, the same character as the Kintsugi oracle, with states driven only by real events |
 
 Out of scope for v1: tarot, journal, billing, composites and progressions, speech input,

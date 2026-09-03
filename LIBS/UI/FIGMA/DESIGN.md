@@ -54,7 +54,7 @@ shows the absence state.
 ## Anti-patterns (do not produce)
 Tabs per feature · a second navigation system · bubbles for her turns · gold as a fill on
 large areas · violet glow halos · text under 12 px · caps-tracked labels everywhere · unicode
-astrological glyphs in place of the glyph set · WebView audio · a progress bar on first
+astrological glyphs in place of the glyph set · the browser speech engine (`speechSynthesis`) on any leg · a progress bar on first
 light (real progress bars only on model download and engine load) · placeholder prose.
 
 ## Accessibility floor

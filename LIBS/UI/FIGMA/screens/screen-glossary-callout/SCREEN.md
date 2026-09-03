@@ -3,3 +3,7 @@
 **Variants:** none (content varies by term).
 **Content classes:** authored-static, labelled.
 **Journeys:** J2, J4.
+
+## Frames (Figma `natally v1`)
+
+- `overAtlas` — node `25:2` — https://www.figma.com/design/TmZDFVgkUeeL1VEYWtuaJL?node-id=25-2

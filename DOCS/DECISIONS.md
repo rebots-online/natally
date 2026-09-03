@@ -20,7 +20,7 @@ silently override earlier ones; they cite them.
 
 | # | Assumption |
 |---|---|
-| A1 | The **web PWA leg has no voice**: browsers can only play through the WebView, which D7 forbids. The web leg ships charts + text companion; the voice control shows honest absence. |
+| A1 | ~~The web PWA leg has no voice~~ **Retired 2026-09-03 by D7a** (see below). Original text: The web PWA leg has no voice: browsers can only play through the WebView, which D7 forbids. The web leg ships charts + text companion; the voice control shows honest absence. |
 | A2 | Namespace `mba.robin.natally`; origin `https://forgejo.robin.mba/rcheung/natally.git`; branch `master`. ~~License AGPL-3.0-or-later~~ superseded by D9. |
 | A3 | Frozen model mirror `RobinsAIWorld/natally-models` on Hugging Face (GGUF, Kokoro ONNX, voices, `manifest.json` with sha256). A working HF write token is an operator precondition (both PATs in Admin-Manual returned 401 on 2026-08-18). |
 | A4 | Dark only: the character is drawn for night; gold seams need a dark ground. |
@@ -70,5 +70,11 @@ decides between it, the Astrodienst professional license, and a permissive engin
 
 | # | Direction | Notes |
 |---|---|---|
-| R1 | **Alby Market web-only edition first.** Once the look and the engine are clean, ship a web-only build listed on the Alby Market (no native voice on web per A1; charts + text companion). | Precedes the multiplatform v1 Milestone 1 in priority. Architecture must keep the web leg a first-class build target with its own stamped artifact. |
+| R1 | **Alby Market web-only edition first.** Once the look and the engine are clean, ship a web-only build listed on the Alby Market (Kokoro voice on web too, per D7a: in-browser ONNX inference; charts + companion + voice). | Precedes the multiplatform v1 Milestone 1 in priority. Architecture must keep the web leg a first-class build target with its own stamped artifact. |
 | R2 | **x402 / Alby-marketplace-aligned edition next.** Integrate x402 (HTTP 402 Lightning payments) in the marketplace-aligned version. | Billing stays a v2 checklist; the interface seam (`billing.consume`) is designed in at architecture so R2 does not re-architect. |
+
+## 2026-09-03 — voice on every leg
+
+| # | Decision | Kintsugi lesson |
+|---|---|---|
+| D7a | **Kokoro on every version, including the web leg.** Operator: "kokoro all versions — never use built-in browser robo-voice". The thing D7 forbids is the browser's own speech engine (`speechSynthesis`, the "robo-voice"), never Kokoro's PCM. Native legs (Linux, Windows, Android): Kokoro synthesised **and played in Rust** (D7 unchanged). Web leg: Kokoro-82M runs **in the browser** via onnxruntime-web (WASM, WebGPU where present) with the same voices and the same `manifest.json`; its PCM is played through the Web Audio API because a browser has no other output. `speechSynthesis` is never called on any leg. Retires A1. | Kintsugi had no voice at all; the companion was text in a drawer. |
