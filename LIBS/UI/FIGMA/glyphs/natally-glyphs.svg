@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="display:none">
+  <!-- natally glyph set v1 — stroke-based, currentColor, 24×24. Sign glyphs, bodies, nodes, aspects, retrograde. -->
+  <defs>
+    <!-- signs -->
+    <symbol id="g-aries" viewBox="0 0 24 24"><path d="M12 21V9c0-3.5-2.5-6-5.5-5S4.5 9.5 6 11M12 9c0-3.5 2.5-6 5.5-5s2 5.5.5 7"/></symbol>
+    <symbol id="g-taurus" viewBox="0 0 24 24"><circle cx="12" cy="14.5" r="5.5"/><path d="M5.5 3.5c1 4 3.5 6 6.5 6s5.5-2 6.5-6"/></symbol>
+    <symbol id="g-gemini" viewBox="0 0 24 24"><path d="M5 4.5h14M5 19.5h14M9 4.5v15M15 4.5v15"/></symbol>
+    <symbol id="g-cancer" viewBox="0 0 24 24"><circle cx="7.5" cy="10" r="2.75"/><circle cx="16.5" cy="14" r="2.75"/><path d="M4.75 10c0-4.5 4-7 9.5-6M19.25 14c0 4.5-4 7-9.5 6"/></symbol>
+    <symbol id="g-leo" viewBox="0 0 24 24"><circle cx="8" cy="16.5" r="2.5"/><path d="M10.5 16.5c0-3.5-3.5-5.5-3.5-9a4.5 4.5 0 0 1 9 0c0 5-3 8-3 11.5a2 2 0 0 0 4 0"/></symbol>
+    <symbol id="g-virgo" viewBox="0 0 24 24"><path d="M3.5 6.5v9M3.5 8c0-2 3-2.5 3-.5v8M6.5 8c0-2 3-2.5 3-.5v8M9.5 8c0-2 3.5-2.5 3.5-.5v6c0 4-2.5 6.5-6 7.5M13 12.5c3 .5 5 2.5 5 5.5"/></symbol>
+    <symbol id="g-libra" viewBox="0 0 24 24"><path d="M4 18.5h16M4 14h4.5a4.5 4.5 0 1 1 7 0H20"/></symbol>
+    <symbol id="g-scorpio" viewBox="0 0 24 24"><path d="M3.5 6.5v9M3.5 8c0-2 3-2.5 3-.5v8M6.5 8c0-2 3-2.5 3-.5v8M9.5 8c0-2 3.5-2.5 3.5-.5v8c0 2.5 2 3.5 4.5 3l2-1M17.5 15.5l2.5 2-2 2.5"/></symbol>
+    <symbol id="g-sagittarius" viewBox="0 0 24 24"><path d="M5 19L19 5M11.5 5H19v7.5M8 11.5l4.5 4.5"/></symbol>
+    <symbol id="g-capricorn" viewBox="0 0 24 24"><path d="M4 6.5c2 0 3 1.5 3 3.5v6M7 8.5c0-2 3.5-3 4.5-1v7c0 3 2.5 4.5 5 3.5a3 3 0 1 0-1.5-5.5c-2 1-3 3-3 5.5"/></symbol>
+    <symbol id="g-aquarius" viewBox="0 0 24 24"><path d="M4 9.5l3-2.5 3 2.5 3-2.5 3 2.5 3-2.5M4 15.5l3-2.5 3 2.5 3-2.5 3 2.5 3-2.5"/></symbol>
+    <symbol id="g-pisces" viewBox="0 0 24 24"><path d="M6 4c4 3 4 13 0 16M18 4c-4 3-4 13 0 16M5.5 12h13"/></symbol>
+    <!-- bodies -->
+    <symbol id="g-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="7.5"/><circle cx="12" cy="12" r="1.25" fill="currentColor" stroke="none"/></symbol>
+    <symbol id="g-moon" viewBox="0 0 24 24"><path d="M14.5 3.5a9 9 0 1 0 0 17a7 7 0 0 1 0-17z"/></symbol>
+    <symbol id="g-mercury" viewBox="0 0 24 24"><path d="M8.5 3c0 2 1.5 3 3.5 3s3.5-1 3.5-3M12 14v7M9 18h6"/><circle cx="12" cy="10" r="4"/></symbol>
+    <symbol id="g-venus" viewBox="0 0 24 24"><circle cx="12" cy="9" r="5.5"/><path d="M12 14.5V21M9 18h6"/></symbol>
+    <symbol id="g-mars" viewBox="0 0 24 24"><circle cx="10" cy="14" r="5.5"/><path d="M14 10l6-6M14.5 4H20v5.5"/></symbol>
+    <symbol id="g-jupiter" viewBox="0 0 24 24"><path d="M5 7c2-3 6-2.5 6 1s-3 5-6 6.5h14M15 4v17"/></symbol>
+    <symbol id="g-saturn" viewBox="0 0 24 24"><path d="M8 3v13M5 7h6M8 12c2-2 6-1.5 6 1.5s-3 5-3 6.5a1.5 1.5 0 0 0 3 0"/></symbol>
+    <symbol id="g-uranus" viewBox="0 0 24 24"><path d="M6 3.5v10M18 3.5v10M6 8.5h12M12 8.5v6"/><circle cx="12" cy="17.5" r="3"/></symbol>
+    <symbol id="g-neptune" viewBox="0 0 24 24"><path d="M6 4c0 6 3 9 6 9s6-3 6-9M12 4v17M9 18h6"/></symbol>
+    <symbol id="g-pluto" viewBox="0 0 24 24"><circle cx="12" cy="7" r="3.5"/><path d="M6 8c0 5 3 8 6 8s6-3 6-8M12 16v5M9 19h6"/></symbol>
+    <symbol id="g-chiron" viewBox="0 0 24 24"><circle cx="12" cy="16" r="4"/><path d="M12 12V3M12 7l4-4M12 7L8 3"/></symbol>
+    <symbol id="g-north-node" viewBox="0 0 24 24"><path d="M7 18.5a2.5 2.5 0 1 1 .5-1.5c0-5 1.5-9.5 4.5-9.5s4.5 4.5 4.5 9.5a2.5 2.5 0 1 1 .5 1.5"/></symbol>
+    <symbol id="g-south-node" viewBox="0 0 24 24"><path d="M7 5.5a2.5 2.5 0 1 0 .5 1.5c0 5 1.5 9.5 4.5 9.5s4.5-4.5 4.5-9.5a2.5 2.5 0 1 0 .5-1.5"/></symbol>
+    <!-- aspects -->
+    <symbol id="g-conjunction" viewBox="0 0 24 24"><circle cx="9" cy="15" r="4"/><path d="M12 12l7-7"/></symbol>
+    <symbol id="g-opposition" viewBox="0 0 24 24"><circle cx="7" cy="17" r="3.5"/><circle cx="17" cy="7" r="3.5"/><path d="M9.5 14.5l5-5"/></symbol>
+    <symbol id="g-trine" viewBox="0 0 24 24"><path d="M12 4.5l8 14.5H4z"/></symbol>
+    <symbol id="g-square" viewBox="0 0 24 24"><rect x="5" y="5" width="14" height="14"/></symbol>
+    <symbol id="g-sextile" viewBox="0 0 24 24"><path d="M12 4v16M5 8l14 8M19 8L5 16"/></symbol>
+    <symbol id="g-quincunx" viewBox="0 0 24 24"><path d="M5 18l7-12 7 12"/></symbol>
+    <symbol id="g-semisextile" viewBox="0 0 24 24"><path d="M5 6l7 12 7-12"/></symbol>
+    <!-- motion -->
+    <symbol id="g-retrograde" viewBox="0 0 24 24"><path d="M7 20V4h5a4 4 0 0 1 0 8H7M11.5 12l5 8M13 16.5l4.5-3.5"/></symbol>
+    <symbol id="g-applying" viewBox="0 0 24 24"><path d="M5 12h12M13 7l5 5-5 5"/></symbol>
+    <symbol id="g-separating" viewBox="0 0 24 24"><path d="M19 12H7M11 7l-5 5 5 5"/></symbol>
+  </defs>
+</svg>
