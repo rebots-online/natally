@@ -35,8 +35,17 @@ avatar in the top bar on scroll) → transcript → composer.
 **Transcript grammar:** her turns run as page text with her `voice/name` and a gilt glyph in
 the left margin (no bubbles); your turns are right-aligned inside an `orbglow` hairline box;
 plates are `midnight/2` cards with a `voice/name` title line and an "Open" action.
-Routes: `/`, `/atlas/:plate`, `/people`, `/people/:id`, `/settings`, `/about` (hash router;
-Android back works).
+Routes: `/`, `/atlas/:plate`, `/people`, `/people/:id`, `/settings`, `/paywall`, `/checkout`,
+`/about` (hash router; Android back works).
+
+## Commerce surfaces (D11)
+`/paywall` and `/checkout` speak in her voice, never in a storefront's. The one gilt primary
+per screen is the unlock CTA; prices, offering names, trial counters, processor lists and
+failure reasons are **runtime data** (Plex Mono bracketed markers in frames, never sample
+prose). No countdown timers, no crossed-out prices, no pressure copy — she offers, warmly,
+once. Trial states live in the conversation (context chip + honest asides), not as a modal.
+Unlock success returns to the conversation; the mascot's Delighted moment is the only
+celebration.
 
 ## Signature: the Stage
 The mascot's state is driven only by real events: asleep (no model) · waking (loading, real

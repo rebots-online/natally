@@ -46,7 +46,11 @@ INC-1.
    separate roles; a coder flips at most to `[X]` (its Verify command ran and its Accept line
    held); **`✅` is flipped only by the orchestrator on semantic validation from an observed
    run.** Markers are not evidence, and neither is a grep match (I-5 verify-by-running, I-12
-   no-proxy-attestation, INC-7, SC4/GR-4) — only an observed run proves anything.
+   no-proxy-attestation, INC-7, SC4/GR-4) — only an observed run proves anything. Each
+   coder/subagent receives exactly **one task block** and works only from that block plus
+   this repo's docs — reading other task blocks is out of scope (coordination is closed at
+   architecting time; Owns sets are pairwise disjoint). A perceived cross-task need is a
+   checklist defect to report (`[/] blocked: <reason>`), never an improvisation.
 
 ## Always-on floor (global rules — never suspended by project specifics)
 
@@ -153,19 +157,33 @@ content law (INC-19, below).
 ## License
 
 AGPL-3.0-or-later for now, proprietary as the target once the in-house ephemeris replaces
-Swiss Ephemeris (D9). The ephemeris successor is a pending operator input recorded in
-`DOCS/DECISIONS.md`.
+Swiss Ephemeris (D9). The incumbent `sweph-wasm` is pinned behind a swappable
+`EphemerisEngine` seam (D14); while `sweph-wasm` is in the tree the repo stays AGPL and
+public. The successor search is no longer a gate — a successor (Astrodienst-licensed build,
+`astronomy-engine` + in-house houses, or the operator's in-house engine) lands behind the
+seam without re-architecting.
 
 ## Current state
 
-- **2026-09-03 — Phase 0.5 done, frozen, awaiting operator clearance (D3).** Figma file
-  `natally v1` (key `TmZDFVgkUeeL1VEYWtuaJL`): tokens, type ramp, glyph set, nine components,
-  eleven `screen-*` frame sets (+ desktop conversation), Journeys page. Renders, `SCREEN.md`,
+- **2026-09-03 — Phase 0.5 done, frozen.** Figma file `natally v1` (key
+  `TmZDFVgkUeeL1VEYWtuaJL`): tokens, type ramp, glyph set, nine components, eleven
+  `screen-*` frame sets (+ desktop conversation), Journeys page. Renders, `SCREEN.md`,
   `TOKENS.md`, `STATE-LEDGER.json` under `LIBS/UI/FIGMA/`.
-- **2026-09-03 — CLAUDE.md grounded in Admin-Manual** (this amendment); natally registered in
-  `APP_INVENTORY.md` + `PORTFOLIO.md` (INC-17).
-- Nothing under `src/` yet. `DOCS/ARCHITECTURE.md`, `CHECKLIST.md`, `DOCS/TEST_RUBRIC.md`
-  begin only after the operator says "cleared".
-- Open items: ephemeris successor (operator's Windows machine); HF write token +
-  `CREDENTIALS/natally.md` creation; forgejo return (restore CC13 remotes + LFS re-push); R1
-  Alby Market web-only edition planning.
+- **2026-09-04 — Amended under TC12 §10 (D10–D14, operator):** monorepo — local app + future
+  hosted LN/x402 SaaS whose seams only are laid now (D10); monetization in scope for the
+  local app — trial gate → paid unlimited, six processor rails, coupons, RevenueCat paywall
+  (D11, supersedes D4's "billing is v2" for this product); shared client-side GraphRAG lore
+  (D12); companion as tool-using agent with DOM r/w, atomic chat-turboquant, persona law
+  (D13); `sweph-wasm` pinned behind the `EphemerisEngine` seam (D14, resolves D9's open
+  consequence). New surfaces (paywall, checkout, coupon, trial states, Settings License +
+  Lore) entered **specs-first** with frames already backfilled (`/paywall`, `/checkout`,
+  J10/J11, trial + license nodes in `STATE-LEDGER.json`) — **operator re-clearance and
+  re-freeze of the amended complement still pending.**
+- `DOCS/ARCHITECTURE.md` (2026-09-04) and `CHECKLIST.md` exist; `DOCS/TEST_RUBRIC.md` is the
+  remaining gate-2 sibling. Nothing under `src/` before all three exist and the complement is
+  re-cleared (I2, TC12, D3).
+- Open items: operator re-clearance + re-freeze of the D10–D14 complement; TEST_RUBRIC.md
+  authoring; HF write token + `CREDENTIALS/natally.md` creation; forgejo return (restore CC13
+  remotes + LFS re-push); hosted-product design pass (Alby Market / x402 — separate
+  conversation); unify the two workstations' remote layouts (msi4090: `origin`=forgejo +
+  `github` mirror; this host: `origin`=GitHub) when forgejo returns.
