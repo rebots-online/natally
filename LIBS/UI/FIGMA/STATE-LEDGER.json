@@ -75,7 +75,9 @@
     "screen-settings": "4:14",
     "screen-about": "4:15",
     "screen-glossary-callout": "4:16",
-    "Journeys": "4:18"
+    "Journeys": "4:18",
+    "screen-paywall": "36:123",
+    "screen-checkout": "48:2"
   },
   "components": {
     "Button": "6:8",
@@ -104,7 +106,10 @@
       "Speaking": "13:215",
       "Asleep": "13:332",
       "Error": "13:448",
-      "Desktop": "26:430"
+      "Desktop": "26:430",
+      "TrialIdle": "51:613",
+      "TrialExhausted": "51:727",
+      "RateLimited": "51:846"
     },
     "screen-first-light": {
       "name": "15:2",
@@ -144,13 +149,32 @@
       "web-voice-rows": [
         "28:42",
         "28:48"
-      ]
+      ],
+      "license-section-mobile": "53:2",
+      "license-section-web": "53:18"
     },
     "screen-about": {
       "mobile": "24:2"
     },
     "screen-glossary-callout": {
       "overAtlas": "25:2"
+    },
+    "screen-paywall": {
+      "trial-active": "42:13",
+      "trial-exhausted": "45:13",
+      "rate-limited": "45:61",
+      "already-unlocked": "45:109",
+      "enter-code": "45:157",
+      "code-error": "45:210",
+      "desktop": "45:258"
+    },
+    "screen-checkout": {
+      "handoff": "48:3",
+      "iap-waiting": "48:25",
+      "success": "48:42",
+      "failure": "48:58",
+      "offline": "48:77",
+      "enter-license-key": "48:96"
     },
     "journeys": {
       "root": "27:2",
@@ -188,7 +212,12 @@
     "journeys page 4:18 built (J1,J2,J4,J6)",
     "sweep: first-light candidate rows HUG; date 1990-05-02 in Plate + first-light; settings meta wrap",
     "D7a: settings web variant voice rows replace the web-absence row",
-    "desktop conversation: Stage fixed 430 centred; Robin + Sam"
+    "desktop conversation: Stage fixed 430 centred; Robin + Sam",
+    "2026-09-04 D11: screen-paywall page (7 frames: trial-active, trial-exhausted, rate-limited, already-unlocked, enter-code, code-error, desktop)",
+    "2026-09-04 D11: screen-checkout page (6 frames: handoff, iap-waiting, success, failure, offline, enter-license-key)",
+    "2026-09-04 D11: conversation trial variants (TrialIdle, TrialExhausted, RateLimited)",
+    "2026-09-04 D11/D12: settings License section (53:2 mobile, 53:18 web) + Lore rows in Data",
+    "2026-09-04 J10, J11 journeys added (text-only, screens in complement)"
   ],
   "remotes": {
     "github": "https://github.com/rebots-online/natally.git (push target while forgejo is down)",
@@ -231,6 +260,9 @@
     "applying": "5:117",
     "separating": "5:120"
   },
-  "pendingFixes": [],
-  "frozen": "2026-09-03"
+  "pendingFixes": [
+    "operator: re-clear the 2026-09-04 additions in Figma (TC12 §9) — paywall, checkout, conversation trial variants, settings License/Lore — then re-stamp frozen"
+  ],
+  "frozen": "2026-09-03",
+  "amended": "2026-09-04 (D10–D14 additions built in-file; awaiting operator re-clearance for re-freeze)"
 }

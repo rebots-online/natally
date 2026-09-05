@@ -17,7 +17,11 @@ WebView audio** (D7); on the web leg Kokoro runs in-browser via onnxruntime-web 
 2. `DOCS/ARCHITECTURE.md` (entity table with a content-provenance column) + `CHECKLIST.md`
    + `DOCS/TEST_RUBRIC.md` are written after clearance and before any `src/`.
 3. Coders execute `CHECKLIST.md` tasks only, marking `[ ]` `[/]` `[X]` ✅; a task is ✅ only
-   when its Verify command ran and matched its Accept line.
+   when its Verify command ran and matched its Accept line. Each coder/subagent receives
+   exactly **one task block** and works only from that block plus this repo's docs — reading
+   other task blocks is out of scope (coordination is closed at architecting time; Owns sets
+   are pairwise disjoint). A perceived cross-task need is a checklist defect to report
+   (`[/] blocked`), never an improvisation.
 
 ## House rules that bite here
 - Conventions adopted: CC2, CC7, CC9, CC11, CC12, CC13, CC15, TC10, TC12 (Figma carve-out),
@@ -38,16 +42,23 @@ WebView audio** (D7); on the web leg Kokoro runs in-browser via onnxruntime-web 
   driven only by real events.
 
 ## License
-AGPL-3.0-or-later for now, proprietary as the target once the in-house ephemeris replaces Swiss Ephemeris (D9). The ephemeris successor is a pending operator input recorded in `DOCS/DECISIONS.md`.
+AGPL-3.0-or-later for now, proprietary as the target once the in-house ephemeris replaces Swiss Ephemeris (D9). The incumbent `sweph-wasm` is pinned behind a swappable `EphemerisEngine` seam (D14); while `sweph-wasm` is in the tree the repo stays AGPL and public.
 
 ## Current state
 
-- **2026-09-03 — Phase 0.5 done, frozen, awaiting operator clearance (TC12 §9).** Figma file
-  `natally v1` (key `TmZDFVgkUeeL1VEYWtuaJL`): tokens, type ramp, glyph set, nine components,
-  eleven `screen-*` frame sets (+ desktop conversation), Journeys page. Renders, `SCREEN.md`,
-  `TOKENS.md`, `STATE-LEDGER.json` under `LIBS/UI/FIGMA/`.
-- Nothing under `src/` yet. `DOCS/ARCHITECTURE.md`, `CHECKLIST.md`, `DOCS/TEST_RUBRIC.md` begin
-  only after the operator says "cleared".
-- Open items: ephemeris successor (operator's Windows machine); HF write token for
-  `RobinsAIWorld/natally-models`; forgejo return (push `origin` + LFS); R1 Alby Market
-  web-only edition planning.
+- **2026-09-03 — Phase 0.5 done, frozen** (Figma file `natally v1`, key `TmZDFVgkUeeL1VEYWtuaJL`:
+  tokens, type ramp, glyph set, nine components, eleven `screen-*` frame sets (+ desktop
+  conversation), Journeys page; renders, `SCREEN.md`, `TOKENS.md`, `STATE-LEDGER.json` under
+  `LIBS/UI/FIGMA/`).
+- **2026-09-04 — Amended under TC12 §10 (D10–D14):** monorepo (local app + future hosted
+  LN/x402 SaaS), monetization in scope for the local app (trial gate → paid unlimited;
+  Stripe/RevenueCat/Polar/LemonSqueezy/PayPal/Square; coupons; RC paywall), shared client-side
+  GraphRAG lore, companion DOM r/w tools + turboquant + ultra-relatable persona law,
+  `sweph-wasm` pinned behind the ephemeris seam. New surfaces (paywall, checkout, coupon,
+  trial/license, Settings License + Lore) are **specs-first**; Figma frames pending backfill,
+  then operator re-clearance and re-freeze.
+- Nothing under `src/` yet. `DOCS/ARCHITECTURE.md` (this amendment round's deliverable),
+  `CHECKLIST.md`, `DOCS/TEST_RUBRIC.md` precede any code.
+- Open items: Figma frame backfill for the D10–D14 surfaces; HF write token for
+  `RobinsAIWorld/natally-models`; forgejo return (push `origin` + LFS); hosted-product design
+  pass (Alby Market / x402 — separate conversation).
