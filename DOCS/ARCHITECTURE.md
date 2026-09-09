@@ -3,8 +3,10 @@
 Normative for the **local-app product** (Linux, Windows, Android, web PWA — all legs
 local-inference) and for the monorepo seams the **hosted web-only SaaS** (Alby Market /
 Bitcoin LN / x402, pay-per-reading) will occupy later (D10). Written 2026-09-04 against the
-amended complement (D10–D14). `CHECKLIST.md` and `DOCS/TEST_RUBRIC.md` (gate-2 siblings)
-follow separately; no `src/` is written before all three exist (CLAUDE.md, I2, TC12).
+amended complement (D10–D14). Reconciled 2026-09-09 against the frozen complement, the
+tree, and the vendored sweph-wasm surface; `CHECKLIST.md` was recreated from this edition
+the same day. `DOCS/TEST_RUBRIC.md` (gate-2 sibling) follows separately; no `src/` is
+written before all three exist and the complement is re-cleared (CLAUDE.md, I2, TC12, D3).
 
 Reading order: `README.md` (what) → `DOCS/DECISIONS.md` (why; D1–D14 cited throughout) →
 this file (how) → `LIBS/UI/FIGMA/DESIGN.md` + `TOKENS.md` + `STATE-LEDGER.json` (surfaces).
@@ -137,6 +139,13 @@ interface EphemerisEngine {
   the operator's in-house engine) registers behind the same interface with a conformance
   suite (fixed-star and planet positions vs DE431 references at 0.01° tolerance; house cusps
   vs published examples for all 12 systems).
+- **House systems (closed set, 12 — SC1):** Placidus `P`, Koch `K`, Porphyry `O`,
+  Regiomontanus `R`, Campanus `C`, Equal (Asc) `A`, Vehlow Equal `V`, Whole Sign `W`,
+  Topocentric (Polich/Page) `T`, Meridian (axial rotation) `X`, Alcabitius `B`,
+  Krusinski-Pisa-Goelzer `U`. Each maps 1:1 to a `HouseSystems` code of `sweph-wasm@2.6.9`
+  (vendored snapshot `DOCS/sdk/sweph-wasm/index.d.ts`, type at line 2423; local docs per
+  TC7). The engine domain is wider (25 codes); adding a 13th chip is a decision-entry
+  event, never a silent append.
 - **Honest absence rules:** birth time unknown ⇒ solar chart (Sun on the 1st-house cusp by
   sign), no Ascendant, no houses anywhere that person appears (J1/J3/J4 branches); backend
   without Chiron ⇒ glyph shows absence, never an estimate.
@@ -219,8 +228,8 @@ hybrid: top-k vector matches (k=8) ∪ 2-hop neighbourhood of matched nodes, bud
 ### 8.4 Boundaries
 `LoreStore` is an interface (`query`, `upsert`, `export`, `delete`, `stats`) so the later
 **pysanky / 6dog** graph-navigation UI reads the same graph without re-architecting. User
-controls (Settings › Data): summary line (`[turns · nodes · runtime]`), export with J8,
-delete-everything includes lore. Deletion is real deletion (rows + vectors), not soft-hide.
+controls (Settings › Data): summary line (`[turns · nodes]`, rendered from `stats()` →
+`{turns, nodes, edges}`), export with J8, delete-everything includes lore. Deletion is real deletion (rows + vectors), not soft-hide.
 
 ## 9. Licensing & entitlement (D11)
 
@@ -293,8 +302,12 @@ Kokoro on every leg. Native: ONNX runtime in Rust, synthesis and playback fully 
 voices from the mirror (`manifest.json` shared with the LLM catalogue); Web:
 onnxruntime-web (WASM, WebGPU where present) with PCM through Web Audio. `speechSynthesis`
 is banned on all legs (CI grep guard). The Stage consumes real events only (STATES.md):
-Thinking on first streamed token, Speaking while PCM plays with the RMS envelope driving
-orb+mouth, Delighted on chart computed / unlock success, Error on engine failure.
+Thinking when a companion request is sent (no tokens yet — STATES.md's trigger), Speaking
+while PCM plays with the RMS envelope driving orb+mouth, Delighted on chart computed /
+unlock success, Error on engine failure. Asleep, waking and listening are driven by
+capability signals (model presence, engine/model load progress, composer focus), not by
+bus events; the Stage reducer consumes a `StageSignal` union — companion bus events ∪
+capability signals — defined by task C.4.
 
 ## 11. Privacy & security posture
 
@@ -343,7 +356,8 @@ an operator precondition (open item §16).
 ## 15. Configuration surface (`.env`, see `.env.example`)
 
 Build-baked client values: mirror base, app URL, trial policy block, six processor values +
-bridge URL, RevenueCat offering id, lore flags. Script/server-only: `HF_TOKEN` (local repo)
+bridge URL, RevenueCat offering id, lore flags, and `VITE_LICENSE_PUBKEY` (offline license
+verify, §9.3). Script/server-only: `HF_TOKEN` (local repo)
 and the bridge's `LICENSE_ED25519_PRIVATE_KEY`, processor webhook secrets, code registry
 (bridge host only, Admin-Manual convention). Nothing in `apps/local` reads a secret at
 runtime.
@@ -351,8 +365,11 @@ runtime.
 ## 16. Open items register
 
 1. Operator re-clearance of the 2026-09-04 complement additions in Figma → re-freeze
-   (STATE-LEDGER `pendingFixes`).
-2. `CHECKLIST.md` + `DOCS/TEST_RUBRIC.md` (gate-2 siblings; next session).
+   (STATE-LEDGER `pendingFixes`) — including re-verifying the Stage component's five
+   variant node-ids: `DESIGN.md`'s Stage row and `STATE-LEDGER.json` disagree (7:3, 7:5,
+   7:16); STATE-LEDGER is canonical for code until the operator says otherwise.
+2. `DOCS/TEST_RUBRIC.md` (final gate-2 sibling; `CHECKLIST.md` was recreated 2026-09-09
+   from this reconciled edition).
 3. HF write token for the mirror (both PATs 401 on 2026-08-18).
 4. forgejo return → push `origin` with LFS; decide the GitHub artifact channel (R1 needs a
    downloadable web build before forgejo returns).
@@ -361,6 +378,9 @@ runtime.
    (§1, §9.6).
 6. Embedding model selection for lore (mirror catalogue entry + dimension pin).
 7. Ephemeris successor watch (D14 keeps the seam; conformance suite specified §6).
+8. Wider `DOCS/sdk/` snapshots (RevenueCat SDK, ort/onnxruntime-web, llama-cpp-2/wllama,
+   processor webhook schemes) are vendored at the start of their owning tasks (TC7);
+   sweph-wasm is vendored now (`DOCS/sdk/sweph-wasm/`, 2.6.9, sha256-stamped).
 
 ## 17. Traceability appendix
 
@@ -369,7 +389,7 @@ runtime.
 | §1 overview | D4, D5, D6, D10, D13 | all | DESIGN.md |
 | §5 entities | INC-19 | all | SCREEN.md ×13 |
 | §6 ephemeris | D9, D14 | atlas ×3, plates | DESIGN.md, STATE-LEDGER |
-| §7 companion | D13 | conversation ×8 variants | mascot/STATES.md |
+| §7 companion | D13 | conversation ×9 variants (incl. Desktop + 3 trial) | mascot/STATES.md |
 | §8 lore | D12 | settings (Data/Lore) | screenshot-license.png |
 | §9 licensing | D11, R2 | paywall ×7, checkout ×6, conversation trial ×3 | SCREEN.md (paywall, checkout), J10, J11 |
 | §10 voice/stage | D7, D7a | conversation, settings (Voice) | STATES.md |

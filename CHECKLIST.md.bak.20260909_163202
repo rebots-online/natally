@@ -1,10 +1,8 @@
 # natally — implementation checklist (Gate 2 document 2 of 3)
 
-Recreated 2026-09-09 from `DOCS/ARCHITECTURE.md` (2026-09-09 reconciled edition). Supersedes
-the 2026-09-04 translation, which is preserved beside this file as
-`CHECKLIST.md.bak.20260909_163202` (additive per I3 — copy, never move). Every task is
+Translated 1:1 from `DOCS/ARCHITECTURE.md` (2026-09-04, D10–D14 complement). Every task is
 **atomic**, **idempotent** (re-running after completion changes nothing and exits 0),
-**order-independent** (any task may run before or after any other, in parallel, with four
+**order-independent** (any task may run before or after any other, in parallel, with two
 explicit exceptions marked ⛓), and **self-contained**: a subagent given exactly one task
 block — plus `DOCS/ARCHITECTURE.md` for background — can finish it in one pass.
 
@@ -16,11 +14,6 @@ executable subset of it).
 - Marker protocol: `[ ]` untouched · `[/]` in progress or blocked (append ` — blocked: <reason>`
   when a **Reads** dependency is absent; never fake an Accept) · `[X]` implemented · `✅` only
   when the **Verify** command ran and its output matched the **Accept** line.
-- **Ownership closure:** every Verify command operates only on files in its own task's
-  **Owns** — including the test files the Verify runs. Entities are denoted explicitly in
-  each block, translated 1:1 from the exhaustive enumeration in `DOCS/ARCHITECTURE.md`,
-  which is the source of truth. A task that seems to need a file outside its Owns is a
-  checklist defect, not an improvisation license.
 - Coordination is closed at architecting time, not execution time: the translation from
   `DOCS/ARCHITECTURE.md` to this checklist partitioned the entire surface into
   **pairwise-disjoint Owns sets** — no two tasks share an owned file, and shared seams are
@@ -36,8 +29,8 @@ executable subset of it).
   consults; they may not exist yet (out-of-order execution) — write imports against them
   anyway; full-workspace typecheck is deferred to I.4.
 - Verifies are scoped to owned files (unit-level, local fixtures) so they pass regardless of
-  other tasks' state. The ⛓ integrator tasks (I.1–I.4) are regenerators, not coordinators —
-  they rebuild registries from whatever exists when they run.
+  other tasks' state. The ⛓ integrator tasks are regenerators, not coordinators — they
+  rebuild registries from whatever exists when they run.
 - No mocks/stubs in shipped code; test utilities that are real injectable implementations
   (e.g. a deterministic embedder) live under the owning package's `tests/` and are never
   imported by `src/`.
@@ -58,7 +51,7 @@ executable subset of it).
 | Offering, CheckoutSession, PurchaseAdapter | T0.7 | B.5a/b/c |
 | LoreNode, LoreEdge, LoreStore | T0.6 | L.1–L.5 |
 | ModelManifest, ManifestAsset, Download | T0.7 (types) | M.1 |
-| CompanionEvent, DomWriteOp, CompanionTool, StageSignal | T0.6, C.4 | C.3, C.4 |
+| CompanionEvent, DomWriteOp, CompanionTool | T0.6 | C.3, C.4 |
 | ExportDocument (exportVersion) | T0.6 | X.1 |
 | StageState (mascot) | U.9 | U.9 |
 | Route entries | U.1 (contract) | I.1 (registry) |
@@ -82,19 +75,17 @@ executable subset of it).
 - [ ] **T0.2 — apps/local frontend scaffold.**
   **Owns:** `apps/local/package.json`, `apps/local/vite.config.ts`, `apps/local/tsconfig.json`,
   `apps/local/index.html`, `apps/local/src/main.tsx`, `apps/local/src/app.tsx`,
-  `apps/local/src/styles/global.css`, `apps/local/public/` (empty `.gitkeep`),
-  `apps/local/tsconfig.standalone.json`.
+  `apps/local/src/styles/global.css`, `apps/local/public/` (empty `.gitkeep`).
   **Reads:** T0.1, T0.8. **Spec:** Vite + React 19 entry that renders `<NatallyApp/>`;
   `global.css` imports `@natally/design-tokens/tokens.css` and sets `midnight` ground,
   self-hosted font `@font-face` declarations live in S.1 (import site reserved via comment
   contract `/* S.1 fonts */`); Tailwind 4 via `@import "tailwindcss"` in global.css with
   `@source` pointing at `../src`; `main.tsx` mounts router shell export from U.1 **as a
   lazy dynamic import with a real loading absence element** (dark, wordmark, nothing fake).
-  `tsconfig.standalone.json` typechecks this task's files alone (router import excluded).
-  **Verify:** `pnpm --filter @natally/local exec tsc --noEmit -p tsconfig.standalone.json`
-  **Accept:** `built standalone entry OK` (tsc exits 0). The full-app `vite build` is
-  exercised later by I.1/I.4 once the router registry exists — not part of this Accept
-  (order-independence).
+  **Verify:** `pnpm --filter @natally/local exec vite build` after I-tasks OR standalone:
+  `pnpm --filter @natally/local exec tsc --noEmit -p tsconfig.standalone.json` where you also
+  create `tsconfig.standalone.json` (owns it) that excludes router import.
+  **Accept:** `built standalone entry OK` (tsc exits 0; vite build accepted after I.1).
 
 - [ ] **T0.3 — src-tauri scaffold.**
   **Owns:** `apps/local/src-tauri/` (Cargo.toml, tauri.conf.json, build.rs, src/main.rs,
@@ -110,38 +101,33 @@ executable subset of it).
 
 - [ ] **T0.4 — Token mirror test (design-tokens contract verification).**
   **Owns:** `packages/design-tokens/tests/tokens.test.ts`.
-  **Reads:** T0.8. **Spec:** test parses `tokens.css` `@theme` block and asserts the 36
-  frozen variables: 10 colour vars (STATE-LEDGER 2:3–2:12) + 12 zodiac vars (2:13–2:24) +
-  4 radius (2:25–2:28) + 6 space (2:29–2:34) + 1 stroke (2:35) + 3 size (2:36–2:38); every
+  **Reads:** T0.8. **Spec:** test parses `tokens.css` `@theme` block and asserts: 8 colour
+  vars + 12 zodiac vars + 4 radius + 6 space + stroke + 3 size; every
   `--color-*`/`--spacing-*` name matches the `CSS` column of `LIBS/UI/FIGMA/TOKENS.md`
   (parse the markdown table in-repo); hex values equal TOKENS.md hex column.
   **Verify:** `pnpm vitest run packages/design-tokens`
-  **Accept:** `tokens: 36 variables mirrored exactly`.
+  **Accept:** `tokens: 35 variables mirrored exactly`.
 
 - [ ] **T0.5 — Ephemeris contracts.**
   **Owns:** `packages/ephemeris/src/types.ts`, `packages/ephemeris/src/seam.ts`,
-  `packages/ephemeris/package.json`, `packages/ephemeris/tsconfig.json`,
-  `packages/ephemeris/tests/types.test.ts`.
-  **Reads:** `DOCS/sdk/sweph-wasm/` (vendored 2.6.9 snapshot — PROVENANCE.md, index.d.ts).
+  `packages/ephemeris/package.json`, `packages/ephemeris/tsconfig.json`.
   **Spec:** verbatim from ARCHITECTURE §6: `EphemerisEngine` (id, init(cfg), position, cusps,
   aspects, chiron?); `Body` = 11 bodies + 'chiron' | 'north-node' | 'south-node';
-  `HouseSystem` = the pinned 12, each identical to its `HouseSystems` code of
-  `sweph-wasm@2.6.9` (ARCHITECTURE §6 closed set; type surface at
-  `DOCS/sdk/sweph-wasm/index.d.ts:2423`): `'P'` Placidus, `'K'` Koch, `'O'` Porphyry,
-  `'R'` Regiomontanus, `'C'` Campanus, `'A'` Equal (Asc), `'V'` Vehlow Equal,
-  `'W'` Whole Sign, `'T'` Topocentric (Polich/Page), `'X'` Meridian (axial rotation),
-  `'B'` Alcabitius, `'U'` Krusinski-Pisa-Goelzer; `OrbTable` (conjunction 8,
+  `HouseSystem` = the 12 (P, K, O, R, C, A, E, W, T, B, M, 'GO'? — enumerate: Placidus,
+  Koch, Porphyry, Regiomontanus, Campanus, Equal, WholeSign, Topocentric, Meridian,
+  Alcabitius, Vehlow-equal, Kroonenhouse-generic — if sweph id differs use its 1-char codes;
+  the set is fixed by sweph-wasm's `hsys` parameter domain); `OrbTable` (conjunction 8,
   opposition 8, trine 7, square 7, sextile 4, quincunx 3, semisextile 2 — defaults,
   overridable); `ChartFacts` (id: content hash, inputs {ut[], place, system}, positions:
   Array<{body, lon, lat, speed}>, cusps?: number[12]+asc+mc+armc, aspects: Aspect[]);
   `Aspect {a, b, type, orb, applying: boolean}`; `EclipticPosition`.
   Export all as `.ts` types + zod schemas (add zod dep).
-  **Verify:** `pnpm vitest run packages/ephemeris/tests/types.test.ts`
+  **Verify:** `pnpm vitest run packages/ephemeris/tests/types.test.ts` (write it; owns it)
   **Accept:** `seam types: schema roundtrip OK`.
 
 - [ ] **T0.6 — Lore & conversation contracts.**
   **Owns:** `packages/lore/src/types.ts`, `packages/lore/src/store.ts` (interface only),
-  `packages/lore/package.json`, tsconfig, `packages/lore/tests/types.test.ts`.
+  `packages/lore/package.json`, tsconfig.
   **Spec (ARCHITECTURE §5, §8):** `LoreNode {id, kind: 'person'|'fact'|'event'|'thread'|'place',
   summary, embedding: number[], refs[]}`; `LoreEdge {from, to, rel: 'mentions'|'relates'|
   'follows'|'contradicts', weight, sourceTurnId}`; `Turn {id, sessionId, personId?, role:
@@ -155,8 +141,7 @@ executable subset of it).
   **Accept:** `lore types: roundtrip OK`.
 
 - [ ] **T0.7 — Billing contracts.**
-  **Owns:** `packages/billing/src/types.ts`, `package.json`, tsconfig,
-  `packages/billing/tests/types.test.ts`.
+  **Owns:** `packages/billing/src/types.ts`, `package.json`, tsconfig.
   **Spec (ARCHITECTURE §9):** `TrialPolicy {mode: 'count'|'time'|'rate', readings?: number,
   days?: number, cooldownDays?: number, trialModel: string}`; `Reading {id, ts, personId,
   chartId}`; `LicenseToken` = compact COSE-style string, payload type `{sub: appUserId, tier:
@@ -179,12 +164,11 @@ executable subset of it).
   `--color-z-<sign>`). `src/index.ts` exports the same as frozen TS const objects parsed
   once (no hand-duplicated values — parse tokens.css at build via a tiny owned script
   `scripts/gen.mjs`, output committed). **Verify:** `node packages/design-tokens/scripts/gen.mjs
-  --check` **Accept:** `tokens.css in sync with TOKENS.md (36 vars)`.
+  --check` **Accept:** `tokens.css in sync with TOKENS.md (35 vars)`.
 
 - [ ] **T0.9 — SQLite DDL & migration runner.**
   **Owns:** `packages/lore/src/ddl.ts` (shared store DDL used by both lore and app tables —
-  single ownership to keep parallel tasks disjoint), `packages/lore/src/migrate.ts`,
-  `packages/lore/tests/ddl.test.ts`.
+  single ownership to keep parallel tasks disjoint), `packages/lore/src/migrate.ts`.
   **Spec:** `MIGRATIONS: {id, sql}[]` executed in order, recorded in `_migrations`. Tables
   (all entities, ARCHITECTURE §5/§8/§9):
   `people(id TEXT PK, name TEXT NOT NULL, birth_date TEXT NOT NULL, birth_time TEXT,
@@ -201,21 +185,15 @@ executable subset of it).
   `vec_nodes(virtual, sqlite-vec)` — emitted only when the vec extension loads (runner takes
   `extensions: boolean`). `migrate(db, {vec:boolean})` idempotent.
   **Verify:** `pnpm vitest run packages/lore/tests/ddl.test.ts` (in-memory better-sqlite3
-  dev-dep; vec-off path) **Accept:** `migrations: fresh + re-run both OK (9 tables without
-  vec; 10 with)`.
+  dev-dep; vec-off path) **Accept:** `migrations: fresh + re-run both OK (10 tables)`.
 
 - [ ] **T0.10 — Config loader.**
-  **Owns:** `apps/local/src/config.ts`, `packages/billing/src/config.ts`,
-  `packages/billing/tests/config.test.ts`, `.env.example` (whole file).
+  **Owns:** `apps/local/src/config.ts`, `packages/billing/src/config.ts`.
   **Spec:** typed `loadConfig(env)` reading the `.env.example` variables verbatim
   (ARCHITECTURE §15): trial block with validation (exactly one mode populated; trialModel
   required non-empty), 6 processor values (blank → rail absent), bridge URL, mirror base,
-  app URL, `VITE_LICENSE_PUBKEY`, lore flags + embed dim (384 default). This task owns
-  `.env.example` whole: add the `VITE_LICENSE_PUBKEY=` line (comment: offline license
-  verify — B.3 reads it) and annotate `VITE_TRIAL_MODEL` as required non-empty at build
-  (a blank value makes the config loader throw at boot — fail-loud by design). Export
-  `RuntimeConfig` frozen object + `paymentsAvailable()` derived list. zod-validated;
-  throws with field names on bad env.
+  app URL, lore flags + embed dim (384 default). Export `RuntimeConfig` frozen object +
+  `paymentsAvailable()` derived list. zod-validated; throws with field names on bad env.
   **Verify:** `pnpm vitest run packages/billing/tests/config.test.ts`
   **Accept:** `config: valid, blank-rails-hidden, bad-env-throws`.
 
@@ -226,19 +204,17 @@ executable subset of it).
 - [ ] **P.1 — sweph-wasm backend.**
   **Owns:** `packages/ephemeris/src/sweph/` (engine.ts, tables.ts), `packages/ephemeris/tests/
   conformance.test.ts`, `packages/ephemeris/tests/fixtures/`.
-  **Reads:** T0.5, `DOCS/sdk/sweph-wasm/` (vendored 2.6.9 snapshot). **Spec:** implement
-  `EphemerisEngine` on `sweph-wasm@2.6.9` (pin per `DOCS/sdk/sweph-wasm/PROVENANCE.md`);
-  `init` loads semiset ephemeris (lazy mount of the bundled `dist/ephe/seas_*.se1` files;
-  document the exact files in a `tables.ts` table map); `position` via `swe_calc_ut`
-  (speed flags on); `cusps` via `swe_houses_ex` for each of the 12 pinned HouseSystems
-  (codes per ARCHITECTURE §6 — they are the engine's own `HouseSystems` codes verbatim);
-  time-unknown input never reaches here (P.2 guards). Conformance fixtures: embed 24 cases
-  (2 dates × 12 bodies: Gregorian 1990-05-02 14:32 UT and 2026-09-04 00:00 UT; place
-  55.60N 13.00E) with expected lon values generated from Swiss Ephemeris reference tables
-  (operator supplies at review; until then compute-and-freeze via the same engine is
-  FORBIDDEN — instead the test asserts **invariants**: positions in [0,360), |speed| bounds
-  per body, cusps ascending modulo, asc/mc consistency `|normalize(mc-asc)| ≤ 180`). When
-  operator supplies reference numbers, tighten tol 0.01°.
+  **Reads:** T0.5. **Spec:** implement `EphemerisEngine` on `sweph-wasm` (dep): `init` loads
+  semiset ephemeris (lazy mount of bundled `se1` files; document the exact files in a
+  `tables.ts` table map); `position` via `swe_calc_ut` (speed flags on); `cusps` via
+  `swe_houses_ex` for each HouseSystem mapped to its sweph `hsys` char; time-unknown input
+  never reaches here (P.2 guards). Conformance fixtures: embed 24 cases (2 dates × 12
+  bodies: Gregorian 1990-05-02 14:32 UT and 2026-09-04 00:00 UT; place 55.60N 13.00E) with
+  expected lon values generated from Swiss Ephemeris reference tables (operator supplies at
+  review; until then compute-and-freeze via the same engine is FORBIDDEN — instead the test
+  asserts **invariants**: positions in [0,360), |speed| bounds per body, cusps ascending
+  modulo, asc/mc consistency `|normalize(mc-asc)| ≤ 180`). When operator supplies reference
+  numbers, tighten tol 0.01°.
   **Verify:** `pnpm vitest run packages/ephemeris/tests/conformance.test.ts`
   **Accept:** `sweph backend: 24 cases, invariants hold`.
 
@@ -254,7 +230,7 @@ executable subset of it).
 
 - [ ] **P.3 — Worker/off-thread host.**
   **Owns:** `packages/ephemeris/src/host/` (protocol.ts, web-worker.ts, native-task.rs at
-  `packages/ephemeris/native/host.rs`), `packages/ephemeris/tests/host.test.ts`.
+  `packages/ephemeris/native/host.rs`).
   **Spec:** JSON protocol `{id, op: 'init'|'position'|'cusps'|'aspects', params}` →
   `{id, ok, result|error}`; web worker instantiates P.1; native side is a tokio
   `mpsc`-served task the Tauri command registry mounts (registry macro from T0.3).
@@ -323,8 +299,7 @@ executable subset of it).
   **Owns:** `packages/lore/src/pipeline.ts`, tests.
   **Spec:** `LorePipeline.consume(turn)` → embed (L.2) → extract/merge (L.3) → batched
   write (single flush per turn, insert-only SQL within one transaction); `stats()` returns
-  `{turns, nodes, edges}` for Settings (UI renders `[turns · nodes]`, ARCHITECTURE §8.4);
-  `deleteAll()` = rows + vectors real deletion.
+  `{turns, nodes, edges}` for Settings; `deleteAll()` = rows + vectors real deletion.
   **Verify:** `pnpm vitest run packages/lore/tests/pipeline.test.ts`
   **Accept:** `pipeline: 50 turns → nodes merged, flush count = 50, delete leaves 0 rows`.
 
@@ -354,14 +329,13 @@ executable subset of it).
 - [ ] **B.3 — License token verify + storage.**
   **Owns:** `packages/billing/src/token/` (format.ts, verify-web.ts, storage-web.ts,
   native.rs, verify.rs), tests.
-  **Reads:** `.env.example` `VITE_LICENSE_PUBKEY` (line owned by T0.10).
   **Spec:** compact token = base64url(header).payload.Ed25519-sig (COSE-esque, no external
   dep: implement encode/verify with WebCrypto Ed25519 on web; RustCurve25519-dalek-ed25519
-  native); public key baked from config `VITE_LICENSE_PUBKEY`; verify offline: sig, iss,
-  sub match appUserId, exp null-or-future; deny-list: signed DenyList fetched when online
-  (bridge), cached, `revokedJti` blocks only listed jti; storage: keychain (native command
-  via registry macro) / IndexedDB WebCrypto-wrapped (web). Tests: generate test keypair,
-  forge + reject tests.
+  native); public key baked from config `VITE_LICENSE_PUBKEY` (add to `.env.example` —
+  owns that line); verify offline: sig, iss, sub match appUserId, exp null-or-future;
+  deny-list: signed DenyList fetched when online (bridge), cached, `revokedJti` blocks only
+  listed jti; storage: keychain (native command via registry macro) / IndexedDB
+  WebCrypto-wrapped (web). Tests: generate test keypair, forge + reject tests.
   **Verify:** `pnpm vitest run packages/billing/tests/token.test.ts`
   **Accept:** `token: valid passes, tampered/expired/revoked rejected`.
 
@@ -376,16 +350,16 @@ executable subset of it).
 
 - [ ] **B.5a — Generic hosted-redirect adapter + bridge client.**
   **Owns:** `packages/billing/src/adapters/hosted.ts`, `packages/billing/src/bridge-client.ts`,
-  `packages/billing/src/adapters/guards.ts`, tests. **Spec:** for
-  stripe/polar/lemonsqueezy/paypal/square: `available()` = config URL present;
-  `checkout(offering)` → `{kind:'redirect', url: <configured checkout URL> +
-  ?appUserId=<id>&offering=<id>}` opened via opener injection (Tauri shell-open /
-  window.open); then poll bridge `POST /verify {appUserId}` (2s backoff, 15 min cap,
-  offline-tolerant); `restore()` → `GET /verify?appUserId=` → token|null. SSRF guard:
-  reject non-https, loopback/private/reserved hosts (owns `guards.ts`).
-  **Verify:** `pnpm vitest run packages/billing/tests/adapters-hosted.test.ts` (no network:
-  `fetch` arrives as an injected `transport` constructor parameter; tests inject an
-  in-process routing function — the injection is a parameter, not a mock)
+  tests. **Spec:** for stripe/polar/lemonsqueezy/paypal/square: `available()` = config URL
+  present; `checkout(offering)` → `{kind:'redirect', url: <configured checkout URL> +
+  ?appUserId=<id>&offering=<id>}` opened via opener injection (Tauri shell-open / window.open);
+  then poll bridge `POST /verify {appUserId}` (2s backoff, 15 min cap, offline-tolerant);
+  `restore()` → `GET /verify?appUserId=` → token|null. SSRF guard: reject non-https,
+  loopback/private/reserved hosts (owns `guards.ts`).
+  **Verify:** `pnpm vitest run packages/billing/tests/adapters-hosted.test.ts` (fetch stubbed
+  at the boundary — real `fetchGlobal` injectable, test injects local http server via
+  `node:test`? Simpler: inject `transport` fn, real impl uses fetch — the injection is a
+  parameter, not a mock.)
   **Accept:** `hosted adapter: URL build, poll loop, SSRF rejects loopback/private`.
 
 - [ ] **B.5b — RevenueCat adapter.**
@@ -430,9 +404,8 @@ executable subset of it).
 ## Phase C — Companion
 
 - [ ] **C.1 — Inference host (turboquant).**
-  **Owns:** `apps/local/src-tauri/src/inference/` (mod.rs, llama.rs),
-  `apps/local/src/companion/inference-web.ts`, `apps/local/src/companion/lane.ts`,
-  `apps/local/src/companion/inference.test.ts`.
+  **Owns:** `apps/local/src-tauri/src/inference/` (mod.rs, llama.rs), `apps/local/src/
+  companion/inference-web.ts`, `packages/…` none — plus `apps/local/src/companion/lane.ts`.
   **Spec:** streaming completion API `complete(ctx: FenceContext, onToken)`; native:
   llama.cpp bindings (crate `llama-cpp-2` or vendored; catalogue-tier Q4_K_M weights, KV
   q8_0 via context params; recursor tier q4r8 optional flag); web: wllama with same
@@ -461,23 +434,19 @@ executable subset of it).
   dependency rendering the real confirm plate); every invocation appends `Turn(role='tool')`
   with toolOps to the transcript (X.1 repo injection) and lore pipeline; `chart.open`,
   `chart.compute` (P.4 via host), `lore.recall` (L.4). No network: assert by construction —
-  tools module imports no network surface; a test greps the file for `fetch(`,
-  `XMLHttpRequest`, `new WebSocket`, `window.open(` and fails on any hit.
+  tools module imports no fetch/URL opener; a test greps the file for `fetch|WebSocket|open(`
+  and fails on hit.
   **Verify:** `pnpm vitest run apps/local/src/companion/tools.test.ts` (jsdom)
   **Accept:** `tools: read masks secrets, write records turn, no-network grep clean`.
 
 - [ ] **C.4 — Companion event bus.**
   **Owns:** `apps/local/src/companion/bus.ts`, tests.
-  **Spec:** typed pub/sub for the CompanionEvent union (token, turn, chart-computed,
-  envelope, error); `subscribe(type, fn)` unsubscribe handle; the exported `StageSignal`
-  union = `CompanionEvent ∪ {engine-load(fraction), model-presence(bool), composer-focus(bool)}`
-  (ARCHITECTURE §10 — asleep/waking/listening ride capability signals, not bus events);
-  replay-buffered `stageState$` derived reducer over StageSignal: Thinking on request-sent
-  (no tokens yet — STATES.md), Speaking while the envelope plays, Delighted on
-  chart-computed/unlock, Error on engine failure, Asleep from model-presence=false, Waking
-  from engine-load progress — pure reducer exported for U.9 tests.
+  **Spec:** typed pub/sub for the CompanionEvent union (§ Turn/chart/envelope/error/token);
+  `subscribe(type, fn)` unsubscribe handle; replay-buffered `stageState$` derived reducer
+  (Thinking on first token, Speaking during envelope, Delighted on chart-computed/unlock,
+  Error) — pure reducer exported for U.9 tests.
   **Verify:** `pnpm vitest run apps/local/src/companion/bus.test.ts`
-  **Accept:** `bus: StageSignal→stage reducer sequence request-sent→Thinking→Speaking→Idle exact`.
+  **Accept:** `bus: event→stage reducer sequence Thinking→Speaking→Idle exact`.
 
 ---
 
@@ -510,11 +479,9 @@ executable subset of it).
   **Owns:** `apps/local/src/ui/shell.tsx`, `apps/local/src/ui/router.ts` (contract +
   registry type), `apps/local/src/ui/primitives/` (Button, Chip, TopBar, Composer, PlateCard,
   TurnHer, TurnYou), `apps/local/src/ui/glyphs.tsx`, `apps/local/src/ui/version.tsx`.
-  **Spec:** primitives mirror Components page 1:1 (STATE-LEDGER ids in doc comments; the
-  STATE-LEDGER is canonical for component node-ids — DESIGN.md's Stage row is stale pending
-  the operator re-clearance, see STATE-LEDGER `pendingFixes`); glyph set loaded from
-  `LIBS/UI/FIGMA/glyphs/natally-glyphs.svg` (owns `apps/local/src/assets/glyphs/` copy);
-  router: hash routes exactly `/`,`/atlas/:plate`,`/people`,`/people/:id`,
+  **Spec:** primitives mirror Components page 1:1 (STATE-LEDGER ids in doc comments); glyph
+  set loaded from `LIBS/UI/FIGMA/glyphs/natally-glyphs.svg` (owns `apps/local/src/assets/
+  glyphs/` copy); router: hash routes exactly `/`,`/atlas/:plate`,`/people`,`/people/:id`,
   `/settings`,`/paywall`,`/checkout`,`/about`; each screen registers via
   `registerRoute({path, load})` into a module-owned registry (I.1 consolidates imports);
   version stamp `data/micro` bottom-right every surface. Storybook-free visual tests:
@@ -539,9 +506,9 @@ executable subset of it).
   **Spec:** plate cards (natal withHouses/timeUnknown); Atlas views natal/synastry/today:
   wheel renderer (owns `apps/local/src/ui/wheel.tsx` — 272px structure, AC/MC labels, cusps
   placed from ChartFacts at runtime, zodiac ramp per sign, aspects table with orb +
-  applying/separating, 12-house-system chip selector (the §6 pinned set: P K O R C A V W T X B U),
-  bi-wheel for synastry, no score/no label); honest-absence branches (J1/J3/J4/J5). Render
-  tests assert cusp angles from fixture ChartFacts.
+  applying/separating, 12-house-system chip selector, bi-wheel for synastry, no score/no
+  label); honest-absence branches (J1/J3/J4/J5). Render tests assert cusp angles from
+  fixture ChartFacts.
   **Verify:** `pnpm vitest run apps/local/src/screens/atlas apps/local/src/screens/plate-natal`
   **Accept:** `atlas: 3 views render; wheel cusp angles match fixtures ±0.5°`.
 
@@ -556,12 +523,12 @@ executable subset of it).
 
 - [ ] **U.5 — Settings screen.**
   **Owns:** `apps/local/src/screens/settings/`.
-  **Spec:** sections exactly per amended SCREEN.md: House system (12 chips: P K O R C A V W
-  T X B U per ARCHITECTURE §6), Model catalogue from M.1, real download progress %, storage
-  used, remove, trial-eligible flag + lock routing to /paywall), Voice (Kokoro picker,
-  preview, mute — V.1/V.2 injection), License (status from B.1/B.3, Restore → B.5c, Enter a
-  code → /paywall enter-code state), Data (export/import/deleted via X.1/X.2, Lore summary
-  line `[turns · nodes]` from L.5 stats), About link; mobile + web (1280) layouts.
+  **Spec:** sections exactly per amended SCREEN.md: House system (12 chips), Model
+  (catalogue from M.1, real download progress %, storage used, remove, trial-eligible flag
+  + lock routing to /paywall), Voice (Kokoro picker, preview, mute — V.1/V.2 injection),
+  License (status from B.1/B.3, Restore → B.5c, Enter a code → /paywall enter-code state),
+  Data (export/import/deleted via X.1/X.2, Lore summary line `[turns · nodes]` from L.5
+  stats), About link; mobile + web (1280) layouts.
   **Verify:** `pnpm vitest run apps/local/src/screens/settings`
   **Accept:** `settings: 6 sections render; trial-lock and license states bind`.
 
@@ -582,7 +549,7 @@ executable subset of it).
   posting the term into the conversation (bus). Fix the frozen spec drift: license line
   reads AGPL-3.0-or-later (not "proprietary").
   **Verify:** `pnpm vitest run apps/local/src/screens/about apps/local/src/screens/glossary`
-  **Accept:** `about+glossary: license line AGPL; 35 glyph entries open`.
+  **Accept:** `about+glossary: license line AGPL; 36 glyph entries open`.
 
 - [ ] **U.8 — Splash.**
   **Owns:** `apps/local/src/screens/splash/`.
@@ -595,12 +562,12 @@ executable subset of it).
 - [ ] **U.9 — Stage (mascot).**
   **Owns:** `apps/local/src/ui/stage.tsx`, `apps/local/src/assets/mascot/` (copies from
   LIBS/UI/FIGMA/mascot/), tests.
-  **Spec:** 8 states driven only by the C.4 `StageSignal` union (STATES.md real-vs-composed
-  table): idle loop (webp) real; waking/thinking/speaking/delighted/error as composed
-  overlays (SVG/glyph + envelope ring); asleep = no model; listening = composer focus;
-  reduced-motion: frame 0 + no plate slide; envelope drives orb+mouth scale.
+  **Spec:** 8 states driven only by C.4 bus events (STATES.md real-vs-composed table):
+  idle loop (webp) real; waking/thinking/speaking/delighted/error as composed overlays
+  (SVG/glyph + envelope ring); asleep = no model; reduced-motion: frame 0 + no plate slide;
+  envelope drives orb+mouth scale.
   **Verify:** `pnpm vitest run apps/local/src/ui/stage.test.tsx`
-  **Accept:** `stage: 8 states map to StageSignal; envelope scales orb; reduced-motion honored`.
+  **Accept:** `stage: 8 states map to bus events; envelope scales orb; reduced-motion honored`.
 
 ---
 
@@ -637,8 +604,7 @@ executable subset of it).
   files + keychain token (B.3 injection) + license_state; returns a report
   `{tablesCleared, filesDeleted, tokenCleared}`; confirm affordance lives in U.5 (inject).
   **Verify:** `pnpm vitest run apps/local/src/data/destroy.test.ts`
-  **Accept:** `destroy: 0 rows remain across all app tables (9 without vec; 10 with); files
-  removed; token cleared`.
+  **Accept:** `destroy: 0 rows remain across 10 tables; files removed; token cleared`.
 
 ---
 
@@ -647,14 +613,12 @@ executable subset of it).
 - [ ] **G.1 — Glossary + gazetteer.**
   **Owns:** `apps/local/src/content/glossary.json`, `apps/local/src/content/gazetteer.json`,
   `apps/local/src/content/index.ts`, tests.
-  **Spec:** GlossaryEntry per glyph (35: 12 signs, 11 bodies, 2 nodes, 7 aspects,
-  retrograde, applying, separating — per TOKENS.md glyph decomposition and the
-  `natally-glyphs.svg` symbol set) with `What it is` body (authored-static, INC-19) +
+  **Spec:** GlossaryEntry per glyph (36) with `What it is` body (authored-static, INC-19) +
   synastry notes where applicable (per glossary-callout screen); gazetteer = place names
   gazetteer for L.3 (seed: ~100 major cities + reflexive user-entered places at runtime);
   index exports typed loaders.
   **Verify:** `pnpm vitest run apps/local/src/content`
-  **Accept:** `content: 35 entries, all four fields present, gazetteer loads`.
+  **Accept:** `content: 36 entries, all four fields present, gazetteer loads`.
 
 ---
 
@@ -674,7 +638,7 @@ executable subset of it).
 ## Phase I — Integrators (⛓ idempotent consolidators; safe to re-run anytime, in any order after their inputs exist)
 
 - [ ] **I.1 — Route registry wiring.** ⛓
-  **Owns:** `apps/local/src/ui/routes.generated.ts`, `apps/local/scripts/gen-routes.mjs`.
+  **Owns:** `apps/local/src/ui/routes.generated.ts`.
   **Spec:** generate (owned script `gen-routes.mjs`) the static import list of every
   `registerRoute` call site under `src/screens/**`; emit registry module consumed by
   router.ts. Re-running regenerates identically. **Verify:** `node apps/local/scripts/
@@ -697,10 +661,9 @@ executable subset of it).
   **Accept:** `capabilities: single selection point; grep clean elsewhere`.
 
 - [ ] **I.4 — Full workspace gate.** ⛓
-  **Owns:** `scripts/assert-budget.mjs`; runs checks.
-  **Spec:** `./scripts/check.sh` (T0.1) + `bash scripts/grep-no-speechsynthesis.sh` +
-  bundle budget assert script (owned `scripts/assert-budget.mjs`: built web initial JS
-  ≤ 300 KB gz).
+  **Owns:** nothing new; runs checks. **Spec:** `./scripts/check.sh` (T0.1) +
+  `bash scripts/grep-no-speechsynthesis.sh` + bundle budget assert script (owns
+  `scripts/assert-budget.mjs`: built web initial JS ≤ 300 KB gz).
   **Verify:** `./scripts/check.sh && node scripts/assert-budget.mjs`
   **Accept:** `workspace: typecheck+lint+tests green; budget ≤ 300 KB gz; ban greps 0`.
 
@@ -725,8 +688,7 @@ executable subset of it).
   **Verify:** `bash -n` + `--dry-run` **Accept:** `dry-run prints apk/aab names + versionCode`.
 
 - [ ] **R.4 — build-web.sh (PWA).** **Owns:** `scripts/build-web.sh`,
-  `apps/local/public/manifest.webmanifest`, `apps/local/src/sw.ts`,
-  `apps/local/src/sw.test.ts`.
+  `apps/local/public/manifest.webmanifest`, `apps/local/src/sw.ts`.
   **Spec:** vite build → `dist/web` (its own stamped qualifier artifact per R1 lineage);
   PWA manifest (name natally, identity `mba.robin.natally`, dark theme `#120C1C`); service
   worker: cache-first for hashed assets + fonts, network-only for mirror/bridge (never
@@ -739,17 +701,13 @@ executable subset of it).
   `scripts/update-version.sh --post-build`. **Verify:** `bash -n && --dry-run`
   **Accept:** `dry-run sequences all targets; lock acquire/release printed`.
 
-- [ ] **R.6 — Version stamping wiring.** **Owns:** `scripts/update-version.sh`.
-  **Spec:** add a read-only `--check` mode (exit 0 when every version surface agrees;
-  nonzero otherwise; never writes — running it must not mutate the stamp). Migrate the
-  manifest guards to the monorepo paths they silently miss today:
-  `apps/local/src-tauri/tauri.conf.json`, `apps/local/src-tauri/Cargo.toml`,
-  `apps/local/src-tauri/gen/android/tauri.properties` (the current guards point at the
-  pre-monorepo root and no-op). Keep the default stamp behaviour and `--post-build` exactly
-  as they are (house flow unchanged — no hardening).
-  **Verify:** `bash scripts/update-version.sh --check` **Accept:** `version check:
-  consistent (version.txt = version.json = package.json = apps/local/src-tauri/tauri.conf.json
-  = apps/local/src-tauri/Cargo.toml)`.
+- [ ] **R.6 — Version stamping wiring.** **Owns:** edits limited to
+  `scripts/update-version.sh` guards (already pre-wired: package.json, tauri.conf.json,
+  Cargo.toml, tauri.properties). Confirm idempotency: no-op when values equal (fix the
+  unconditional MINOR bump to only fire with `--bump` or when committing per house flow —
+  keep default behavior, add `--check` mode you own). **Verify:** `bash
+  scripts/update-version.sh --check` **Accept:** `version check: consistent
+  (version.txt = version.json = package.json)`.
 
 - [ ] **R.7 — Dormant CI + guards.** **Owns:** `.github/workflows/check.yml` (workflow
   gated to run only when labeled/`workflow_dispatch` — dormant until public release),
