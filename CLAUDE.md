@@ -183,11 +183,12 @@ seam without re-architecting.
   Lore) entered **specs-first** with frames already backfilled (`/paywall`, `/checkout`,
   J10/J11, trial + license nodes in `STATE-LEDGER.json`) — **operator re-clearance and
   re-freeze of the amended complement still pending.**
-- `DOCS/ARCHITECTURE.md` (2026-09-04) and `CHECKLIST.md` exist; `DOCS/TEST_RUBRIC.md` is the
-  remaining gate-2 sibling. Nothing under `src/` before all three exist and the complement is
-  re-cleared (I2, TC12, D3).
-- Open items: operator re-clearance + re-freeze of the D10–D14 complement; TEST_RUBRIC.md
-  authoring; HF write token + `CREDENTIALS/natally.md` creation; forgejo return (restore CC13
-  remotes + LFS re-push); hosted-product design pass (Alby Market / x402 — separate
-  conversation); unify the two workstations' remote layouts (msi4090: `origin`=forgejo +
+- **Gate 2 complete (2026-09-11):** `DOCS/ARCHITECTURE.md` (reconciled 2026-09-09, spec-panel
+  fills 2026-09-11), `CHECKLIST.md` (recreated de novo, 58 tasks), `DOCS/TEST_RUBRIC.md`
+  (authored 2026-09-11). **CODE is open** — D19 (2026-09-11) rules the Figma frame
+  re-clearance is not a blocker; the 2026-09-04 TC12 §10 approval governs (I2/TC12/D3).
+- Open items: HF write token + `CREDENTIALS/natally.md` creation; hosted-product design
+  pass (Alby Market / x402 — separate conversation); msi4090 remote sync (this host's CC13
+  restored 2026-09-11; unify at msi4090's next session); Stage node-id verification at the
+  re-freeze. Former open item "forgejo return" is **resolved** (CC13 restored 2026-09-11).
   `github` mirror; this host: `origin`=GitHub) when forgejo returns.

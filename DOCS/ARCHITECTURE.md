@@ -391,10 +391,10 @@ runtime.
 
 ## 16. Open items register
 
-1. Operator re-clearance of the 2026-09-04 complement additions in Figma → re-freeze
-   (STATE-LEDGER `pendingFixes`) — including re-verifying the Stage component's five
-   variant node-ids: `DESIGN.md`'s Stage row and `STATE-LEDGER.json` disagree (7:3, 7:5,
-   7:16); STATE-LEDGER is canonical for code until the operator says otherwise.
+1. Figma visual re-clearance of the 2026-09-04 complement additions → re-freeze — **ruled
+   not a CODE blocker (D19, 2026-09-11)**; opportunistic. Still owed at re-freeze:
+   re-verifying the Stage component's five variant node-ids (`DESIGN.md`'s Stage row and
+   `STATE-LEDGER.json` disagree on 7:3, 7:5, 7:16; STATE-LEDGER is canonical for code).
 2. `DOCS/TEST_RUBRIC.md` (final gate-2 sibling; `CHECKLIST.md` was recreated 2026-09-09
    from this reconciled edition).
 3. HF write token for the mirror (both PATs 401 on 2026-08-18).

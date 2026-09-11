@@ -135,3 +135,9 @@ workflow layers above and supersede nothing.
 | D16 | **No hardening; never break Tauri 2 multi-platform compatibility.** Doc reconciliation touches naming and consistency only — build topology, stamping scheme, and all six billing rails stay exactly as specified. | Hardening passes during reconciliation; any change that risks the four-target Tauri 2 matrix. |
 | D17 | **ARCHITECT-phase doctrine:** the enumeration is consumed onto the checklist or the checklist is wrong — no test-like or matcher activity at this phase; coders see exactly one self-contained task block and nothing else; anything a checker would need to resolve must already be resolved in the enumeration. | Post-hoc checkers over prose at ARCHITECT; smoke tests as deliverables; coder exploration beyond its block. |
 | D18 | On major change the checklist is recreated **de novo from `ARCHITECTURE.md`** — never transcribed from its predecessor; predecessors are preserved beside it with semantic names (additive, I3). | Deriving a new checklist from the old checklist's text. |
+
+## 2026-09-11 — operator directive D19: complement re-clearance is not a CODE blocker
+
+| # | Decision | Rules out |
+|---|---|---|
+| D19 | The 2026-09-04 TC12 §10 approval governs: the amended complement's **Figma frame re-clearance is not a CODE blocker**; visual re-clearance + re-freeze happen opportunistically (at re-freeze, verify the Stage component's five variant node-ids — DESIGN.md's Stage row and STATE-LEDGER.json disagree; the ledger is canonical for code). | Holding CODE pending frame clearance; treating the specs-first surfaces as unapproved. |

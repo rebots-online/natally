@@ -261,7 +261,7 @@
     "separating": "5:120"
   },
   "pendingFixes": [
-    "operator: re-clear the 2026-09-04 additions in Figma (TC12 §9) — paywall, checkout, conversation trial variants, settings License/Lore — then re-stamp frozen"
+    "D19 (2026-09-11): frame re-clearance is not a CODE blocker — the 2026-09-04 §10 approval governs; at opportunistic re-freeze, verify the Stage component's five variant node-ids (DESIGN.md Stage row disagrees with this ledger on 7:3, 7:5, 7:16; ledger is canonical for code)"
   ],
   "frozen": "2026-09-03",
   "amended": "2026-09-04 (D10–D14 additions built in-file; awaiting operator re-clearance for re-freeze)"
