@@ -15,8 +15,8 @@ one task block — plus `DOCS/ARCHITECTURE.md` for background — can finish it 
 The architecture enumerates every entity and closed set; each block cites its entities
 verbatim, so a coder looks at its block and nothing else.
 
-Sibling document: `DOCS/TEST_RUBRIC.md` (pending; task-level Verify lines here are the
-executable subset of it).
+Sibling document: `DOCS/TEST_RUBRIC.md` (authored 2026-09-11; the task-level Verify lines
+here are the executable subset of it).
 
 ## Execution protocol (house rules, CC/TC compliant)
 
@@ -350,8 +350,10 @@ executable subset of it).
 - [ ] **B.2 — Reading ledger + billing.consume.** *(§9.2 reading unit, §9.6 seam)*
   **Owns:** `packages/billing/src/ledger.ts`, `packages/billing/src/consume.ts`, tests.
   **Reads:** T0.7, T0.9. **Spec:** `ReadingLedger` over injected SQLite (readings table):
-  `append(reading)` — append-only, never mutate (§9.2; corrections are compensating rows);
-  `rowsSince(ts)`. `billing.consume(reading, deps)`: licensed (verified B.3 token) ⇒
+  `append(reading)` — append-only, never mutate (§9.2); `compensate(reading)` — appends the
+  compensating credit row of the §9.2 charge lifecycle (charge at request with a plate in
+  scope; refund when the fence finds zero Tier-1 references); `rowsSince(ts)`.
+  `billing.consume(reading, deps)`: licensed (verified B.3 token) ⇒
   allowed; else evaluateGate ⇒ map states to ConsumeResult (§9.6 — THE seam: the hosted
   product swaps the impl, same signature).
   **Verify:** `pnpm vitest run packages/billing/tests/ledger.test.ts`
@@ -365,9 +367,12 @@ executable subset of it).
   no external dep — WebCrypto Ed25519 on web; `ed25519-dalek` native); public key baked
   from `VITE_LICENSE_PUBKEY`; offline verify checks sig, iss, sub = appUserId, exp
   null-or-future; revocation = bridge-published signed dated DenyList checked when online,
-  never blocking a verified unexpired token offline; storage: OS keychain (native command
-  via T0.3 macro) / IndexedDB WebCrypto-wrapped (web). Tests: generated keypair, forge +
-  reject paths.
+  never blocking a verified unexpired token offline; deny-list fetched at app start,
+  before any checkout/restore, and at most every 24 h (§9.3); storage: OS keychain (native
+  command via T0.3 macro) / IndexedDB WebCrypto-wrapped (web) — where no OS keychain
+  exists, an encrypted app-data file with About disclosure (§9.3), never plaintext. Tests:
+  published Ed25519 test vectors (RFC 8032) for verify; generated keypair for the
+  mint/forge paths.
   **Verify:** `pnpm vitest run packages/billing/tests/token.test.ts`
   **Accept:** `token: valid passes, tampered/expired/revoked rejected`.
 
@@ -401,7 +406,8 @@ executable subset of it).
   + appUserId; `checkout` → `presentPaywall(offeringId)` (default offering
   `natally_default`); entitlement `unlimited` present ⇒ bridge `/mint` with the RC
   purchase id (§9.4: RC is the registry; the bridge verifies via RC REST v2 with its
-  secret) → LicenseToken; `restore` via RC restore.
+  secret) → LicenseToken; `restore` via RC restore; `GET /denylist` enforcement honours the
+  §9.3 fetch cadence.
   **Verify:** `pnpm vitest run packages/billing/tests/adapters-rc.test.ts` (RC SDK
   injected as constructor param)
   **Accept:** `rc adapter: paywall→entitlement→mint→token flow OK`.
@@ -426,10 +432,13 @@ executable subset of it).
   {code}` (single-use registry, sha256-stored); `POST /mint {appUserId, purchaseRef}` (RC
   path — verifies purchase against RC REST v2 with `RC_SECRET_KEY`); `GET /denylist`
   (signed); `GET /healthz`. Env: six processor webhook secrets + RC keys + signing key +
-  `LEDGER_PATH` (§11: no secret ever ships in a client). Tests: HMAC fixtures, idempotent
-  double-webhook, mint+verify roundtrip, redeem reuse.
+  `LEDGER_PATH` (§11: no secret ever ships in a client). **Refund/chargeback webhook
+  events that identify a fulfilled purchase add the minted jti to the signed deny-list**
+  (§9.4 — the only revocation path). Tests: HMAC fixtures, idempotent
+  double-webhook, mint+verify roundtrip, redeem reuse, refund→deny-list.
   **Verify:** `cargo test --manifest-path services/license-bridge/Cargo.toml`
-  **Accept:** `bridge: 6 webhook fixtures verified idempotently; mint→verify; redeem reuse rejected`.
+  **Accept:** `bridge: 6 webhook fixtures verified idempotently; mint→verify; redeem reuse
+  rejected; refund→deny-list revoke`.
 
 ---
 
@@ -482,7 +491,10 @@ executable subset of it).
   **Spec:** §4's typed bus for the CompanionEvent union (token, turn, chart-computed,
   envelope, error): `subscribe(type, fn)` unsubscribe handle. §10's `StageSignal` union =
   `CompanionEvent ∪ {engine-load(fraction), model-presence(bool), composer-focus(bool)}`
-  — asleep/waking/listening ride capability signals, not bus events. Replay-buffered
+  — asleep/waking/listening ride capability signals, not bus events; the `envelope` member
+  is three-valued — `envelope-start`, `envelope-level(0..1)` per 20 ms window,
+  `envelope-end` (stream close or 120 ms silence, §10); `Speaking` spans start→end.
+  Replay-buffered
   `stageState$` reducer over StageSignal (§10 + STATES.md): Thinking on request-sent (no
   tokens yet), Speaking while the envelope plays, Delighted on chart-computed/unlock,
   Error on engine failure, Asleep from model-presence=false, Waking from engine-load
@@ -567,8 +579,9 @@ executable subset of it).
   **Owns:** `apps/local/src/screens/people/`, `apps/local/src/screens/first-light/`.
   **Spec:** conversational intake (name/date/place/time-or-unknown; instant computed fact
   after each answer via P.4 — J1); privacy explainer, two-lane local wording (§11); people
-  list (name · sun glyph · date · place · time-known marker; add/edit/remove with
-  export-first nudge — J3; X.1 repo injection).
+  list (name · sun glyph · date · place · time-known marker; add/edit/remove — remove runs
+  X.1's `removePerson` cascade behind a `requestConfirm` plate (§8.4) — with export-first
+  nudge — J3; X.1 repo injection).
   **Verify:** `pnpm vitest run apps/local/src/screens/people apps/local/src/screens/first-light`
   **Accept:** `intake: 4-step flow yields Person + first computed fact; unknown-time branch`.
 
@@ -632,7 +645,9 @@ executable subset of it).
   **Owns:** `apps/local/src/mirror/` (manifest.ts, download.ts, cache.ts, catalogue.ts),
   tests.
   **Reads:** T0.7 types. **Spec:** §13 verbatim: fetch `manifest.json` from
-  `VITE_MODEL_MIRROR_BASE` (host allowlist = mirror + bridge, §11); ranged resumable
+  `VITE_MODEL_MIRROR_BASE` (host allowlist = mirror + bridge, §11); a **free-space
+  precondition** (asset size + 10 %) checked before each download starts — failure is an
+  honest error (§13); ranged resumable
   download to the platform cache (native dir via command, web Cache Storage); sha256
   verify before commit (streaming digest), atomic rename; catalogue store (present →
   downloading %, bytes; remove = files + rows); `trialEligible` honoured by B.1/U.5 (§9.1).
@@ -650,10 +665,15 @@ executable subset of it).
   **Reads:** T0.9 DDL, L.1 `exportAll()`. **Spec:** repos for Person/Session/Turn/ChartFacts
   per the T0.9 tables; `exportAll()` → ExportDocument v1 (§5: people, sessions, turns,
   chart **inputs**, lore via L.1, consumedCodes); `importDocument(doc)` merges by personId
-  and lore nodeId — never deletes; §11: exported JSON is plaintext by design and the UI
-  says so. Deterministic export fixture roundtrip.
+  and lore nodeId — never deletes; same personId with divergent birth data ⇒ **existing
+  wins**, incoming birth fields ignored, one row in the returned report
+  `{merged, skipped, conflicts[]}` (§8.4); `removePerson(personId)` = real deletion of the
+  person, their `kind=person` lore node + incident edges, and their cached charts;
+  sessions/turns persist as transcript history (§8.4); §11: exported JSON is plaintext by
+  design and the UI says so. Deterministic export fixture roundtrip.
   **Verify:** `pnpm vitest run apps/local/src/data`
-  **Accept:** `data: CRUD roundtrip; export→wipe→import restores equivalently`.
+  **Accept:** `data: CRUD roundtrip; export→wipe→import restores equivalently; conflicts
+  reported with existing wins; removePerson cascades lore+charts and keeps the transcript`.
 
 - [ ] **X.2 — Delete-everything.** *(§8.4 real deletion)*
   **Owns:** `apps/local/src/data/destroy.ts`, tests.

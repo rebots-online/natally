@@ -230,6 +230,16 @@ hybrid: top-k vector matches (k=8) ∪ 2-hop neighbourhood of matched nodes, bud
 **pysanky / 6dog** graph-navigation UI reads the same graph without re-architecting. User
 controls (Settings › Data): summary line (`[turns · nodes]`, rendered from `stats()` →
 `{turns, nodes, edges}`), export with J8, delete-everything includes lore. Deletion is real deletion (rows + vectors), not soft-hide.
+**Person removal** (People edit flow) is real deletion of the person, their `kind=person`
+lore node and every edge incident to it, and their cached charts (§5 content-addressed
+rows); their sessions and turns persist as transcript history — the transcript is the
+primary surface and is never rewritten. The action runs behind the standard confirm
+affordance.
+**Import conflicts:** `importDocument` merges by personId and lore nodeId; when an incoming
+person's id matches but birth data diverges, the **existing person wins** — incoming birth
+fields are ignored and the divergence is surfaced once in the import report
+`{merged, skipped, conflicts[]}`. Nothing is silently overwritten and nothing is deleted
+by import.
 
 ## 9. Licensing & entitlement (D11)
 
@@ -246,13 +256,22 @@ conversation that references at least one plate. Ledger: SQLite `readings(id, ts
 chartId)` append-only (house never-delete rule; corrections are compensating rows). Gate
 check runs pre-inference; outcomes map to the designed states: remaining counter (TrialIdle
 chip), exhausted (TrialExhausted composer replacement), rate-limited next-date aside.
+**Charge lifecycle:** when a turn is requested with a plate in scope, the ledger appends a
+Reading row at request time (that is the charge — append-only, §5); if the fence checker
+(§7.2) finds the produced turns reference **zero** Tier-1 values, a compensating credit row
+is appended (house never-delete rule) — the reading is refunded, not deleted. Turns whose
+request carries no plate context are never charged (§7.4 free chat). The pre-inference
+gate is a prediction over committed rows; the ledger owns charge and refund.
 
 ### 9.3 License token
 Ed25519-signed JSON `{ sub: appUserId, tier: 'unlimited', iat, exp?: null, iss:
 'natally-license-bridge', jti }` (COSE/CWT-style compact form). The **public key is baked at
 build**; verification is offline; revocation is a bridge-published, signed, dated deny-list
-checked when online (never blocks a verified unexpired token offline). Storage: OS keychain
-(native) / IndexedDB with WebCrypto-wrapped value (web).
+checked when online (never blocks a verified unexpired token offline). **Deny-list
+cadence:** fetched at app start, before any checkout/restore, and at most every 24 h
+thereafter; cached locally. **Storage:** OS keychain (native) / IndexedDB with
+WebCrypto-wrapped value (web); where no OS keychain exists, the wrapped value lives in an
+encrypted app-data file and About states so — never plaintext.
 
 ### 9.4 Processor rails & the license bridge
 One interface, six adapters, presence driven by `.env` (blank ⇒ rail hidden; the paywall's
@@ -278,8 +297,11 @@ interface PurchaseAdapter {
   SQLite ledger keyed `(processor, invoiceId)`), mints LicenseTokens with
   `LICENSE_ED25519_PRIVATE_KEY`, issues single-use redeem codes (128-bit random, stored
   SHA-256-hashed), publishes the signed deny-list, and exposes `POST /redeem` +
-  `POST /verify`. Secrets live in the bridge's `.env` per Admin-Manual convention; **no
-  processor secret and no signing key ever ships in a client**.
+  `POST /verify`. **Refund/chargeback events that identify a fulfilled purchase revoke the
+  minted jti onto the signed deny-list** — the deny-list is the only revocation path, and
+  clients enforce at the next online check (§9.3 cadence). Secrets live in the bridge's
+  `.env` per Admin-Manual convention; **no processor secret and no signing key ever ships
+  in a client**.
 
 ### 9.5 Codes
 - **Individually-redeemable:** bridge-issued, single-use, registry-deduped server-side and
@@ -307,7 +329,10 @@ while PCM plays with the RMS envelope driving orb+mouth, Delighted on chart comp
 unlock success, Error on engine failure. Asleep, waking and listening are driven by
 capability signals (model presence, engine/model load progress, composer focus), not by
 bus events; the Stage reducer consumes a `StageSignal` union — companion bus events ∪
-capability signals — defined by task C.4.
+capability signals — defined by task C.4. **Envelope semantics:** CompanionEvent
+`envelope` is three-valued — `envelope-start`, `envelope-level(0..1)` per 20 ms window,
+`envelope-end` (raised on stream close or after a 120 ms silence threshold). `Speaking`
+spans `envelope-start` → `envelope-end`; `Idle` resumes at `envelope-end`.
 
 ## 11. Privacy & security posture
 
@@ -338,8 +363,10 @@ capability signals — defined by task C.4.
 `{ version, assets: [{ id, kind: 'llm'|'embedder'|'voice'|'voices', file, bytes, sha256,
 quant, trialEligible? }] }`. Downloads: ranged + resumable, sha256-verified before commit,
 stored under the platform cache dir (native) / Cache Storage (web); catalogue rows in
-Settings render from this manifest; removal deletes files + manifest rows. HF write token is
-an operator precondition (open item §16).
+Settings render from this manifest; removal deletes files + manifest rows. A **free-space
+precondition** (asset size + 10 %) is checked before each download starts; failure is an
+honest error, never a partial stash. HF write token is an operator precondition (open item
+§16).
 
 ## 14. Build, release, versioning
 
