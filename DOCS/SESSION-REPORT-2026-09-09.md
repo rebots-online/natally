@@ -130,8 +130,8 @@ a first line in combination with codegraph before even looking at the codebase")
 | D17 (proposed) | 2026-09-09 | **ARCHITECT-phase doctrine:** the enumeration is consumed onto the checklist or the checklist is wrong — no test-like or matcher activity at this phase; coders see exactly one self-contained task block and nothing else; anything a checker would have to resolve must be resolved in the enumeration. |
 | D18 (proposed) | 2026-09-09 | Checklist is recreated **de novo from ARCHITECTURE.md** on major change — never transcribed from its predecessor; predecessors preserved beside with semantic names. |
 
-These are minted here as proposals; minting into `DOCS/DECISIONS.md` (append-only) awaits the
-operator's confirmation of numbering.
+These were **minted 2026-09-11 into `DOCS/DECISIONS.md` as D15–D18** (operator directives,
+recorded verbatim-in-substance).
 
 ## 8. Spec-panel review (2026-09-10) — findings staged for disposition
 
@@ -164,10 +164,12 @@ No files were modified by the panel (its own boundary: review only).
 2. Operator re-clearance + re-freeze of the amended complement — including the Stage
    node-id verification (H3) and disposition of §8's operator-decision rows.
 3. Postgres **task_ledger** (`192.168.0.249:5432` — Proxmox CT 112, `alpine-postgresql`)
-   returned with the fleet; **re-recorded 2026-09-11** (ledger ids 1975–1977). Remaining
-   infrastructure gap: forgejo push auth — both documented tokens 401 against git and API
-   (v15 box has no SSH on :22); rotation requested from the operator (DECISIONS
-   2026-09-11). `github` remains the working push target; CC13 shape is staged.
+   returned with the fleet; **re-recorded 2026-09-11** (ledger ids 1975–1977).
+   **CC13 restored the same day** (operator correction: the tokens were valid — the
+   extraction had baked the CREDENTIALS table's markdown backticks into the value);
+   `rcheung/natally` created de-novo on the v15 instance (id 54, no-migration instance)
+   and `master` pushed. `origin` authoritative + `github` code-only public mirror,
+   histories identical. See DECISIONS 2026-09-11.
 4. Doc-alignment pass from the original roadmap item 5 (M6, M8): README origin line,
    STATE-LEDGER `remotes` block, DECISIONS superseding note, APP_INVENTORY D9 field.
 5. Wider `DOCS/sdk/` snapshots land at their owning tasks (§16.8), not before.

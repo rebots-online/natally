@@ -114,3 +114,24 @@ are re-read as the **hosted product's** roadmap (D10), not as legs of the local 
   git and API, and the v15 box has no SSH on :22. `github` remains the working push target
   until the operator rotates the token (I-15: no rotation without explicit instruction;
   I-4/I-6: escalated, not self-rescued).
+- **Resolution (same day, operator correction):** no rotation was needed — the tokens were
+  valid all along; the credential parser had baked the CREDENTIALS table's markdown
+  backticks into the value (42 chars incl. backticks = 401; stripped 40 chars = 200).
+  `rcheung/natally` then returned "Repository not found": the v15 instance is de-novo
+  (no migration), so the repo was created via API (id 54, private, `master`,
+  push-to-create disabled by policy) and `master` pushed. **CC13 fully restored**;
+  `github` remains the code-only public mirror. Standing lesson recorded in CLAUDE.md:
+  credential parsers strip markdown decoration from CREDENTIALS tables; values never
+  enter transcripts.
+
+## 2026-09-11 — operator directives D15–D18 (minted from the 2026-09-09/10 sessions)
+
+Recorded verbatim-in-substance from the operator's session instructions; they refine the
+workflow layers above and supersede nothing.
+
+| # | Decision | Rules out |
+|---|---|---|
+| D15 | Roadmap work executes **"don't block — vendor in"**: fold audit fixes directly into the artifact being recreated; vendor the needed SDK snapshot (`sweph-wasm`) rather than leaving a contract blocked on it. | Blocking contract pins on missing snapshots; deferring known fixes to a later pass. |
+| D16 | **No hardening; never break Tauri 2 multi-platform compatibility.** Doc reconciliation touches naming and consistency only — build topology, stamping scheme, and all six billing rails stay exactly as specified. | Hardening passes during reconciliation; any change that risks the four-target Tauri 2 matrix. |
+| D17 | **ARCHITECT-phase doctrine:** the enumeration is consumed onto the checklist or the checklist is wrong — no test-like or matcher activity at this phase; coders see exactly one self-contained task block and nothing else; anything a checker would need to resolve must already be resolved in the enumeration. | Post-hoc checkers over prose at ARCHITECT; smoke tests as deliverables; coder exploration beyond its block. |
+| D18 | On major change the checklist is recreated **de novo from `ARCHITECTURE.md`** — never transcribed from its predecessor; predecessors are preserved beside it with semantic names (additive, I3). | Deriving a new checklist from the old checklist's text. |

@@ -87,17 +87,14 @@ content law (INC-19, below).
   under `release.lock` so every platform ships the same stamp.
 - **Git** (TC10, CC13): commit and push at every task completion and handback; `git add`
   scoped to the task's files, never `-A`; a push failure is reported as a durability gap.
-  Branch `master`. Standing state (2026-09-11): forgejo.robin.mba (Forgejo v15, CT 130) is
-  **back**, and the CC13 shape is **staged on this host but blocked on credentials** —
-  `origin` → `https://forgejo.robin.mba/rcheung/natally.git` (authoritative; auth pending),
-  `github` → `github.com/rebots-online/natally` (**working push target**; code-only,
-  `GIT_LFS_SKIP_PUSH=1`). Both documented forgejo tokens
-  (`CREDENTIALS/forgejo-robin-mba-v15.md`, `CREDENTIALS/api-tokens.md` forgejo.robin.mba
-  section) returned 401 against git and API on 2026-09-11, and the v15 box exposes no SSH
-  on :22 — **operator to rotate the token** (I-15: no rotation without explicit
-  instruction); until then push explicitly to `github`. On the first valid token:
-  `git push -u origin master` (full history; LFS endpoint per `.lfsconfig`), then
-  `git push github master`.
+  Branch `master`. Standing state (2026-09-11): **CC13 restored** — `origin` →
+  `https://forgejo.robin.mba/rcheung/natally.git` (authoritative; LFS endpoint per
+  `.lfsconfig`; repo created de-novo on Forgejo v15, CT 130 — the instance has no
+  migration, so repos are fresh — id 54, private, `master`), `github` →
+  `github.com/rebots-online/natally` (public mirror; **code-only, `GIT_LFS_SKIP_PUSH=1`**).
+  Push both at handbacks: `git push` then `GIT_LFS_SKIP_PUSH=1 git push github`.
+  Forgejo token lives in `CREDENTIALS/forgejo-robin-mba-v15.md` — **strip the markdown
+  backticks when scripting it** (a backtick-wrapped 40-hex token reads as 401).
 - **Artifacts** (CC12, CC3, INC-16): `dist/` is **tracked**; binaries go through git-LFS.
   Artifact names are slug-first: `mba.robin.natally-v<version>-<qualifier>`. Unstamped
   artifacts are never left behind; wrongly-stamped ones move to `~/outbox/natally/` on sight —

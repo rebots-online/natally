@@ -220,8 +220,8 @@
     "2026-09-04 J10, J11 journeys added (text-only, screens in complement)"
   ],
   "remotes": {
-    "origin": "https://forgejo.robin.mba/rcheung/natally.git (authoritative, CC13; push auth pending forgejo token rotation — both documented tokens 401 on 2026-09-11)",
-    "github": "https://github.com/rebots-online/natally.git (working mirror, code-only, GIT_LFS_SKIP_PUSH=1)"
+    "origin": "https://forgejo.robin.mba/rcheung/natally.git (authoritative, CC13 — restored 2026-09-11: repo created de-novo on Forgejo v15 (id 54); LFS endpoint per .lfsconfig)",
+    "github": "https://github.com/rebots-online/natally.git (public mirror, code-only, GIT_LFS_SKIP_PUSH=1)"
   },
   "glyphs": {
     "aries": "5:4",
