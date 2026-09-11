@@ -163,10 +163,11 @@ No files were modified by the panel (its own boundary: review only).
 1. `DOCS/TEST_RUBRIC.md` authoring — the remaining gate-2 sibling (H1).
 2. Operator re-clearance + re-freeze of the amended complement — including the Stage
    node-id verification (H3) and disposition of §8's operator-decision rows.
-3. Postgres **task_ledger** (`192.168.0.249:5432`) unreachable all session — the
-   `TARCH-20260909-reconcile-checklist` events (formulated/undertaken/completed, actor
-   `session_20260909_162352`) are recorded in the context-mcp session summaries and this
-   report; re-record when the host returns.
+3. Postgres **task_ledger** (`192.168.0.249:5432` — Proxmox CT 112, `alpine-postgresql`)
+   returned with the fleet; **re-recorded 2026-09-11** (ledger ids 1975–1977). Remaining
+   infrastructure gap: forgejo push auth — both documented tokens 401 against git and API
+   (v15 box has no SSH on :22); rotation requested from the operator (DECISIONS
+   2026-09-11). `github` remains the working push target; CC13 shape is staged.
 4. Doc-alignment pass from the original roadmap item 5 (M6, M8): README origin line,
    STATE-LEDGER `remotes` block, DECISIONS superseding note, APP_INVENTORY D9 field.
 5. Wider `DOCS/sdk/` snapshots land at their owning tasks (§16.8), not before.

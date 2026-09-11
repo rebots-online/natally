@@ -101,3 +101,16 @@ added to the complement as **specs first** (`SCREEN.md` + `STATE-LEDGER.json` `p
 worklist); the Figma frames are backfilled into `natally v1` and the complement re-frozen
 only after the frames exist and the operator clears them (TC12 §9 again). R1/R2 rows above
 are re-read as the **hosted product's** roadmap (D10), not as legs of the local app.
+
+## 2026-09-11 — forgejo returned; CC13 restoration staged, credential rotation requested (operator session)
+
+- forgejo.robin.mba (Forgejo v15, CT 130) and the Proxmox fleet are back (verified live
+  2026-09-10 by the registry pass; push tested 2026-09-11).
+- The task-ledger Postgres (CT 112, `192.168.0.249:5432`, `claude_archive`) is reachable
+  again; the pending `TARCH-20260909-reconcile-checklist` events were recorded
+  (ledger ids 1975–1977).
+- This host's remotes now hold the CC13 shape — `origin` → forgejo, `github` → code-only
+  mirror — but **push auth is blocked**: both documented forgejo tokens return 401 against
+  git and API, and the v15 box has no SSH on :22. `github` remains the working push target
+  until the operator rotates the token (I-15: no rotation without explicit instruction;
+  I-4/I-6: escalated, not self-rescued).

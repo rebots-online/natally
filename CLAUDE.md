@@ -87,10 +87,17 @@ content law (INC-19, below).
   under `release.lock` so every platform ships the same stamp.
 - **Git** (TC10, CC13): commit and push at every task completion and handback; `git add`
   scoped to the task's files, never `-A`; a push failure is reported as a durability gap.
-  Branch `master`. Standing state: forgejo.robin.mba is down, so **origin currently points at
-  `github.com/rebots-online/natally`** (code-only; `GIT_LFS_SKIP_PUSH=1`, no LFS objects to
-  GitHub). When forgejo returns, restore CC13 shape: origin = forgejo (HTTPS, token), GitHub =
-  `github` mirror with LFS resolved to forgejo (`.lfsconfig` already in place); re-push LFS.
+  Branch `master`. Standing state (2026-09-11): forgejo.robin.mba (Forgejo v15, CT 130) is
+  **back**, and the CC13 shape is **staged on this host but blocked on credentials** —
+  `origin` → `https://forgejo.robin.mba/rcheung/natally.git` (authoritative; auth pending),
+  `github` → `github.com/rebots-online/natally` (**working push target**; code-only,
+  `GIT_LFS_SKIP_PUSH=1`). Both documented forgejo tokens
+  (`CREDENTIALS/forgejo-robin-mba-v15.md`, `CREDENTIALS/api-tokens.md` forgejo.robin.mba
+  section) returned 401 against git and API on 2026-09-11, and the v15 box exposes no SSH
+  on :22 — **operator to rotate the token** (I-15: no rotation without explicit
+  instruction); until then push explicitly to `github`. On the first valid token:
+  `git push -u origin master` (full history; LFS endpoint per `.lfsconfig`), then
+  `git push github master`.
 - **Artifacts** (CC12, CC3, INC-16): `dist/` is **tracked**; binaries go through git-LFS.
   Artifact names are slug-first: `mba.robin.natally-v<version>-<qualifier>`. Unstamped
   artifacts are never left behind; wrongly-stamped ones move to `~/outbox/natally/` on sight —
