@@ -1,9 +1,9 @@
 {
-  "version": "1.9.19391",
-  "versionBase": "1.9",
-  "buildNumber": "19391",
-  "versionCode": 100009,
-  "buildDate": "2026-09-11T17:51:53-04:00",
+  "version": "1.10.21039",
+  "versionBase": "1.10",
+  "buildNumber": "21039",
+  "versionCode": 100010,
+  "buildDate": "2026-09-13T08:19:02+07:00",
   "productName": "natally",
   "internalName": "natally",
   "packageName": "mba.robin.natally"

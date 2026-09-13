@@ -49,8 +49,10 @@ INC-1.
    no-proxy-attestation, INC-7, SC4/GR-4) — only an observed run proves anything. Each
    coder/subagent receives exactly **one task block** and works only from that block plus
    this repo's docs — reading other task blocks is out of scope (coordination is closed at
-   architecting time; Owns sets are pairwise disjoint). A perceived cross-task need is a
-   checklist defect to report (`[/] blocked: <reason>`), never an improvisation.
+   architecting time; Owns sets are pairwise disjoint). Resolve cross-task concerns while
+   deriving the checklist, before sign-off. Once implementation begins, execute the
+   approved block autonomously; record any concern for discussion with the completed
+   handoff, without stopping, reopening architecture, or improvising a deviation.
 
 ## Always-on floor (global rules — never suspended by project specifics)
 
@@ -60,11 +62,16 @@ INC-1.
 - **Additive stewardship (I3).** Never delete files or artifacts: `cp` to
   `~/outbox/natally/` (CC12's outbox; **copy, never move** — INC-13). Snapshot before any
   destructive step and print the rollback recipe (global priority rule 7).
-- **Escalate, never invent (I-4); no self-rescue (I-6).** A gap in spec or artifacts is an
-  escalation block and a stop — never a silent invention.
+- **Complete approved execution (global I2, I-4, I-6; operator clarification 2026-09-13).**
+  Architecture-to-checklist derivation is the last point for surfacing and resolving
+  concerns before sign-off. After sign-off, the checklist is authority to finish without
+  requiring the operator's presence: do not create blockers, new prerequisites, or
+  architecture detours. Record concerns for discussion after completing the goal; never
+  silently deviate or claim an unobserved result. The operator may be tending other
+  projects, so an implementation pause can waste the remainder of the day.
 - **Purposive rule reading.** A rule read so literally that it defeats its own goal is being
-  misread — but D1–D9 are operator decisions, not rules: on conflict, halt and ask; never
-  reinterpret them.
+  misread — but D1–D9 are operator decisions, not rules: resolve conflicts before checklist
+  sign-off; never reinterpret them. Approved execution follows the global rule above.
 - **No `/tmp` work.** Use project `.tmp/` or the session scratchpad; intermediates are
   `STAGING_`-prefixed; artifacts representing significant compute never rest in `.tmp/`
   (INC-16) — they land in tracked `dist/` immediately.
