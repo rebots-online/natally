@@ -20,8 +20,7 @@ here are the executable subset of it).
 
 ## Execution protocol (house rules, CC/TC compliant)
 
-- Marker protocol: `[ ]` untouched · `[/]` in progress or blocked (append ` — blocked: <reason>`
-  when a **Reads** dependency is absent; never fake an Accept) · `[X]` implemented · `✅` only
+- Marker protocol: `[ ]` untouched · `[/]` in progress · `[X]` implemented · `✅` only
   when the **Verify** command ran and its output matched the **Accept** line.
 - **Ownership closure by derivation:** every file a task may create or modify is denoted in
   its own block (**Owns**), derived 1:1 from the architecture's entity enumeration — the
@@ -31,8 +30,14 @@ here are the executable subset of it).
 - Coordination is closed at architecting time, not execution time: §5's entity rows
   partition into **pairwise-disjoint Owns sets** — no two tasks share an owned file; shared
   seams are contract files owned by exactly one task each. A task block is its executor's
-  whole world; needing a file outside it is a checklist defect: stop, mark
-  `[/] blocked: cross-task need <…>`, report — never improvise.
+  whole world. Resolve ownership and dependency concerns during architecture-to-checklist
+  derivation, before sign-off. After sign-off, execute the approved block without creating
+  blockers, reopening architecture, or improvising changes to its ownership or scope.
+- **Global autonomous execution rule (operator clarification 2026-09-13):** the approved
+  checklist authorizes completion without further operator attendance. Continue to the
+  agreed goal; record concerns for discussion with the completed handoff. The operator may
+  be working elsewhere, and a pause can waste the remainder of the day. Record actual
+  verification outcomes honestly; this rule never turns a failed Accept into a pass.
 - The ⛓ integrators (I.1–I.4) are regenerators, not coordinators — they rebuild registries
   from whatever exists when they run; running another task's script or contract file in a
   Verify is a **Read**, never a modification.
@@ -66,9 +71,10 @@ here are the executable subset of it).
 
 ## Phase T — Scaffolding & contracts (§2 monorepo layout, §3 normative stack, §15 config)
 
-- [ ] **T0.1 — Workspace scaffold.** *(§2 dependency rule, §3 stack)*
+- ✅ **T0.1 — Workspace scaffold.** *(§2 dependency rule, §3 stack)*
   **Owns:** `pnpm-workspace.yaml`, root `package.json` (rewrite — version stamp preserved),
-  `tsconfig.base.json`, `biome.json`, `.prettierrc`, `vitest.workspace.ts`, `scripts/check.sh`.
+  `pnpm-lock.yaml` (§3: committed from day one), `tsconfig.base.json`, `biome.json`,
+  `.prettierrc`, `vitest.workspace.ts`, `scripts/check.sh`.
   **Spec:** pnpm workspace packages `apps/*`, `packages/*` per §2; TS `strict`,
   `moduleResolution: bundler`, path alias `@natally/*` → `packages/*/src`; Biome lint+format
   (no `any`, no `console` in `src/`); vitest workspace with per-package projects;
@@ -78,6 +84,12 @@ here are the executable subset of it).
   `scripts/update-version.sh` and `version` script wired (§14).
   **Verify:** `pnpm install --frozen-lockfile=false && ./scripts/check.sh`
   **Accept:** `workspace: 0 test files, typecheck+lint clean` (empty workspace passes).
+  **Observed 2026-09-13, v1.10.21039:** required install + check exited 0; TypeScript
+  clean, Biome checked four files with no fixes, Vitest reported zero test files and
+  exited 0. Frozen-lockfile install also passed. An isolated app/package fixture verified
+  actual type, lint (`any`/console), and test failures return nonzero, then passed after
+  correction. Vitest 3.2's workspace-format deprecation notice is recorded for later
+  discussion; this task preserves the approved `vitest.workspace.ts` contract.
 
 - [ ] **T0.2 — apps/local frontend scaffold.** *(§3 frontend row)*
   **Owns:** `apps/local/package.json`, `apps/local/vite.config.ts`, `apps/local/tsconfig.json`,

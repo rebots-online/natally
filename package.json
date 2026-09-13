@@ -1,11 +1,33 @@
 {
   "name": "natally",
   "private": true,
-  "version": "1.9.19391",
+  "version": "1.10.21039",
   "type": "module",
   "license": "AGPL-3.0-or-later",
   "description": "natally — a natal astrology and synastry companion who reads your sky to you.",
+  "packageManager": "pnpm@11.19.0",
+  "engines": {
+    "node": ">=22.13.0"
+  },
   "scripts": {
+    "check": "bash scripts/check.sh",
+    "typecheck": "tsc --noEmit --project tsconfig.base.json",
+    "lint": "biome check .",
+    "format": "biome format --write .",
+    "vitest": "vitest --passWithNoTests",
     "version": "bash scripts/update-version.sh"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.5.13",
+    "@tauri-apps/cli": "2.11.4",
+    "@types/node": "24.13.4",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "tailwindcss": "4.3.3",
+    "typescript": "5.9.3",
+    "vite": "7.3.6",
+    "vitest": "3.2.7"
   }
 }
