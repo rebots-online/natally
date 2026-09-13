@@ -1,0 +1,858 @@
+[
+  {
+    "id": "geonames:6167865",
+    "name": "Toronto",
+    "countryCode": "CA",
+    "lat": 43.70643,
+    "lon": -79.39864,
+    "tzid": "America/Toronto"
+  },
+  {
+    "id": "geonames:6077243",
+    "name": "Montréal",
+    "countryCode": "CA",
+    "lat": 45.50884,
+    "lon": -73.58781,
+    "tzid": "America/Toronto"
+  },
+  {
+    "id": "geonames:6173331",
+    "name": "Vancouver",
+    "countryCode": "CA",
+    "lat": 49.24966,
+    "lon": -123.11934,
+    "tzid": "America/Vancouver"
+  },
+  {
+    "id": "geonames:6094817",
+    "name": "Ottawa",
+    "countryCode": "CA",
+    "lat": 45.41117,
+    "lon": -75.69812,
+    "tzid": "America/Toronto"
+  },
+  {
+    "id": "geonames:5913490",
+    "name": "Calgary",
+    "countryCode": "CA",
+    "lat": 51.05011,
+    "lon": -114.08529,
+    "tzid": "America/Edmonton"
+  },
+  {
+    "id": "geonames:5946768",
+    "name": "Edmonton",
+    "countryCode": "CA",
+    "lat": 53.55014,
+    "lon": -113.46871,
+    "tzid": "America/Edmonton"
+  },
+  {
+    "id": "geonames:6183235",
+    "name": "Winnipeg",
+    "countryCode": "CA",
+    "lat": 49.8844,
+    "lon": -97.14704,
+    "tzid": "America/Winnipeg"
+  },
+  {
+    "id": "geonames:6324729",
+    "name": "Halifax",
+    "countryCode": "CA",
+    "lat": 44.64269,
+    "lon": -63.57688,
+    "tzid": "America/Halifax"
+  },
+  {
+    "id": "geonames:5128581",
+    "name": "New York City",
+    "countryCode": "US",
+    "lat": 40.71427,
+    "lon": -74.00597,
+    "tzid": "America/New_York"
+  },
+  {
+    "id": "geonames:5368361",
+    "name": "Los Angeles",
+    "countryCode": "US",
+    "lat": 34.05223,
+    "lon": -118.24368,
+    "tzid": "America/Los_Angeles"
+  },
+  {
+    "id": "geonames:4887398",
+    "name": "Chicago",
+    "countryCode": "US",
+    "lat": 41.85003,
+    "lon": -87.65005,
+    "tzid": "America/Chicago"
+  },
+  {
+    "id": "geonames:4699066",
+    "name": "Houston",
+    "countryCode": "US",
+    "lat": 29.76328,
+    "lon": -95.36327,
+    "tzid": "America/Chicago"
+  },
+  {
+    "id": "geonames:5308655",
+    "name": "Phoenix",
+    "countryCode": "US",
+    "lat": 33.44838,
+    "lon": -112.07404,
+    "tzid": "America/Phoenix"
+  },
+  {
+    "id": "geonames:4560349",
+    "name": "Philadelphia",
+    "countryCode": "US",
+    "lat": 39.95238,
+    "lon": -75.16362,
+    "tzid": "America/New_York"
+  },
+  {
+    "id": "geonames:4726206",
+    "name": "San Antonio",
+    "countryCode": "US",
+    "lat": 29.42412,
+    "lon": -98.49363,
+    "tzid": "America/Chicago"
+  },
+  {
+    "id": "geonames:5391811",
+    "name": "San Diego",
+    "countryCode": "US",
+    "lat": 32.71571,
+    "lon": -117.16472,
+    "tzid": "America/Los_Angeles"
+  },
+  {
+    "id": "geonames:4684888",
+    "name": "Dallas",
+    "countryCode": "US",
+    "lat": 32.78306,
+    "lon": -96.80667,
+    "tzid": "America/Chicago"
+  },
+  {
+    "id": "geonames:5391959",
+    "name": "San Francisco",
+    "countryCode": "US",
+    "lat": 37.77493,
+    "lon": -122.41942,
+    "tzid": "America/Los_Angeles"
+  },
+  {
+    "id": "geonames:5809844",
+    "name": "Seattle",
+    "countryCode": "US",
+    "lat": 47.60621,
+    "lon": -122.33207,
+    "tzid": "America/Los_Angeles"
+  },
+  {
+    "id": "geonames:4930956",
+    "name": "Boston",
+    "countryCode": "US",
+    "lat": 42.35843,
+    "lon": -71.05977,
+    "tzid": "America/New_York"
+  },
+  {
+    "id": "geonames:4140963",
+    "name": "Washington",
+    "countryCode": "US",
+    "lat": 38.89511,
+    "lon": -77.03637,
+    "tzid": "America/New_York"
+  },
+  {
+    "id": "geonames:4164138",
+    "name": "Miami",
+    "countryCode": "US",
+    "lat": 25.77427,
+    "lon": -80.19366,
+    "tzid": "America/New_York"
+  },
+  {
+    "id": "geonames:5419384",
+    "name": "Denver",
+    "countryCode": "US",
+    "lat": 39.73915,
+    "lon": -104.9847,
+    "tzid": "America/Denver"
+  },
+  {
+    "id": "geonames:4180439",
+    "name": "Atlanta",
+    "countryCode": "US",
+    "lat": 33.749,
+    "lon": -84.38798,
+    "tzid": "America/New_York"
+  },
+  {
+    "id": "geonames:5856195",
+    "name": "Honolulu",
+    "countryCode": "US",
+    "lat": 21.30694,
+    "lon": -157.85833,
+    "tzid": "Pacific/Honolulu"
+  },
+  {
+    "id": "geonames:5879400",
+    "name": "Anchorage",
+    "countryCode": "US",
+    "lat": 61.21806,
+    "lon": -149.90028,
+    "tzid": "America/Anchorage"
+  },
+  {
+    "id": "geonames:3530597",
+    "name": "Mexico City",
+    "countryCode": "MX",
+    "lat": 19.42847,
+    "lon": -99.12766,
+    "tzid": "America/Mexico_City"
+  },
+  {
+    "id": "geonames:4005539",
+    "name": "Guadalajara",
+    "countryCode": "MX",
+    "lat": 20.67738,
+    "lon": -103.34749,
+    "tzid": "America/Mexico_City"
+  },
+  {
+    "id": "geonames:3995465",
+    "name": "Monterrey",
+    "countryCode": "MX",
+    "lat": 25.68435,
+    "lon": -100.31721,
+    "tzid": "America/Monterrey"
+  },
+  {
+    "id": "geonames:3553478",
+    "name": "Havana",
+    "countryCode": "CU",
+    "lat": 23.13302,
+    "lon": -82.38304,
+    "tzid": "America/Havana"
+  },
+  {
+    "id": "geonames:3703443",
+    "name": "Panamá",
+    "countryCode": "PA",
+    "lat": 8.9936,
+    "lon": -79.51973,
+    "tzid": "America/Panama"
+  },
+  {
+    "id": "geonames:2643743",
+    "name": "London",
+    "countryCode": "GB",
+    "lat": 51.50853,
+    "lon": -0.12574,
+    "tzid": "Europe/London"
+  },
+  {
+    "id": "geonames:2650225",
+    "name": "Edinburgh",
+    "countryCode": "GB",
+    "lat": 55.95206,
+    "lon": -3.19648,
+    "tzid": "Europe/London"
+  },
+  {
+    "id": "geonames:2643123",
+    "name": "Manchester",
+    "countryCode": "GB",
+    "lat": 53.48095,
+    "lon": -2.23743,
+    "tzid": "Europe/London"
+  },
+  {
+    "id": "geonames:2964574",
+    "name": "Dublin",
+    "countryCode": "IE",
+    "lat": 53.33306,
+    "lon": -6.24889,
+    "tzid": "Europe/Dublin"
+  },
+  {
+    "id": "geonames:2988507",
+    "name": "Paris",
+    "countryCode": "FR",
+    "lat": 48.85341,
+    "lon": 2.3488,
+    "tzid": "Europe/Paris"
+  },
+  {
+    "id": "geonames:2995469",
+    "name": "Marseille",
+    "countryCode": "FR",
+    "lat": 43.29695,
+    "lon": 5.38107,
+    "tzid": "Europe/Paris"
+  },
+  {
+    "id": "geonames:3117735",
+    "name": "Madrid",
+    "countryCode": "ES",
+    "lat": 40.4165,
+    "lon": -3.70256,
+    "tzid": "Europe/Madrid"
+  },
+  {
+    "id": "geonames:3128760",
+    "name": "Barcelona",
+    "countryCode": "ES",
+    "lat": 41.38879,
+    "lon": 2.15899,
+    "tzid": "Europe/Madrid"
+  },
+  {
+    "id": "geonames:2267057",
+    "name": "Lisbon",
+    "countryCode": "PT",
+    "lat": 38.72509,
+    "lon": -9.1498,
+    "tzid": "Europe/Lisbon"
+  },
+  {
+    "id": "geonames:3169070",
+    "name": "Rome",
+    "countryCode": "IT",
+    "lat": 41.89193,
+    "lon": 12.51133,
+    "tzid": "Europe/Rome"
+  },
+  {
+    "id": "geonames:3173435",
+    "name": "Milan",
+    "countryCode": "IT",
+    "lat": 45.46427,
+    "lon": 9.18951,
+    "tzid": "Europe/Rome"
+  },
+  {
+    "id": "geonames:2950159",
+    "name": "Berlin",
+    "countryCode": "DE",
+    "lat": 52.52437,
+    "lon": 13.41053,
+    "tzid": "Europe/Berlin"
+  },
+  {
+    "id": "geonames:2867714",
+    "name": "Munich",
+    "countryCode": "DE",
+    "lat": 48.13743,
+    "lon": 11.57549,
+    "tzid": "Europe/Berlin"
+  },
+  {
+    "id": "geonames:2759794",
+    "name": "Amsterdam",
+    "countryCode": "NL",
+    "lat": 52.37403,
+    "lon": 4.88969,
+    "tzid": "Europe/Amsterdam"
+  },
+  {
+    "id": "geonames:2800866",
+    "name": "Brussels",
+    "countryCode": "BE",
+    "lat": 50.85045,
+    "lon": 4.34878,
+    "tzid": "Europe/Brussels"
+  },
+  {
+    "id": "geonames:2657896",
+    "name": "Zürich",
+    "countryCode": "CH",
+    "lat": 47.36667,
+    "lon": 8.55,
+    "tzid": "Europe/Zurich"
+  },
+  {
+    "id": "geonames:2761369",
+    "name": "Vienna",
+    "countryCode": "AT",
+    "lat": 48.20849,
+    "lon": 16.37208,
+    "tzid": "Europe/Vienna"
+  },
+  {
+    "id": "geonames:3067696",
+    "name": "Prague",
+    "countryCode": "CZ",
+    "lat": 50.08804,
+    "lon": 14.42076,
+    "tzid": "Europe/Prague"
+  },
+  {
+    "id": "geonames:756135",
+    "name": "Warsaw",
+    "countryCode": "PL",
+    "lat": 52.22977,
+    "lon": 21.01178,
+    "tzid": "Europe/Warsaw"
+  },
+  {
+    "id": "geonames:3054643",
+    "name": "Budapest",
+    "countryCode": "HU",
+    "lat": 47.49835,
+    "lon": 19.04045,
+    "tzid": "Europe/Budapest"
+  },
+  {
+    "id": "geonames:264371",
+    "name": "Athens",
+    "countryCode": "GR",
+    "lat": 37.98376,
+    "lon": 23.72784,
+    "tzid": "Europe/Athens"
+  },
+  {
+    "id": "geonames:2673730",
+    "name": "Stockholm",
+    "countryCode": "SE",
+    "lat": 59.32938,
+    "lon": 18.06871,
+    "tzid": "Europe/Stockholm"
+  },
+  {
+    "id": "geonames:2692969",
+    "name": "Malmö",
+    "countryCode": "SE",
+    "lat": 55.60587,
+    "lon": 13.00073,
+    "tzid": "Europe/Stockholm"
+  },
+  {
+    "id": "geonames:3143244",
+    "name": "Oslo",
+    "countryCode": "NO",
+    "lat": 59.91273,
+    "lon": 10.74609,
+    "tzid": "Europe/Oslo"
+  },
+  {
+    "id": "geonames:2618425",
+    "name": "Copenhagen",
+    "countryCode": "DK",
+    "lat": 55.67594,
+    "lon": 12.56553,
+    "tzid": "Europe/Copenhagen"
+  },
+  {
+    "id": "geonames:658225",
+    "name": "Helsinki",
+    "countryCode": "FI",
+    "lat": 60.16952,
+    "lon": 24.93545,
+    "tzid": "Europe/Helsinki"
+  },
+  {
+    "id": "geonames:3413829",
+    "name": "Reykjavík",
+    "countryCode": "IS",
+    "lat": 64.13548,
+    "lon": -21.89541,
+    "tzid": "Atlantic/Reykjavik"
+  },
+  {
+    "id": "geonames:703448",
+    "name": "Kyiv",
+    "countryCode": "UA",
+    "lat": 50.45466,
+    "lon": 30.5238,
+    "tzid": "Europe/Kyiv"
+  },
+  {
+    "id": "geonames:683506",
+    "name": "Bucharest",
+    "countryCode": "RO",
+    "lat": 44.43225,
+    "lon": 26.10626,
+    "tzid": "Europe/Bucharest"
+  },
+  {
+    "id": "geonames:745044",
+    "name": "Istanbul",
+    "countryCode": "TR",
+    "lat": 41.01384,
+    "lon": 28.94966,
+    "tzid": "Europe/Istanbul"
+  },
+  {
+    "id": "geonames:524901",
+    "name": "Moscow",
+    "countryCode": "RU",
+    "lat": 55.75204,
+    "lon": 37.61781,
+    "tzid": "Europe/Moscow"
+  },
+  {
+    "id": "geonames:292223",
+    "name": "Dubai",
+    "countryCode": "AE",
+    "lat": 25.07725,
+    "lon": 55.30927,
+    "tzid": "Asia/Dubai"
+  },
+  {
+    "id": "geonames:108410",
+    "name": "Riyadh",
+    "countryCode": "SA",
+    "lat": 24.68773,
+    "lon": 46.72185,
+    "tzid": "Asia/Riyadh"
+  },
+  {
+    "id": "geonames:112931",
+    "name": "Tehran",
+    "countryCode": "IR",
+    "lat": 35.69439,
+    "lon": 51.42151,
+    "tzid": "Asia/Tehran"
+  },
+  {
+    "id": "geonames:360630",
+    "name": "Cairo",
+    "countryCode": "EG",
+    "lat": 30.06263,
+    "lon": 31.24967,
+    "tzid": "Africa/Cairo"
+  },
+  {
+    "id": "geonames:2553604",
+    "name": "Casablanca",
+    "countryCode": "MA",
+    "lat": 33.58831,
+    "lon": -7.61138,
+    "tzid": "Africa/Casablanca"
+  },
+  {
+    "id": "geonames:2332459",
+    "name": "Lagos",
+    "countryCode": "NG",
+    "lat": 6.45407,
+    "lon": 3.39467,
+    "tzid": "Africa/Lagos"
+  },
+  {
+    "id": "geonames:2306104",
+    "name": "Accra",
+    "countryCode": "GH",
+    "lat": 5.55602,
+    "lon": -0.1969,
+    "tzid": "Africa/Accra"
+  },
+  {
+    "id": "geonames:184745",
+    "name": "Nairobi",
+    "countryCode": "KE",
+    "lat": -1.28333,
+    "lon": 36.81667,
+    "tzid": "Africa/Nairobi"
+  },
+  {
+    "id": "geonames:344979",
+    "name": "Addis Ababa",
+    "countryCode": "ET",
+    "lat": 9.02497,
+    "lon": 38.74689,
+    "tzid": "Africa/Addis_Ababa"
+  },
+  {
+    "id": "geonames:993800",
+    "name": "Johannesburg",
+    "countryCode": "ZA",
+    "lat": -26.20227,
+    "lon": 28.04363,
+    "tzid": "Africa/Johannesburg"
+  },
+  {
+    "id": "geonames:3369157",
+    "name": "Cape Town",
+    "countryCode": "ZA",
+    "lat": -33.92584,
+    "lon": 18.42322,
+    "tzid": "Africa/Johannesburg"
+  },
+  {
+    "id": "geonames:2253354",
+    "name": "Dakar",
+    "countryCode": "SN",
+    "lat": 14.6937,
+    "lon": -17.44406,
+    "tzid": "Africa/Dakar"
+  },
+  {
+    "id": "geonames:1275339",
+    "name": "Mumbai",
+    "countryCode": "IN",
+    "lat": 19.07283,
+    "lon": 72.88261,
+    "tzid": "Asia/Kolkata"
+  },
+  {
+    "id": "geonames:1273294",
+    "name": "Delhi",
+    "countryCode": "IN",
+    "lat": 28.65195,
+    "lon": 77.23149,
+    "tzid": "Asia/Kolkata"
+  },
+  {
+    "id": "geonames:1277333",
+    "name": "Bengaluru",
+    "countryCode": "IN",
+    "lat": 12.97194,
+    "lon": 77.59369,
+    "tzid": "Asia/Kolkata"
+  },
+  {
+    "id": "geonames:1264527",
+    "name": "Chennai",
+    "countryCode": "IN",
+    "lat": 13.08784,
+    "lon": 80.27847,
+    "tzid": "Asia/Kolkata"
+  },
+  {
+    "id": "geonames:1275004",
+    "name": "Kolkata",
+    "countryCode": "IN",
+    "lat": 22.56263,
+    "lon": 88.36304,
+    "tzid": "Asia/Kolkata"
+  },
+  {
+    "id": "geonames:1174872",
+    "name": "Karachi",
+    "countryCode": "PK",
+    "lat": 24.8608,
+    "lon": 67.0104,
+    "tzid": "Asia/Karachi"
+  },
+  {
+    "id": "geonames:1185241",
+    "name": "Dhaka",
+    "countryCode": "BD",
+    "lat": 23.7104,
+    "lon": 90.40744,
+    "tzid": "Asia/Dhaka"
+  },
+  {
+    "id": "geonames:1283240",
+    "name": "Kathmandu",
+    "countryCode": "NP",
+    "lat": 27.70169,
+    "lon": 85.3206,
+    "tzid": "Asia/Kathmandu"
+  },
+  {
+    "id": "geonames:1248991",
+    "name": "Colombo",
+    "countryCode": "LK",
+    "lat": 6.93548,
+    "lon": 79.84868,
+    "tzid": "Asia/Colombo"
+  },
+  {
+    "id": "geonames:1816670",
+    "name": "Beijing",
+    "countryCode": "CN",
+    "lat": 39.9075,
+    "lon": 116.39723,
+    "tzid": "Asia/Shanghai"
+  },
+  {
+    "id": "geonames:1796236",
+    "name": "Shanghai",
+    "countryCode": "CN",
+    "lat": 31.22222,
+    "lon": 121.45806,
+    "tzid": "Asia/Shanghai"
+  },
+  {
+    "id": "geonames:1819729",
+    "name": "Hong Kong",
+    "countryCode": "HK",
+    "lat": 22.27832,
+    "lon": 114.17469,
+    "tzid": "Asia/Hong_Kong"
+  },
+  {
+    "id": "geonames:1850147",
+    "name": "Tokyo",
+    "countryCode": "JP",
+    "lat": 35.6895,
+    "lon": 139.69171,
+    "tzid": "Asia/Tokyo"
+  },
+  {
+    "id": "geonames:1853909",
+    "name": "Osaka",
+    "countryCode": "JP",
+    "lat": 34.69379,
+    "lon": 135.50107,
+    "tzid": "Asia/Tokyo"
+  },
+  {
+    "id": "geonames:1835848",
+    "name": "Seoul",
+    "countryCode": "KR",
+    "lat": 37.566,
+    "lon": 126.9784,
+    "tzid": "Asia/Seoul"
+  },
+  {
+    "id": "geonames:1668341",
+    "name": "Taipei",
+    "countryCode": "TW",
+    "lat": 25.05306,
+    "lon": 121.52639,
+    "tzid": "Asia/Taipei"
+  },
+  {
+    "id": "geonames:1609350",
+    "name": "Bangkok",
+    "countryCode": "TH",
+    "lat": 13.75398,
+    "lon": 100.50144,
+    "tzid": "Asia/Bangkok"
+  },
+  {
+    "id": "geonames:1566083",
+    "name": "Ho Chi Minh City",
+    "countryCode": "VN",
+    "lat": 10.82302,
+    "lon": 106.62965,
+    "tzid": "Asia/Ho_Chi_Minh"
+  },
+  {
+    "id": "geonames:1880252",
+    "name": "Singapore",
+    "countryCode": "SG",
+    "lat": 1.28967,
+    "lon": 103.85007,
+    "tzid": "Asia/Singapore"
+  },
+  {
+    "id": "geonames:1735161",
+    "name": "Kuala Lumpur",
+    "countryCode": "MY",
+    "lat": 3.1412,
+    "lon": 101.68653,
+    "tzid": "Asia/Kuala_Lumpur"
+  },
+  {
+    "id": "geonames:1642911",
+    "name": "Jakarta",
+    "countryCode": "ID",
+    "lat": -6.21462,
+    "lon": 106.84513,
+    "tzid": "Asia/Jakarta"
+  },
+  {
+    "id": "geonames:1701668",
+    "name": "Manila",
+    "countryCode": "PH",
+    "lat": 14.6042,
+    "lon": 120.9822,
+    "tzid": "Asia/Manila"
+  },
+  {
+    "id": "geonames:2147714",
+    "name": "Sydney",
+    "countryCode": "AU",
+    "lat": -33.86785,
+    "lon": 151.20732,
+    "tzid": "Australia/Sydney"
+  },
+  {
+    "id": "geonames:2158177",
+    "name": "Melbourne",
+    "countryCode": "AU",
+    "lat": -37.814,
+    "lon": 144.96332,
+    "tzid": "Australia/Melbourne"
+  },
+  {
+    "id": "geonames:2193733",
+    "name": "Auckland",
+    "countryCode": "NZ",
+    "lat": -36.84853,
+    "lon": 174.76349,
+    "tzid": "Pacific/Auckland"
+  },
+  {
+    "id": "geonames:2179537",
+    "name": "Wellington",
+    "countryCode": "NZ",
+    "lat": -41.28664,
+    "lon": 174.77557,
+    "tzid": "Pacific/Auckland"
+  },
+  {
+    "id": "geonames:3448439",
+    "name": "São Paulo",
+    "countryCode": "BR",
+    "lat": -23.5475,
+    "lon": -46.63611,
+    "tzid": "America/Sao_Paulo"
+  },
+  {
+    "id": "geonames:3451190",
+    "name": "Rio de Janeiro",
+    "countryCode": "BR",
+    "lat": -22.90642,
+    "lon": -43.18223,
+    "tzid": "America/Sao_Paulo"
+  },
+  {
+    "id": "geonames:3435910",
+    "name": "Buenos Aires",
+    "countryCode": "AR",
+    "lat": -34.61315,
+    "lon": -58.37723,
+    "tzid": "America/Argentina/Buenos_Aires"
+  },
+  {
+    "id": "geonames:3871336",
+    "name": "Santiago",
+    "countryCode": "CL",
+    "lat": -33.45694,
+    "lon": -70.64827,
+    "tzid": "America/Santiago"
+  },
+  {
+    "id": "geonames:3936456",
+    "name": "Lima",
+    "countryCode": "PE",
+    "lat": -12.04318,
+    "lon": -77.02824,
+    "tzid": "America/Lima"
+  },
+  {
+    "id": "geonames:3688689",
+    "name": "Bogotá",
+    "countryCode": "CO",
+    "lat": 4.60971,
+    "lon": -74.08175,
+    "tzid": "America/Bogota"
+  },
+  {
+    "id": "geonames:3652462",
+    "name": "Quito",
+    "countryCode": "EC",
+    "lat": -0.22985,
+    "lon": -78.52495,
+    "tzid": "America/Guayaquil"
+  }
+]

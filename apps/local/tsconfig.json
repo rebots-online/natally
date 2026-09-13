@@ -3,7 +3,7 @@
   "compilerOptions": {
     "types": ["vite/client", "node", "vitest/globals"],
     "baseUrl": ".",
-    "paths": {}
+    "paths": { "@natally/local-shell": ["src/ui/shell.tsx"] }
   },
   "include": ["src/**/*.ts", "src/**/*.tsx", "vite.config.ts"],
   "exclude": ["node_modules", "dist", "src-tauri"]

@@ -6,7 +6,11 @@
     ".": "./src/types.ts",
     "./types": "./src/types.ts",
     "./types.js": "./src/types.ts",
-    "./src/types.ts": "./src/types.ts"
+    "./src/types.ts": "./src/types.ts",
+    "./config": "./src/config.ts",
+    "./trial": "./src/trial.ts",
+    "./ledger": "./src/ledger.ts",
+    "./consume": "./src/consume.ts"
   },
   "scripts": {
     "typecheck": "pnpm -w exec tsc --project packages/billing/tsconfig.json --noEmit",

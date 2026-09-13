@@ -11,6 +11,14 @@ const ledgerText = readFileSync(
   "utf8",
 );
 
+function themeBody(): string {
+  const source = css.replace(/\/\*[\s\S]*?\*\//g, "").trim();
+  const theme = source.match(/^@theme(?:\s+static)?\s*\{([^{}]*)\}$/);
+  expect(theme, "All mirrored declarations must be inside one @theme block").not.toBeNull();
+  if (!theme) throw new Error("Expected one complete @theme block");
+  return theme[1];
+}
+
 function readLedger(): Record<string, string> {
   try {
     const ledger: { variables: Record<string, string> } = JSON.parse(ledgerText);
@@ -23,7 +31,7 @@ function readLedger(): Record<string, string> {
 describe("tokens: 36 variables mirrored exactly", () => {
   it("matches every CSS column and value in the frozen markdown tables", () => {
     const actual = new Map(
-      [...css.matchAll(/(--[a-z0-9-]+)\s*:\s*([^;]+);/g)].map((match) => [
+      [...themeBody().matchAll(/(--[a-z0-9-]+)\s*:\s*([^;]+);/g)].map((match) => [
         match[1],
         match[2].trim(),
       ]),
@@ -69,8 +77,7 @@ describe("tokens: 36 variables mirrored exactly", () => {
   });
 
   it("contains one theme block with the complete category counts", () => {
-    expect(css.match(/@theme\b/g)).toHaveLength(1);
-    const properties = [...css.matchAll(/(--[a-z0-9-]+)\s*:/g)].map((match) => match[1]);
+    const properties = [...themeBody().matchAll(/(--[a-z0-9-]+)\s*:/g)].map((match) => match[1]);
     expect(new Set(properties).size).toBe(properties.length);
     expect(properties.filter((name) => name.startsWith("--color-z-"))).toHaveLength(12);
     expect(

@@ -125,10 +125,12 @@ describe("sweph backend: 24 cases, invariants hold", () => {
       inputs: { ut: [ut + step], place, system },
       positions: [{ body, ...engine.position(body, ut + step) }],
     };
-    expect(engine.aspects(chart, chart, { ...DEFAULT_ORBS })).toEqual([]);
-    expect(
-      engine.aspects(chart, { ...chart, id: `${chart.id}:copy` }, { ...DEFAULT_ORBS }),
-    ).toEqual([{ a: body, b: body, type: "conjunction", orb: 0, applying: false }]);
+    expect(engine.aspects(chart, chart, { ...DEFAULT_ORBS })).toEqual([
+      { a: body, b: body, type: "conjunction", orb: 0, applying: false },
+    ]);
+    expect(engine.aspects(chart, { ...chart }, { ...DEFAULT_ORBS })).toEqual([
+      { a: body, b: body, type: "conjunction", orb: 0, applying: false },
+    ]);
     const aspects = engine.aspects(chart, future, { ...DEFAULT_ORBS });
     expect(aspects).toHaveLength(1);
     for (const aspect of aspects) {

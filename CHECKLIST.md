@@ -214,7 +214,7 @@ here are the executable subset of it).
   **Verify:** `node packages/design-tokens/scripts/gen.mjs --check`
   **Accept:** `tokens.css in sync with TOKENS.md (36 vars)`.
 
-- [ ] **T0.9 — SQLite DDL & migration runner.** *(§5 storage column, §8.1)*
+- ✅ **T0.9 — SQLite DDL & migration runner.** *(§5 storage column, §8.1)*
   **Owns:** `packages/lore/src/ddl.ts` (the shared DDL for lore **and** app tables — single
   ownership keeps parallel tasks disjoint), `packages/lore/src/migrate.ts`,
   `packages/lore/tests/ddl.test.ts`.
@@ -274,7 +274,7 @@ here are the executable subset of it).
   **Verify:** `pnpm vitest run packages/ephemeris/tests/conformance.test.ts`
   **Accept:** `sweph backend: 24 cases, invariants hold`.
 
-- [ ] **P.2 — Honest-absence & solar chart rules.** *(§6 honest absence rules)*
+- ✅ **P.2 — Honest-absence & solar chart rules.** *(§6 honest absence rules)*
   **Owns:** `packages/ephemeris/src/solar.ts`, tests.
   **Spec:** `chartInputs(person)` with `timeKnown=false` returns `{ut: null-date-only,
   system: 'WholeSign', solarHouses: true}` and enforces §6: no ASC, no MC, no house cusps;
@@ -284,7 +284,7 @@ here are the executable subset of it).
   **Verify:** `pnpm vitest run packages/ephemeris/tests/solar.test.ts`
   **Accept:** `solar: absence rules hold for J1/J3/J4 branches`.
 
-- [ ] **P.3 — Worker/off-thread host.** *(§4 process topology)*
+- [X] **P.3 — Worker/off-thread host.** *(§4 process topology)*
   **Owns:** `packages/ephemeris/src/host/` (protocol.ts, web-worker.ts, native-task.rs at
   `packages/ephemeris/native/host.rs`), `packages/ephemeris/tests/host.test.ts`.
   **Spec:** §4 "ephemeris runs off the UI thread": JSON protocol `{id, op:
@@ -295,7 +295,7 @@ here are the executable subset of it).
   `new Worker(new URL(...), {type:'module'})` under vitest web-worker pool)
   **Accept:** `host: init→cusps roundtrip via protocol OK`.
 
-- [ ] **P.4 — ChartFacts builder + cache.** *(§5 charts row, §6 aspects)*
+- ✅ **P.4 — ChartFacts builder + cache.** *(§5 charts row, §6 aspects)*
   **Owns:** `packages/ephemeris/src/facts.ts`, tests.
   **Reads:** T0.5, T0.9 (charts storage via injected `put/get`; X.1 adapts).
   **Spec:** `buildFacts(inputs)` — content id = sha256 of canonicalized inputs JSON (§5
@@ -310,7 +310,7 @@ here are the executable subset of it).
 
 ## Phase L — Lore (§8)
 
-- [ ] **L.1 — LoreStore storage adapters.** *(§8.1 client-side storage)*
+- [X] **L.1 — LoreStore storage adapters.** *(§8.1 client-side storage)*
   **Owns:** `packages/lore/src/store/` (web.ts, native.ts, common.ts), tests.
   **Reads:** T0.6, T0.9. **Spec:** §8.1 "SQLite everywhere": web adapter `wa-sqlite` on
   OPFS (IndexedDB fallback), sqlite-vec wasm extension; native adapter the same interface
@@ -333,7 +333,7 @@ here are the executable subset of it).
   **Verify:** `pnpm vitest run packages/lore/tests/embed.test.ts`
   **Accept:** `embedder: dim honored, L2 norm 1.0 ±1e-6, src purity holds`.
 
-- [ ] **L.3 — Extraction & merge.** *(§8.3 pipeline, extraction v1 + merge rule)*
+- ✅ **L.3 — Extraction & merge.** *(§8.3 pipeline, extraction v1 + merge rule)*
   **Owns:** `packages/lore/src/extract.ts`, tests.
   **Spec:** deterministic extraction from a Turn (§8.3: proper nouns, dates, places,
   thread labels by rule + gazetteer; `lore.recall` hits as hints) — capitalized proper
@@ -368,7 +368,7 @@ here are the executable subset of it).
 
 ## Phase B — Billing & licensing (§9)
 
-- [ ] **B.1 — Trial gate.** *(§9.1 trial policy)*
+- ✅ **B.1 — Trial gate.** *(§9.1 trial policy)*
   **Owns:** `packages/billing/src/trial.ts`, tests.
   **Spec:** parse the RuntimeConfig trial block (T0.10); `evaluateGate(policy, ledgerRows,
   now)` → `{state: 'trial-active'|'trial-exhausted'|'rate-limited'|'licensed', remaining?,
@@ -378,7 +378,7 @@ here are the executable subset of it).
   **Verify:** `pnpm vitest run packages/billing/tests/trial.test.ts`
   **Accept:** `trial: count/time/rate/licensed matrices pass (≥14 cases)`.
 
-- [ ] **B.2 — Reading ledger + billing.consume.** *(§9.2 reading unit, §9.6 seam)*
+- ✅ **B.2 — Reading ledger + billing.consume.** *(§9.2 reading unit, §9.6 seam)*
   **Owns:** `packages/billing/src/ledger.ts`, `packages/billing/src/consume.ts`, tests.
   **Reads:** T0.7, T0.9. **Spec:** `ReadingLedger` over injected SQLite (readings table):
   `append(reading)` — append-only, never mutate (§9.2); `compensate(reading)` — appends the
@@ -488,7 +488,7 @@ here are the executable subset of it).
   param mapping with injected engine factory) **Accept:** `inference: turboquant params
   (Q4_K_M, kv q8_0) mapped on both lanes`.
 
-- [ ] **C.2 — Prompt fence + checker.** *(§7.2 three-tier fence)*
+- ✅ **C.2 — Prompt fence + checker.** *(§7.2 three-tier fence)*
   **Owns:** `apps/local/src/companion/fence.ts`, `apps/local/src/companion/persona.ts`,
   tests.
   **Spec:** §7.2 verbatim structure: Tier 1 = serialized ChartFacts in scope + glossary
@@ -503,7 +503,7 @@ here are the executable subset of it).
   **Verify:** `pnpm vitest run apps/local/src/companion/fence.test.ts`
   **Accept:** `fence: clean passes; 0.01° tolerance; violation→regen→absence chain exact`.
 
-- [ ] **C.3 — Tool suite (DOM r/w).** *(§7.3)*
+- ✅ **C.3 — Tool suite (DOM r/w).** *(§7.3)*
   **Owns:** `apps/local/src/companion/tools.ts`, tests.
   **Spec:** §7.3's five tools: `dom.read` → accessibility-style snapshot from the live DOM
   (root or selector, depth cap; §7.3 masking — input values, `[data-secret]`, keychain
@@ -517,7 +517,7 @@ here are the executable subset of it).
   **Verify:** `pnpm vitest run apps/local/src/companion/tools.test.ts` (jsdom)
   **Accept:** `tools: read masks secrets, write records turn, no-network grep clean`.
 
-- [ ] **C.4 — Companion event bus.** *(§4 event bus, §10 Stage signals)*
+- ✅ **C.4 — Companion event bus.** *(§4 event bus, §10 Stage signals)*
   **Owns:** `apps/local/src/companion/bus.ts`, tests.
   **Spec:** §4's typed bus for the CompanionEvent union (token, turn, chart-computed,
   envelope, error): `subscribe(type, fn)` unsubscribe handle. §10's `StageSignal` union =
@@ -672,7 +672,7 @@ here are the executable subset of it).
 
 ## Phase M — Mirror & models (§13)
 
-- [ ] **M.1 — Manifest, downloads, catalogue.** *(§13 mirror contract)*
+- [X] **M.1 — Manifest, downloads, catalogue.** *(§13 mirror contract)*
   **Owns:** `apps/local/src/mirror/` (manifest.ts, download.ts, cache.ts, catalogue.ts),
   tests.
   **Reads:** T0.7 types. **Spec:** §13 verbatim: fetch `manifest.json` from
@@ -720,7 +720,7 @@ here are the executable subset of it).
 
 ## Phase G — Content (§5 authored, §8.3 gazetteer)
 
-- [ ] **G.1 — Glossary + gazetteer.**
+- ✅ **G.1 — Glossary + gazetteer.**
   **Owns:** `apps/local/src/content/glossary.json`, `apps/local/src/content/gazetteer.json`,
   `apps/local/src/content/index.ts`, tests.
   **Spec:** GlossaryEntry per glyph — 35 (12 signs, 11 bodies, 2 nodes, 7 aspects,
@@ -735,7 +735,7 @@ here are the executable subset of it).
 
 ## Phase S — Assets (§3 self-hosted fonts, fragility ethos)
 
-- [ ] **S.1 — Fonts self-host.**
+- ✅ **S.1 — Fonts self-host.**
   **Owns:** `apps/local/public/fonts/` (woff2 files), `apps/local/src/styles/fonts.css`.
   **Spec:** §3 + CLAUDE.md fragility ethos: Fraunces (SemiBold, Italic), Nunito Sans
   (Regular, SemiBold), IBM Plex Mono (Regular, Medium) as self-hosted woff2,
@@ -806,7 +806,7 @@ here are the executable subset of it).
   stamper's formula). **Verify:** `bash -n` + `--dry-run` **Accept:** `dry-run prints
   apk/aab names + versionCode`.
 
-- [ ] **R.4 — build-web.sh (PWA).** *(§3 web leg, §14)* **Owns:** `scripts/build-web.sh`,
+- ✅ **R.4 — build-web.sh (PWA).** *(§3 web leg, §14)* **Owns:** `scripts/build-web.sh`,
   `apps/local/public/manifest.webmanifest`, `apps/local/src/sw.ts`,
   `apps/local/src/sw.test.ts`.
   **Spec:** vite build → `dist/web` — first-class stamped artifact (§14, R1 lineage); PWA

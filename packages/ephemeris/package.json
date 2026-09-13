@@ -9,7 +9,12 @@
     "./seam": "./src/seam.ts",
     "./seam.ts": "./src/seam.ts",
     "./src/types.ts": "./src/types.ts",
-    "./src/seam.ts": "./src/seam.ts"
+    "./src/seam.ts": "./src/seam.ts",
+    "./solar": "./src/solar.ts",
+    "./facts": "./src/facts.ts",
+    "./sweph/engine": "./src/sweph/engine.ts",
+    "./host": "./src/host/web-worker.ts",
+    "./host/protocol": "./src/host/protocol.ts"
   },
   "scripts": {
     "typecheck": "../../node_modules/.bin/tsc --noEmit -p tsconfig.json",

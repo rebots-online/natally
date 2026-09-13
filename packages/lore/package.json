@@ -10,7 +10,13 @@
     "./store": "./src/store.ts",
     "./store.js": "./src/store.ts",
     "./src/types.ts": "./src/types.ts",
-    "./src/store.ts": "./src/store.ts"
+    "./src/store.ts": "./src/store.ts",
+    "./ddl": "./src/ddl.ts",
+    "./migrate": "./src/migrate.ts",
+    "./store/web": "./src/store/web.ts",
+    "./store/native": "./src/store/native.ts",
+    "./store/common": "./src/store/common.ts",
+    "./extract": "./src/extract.ts"
   },
   "scripts": {
     "typecheck": "../../node_modules/.bin/tsc --noEmit -p tsconfig.json",
@@ -18,7 +24,9 @@
     "test": "../../node_modules/.bin/vitest run tests/types.test.ts"
   },
   "dependencies": {
-    "zod": "4.5.4"
+    "zod": "4.5.4",
+    "wa-sqlite": "1.0.0",
+    "sqlite-vec": "0.1.9"
   },
   "devDependencies": {
     "typescript": "5.9.3",

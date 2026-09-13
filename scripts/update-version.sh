@@ -30,18 +30,27 @@ function checkVersion() {
     if (actual !== expected) failures.push(`${label}: ${actual} != ${expected}`);
   };
   compare("version.json", data.version);
+  compare("versionBase", data.versionBase, `${Number(match[1])}.${Number(match[2])}`);
+  compare("buildNumber", data.buildNumber, match[3]);
   compare("versionCode", data.versionCode, Number(match[1]) * 100000 + Number(match[2]));
   for (const path of ["package.json", "apps/local/package.json", `${native}/tauri.conf.json`]) {
     if (existsSync(path)) compare(path, json(path).version);
   }
   if (existsSync(`${native}/Cargo.toml`)) {
     compare("Cargo.toml", read(`${native}/Cargo.toml`).match(/^version\s*=\s*"([^"]+)"/m)?.[1]);
+    const name = read(`${native}/Cargo.toml`).match(/^name\s*=\s*"([^"]+)"/m)?.[1];
+    if (existsSync(`${native}/Cargo.lock`)) {
+      const local = read(`${native}/Cargo.lock`).split("[[package]]")
+        .find((block) => block.match(/^name = "([^"]+)"/m)?.[1] === name);
+      compare("Cargo.lock local package", local?.match(/^version = "([^"]+)"/m)?.[1]);
+    }
   }
   if (existsSync(`${native}/tauri.conf.json`)) {
     const config = json(`${native}/tauri.conf.json`);
     compare("Tauri Android versionCode", config.bundle.android.versionCode, data.versionCode);
     compare("Tauri identifier", config.identifier, data.packageName);
     compare("Tauri productName", config.productName, data.productName);
+    for (const window of config.app.windows) compare("Tauri window title", window.title, data.productName);
   }
   const android = `${native}/gen/android/tauri.properties`;
   if (existsSync(android)) {

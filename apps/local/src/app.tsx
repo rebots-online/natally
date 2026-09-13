@@ -1,7 +1,7 @@
 import { Component, lazy, type ReactNode, Suspense } from "react";
 
 // U.1 owns the real router shell. Lazy loading keeps runtime engines out of the entry.
-const NatallyShell = lazy(() => import("./ui/shell"));
+const NatallyShell = lazy(() => import("@natally/local-shell"));
 
 function LoadingApplication() {
   return (

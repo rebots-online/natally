@@ -1,7 +1,7 @@
 {
   "name": "@natally/local",
   "private": true,
-  "version": "1.11.21140",
+  "version": "1.12.21175",
   "type": "module",
   "scripts": {
     "dev": "vite --host 127.0.0.1",

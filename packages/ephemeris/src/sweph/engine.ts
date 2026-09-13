@@ -271,11 +271,12 @@ export class SwephEngine implements EphemerisEngine {
     ChartFactsSchema.parse(b);
     const limits = OrbTableSchema.parse(orbs);
     const result: Aspect[] = [];
-    const sameChart = a.id === b.id;
+    // Content IDs can match for different people. Always return cross-chart pairs;
+    // the natal facts builder selects its unique, non-self pairs explicitly.
     for (let i = 0; i < a.positions.length; i++) {
       const left = a.positions[i];
       if (!left) continue;
-      for (let j = sameChart ? i + 1 : 0; j < b.positions.length; j++) {
+      for (let j = 0; j < b.positions.length; j++) {
         const right = b.positions[j];
         if (!right) continue;
         const delta = signedAngle(right.lon - left.lon);

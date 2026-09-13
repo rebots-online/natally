@@ -1,8 +1,8 @@
 @import "tailwindcss";
 @import "@natally/design-tokens/tokens.css";
-@source "../";
-
 /* S.1 fonts */
+@import "./fonts.css";
+@source "../";
 
 :root {
   color-scheme: dark;

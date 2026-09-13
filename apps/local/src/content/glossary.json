@@ -1,0 +1,212 @@
+[
+  {
+    "glyphId": "g-aries",
+    "title": "Aries",
+    "whatItIs": "Authored-static education. Aries is the first of the zodiac's twelve equal sectors, spanning 0° up to 30°. In the tropical zodiac, its starting point is the March equinox. Astrological tradition classifies Aries as cardinal fire. A sign is a coordinate sector, distinct from the constellation bearing its name.",
+    "synastryNotes": "Authored-static education. Two positions in Aries share a sign, but their exact degrees determine their angular separation. Sharing this sector alone does not establish a conjunction or a relationship outcome."
+  },
+  {
+    "glyphId": "g-taurus",
+    "title": "Taurus",
+    "whatItIs": "Authored-static education. Taurus is the second zodiac sector, spanning 30° up to 60° of zodiacal longitude. Its traditional classification is fixed earth. The bull is the sign's emblem; it is a cultural symbol rather than a measurement of someone's temperament.",
+    "synastryNotes": "Authored-static education. A Taurus placement can be compared with any position in another chart. Use both longitudes and the allowed orb; the traditional earth label does not measure how two people relate."
+  },
+  {
+    "glyphId": "g-gemini",
+    "title": "Gemini",
+    "whatItIs": "Authored-static education. Gemini is the third zodiac sector, spanning 60° up to 90°. Astrological tradition places it in the mutable mode and air element. Its twins emblem belongs to the symbolic vocabulary of astrology, not a diagnosis or personality test.",
+    "synastryNotes": "Authored-static education. Comparing Gemini positions describes their locations in two charts. Positions near opposite ends of the same sign can be almost 30° apart, so the shared sign is insufficient to identify a close aspect."
+  },
+  {
+    "glyphId": "g-cancer",
+    "title": "Cancer",
+    "whatItIs": "Authored-static education. Cancer is the fourth zodiac sector, spanning 90° up to 120°. Its tropical starting point is the June solstice. Cardinal water is its traditional classification; seasonal references describe the tropical coordinate system rather than everyone's local season.",
+    "synastryNotes": "Authored-static education. A Cancer position supplies a longitude for comparison with another chart. The water classification supplies traditional vocabulary only; it cannot establish emotional agreement between people."
+  },
+  {
+    "glyphId": "g-leo",
+    "title": "Leo",
+    "whatItIs": "Authored-static education. Leo is the fifth zodiac sector, spanning 120° up to 150°. It is traditionally classified as fixed fire and represented by a lion. These labels describe a symbolic classification system, not observed personal abilities.",
+    "synastryNotes": "Authored-static education. Cross-chart comparisons involving Leo still require the actual bodies and degrees. The lion emblem adds no numerical weight to an aspect and does not establish attraction."
+  },
+  {
+    "glyphId": "g-virgo",
+    "title": "Virgo",
+    "whatItIs": "Authored-static education. Virgo is the sixth zodiac sector, spanning 150° up to 180°. Its traditional labels are mutable and earth. The zodiac divides longitude into equal 30° sectors; the astronomical constellations have different boundaries and unequal extents.",
+    "synastryNotes": "Authored-static education. A Virgo placement and a placement in another earth sign may form a trine, but the exact longitudes and orb decide whether they do. Element labels cannot replace that calculation."
+  },
+  {
+    "glyphId": "g-libra",
+    "title": "Libra",
+    "whatItIs": "Authored-static education. Libra is the seventh zodiac sector, spanning 180° up to 210°. Its tropical starting point is the September equinox. It is traditionally cardinal air, with scales as its emblem; the emblem does not measure fairness or relationship balance.",
+    "synastryNotes": "Authored-static education. Libra and Aries are opposite sign sectors. Particular positions in those signs form an opposition only when their angular separation lies within the selected allowance around 180°."
+  },
+  {
+    "glyphId": "g-scorpio",
+    "title": "Scorpio",
+    "whatItIs": "Authored-static education. Scorpio is the eighth zodiac sector, spanning 210° up to 240°. Astrological tradition classifies it as fixed water and uses the scorpion as an emblem. This sector name provides a way to express a chart position without making a personal claim.",
+    "synastryNotes": "Authored-static education. A cross-chart aspect involving Scorpio is defined by the positions being compared. A sign name alone supplies no evidence about trust, intimacy, or another person's intentions."
+  },
+  {
+    "glyphId": "g-sagittarius",
+    "title": "Sagittarius",
+    "whatItIs": "Authored-static education. Sagittarius is the ninth zodiac sector, spanning 240° up to 270°. Its traditional classification is mutable fire, and its glyph depicts an arrow. The label identifies a section of the zodiac rather than an individual's beliefs or future travels.",
+    "synastryNotes": "Authored-static education. Comparing Sagittarius with another sign is an initial description of positions. A measured aspect uses degrees, and it cannot determine whether people share beliefs or plans."
+  },
+  {
+    "glyphId": "g-capricorn",
+    "title": "Capricorn",
+    "whatItIs": "Authored-static education. Capricorn is the tenth zodiac sector, spanning 270° up to 300°. Its tropical starting point is the December solstice. Cardinal earth and the sea-goat emblem are traditional classifications, not findings about a person's work or status.",
+    "synastryNotes": "Authored-static education. Capricorn and Cancer occupy opposite sectors, but an exact opposition depends on the degrees of the two positions. That geometry does not establish a relationship's responsibilities or duration."
+  },
+  {
+    "glyphId": "g-aquarius",
+    "title": "Aquarius",
+    "whatItIs": "Authored-static education. Aquarius is the eleventh zodiac sector, spanning 300° up to 330°. Despite its water-bearer emblem, its traditional element is air and its mode is fixed. These categories belong to astrology's terminology, not to the physical composition of a sign.",
+    "synastryNotes": "Authored-static education. An Aquarius position can participate in any supported cross-chart aspect. Its air classification cannot establish shared interests, independence, or friendship between the people whose charts are compared."
+  },
+  {
+    "glyphId": "g-pisces",
+    "title": "Pisces",
+    "whatItIs": "Authored-static education. Pisces is the twelfth zodiac sector, spanning 330° up to 360°, where longitude wraps to 0°. It is traditionally mutable water and represented by two fish. The coordinate wrap is continuous: 359° and 1° are only 2° apart.",
+    "synastryNotes": "Authored-static education. A position late in Pisces can be conjunct a position early in Aries across the 360° boundary. Calculated angular distance takes precedence over whether the sign names match."
+  },
+  {
+    "glyphId": "g-sun",
+    "title": "Sun",
+    "whatItIs": "Authored-static education. The Sun is the star at the center of the solar system. An Earth-centered chart records its apparent direction from Earth. Astrology calls the Sun and Moon the luminaries; the Sun's zodiac sector at a specified time is the familiar Sun sign.",
+    "synastryNotes": "Authored-static education. A Sun comparison pairs its recorded longitude with a position from another chart. Comparing Sun signs alone omits other positions and the exact angular separations. It cannot decide a relationship's prospects."
+  },
+  {
+    "glyphId": "g-moon",
+    "title": "Moon",
+    "whatItIs": "Authored-static education. The Moon is Earth's natural satellite and one of astrology's two luminaries. Its apparent longitude changes appreciably during a day, making the recorded birth time relevant to its chart position. A Moon position and a lunar node describe different things.",
+    "synastryNotes": "Authored-static education. A Moon aspect compares measured positions, not observed feelings. If a birth time is uncertain, the Moon's exact degree and tight cross-chart aspects may also be uncertain; that uncertainty should remain visible."
+  },
+  {
+    "glyphId": "g-mercury",
+    "title": "Mercury",
+    "whatItIs": "Authored-static education. Mercury is the planet whose orbit is nearest the Sun. In an Earth-centered chart its apparent position stays relatively close to the Sun's direction. A retrograde label concerns the changing apparent longitude, not a reversal of Mercury's orbit.",
+    "synastryNotes": "Authored-static education. Cross-chart Mercury aspects compare its longitude with another position. Traditions may discuss communication symbolically, but the geometry does not measure what people have said or how well they understand each other."
+  },
+  {
+    "glyphId": "g-venus",
+    "title": "Venus",
+    "whatItIs": "Authored-static education. Venus is the second planet from the Sun. Its chart position describes an apparent direction as viewed from Earth. The familiar circle-and-cross glyph identifies the body; it does not assign a person's gender or relationship role.",
+    "synastryNotes": "Authored-static education. Venus aspects provide cross-chart angular information. Associations with affection are interpretive traditions, not measurements of attraction, consent, or a partner's wishes."
+  },
+  {
+    "glyphId": "g-mars",
+    "title": "Mars",
+    "whatItIs": "Authored-static education. Mars is the fourth planet from the Sun, orbiting outside Earth's orbit. Its chart longitude is an Earth-centered angular position. The circle-and-arrow symbol is a label for that body, not a statement about anyone's gender or behavior.",
+    "synastryNotes": "Authored-static education. A Mars contact means that two chart positions meet an aspect rule. It supplies no observation of desire, conflict, aggression, or consent; those require information from the people involved."
+  },
+  {
+    "glyphId": "g-jupiter",
+    "title": "Jupiter",
+    "whatItIs": "Authored-static education. Jupiter is the largest planet in the solar system and a gas giant. It moves through the zodiac more slowly on average than the inner planets. Its recorded longitude is a positional fact, distinct from astrological stories about fortune or growth.",
+    "synastryNotes": "Authored-static education. People born in a similar period can share nearby Jupiter positions. A Jupiter aspect is an angular comparison, not evidence of future luck, financial benefit, or a uniquely significant relationship."
+  },
+  {
+    "glyphId": "g-saturn",
+    "title": "Saturn",
+    "whatItIs": "Authored-static education. Saturn is a gas giant known for its ring system. Its orbit around the Sun takes much longer than Earth's, so its average progress around the zodiac is slow. An astrological association with time or limits is symbolic vocabulary rather than a physical effect shown by a chart.",
+    "synastryNotes": "Authored-static education. Cross-chart Saturn contacts describe positions and orbs. They do not establish commitment, obligation, restriction, or how long a relationship will last."
+  },
+  {
+    "glyphId": "g-uranus",
+    "title": "Uranus",
+    "whatItIs": "Authored-static education. Uranus is an ice giant beyond Saturn. Because of its long orbit, many people born around the same period have Uranus in the same zodiac sector. The chart records longitude; the unusual tilt of the planet's rotation is a separate astronomical property.",
+    "synastryNotes": "Authored-static education. Shared Uranus positions can reflect a broad birth cohort. An aspect involving Uranus does not establish whether a relationship will be unconventional, unstable, or interrupted."
+  },
+  {
+    "glyphId": "g-neptune",
+    "title": "Neptune",
+    "whatItIs": "Authored-static education. Neptune is the outermost of the solar system's eight planets and is classified as an ice giant. Its slow average zodiacal motion means a sign placement is shared by many birth years. Its chart symbol labels an astronomical position.",
+    "synastryNotes": "Authored-static education. Neptune contacts compare angular positions, often including a position common to a large birth cohort. They cannot reveal deception, idealization, or hidden motives in a relationship."
+  },
+  {
+    "glyphId": "g-pluto",
+    "title": "Pluto",
+    "whatItIs": "Authored-static education. Pluto is a dwarf planet with an elongated orbit in the outer solar system. Astrology can retain a Pluto glyph without treating it as one of astronomy's eight planets. Its slow and uneven progress around the zodiac makes its sign a broad cohort feature.",
+    "synastryNotes": "Authored-static education. A Pluto aspect is a geometric relation between chart positions. It is not evidence of power over another person, compulsion, danger, or a predetermined transformation."
+  },
+  {
+    "glyphId": "g-chiron",
+    "title": "Chiron",
+    "whatItIs": "Authored-static education. Chiron is a small solar-system body classified as a centaur, and it has also shown comet-like activity. It is not a major planet or a lunar node. Its key-shaped glyph marks its computed position in a chart.",
+    "synastryNotes": "Authored-static education. A Chiron contact compares longitudes under the chosen aspect rules. Mythological healing language is symbolic; a chart contact cannot diagnose trauma or establish that another person will heal it."
+  },
+  {
+    "glyphId": "g-north-node",
+    "title": "North node",
+    "whatItIs": "Authored-static education. The north lunar node is the ascending intersection of the Moon's orbital plane with the ecliptic, where the Moon crosses from south to north. It is a calculated point, not a physical body. Mean-node and true-node methods model its position differently.",
+    "synastryNotes": "Authored-static education. A north-node comparison must identify the node method used in both charts. An angular contact with this point supplies no evidence of destiny, a past life, or a required relationship."
+  },
+  {
+    "glyphId": "g-south-node",
+    "title": "South node",
+    "whatItIs": "Authored-static education. The south lunar node is the descending intersection of the Moon's orbital plane with the ecliptic, where the Moon crosses from north to south. It lies 180° from the corresponding north node. Both ends describe one calculated axis rather than two celestial bodies.",
+    "synastryNotes": "Authored-static education. A conjunction to one end of a lunar-node axis is also an opposition to the other end. These are related descriptions of the same geometry, not independent evidence of a special bond."
+  },
+  {
+    "glyphId": "g-conjunction",
+    "title": "Conjunction",
+    "whatItIs": "Authored-static education. A conjunction has a target separation of 0° in zodiacal longitude. Its orb is the distance from that target. Equal longitude does not require two bodies to occupy the same place in space, and a close conjunction can cross a sign boundary.",
+    "synastryNotes": "Authored-static education. In synastry the two positions come from different charts. A conjunction records proximity in longitude; it does not by itself establish agreement, attraction, or a favorable outcome."
+  },
+  {
+    "glyphId": "g-opposition",
+    "title": "Opposition",
+    "whatItIs": "Authored-static education. An opposition has a target separation of 180° in zodiacal longitude. The positions occupy opposite directions on the zodiac circle. The allowed orb determines how far from exact opposition a comparison can be while retaining this label.",
+    "synastryNotes": "Authored-static education. A cross-chart opposition describes a half-circle separation within the chosen orb. It cannot show that two people disagree or that opposites attract; those are interpretations beyond the measured angle."
+  },
+  {
+    "glyphId": "g-trine",
+    "title": "Trine",
+    "whatItIs": "Authored-static education. A trine has a target separation of 120°, one third of the zodiac circle. It is traditionally grouped with soft aspects. That category is interpretive terminology; the angle and its deviation from exactness are the measurable parts.",
+    "synastryNotes": "Authored-static education. A trine between charts may be discussed symbolically as ease, but it does not measure harmony or guarantee a healthy relationship. Exact degrees matter even when the signs share an element."
+  },
+  {
+    "glyphId": "g-square",
+    "title": "Square",
+    "whatItIs": "Authored-static education. A square has a target separation of 90°, one quarter of the zodiac circle. Astrology traditionally groups it with hard aspects. The hard label names an interpretive category, not a measured obstacle or an adverse event.",
+    "synastryNotes": "Authored-static education. A square in synastry identifies a right-angle relation within the allowed orb. It does not establish conflict, incompatibility, or failure, and it cannot substitute for observed interactions."
+  },
+  {
+    "glyphId": "g-sextile",
+    "title": "Sextile",
+    "whatItIs": "Authored-static education. A sextile has a target separation of 60°, one sixth of the zodiac circle. It belongs to the traditional major aspects and is commonly grouped with soft aspects. Its presence depends on measured longitude and the selected orb.",
+    "synastryNotes": "Authored-static education. A cross-chart sextile is a positional comparison. Symbolic language about opportunity is not evidence that the people will cooperate or that a relationship should begin."
+  },
+  {
+    "glyphId": "g-quincunx",
+    "title": "Quincunx",
+    "whatItIs": "Authored-static education. A quincunx, also called an inconjunct, has a target separation of 150°. It is usually classed as a minor aspect. It differs from an opposition by 30°; each has its own target and permitted deviation.",
+    "synastryNotes": "Authored-static education. A quincunx between charts identifies an angle under the configured orb rules. Descriptions of adjustment belong to interpretation and cannot prove that either person must change."
+  },
+  {
+    "glyphId": "g-semisextile",
+    "title": "Semisextile",
+    "whatItIs": "Authored-static education. A semisextile has a target separation of 30°, half a sextile. It is usually classed as a minor aspect. Positions in adjacent signs are not automatically semisextile; their degrees must also bring them within the permitted orb.",
+    "synastryNotes": "Authored-static education. The semisextile label reports a near-30° cross-chart separation. It does not assign a smaller relationship value than a major aspect or establish a personal outcome."
+  },
+  {
+    "glyphId": "g-retrograde",
+    "title": "Retrograde",
+    "whatItIs": "Authored-static education. Apparent retrograde motion means a body's zodiacal longitude is decreasing with time in the chart's Earth-centered frame. It is a viewing-geometry effect for the planets, not a reversal of their orbits. A stationary moment, with zero longitudinal speed, is distinct from retrograde motion.",
+    "synastryNotes": "Authored-static education. A retrograde marker belongs to a particular body's motion at its recorded chart time. It is not a relationship rating, a warning about a person, or evidence that communication will fail."
+  },
+  {
+    "glyphId": "g-applying",
+    "title": "Applying",
+    "whatItIs": "Authored-static education. An applying aspect is moving closer to its exact target angle: its orb is decreasing under the stated motion convention. Relative longitudinal motion matters, including retrograde motion; the sign order alone cannot determine this. Being exact or stationary is a separate case.",
+    "synastryNotes": "Authored-static education. Birth charts may refer to different times, so a cross-chart applying label needs an explicit calculation convention. If none is supplied, application is undetermined. This label does not predict that a relationship is approaching an event."
+  },
+  {
+    "glyphId": "g-separating",
+    "title": "Separating",
+    "whatItIs": "Authored-static education. A separating aspect is moving away from its exact target angle: its orb is increasing under the stated motion convention. This concerns distance from the aspect target, not necessarily increasing distance between the two longitudes. An exact or stationary case needs separate handling.",
+    "synastryNotes": "Authored-static education. Cross-chart separation requires a defined motion convention when the positions come from different birth times. Without it, separation is undetermined. The word does not predict a breakup or describe anyone's intentions."
+  }
+]

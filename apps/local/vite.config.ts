@@ -18,6 +18,11 @@ export default defineConfig(({ mode }) => {
     envDir: repositoryRoot,
     plugins: [tailwindcss()],
     esbuild: { jsx: "automatic" },
+    resolve: {
+      alias: {
+        "@natally/local-shell": fileURLToPath(new URL("./src/ui/shell.tsx", import.meta.url)),
+      },
+    },
     server: {
       port,
       strictPort: true,
