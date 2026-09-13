@@ -29,3 +29,12 @@ Production code comments deep-link **this local snapshot**, never rotting web UR
   - `README.md` — `fe0797d030df654cd2494fb6ed5a3d069849c90fea60085e7416a93914606ee9`
   - `LICENSE` — `8486a10c4393cee1c25392769ddd3b2d6c242d6ec7928e1414efff7dfb2f07ef`
   - `package.json` — `386edb9ef83e5d9c0eab624206a80b46c5f393755bec3cfbfcae4cb3395a4844`
+
+## Source assimilation — 2026-09-12
+
+The former docs-only arrangement above is superseded for runtime dependency resolution.
+Complete detached repositories now live at root `VENDORED/sweph-wasm/` and its
+`swisseph/` child, with the matching published 2.6.9 runtime and all tables. The package
+uses `file:../../VENDORED/sweph-wasm`. This directory remains the original documentation
+snapshot. See `VENDORED/sweph-wasm.UPSTREAM-VENDOR.lock.json` for source revisions and
+`VENDORED/README.md` for local customization and detachment details.

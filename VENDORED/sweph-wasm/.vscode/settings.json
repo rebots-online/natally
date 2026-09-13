@@ -1,0 +1,22 @@
+{
+    // Editor behavior
+    "editor.formatOnSave": true,
+    "editor.tabSize": 4,
+    "editor.codeActionsOnSave": {
+        "source.fixAll": "explicit"
+    },
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    // TypeScript settings
+    "typescript.preferences.importModuleSpecifier": "non-relative",
+
+    "files.associations": {
+        "emscripten.h": "c"
+    },
+    "[python]": {
+        "editor.defaultFormatter": "ms-python.black-formatter"
+    },
+    "search.useIgnoreFiles": false,
+    "[html]": {
+        "editor.defaultFormatter": "vscode.html-language-features"
+    }
+}

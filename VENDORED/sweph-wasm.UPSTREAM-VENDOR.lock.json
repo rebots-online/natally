@@ -1,0 +1,26 @@
+{
+  "wrapper": {
+    "url": "https://github.com/ptprashanttripathi/sweph-wasm",
+    "version": "2.6.9",
+    "commit": "0583463e4c4f4791e19f2a9f1962d2d965e021ab",
+    "commitDate": "2025-09-09T11:49:47Z",
+    "path": "VENDORED/sweph-wasm"
+  },
+  "engine": {
+    "url": "https://github.com/aloistr/swisseph",
+    "commit": "fa78b5065810fa9077e96475e33decb8f3ecd61c",
+    "commitDate": "2025-08-13T21:11:16Z",
+    "path": "VENDORED/sweph-wasm/swisseph"
+  },
+  "vendorDate": "2026-09-12",
+  "method": "Commit-addressed GitHub archives extracted directly into final VENDORED paths; published 2.6.9 runtime overlaid after npm SHA-512 verification.",
+  "detached": true,
+  "tracking": "Ordinary files owned by natally; no nested .git and no gitlinks. Former .gitmodules preserved as UPSTREAM-SUBMODULES.txt for attribution only.",
+  "localChanges": [
+    "Renamed upstream .gitmodules to inert UPSTREAM-SUBMODULES.txt.",
+    "Legacy source downloader uses local source only and cannot refresh from upstream master.",
+    "Binary/data files use natally's Forgejo Git LFS endpoint."
+  ],
+  "licenseFiles": ["sweph-wasm/LICENSE", "sweph-wasm/swisseph/LICENSE"],
+  "verification": "ephemeris-manifest.json records source import SHA-256s; verify detached tracking with git ls-files --stage VENDORED (no mode 160000)."
+}

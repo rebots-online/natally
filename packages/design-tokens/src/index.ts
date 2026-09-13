@@ -1,0 +1,43 @@
+// Generated from tokens.css by scripts/gen.mjs. Do not edit by hand.
+// Colour hashes are escaped; runtime values exactly match the CSS source.
+export const tokens = Object.freeze({
+  "--color-midnight": "\u0023120c1c",
+  "--color-midnight-2": "\u00231c1428",
+  "--color-midnight-3": "\u0023271c36",
+  "--color-hairline": "\u0023322641",
+  "--color-vellum": "\u0023f1e8d8",
+  "--color-vellum-muted": "\u0023a99dae",
+  "--color-gilt": "\u0023d4af37",
+  "--color-orbglow": "\u0023f2a38c",
+  "--color-moonlight": "\u00239fb4ff",
+  "--color-ember": "\u0023e2604f",
+  "--color-z-aries": "hsl(0 50% 68%)",
+  "--color-z-taurus": "hsl(30 50% 68%)",
+  "--color-z-gemini": "hsl(60 50% 68%)",
+  "--color-z-cancer": "hsl(90 50% 68%)",
+  "--color-z-leo": "hsl(120 50% 68%)",
+  "--color-z-virgo": "hsl(150 50% 68%)",
+  "--color-z-libra": "hsl(180 50% 68%)",
+  "--color-z-scorpio": "hsl(210 50% 68%)",
+  "--color-z-sagittarius": "hsl(240 50% 68%)",
+  "--color-z-capricorn": "hsl(270 50% 68%)",
+  "--color-z-aquarius": "hsl(300 50% 68%)",
+  "--color-z-pisces": "hsl(330 50% 68%)",
+  "--radius-plate": "12px",
+  "--radius-button": "10px",
+  "--radius-chip": "8px",
+  "--radius-pill": "999px",
+  "--spacing-1": "4px",
+  "--spacing-2": "8px",
+  "--spacing-3": "12px",
+  "--spacing-4": "16px",
+  "--spacing-6": "24px",
+  "--spacing-8": "32px",
+  "--stroke-hairline": "1px",
+  "--size-touch": "44px",
+  "--size-stage": "200px",
+  "--size-avatar": "44px",
+} as const);
+
+export type TokenName = keyof typeof tokens;
+export type TokenValue = (typeof tokens)[TokenName];

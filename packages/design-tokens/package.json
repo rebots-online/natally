@@ -1,0 +1,20 @@
+{
+  "name": "@natally/design-tokens",
+  "private": true,
+  "type": "module",
+  "sideEffects": [
+    "./tokens.css"
+  ],
+  "exports": {
+    ".": "./src/index.ts",
+    "./src/index.ts": "./src/index.ts",
+    "./tokens.css": "./tokens.css"
+  },
+  "scripts": {
+    "generate": "node scripts/gen.mjs",
+    "check": "node scripts/gen.mjs --check",
+    "typecheck": "../../node_modules/.bin/tsc --noEmit --strict --skipLibCheck --target ES2022 --module NodeNext --moduleResolution NodeNext src/index.ts",
+    "lint": "../../node_modules/.bin/biome check src scripts tests tokens.css",
+    "test": "node scripts/gen.mjs --test"
+  }
+}

@@ -1,0 +1,44 @@
+/* Mirrors LIBS/UI/FIGMA/TOKENS.md. Generate the TypeScript mirror with scripts/gen.mjs. */
+@theme static {
+  --color-midnight: #120c1c;
+  --color-midnight-2: #1c1428;
+  --color-midnight-3: #271c36;
+  --color-hairline: #322641;
+  --color-vellum: #f1e8d8;
+  --color-vellum-muted: #a99dae;
+  --color-gilt: #d4af37;
+  --color-orbglow: #f2a38c;
+  --color-moonlight: #9fb4ff;
+  --color-ember: #e2604f;
+
+  /* Aries starts at 0 degrees; signs follow the frozen ledger's variable IDs. */
+  --color-z-aries: hsl(0 50% 68%);
+  --color-z-taurus: hsl(30 50% 68%);
+  --color-z-gemini: hsl(60 50% 68%);
+  --color-z-cancer: hsl(90 50% 68%);
+  --color-z-leo: hsl(120 50% 68%);
+  --color-z-virgo: hsl(150 50% 68%);
+  --color-z-libra: hsl(180 50% 68%);
+  --color-z-scorpio: hsl(210 50% 68%);
+  --color-z-sagittarius: hsl(240 50% 68%);
+  --color-z-capricorn: hsl(270 50% 68%);
+  --color-z-aquarius: hsl(300 50% 68%);
+  --color-z-pisces: hsl(330 50% 68%);
+
+  --radius-plate: 12px;
+  --radius-button: 10px;
+  --radius-chip: 8px;
+  --radius-pill: 999px;
+
+  --spacing-1: 4px;
+  --spacing-2: 8px;
+  --spacing-3: 12px;
+  --spacing-4: 16px;
+  --spacing-6: 24px;
+  --spacing-8: 32px;
+
+  --stroke-hairline: 1px;
+  --size-touch: 44px;
+  --size-stage: 200px;
+  --size-avatar: 44px;
+}

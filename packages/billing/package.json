@@ -1,0 +1,19 @@
+{
+  "name": "@natally/billing",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/types.ts",
+    "./types": "./src/types.ts",
+    "./types.js": "./src/types.ts",
+    "./src/types.ts": "./src/types.ts"
+  },
+  "scripts": {
+    "typecheck": "pnpm -w exec tsc --project packages/billing/tsconfig.json --noEmit",
+    "lint": "../../node_modules/.bin/biome check src tests",
+    "test": "pnpm -w exec vitest run packages/billing/tests/types.test.ts"
+  },
+  "dependencies": {
+    "zod": "4.5.4"
+  }
+}

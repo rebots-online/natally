@@ -1,0 +1,55 @@
+@import "tailwindcss";
+@import "@natally/design-tokens/tokens.css";
+@source "../";
+
+/* S.1 fonts */
+
+:root {
+  color-scheme: dark;
+  background: var(--color-midnight);
+  color: var(--color-vellum);
+  font-family: "Nunito Sans", sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100dvh;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+button,
+a,
+input,
+textarea,
+select {
+  touch-action: manipulation;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-orbglow);
+  outline-offset: 3px;
+}
+
+.app-loading {
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  min-height: 100dvh;
+  padding: var(--spacing-6);
+  box-sizing: border-box;
+}
+
+.app-loading h1 {
+  color: var(--color-gilt);
+  font-family: "Fraunces", serif;
+  font-size: 28px;
+}

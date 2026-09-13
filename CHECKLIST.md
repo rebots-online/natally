@@ -91,7 +91,22 @@ here are the executable subset of it).
   correction. Vitest 3.2's workspace-format deprecation notice is recorded for later
   discussion; this task preserves the approved `vitest.workspace.ts` contract.
 
-- [ ] **T0.2 — apps/local frontend scaffold.** *(§3 frontend row)*
+- ✅ **T0.V — Detached vendored ephemeris repositories.** *(§2, §6; operator 2026-09-12)*
+  **Owns:** `VENDORED/`, `scripts/vendor-ephemeris.py`.
+  **Spec:** import complete sweph-wasm 2.6.9 source at
+  `0583463e4c4f4791e19f2a9f1962d2d965e021ab` into root `VENDORED/sweph-wasm/`,
+  with its exact Swiss Ephemeris submodule source
+  `fa78b5065810fa9077e96475e33decb8f3ecd61c` materialized as ordinary files under
+  `swisseph/`, plus the matching published JS/WASM/data runtime. Pin origin, revision,
+  commit date, import date, licenses and checksums before assimilation. No nested `.git`,
+  gitlinks, active `.gitmodules`, or upstream refresh; retain source and license attribution.
+  Customizations are local natally commits. Binary assets use Forgejo LFS.
+  **Observed:** source archives extracted at final paths; npm runtime SHA-512 matched
+  the registry pin; 651 imported files recorded in `ephemeris-manifest.json`. Upstream
+  submodule metadata renamed as inert provenance; downloader changed to local-source use.
+  Runtime integration is exercised by P.1 against this source tree.
+
+- ✅ **T0.2 — apps/local frontend scaffold.** *(§3 frontend row)*
   **Owns:** `apps/local/package.json`, `apps/local/vite.config.ts`, `apps/local/tsconfig.json`,
   `apps/local/index.html`, `apps/local/src/main.tsx`, `apps/local/src/app.tsx`,
   `apps/local/src/styles/global.css`, `apps/local/public/` (empty `.gitkeep`),
@@ -108,11 +123,11 @@ here are the executable subset of it).
   **Accept:** `built standalone entry OK` (tsc exits 0). The full-app `vite build` is
   exercised by I.1/I.4 once the route registry exists — not part of this Accept.
 
-- [ ] **T0.3 — src-tauri scaffold.** *(§3 native core row, §2)*
+- ✅ **T0.3 — src-tauri scaffold.** *(§3 native core row, §2)*
   **Owns:** `apps/local/src-tauri/` (Cargo.toml, tauri.conf.json, build.rs, src/main.rs,
   src/lib.rs, capabilities/default.json).
   **Spec:** Tauri 2 app, identity `mba.robin.natally` (§3; Android applicationId equal);
-  dev server `http://localhost:5173`; window 430×932 min, dark. §3 native core hosts:
+  dev server from root `.env` `NATALLY_DEV_PORT` (46371 in the template); window 430×932 min, dark. §3 native core hosts:
   ephemeris worker, llama.cpp bindings, Kokoro ONNX synthesis + playback, OS keychain,
   SQLite stores — this task lays the shell: `lib.rs` defines `#[tauri::command]` modules
   via a static command registry macro (`natally_plugin!`) so feature tasks register
@@ -122,7 +137,7 @@ here are the executable subset of it).
   **Verify:** `cargo check --manifest-path apps/local/src-tauri/Cargo.toml`
   **Accept:** `Finished` with 0 errors.
 
-- [ ] **T0.4 — Token mirror test.** *(§3 law: @theme mirrors TOKENS.md one-to-one)*
+- ✅ **T0.4 — Token mirror test.** *(§3 law: @theme mirrors TOKENS.md one-to-one)*
   **Owns:** `packages/design-tokens/tests/tokens.test.ts`.
   **Reads:** T0.8. **Spec:** test parses `tokens.css` `@theme` and asserts the frozen
   collection exactly: 36 variables — 10 colour (STATE-LEDGER 2:3–2:12) + 12 zodiac
@@ -133,11 +148,12 @@ here are the executable subset of it).
   **Verify:** `pnpm vitest run packages/design-tokens`
   **Accept:** `tokens: 36 variables mirrored exactly`.
 
-- [ ] **T0.5 — Ephemeris contracts.** *(§6 seam, verbatim)*
+- ✅ **T0.5 — Ephemeris contracts.** *(§6 seam, verbatim)*
   **Owns:** `packages/ephemeris/src/types.ts`, `packages/ephemeris/src/seam.ts`,
   `packages/ephemeris/package.json`, `packages/ephemeris/tsconfig.json`,
   `packages/ephemeris/tests/types.test.ts`.
-  **Reads:** `DOCS/sdk/sweph-wasm/` (vendored 2.6.9 snapshot — PROVENANCE.md, index.d.ts).
+  **Reads:** `DOCS/sdk/sweph-wasm/` (2.6.9 docs/types), `VENDORED/sweph-wasm/`
+  (detached source + runtime; dependency `file:../../VENDORED/sweph-wasm`).
   **Spec:** §6 `EphemerisEngine` exactly: `id`, `init(cfg)`, `position(body, ut)`,
   `cusps(ut, place, system)`, `aspects(a, b, orbs)`, optional `chiron?(ut)`. `Body` = the
   11 classical+modern bodies + `'chiron' | 'north-node' | 'south-node'`. `HouseSystem` =
@@ -154,7 +170,7 @@ here are the executable subset of it).
   **Verify:** `pnpm vitest run packages/ephemeris/tests/types.test.ts`
   **Accept:** `seam types: schema roundtrip OK`.
 
-- [ ] **T0.6 — Lore & conversation contracts.** *(§8.2 graph model, §7.3 ops, §5 export)*
+- ✅ **T0.6 — Lore & conversation contracts.** *(§8.2 graph model, §7.3 ops, §5 export)*
   **Owns:** `packages/lore/src/types.ts`, `packages/lore/src/store.ts` (interface only),
   `packages/lore/package.json`, tsconfig, `packages/lore/tests/types.test.ts`.
   **Spec:** §8.2 verbatim — `LoreNode {id, kind: 'person'|'fact'|'event'|'thread'|'place',
@@ -169,7 +185,7 @@ here are the executable subset of it).
   **Verify:** `pnpm vitest run packages/lore/tests/types.test.ts`
   **Accept:** `lore types: roundtrip OK`.
 
-- [ ] **T0.7 — Billing contracts.** *(§9.1–§9.6, §13)*
+- ✅ **T0.7 — Billing contracts.** *(§9.1–§9.6, §13)*
   **Owns:** `packages/billing/src/types.ts`, `package.json`, tsconfig,
   `packages/billing/tests/types.test.ts`.
   **Spec:** §9.1 `TrialPolicy {mode: 'count'|'time'|'rate', readings?, days?,
@@ -186,7 +202,7 @@ here are the executable subset of it).
   **Verify:** `pnpm vitest run packages/billing/tests/types.test.ts`
   **Accept:** `billing types: roundtrip OK`.
 
-- [ ] **T0.8 — Design tokens package.** *(§3 tokens law)*
+- ✅ **T0.8 — Design tokens package.** *(§3 tokens law)*
   **Owns:** `packages/design-tokens/tokens.css`, `package.json`, `src/index.ts`,
   `scripts/gen.mjs`.
   **Reads:** `LIBS/UI/FIGMA/TOKENS.md`, `STATE-LEDGER.json` (read-only sources).
@@ -220,10 +236,12 @@ here are the executable subset of it).
   dev-dep; vec-off path) **Accept:** `migrations: fresh + re-run both OK (9 tables without
   vec; 10 with)`.
 
-- [ ] **T0.10 — Config loader.** *(§15 configuration surface, verbatim)*
+- ✅ **T0.10 — Config loader.** *(§15 configuration surface, verbatim)*
   **Owns:** `apps/local/src/config.ts`, `packages/billing/src/config.ts`,
   `packages/billing/tests/config.test.ts`, `.env.example` (whole file).
-  **Spec:** typed `loadConfig(env)` over §15's build-baked values exactly: mirror base,
+  **Spec:** typed `loadConfig(env)` over §15's build-baked values exactly: fork identity
+  (`VITE_APP_NAME`, `VITE_APP_ID`, `VITE_APP_SLUG`, `VITE_LANDING_URL`) and
+  `NATALLY_DEV_PORT`; mirror base,
   app URL, trial block (§9.1 — exactly one mode populated; `trialModel` required
   non-empty; a blank value throws at boot with the field named — fail-loud by design),
   six processor values + bridge URL (blank ⇒ rail absent, §9.4), RevenueCat offering id,
@@ -238,11 +256,12 @@ here are the executable subset of it).
 
 ## Phase P — Ephemeris (§6, §4)
 
-- [ ] **P.1 — sweph-wasm backend.** *(§6 incumbent + conformance)*
+- ✅ **P.1 — sweph-wasm backend.** *(§6 incumbent + conformance)*
   **Owns:** `packages/ephemeris/src/sweph/` (engine.ts, tables.ts),
   `packages/ephemeris/tests/conformance.test.ts`, `packages/ephemeris/tests/fixtures/`.
   **Reads:** T0.5, `DOCS/sdk/sweph-wasm/` (vendored 2.6.9 snapshot). **Spec:** implement
-  `EphemerisEngine` on `sweph-wasm@2.6.9` (pin per `DOCS/sdk/sweph-wasm/PROVENANCE.md`);
+  `EphemerisEngine` on the detached local `sweph-wasm@2.6.9` dependency
+  (`file:../../VENDORED/sweph-wasm`; pin in `VENDORED/sweph-wasm.UPSTREAM-VENDOR.lock.json`);
   `init` lazily mounts the engine's bundled semiset tables (the package ships
   `dist/ephe/seas_*.se1`; `tables.ts` records exactly which files mount — §6 "lazy");
   `position` via `swe_calc_ut` with speed flags; `cusps` via `swe_houses_ex` for each of
@@ -545,7 +564,7 @@ here are the executable subset of it).
 
 ## Phase U — UI (React; each screen owns its dir — §1, §3, DESIGN.md)
 
-- [ ] **U.1 — Shell, router contract, primitives.** *(§3 routes, DESIGN components)*
+- ✅ **U.1 — Shell, router contract, primitives.** *(§3 routes, DESIGN components)*
   **Owns:** `apps/local/src/ui/shell.tsx`, `apps/local/src/ui/router.ts` (contract +
   registry type), `apps/local/src/ui/primitives/` (Button, Chip, TopBar, Composer,
   PlateCard, TurnHer, TurnYou), `apps/local/src/ui/glyphs.tsx`, `apps/local/src/ui/version.tsx`.
@@ -803,9 +822,11 @@ here are the executable subset of it).
   --post-build` (the stamper's existing mode). **Verify:** `bash -n` + `--dry-run`
   **Accept:** `dry-run sequences all targets; lock acquire/release printed`.
 
-- [ ] **R.6 — Version stamping wiring.** *(§14, SC3 version surfaces)* **Owns:**
+- ✅ **R.6 — Version stamping wiring.** *(§14, SC3 version surfaces)* **Owns:**
   `scripts/update-version.sh`.
-  **Spec:** add a read-only `--check` mode (exit 0 when every version surface agrees;
+  **Spec:** derive product identity from §15 root `.env` while stamping all manifest
+  surfaces (including apps/local/package.json and Tauri product/window identity). Add a
+  read-only `--check` mode (exit 0 when every version surface agrees;
   nonzero otherwise; never writes). Migrate the manifest guards to the monorepo paths they
   silently miss today: `apps/local/src-tauri/tauri.conf.json`,
   `apps/local/src-tauri/Cargo.toml`, `apps/local/src-tauri/gen/android/tauri.properties`

@@ -12,6 +12,7 @@
       "scripts/**",
       "!**/node_modules",
       "!**/dist",
+      "!**/target",
       "!**/STAGING_*"
     ]
   },
@@ -48,5 +49,10 @@
         }
       }
     }
-  ]
+  ],
+  "css": {
+    "parser": {
+      "tailwindDirectives": true
+    }
+  }
 }

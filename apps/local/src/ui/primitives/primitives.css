@@ -1,0 +1,259 @@
+/* U.1 consumes the shared tokens.css theme; no second palette is defined here. */
+.ui-shell {
+  min-height: 100dvh;
+  background: var(--color-midnight);
+  color: var(--color-vellum);
+  font: 400 16px / 24px var(--font-ui, "Nunito Sans", sans-serif);
+  color-scheme: dark;
+}
+.ui-shell *,
+.ui-button,
+.ui-chip,
+.ui-composer,
+.ui-composer *,
+.ui-plate,
+.ui-turn-you {
+  box-sizing: border-box;
+}
+.ui-button,
+.ui-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-2);
+  min-width: var(--size-touch);
+  min-height: var(--size-touch);
+  padding: var(--spacing-2) var(--spacing-3);
+  border: var(--stroke-hairline) solid var(--color-hairline);
+  border-radius: var(--radius-button);
+  background: transparent;
+  color: var(--color-vellum);
+  font: 600 16px / 24px var(--font-ui, "Nunito Sans", sans-serif);
+  cursor: pointer;
+}
+.ui-button--primary {
+  background: var(--color-gilt);
+  border-color: var(--color-gilt);
+  color: var(--color-midnight);
+}
+.ui-button--quiet {
+  border-color: transparent;
+}
+.ui-button:disabled,
+.ui-chip:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.ui-button:focus-visible,
+.ui-chip:focus-visible,
+.ui-composer__field:focus-visible,
+.ui-navigation a:focus-visible,
+.ui-skip-link:focus-visible {
+  outline: 2px solid var(--color-orbglow);
+  outline-offset: 2px;
+}
+.ui-chip {
+  background: var(--color-midnight-3);
+  border-radius: var(--radius-chip);
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: 0.04em;
+}
+.ui-chip--active {
+  border-color: var(--color-orbglow);
+}
+.ui-topbar {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+  padding: var(--spacing-3) var(--spacing-4);
+  border-bottom: var(--stroke-hairline) solid var(--color-hairline);
+}
+.ui-topbar__wordmark,
+.ui-turn-her__name,
+.ui-plate__title {
+  font: 600 18px / 24px var(--font-voice, "Fraunces", serif);
+}
+.ui-topbar__context {
+  margin-inline-start: auto;
+  min-width: 0;
+}
+.ui-composer {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-1);
+  padding: var(--spacing-2);
+  border: var(--stroke-hairline) solid var(--color-hairline);
+  border-radius: var(--radius-pill);
+  background: var(--color-midnight-3);
+}
+.ui-composer > .ui-button {
+  flex-shrink: 0;
+  padding-inline: var(--spacing-2);
+}
+.ui-composer__field {
+  flex: 1;
+  min-width: 0;
+  min-height: var(--size-touch);
+  padding: var(--spacing-2);
+  resize: vertical;
+  border: 0;
+  border-radius: var(--radius-chip);
+  background: transparent;
+  color: var(--color-vellum);
+  font: 400 16px / 24px var(--font-ui, "Nunito Sans", sans-serif);
+}
+.ui-plate {
+  padding: var(--spacing-4);
+  border: var(--stroke-hairline) solid var(--color-hairline);
+  border-radius: var(--radius-plate);
+  background: var(--color-midnight-2);
+  color: var(--color-vellum);
+  font: 400 16px / 24px var(--font-ui, "Nunito Sans", sans-serif);
+}
+.ui-plate--placed {
+  box-shadow: var(--shadow-plate-placed, none);
+}
+.ui-plate__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-3);
+}
+.ui-plate__title {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+.ui-plate__body {
+  margin-block: var(--spacing-3);
+}
+.ui-plate__provenance {
+  color: var(--color-vellum-muted);
+  font: 400 12px / 16px var(--font-data, "IBM Plex Mono", monospace);
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+.ui-turn-her {
+  display: grid;
+  grid-template-columns: 20px minmax(0, 1fr);
+  align-items: start;
+  gap: var(--spacing-3);
+  color: var(--color-vellum);
+  font: 400 16px / 24px var(--font-ui, "Nunito Sans", sans-serif);
+}
+.ui-turn-her__glyph {
+  color: var(--color-gilt);
+}
+.ui-turn-her__name {
+  margin-bottom: var(--spacing-2);
+}
+.ui-turn-her__body,
+.ui-turn-you {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.ui-turn-you {
+  width: fit-content;
+  max-width: 100%;
+  margin-inline-start: auto;
+  padding: var(--spacing-3) var(--spacing-4);
+  border: var(--stroke-hairline) solid var(--color-orbglow);
+  border-radius: var(--radius-chip);
+  color: var(--color-vellum);
+  font: 400 16px / 24px var(--font-ui, "Nunito Sans", sans-serif);
+}
+.ui-shell__layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+}
+.ui-navigation {
+  display: none;
+  padding: var(--spacing-3);
+  border-bottom: var(--stroke-hairline) solid var(--color-hairline);
+}
+.ui-navigation[data-open="true"] {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+}
+.ui-navigation a {
+  display: flex;
+  align-items: center;
+  min-height: var(--size-touch);
+  padding: var(--spacing-2) var(--spacing-3);
+  border-radius: var(--radius-chip);
+  color: var(--color-vellum-muted);
+  text-decoration: none;
+}
+.ui-navigation a[aria-current="page"] {
+  background: var(--color-midnight-3);
+  color: var(--color-vellum);
+}
+.ui-shell__surface {
+  min-width: 0;
+  padding: var(--spacing-4);
+  padding-bottom: calc(var(--spacing-8) + var(--size-touch));
+}
+.ui-absence {
+  color: var(--color-vellum-muted);
+  font: italic 400 16px / 24px var(--font-voice, "Fraunces", serif);
+}
+.ui-absence--error {
+  color: var(--color-ember);
+}
+.ui-version {
+  position: fixed;
+  right: max(var(--spacing-3), env(safe-area-inset-right, 0px));
+  bottom: max(var(--spacing-2), env(safe-area-inset-bottom, 0px));
+  z-index: 10;
+  padding: var(--spacing-1);
+  background: var(--color-midnight);
+  color: var(--color-vellum-muted);
+  font-family: var(--font-data, "IBM Plex Mono", monospace);
+  font-weight: 400;
+  font-size: 11px;
+  line-height: 14px;
+  font-variant-numeric: tabular-nums;
+  user-select: text;
+}
+.ui-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.ui-skip-link {
+  position: fixed;
+  inset-inline-start: var(--spacing-3);
+  top: var(--spacing-3);
+  transform: translateY(-200%);
+  padding: var(--spacing-3);
+  color: var(--color-moonlight);
+  background: var(--color-midnight);
+  z-index: 20;
+}
+.ui-skip-link:focus {
+  transform: none;
+}
+@media (min-width: 960px) {
+  .ui-shell__layout {
+    grid-template-columns: 240px minmax(0, 1fr);
+  }
+  .ui-navigation {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-2);
+    border-bottom: 0;
+    border-right: var(--stroke-hairline) solid var(--color-hairline);
+  }
+  .ui-topbar > .ui-button {
+    display: none;
+  }
+  .ui-shell__surface {
+    padding: var(--spacing-6);
+    padding-bottom: calc(var(--spacing-8) + var(--size-touch));
+  }
+}

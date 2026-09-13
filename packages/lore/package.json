@@ -1,0 +1,29 @@
+{
+  "name": "@natally/lore",
+  "private": true,
+  "type": "module",
+  "types": "./src/types.ts",
+  "exports": {
+    ".": "./src/types.ts",
+    "./types": "./src/types.ts",
+    "./types.js": "./src/types.ts",
+    "./store": "./src/store.ts",
+    "./store.js": "./src/store.ts",
+    "./src/types.ts": "./src/types.ts",
+    "./src/store.ts": "./src/store.ts"
+  },
+  "scripts": {
+    "typecheck": "../../node_modules/.bin/tsc --noEmit -p tsconfig.json",
+    "lint": "../../node_modules/.bin/biome check src tests",
+    "test": "../../node_modules/.bin/vitest run tests/types.test.ts"
+  },
+  "dependencies": {
+    "zod": "4.5.4"
+  },
+  "devDependencies": {
+    "typescript": "5.9.3",
+    "vitest": "3.2.7",
+    "better-sqlite3": "13.0.3",
+    "@types/better-sqlite3": "9.6.0"
+  }
+}

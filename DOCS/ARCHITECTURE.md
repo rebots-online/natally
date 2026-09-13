@@ -49,7 +49,9 @@ apps/local/                 # Tauri 2 application — one codebase, four targets
   src-tauri/                # Rust core (see §5–§7 host duties)
 apps/hosted/                # FUTURE (D10): web-only pay-per-reading SaaS. Empty by design;
                             # nothing in apps/local may import from it or vice versa.
-packages/ephemeris/         # EphemerisEngine seam + sweph-wasm backend (§6)
+VENDORED/sweph-wasm/        # Detached upstream wrapper + published runtime; source owned here
+  swisseph/                 # Detached Swiss Ephemeris source at wrapper-pinned revision
+packages/ephemeris/         # EphemerisEngine seam + local vendored sweph-wasm backend (§6)
 packages/lore/              # Shared GraphRAG lore core, client-side storage (§8)
 packages/billing/           # TrialPolicy, usage ledger, PurchaseAdapter, license verify (§9)
 packages/design-tokens/     # Generated from LIBS/UI/FIGMA/TOKENS.md + STATE-LEDGER.json
@@ -121,7 +123,15 @@ ConsumedCode) as one JSON document, versioned by `exportVersion`.
 
 ## 6. Ephemeris subsystem (D14)
 
-Swiss Ephemeris via `sweph-wasm` is the pinned incumbent; all call sites go through the seam:
+Swiss Ephemeris via `sweph-wasm` is the pinned incumbent. The complete detached source
+repositories and matching runtime are committed under root `VENDORED/sweph-wasm/`
+(wrapper 2.6.9) and `VENDORED/sweph-wasm/swisseph/` (the wrapper-pinned C engine).
+`packages/ephemeris` depends on `file:../../VENDORED/sweph-wasm`; there are no nested
+Git repositories, active submodules, or upstream-tracking remotes. Local modifications
+are owned by natally. Origins and revisions are attribution in
+`VENDORED/sweph-wasm.UPSTREAM-VENDOR.lock.json`; the former source downloader now reads
+local files only. `DOCS/sdk/sweph-wasm/` remains a documentation snapshot, not the
+vendor source tree. All call sites go through the seam:
 
 ```ts
 interface EphemerisEngine {
@@ -381,6 +391,15 @@ honest error, never a partial stash. HF write token is an operator precondition 
   `speechSynthesis` grep, and bundle-budget asserts.
 
 ## 15. Configuration surface (`.env`, see `.env.example`)
+
+Fork identity is configured in the root `.env` only: `VITE_APP_NAME` (display name),
+`VITE_APP_ID` (reverse-DNS namespace), `VITE_APP_SLUG` (release filename prefix),
+`VITE_APP_URL` (web app URL), and `VITE_LANDING_URL` (download/landing page).
+`NATALLY_DEV_PORT` selects the local development port. `.env.example` is the default
+copy template. The config loader, Vite entry, version stamper, native manifests, release
+scripts and nginx provisioning consume these variables; generated manifests are derived
+surfaces, never separate sources of configuration. Internal workspace package names may
+remain stable across forks; product identity and displayed labels come from `.env`.
 
 Build-baked client values: mirror base, app URL, trial policy block, six processor values +
 bridge URL, RevenueCat offering id, lore flags, and `VITE_LICENSE_PUBKEY` (offline license
