@@ -195,7 +195,7 @@ seam without re-architecting.
   (authored 2026-09-11). **CODE is open** — D19 (2026-09-11) rules the Figma frame
   re-clearance is not a blocker; the 2026-09-04 TC12 §10 approval governs (I2/TC12/D3).
 - Open items: HF write token + `CREDENTIALS/natally.md` creation; hosted-product design
-  pass (Alby Market / x402 — separate conversation); msi4090 remote sync (this host's CC13
-  restored 2026-09-11; unify at msi4090's next session); Stage node-id verification at the
+  pass (Alby Market / x402 — separate conversation); Stage node-id verification at the
   re-freeze. Former open item "forgejo return" is **resolved** (CC13 restored 2026-09-11).
-  `github` mirror; this host: `origin`=GitHub) when forgejo returns.
+  Remote unification also resolved (2026-09-14): both hosts now hold `origin`=forgejo +
+  `github` mirror; master `ef92499` pushed to both.
