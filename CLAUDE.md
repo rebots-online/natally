@@ -49,8 +49,10 @@ INC-1.
    no-proxy-attestation, INC-7, SC4/GR-4) — only an observed run proves anything. Each
    coder/subagent receives exactly **one task block** and works only from that block plus
    this repo's docs — reading other task blocks is out of scope (coordination is closed at
-   architecting time; Owns sets are pairwise disjoint). A perceived cross-task need is a
-   checklist defect to report (`[/] blocked: <reason>`), never an improvisation.
+   architecting time; Owns sets are pairwise disjoint). Resolve cross-task concerns while
+   deriving the checklist, before sign-off. Once implementation begins, execute the
+   approved block autonomously; record any concern for discussion with the completed
+   handoff, without stopping, reopening architecture, or improvising a deviation.
 
 ## Always-on floor (global rules — never suspended by project specifics)
 
@@ -60,11 +62,16 @@ INC-1.
 - **Additive stewardship (I3).** Never delete files or artifacts: `cp` to
   `~/outbox/natally/` (CC12's outbox; **copy, never move** — INC-13). Snapshot before any
   destructive step and print the rollback recipe (global priority rule 7).
-- **Escalate, never invent (I-4); no self-rescue (I-6).** A gap in spec or artifacts is an
-  escalation block and a stop — never a silent invention.
+- **Complete approved execution (global I2, I-4, I-6; operator clarification 2026-09-13).**
+  Architecture-to-checklist derivation is the last point for surfacing and resolving
+  concerns before sign-off. After sign-off, the checklist is authority to finish without
+  requiring the operator's presence: do not create blockers, new prerequisites, or
+  architecture detours. Record concerns for discussion after completing the goal; never
+  silently deviate or claim an unobserved result. The operator may be tending other
+  projects, so an implementation pause can waste the remainder of the day.
 - **Purposive rule reading.** A rule read so literally that it defeats its own goal is being
-  misread — but D1–D9 are operator decisions, not rules: on conflict, halt and ask; never
-  reinterpret them.
+  misread — but D1–D9 are operator decisions, not rules: resolve conflicts before checklist
+  sign-off; never reinterpret them. Approved execution follows the global rule above.
 - **No `/tmp` work.** Use project `.tmp/` or the session scratchpad; intermediates are
   `STAGING_`-prefixed; artifacts representing significant compute never rest in `.tmp/`
   (INC-16) — they land in tracked `dist/` immediately.
@@ -87,10 +94,14 @@ content law (INC-19, below).
   under `release.lock` so every platform ships the same stamp.
 - **Git** (TC10, CC13): commit and push at every task completion and handback; `git add`
   scoped to the task's files, never `-A`; a push failure is reported as a durability gap.
-  Branch `master`. Standing state: forgejo.robin.mba is down, so **origin currently points at
-  `github.com/rebots-online/natally`** (code-only; `GIT_LFS_SKIP_PUSH=1`, no LFS objects to
-  GitHub). When forgejo returns, restore CC13 shape: origin = forgejo (HTTPS, token), GitHub =
-  `github` mirror with LFS resolved to forgejo (`.lfsconfig` already in place); re-push LFS.
+  Branch `master`. Standing state (2026-09-11): **CC13 restored** — `origin` →
+  `https://forgejo.robin.mba/rcheung/natally.git` (authoritative; LFS endpoint per
+  `.lfsconfig`; repo created de-novo on Forgejo v15, CT 130 — the instance has no
+  migration, so repos are fresh — id 54, private, `master`), `github` →
+  `github.com/rebots-online/natally` (public mirror; **code-only, `GIT_LFS_SKIP_PUSH=1`**).
+  Push both at handbacks: `git push` then `GIT_LFS_SKIP_PUSH=1 git push github`.
+  Forgejo token lives in `CREDENTIALS/forgejo-robin-mba-v15.md` — **strip the markdown
+  backticks when scripting it** (a backtick-wrapped 40-hex token reads as 401).
 - **Artifacts** (CC12, CC3, INC-16): `dist/` is **tracked**; binaries go through git-LFS.
   Artifact names are slug-first: `mba.robin.natally-v<version>-<qualifier>`. Unstamped
   artifacts are never left behind; wrongly-stamped ones move to `~/outbox/natally/` on sight —
@@ -179,11 +190,12 @@ seam without re-architecting.
   Lore) entered **specs-first** with frames already backfilled (`/paywall`, `/checkout`,
   J10/J11, trial + license nodes in `STATE-LEDGER.json`) — **operator re-clearance and
   re-freeze of the amended complement still pending.**
-- `DOCS/ARCHITECTURE.md` (2026-09-04) and `CHECKLIST.md` exist; `DOCS/TEST_RUBRIC.md` is the
-  remaining gate-2 sibling. Nothing under `src/` before all three exist and the complement is
-  re-cleared (I2, TC12, D3).
-- Open items: operator re-clearance + re-freeze of the D10–D14 complement; TEST_RUBRIC.md
-  authoring; HF write token + `CREDENTIALS/natally.md` creation; forgejo return (restore CC13
-  remotes + LFS re-push); hosted-product design pass (Alby Market / x402 — separate
-  conversation); unify the two workstations' remote layouts (msi4090: `origin`=forgejo +
+- **Gate 2 complete (2026-09-11):** `DOCS/ARCHITECTURE.md` (reconciled 2026-09-09, spec-panel
+  fills 2026-09-11), `CHECKLIST.md` (recreated de novo, 58 tasks), `DOCS/TEST_RUBRIC.md`
+  (authored 2026-09-11). **CODE is open** — D19 (2026-09-11) rules the Figma frame
+  re-clearance is not a blocker; the 2026-09-04 TC12 §10 approval governs (I2/TC12/D3).
+- Open items: HF write token + `CREDENTIALS/natally.md` creation; hosted-product design
+  pass (Alby Market / x402 — separate conversation); msi4090 remote sync (this host's CC13
+  restored 2026-09-11; unify at msi4090's next session); Stage node-id verification at the
+  re-freeze. Former open item "forgejo return" is **resolved** (CC13 restored 2026-09-11).
   `github` mirror; this host: `origin`=GitHub) when forgejo returns.

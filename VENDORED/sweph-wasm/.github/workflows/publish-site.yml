@@ -1,0 +1,49 @@
+name: Deploy to GitHub Pages
+
+# This workflow is triggered on a push to a tag starting with 'v' or a manual trigger.
+on:
+    workflow_dispatch:
+    push:
+        branches: [main]
+        paths:
+            - "example/**"
+
+jobs:
+    deploy:
+        name: Build and Deploy Example
+        runs-on: ubuntu-latest
+
+        # Set permissions for the GITHUB_TOKEN to allow Pages deployment.
+        permissions:
+            pages: write # Required to deploy to GitHub Pages
+            id-token: write # Required to use OpenID Connect for authentication
+
+        steps:
+            # Step 1: Checkout the repository code.
+            # The `actions/checkout` action is essential for making your repository's code
+            # available to the runner. It clones the code into the workflow's working directory.
+            - name: Checkout Repository
+              uses: actions/checkout@v4
+              with:
+                  submodules: "recursive" # This ensures your swisseph submodule is also cloned.
+
+            # Move the 'ephe' folder into the 'example' folder.
+            - name: Move ephe into example
+              run: cp -r swisseph/ephe example
+
+            # Prepare the deployable artifact for GitHub Pages.
+            - name: Setup Pages
+              id: pages
+              uses: actions/configure-pages@v5
+
+            # Upload the 'example' folder as a Pages artifact.
+            - name: Upload artifact
+              uses: actions/upload-pages-artifact@v3
+              with:
+                  # The directory to upload.
+                  path: "./example"
+
+            # Deploy the artifact to GitHub Pages.
+            - name: Deploy to GitHub Pages
+              id: deployment
+              uses: actions/deploy-pages@v4

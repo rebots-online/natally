@@ -1,0 +1,28 @@
+{
+  "name": "@natally/ephemeris",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/seam.ts",
+    "./types": "./src/types.ts",
+    "./types.ts": "./src/types.ts",
+    "./seam": "./src/seam.ts",
+    "./seam.ts": "./src/seam.ts",
+    "./src/types.ts": "./src/types.ts",
+    "./src/seam.ts": "./src/seam.ts",
+    "./solar": "./src/solar.ts",
+    "./facts": "./src/facts.ts",
+    "./sweph/engine": "./src/sweph/engine.ts",
+    "./host": "./src/host/web-worker.ts",
+    "./host/protocol": "./src/host/protocol.ts"
+  },
+  "scripts": {
+    "typecheck": "../../node_modules/.bin/tsc --noEmit -p tsconfig.json",
+    "lint": "../../node_modules/.bin/biome check src tests",
+    "test": "pnpm -w exec vitest run packages/ephemeris/tests/types.test.ts"
+  },
+  "dependencies": {
+    "sweph-wasm": "file:../../VENDORED/sweph-wasm",
+    "zod": "4.5.4"
+  }
+}

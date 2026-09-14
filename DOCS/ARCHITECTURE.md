@@ -3,8 +3,10 @@
 Normative for the **local-app product** (Linux, Windows, Android, web PWA — all legs
 local-inference) and for the monorepo seams the **hosted web-only SaaS** (Alby Market /
 Bitcoin LN / x402, pay-per-reading) will occupy later (D10). Written 2026-09-04 against the
-amended complement (D10–D14). `CHECKLIST.md` and `DOCS/TEST_RUBRIC.md` (gate-2 siblings)
-follow separately; no `src/` is written before all three exist (CLAUDE.md, I2, TC12).
+amended complement (D10–D14). Reconciled 2026-09-09 against the frozen complement, the
+tree, and the vendored sweph-wasm surface; `CHECKLIST.md` was recreated from this edition
+the same day. `DOCS/TEST_RUBRIC.md` (gate-2 sibling) follows separately; no `src/` is
+written before all three exist and the complement is re-cleared (CLAUDE.md, I2, TC12, D3).
 
 Reading order: `README.md` (what) → `DOCS/DECISIONS.md` (why; D1–D14 cited throughout) →
 this file (how) → `LIBS/UI/FIGMA/DESIGN.md` + `TOKENS.md` + `STATE-LEDGER.json` (surfaces).
@@ -47,7 +49,9 @@ apps/local/                 # Tauri 2 application — one codebase, four targets
   src-tauri/                # Rust core (see §5–§7 host duties)
 apps/hosted/                # FUTURE (D10): web-only pay-per-reading SaaS. Empty by design;
                             # nothing in apps/local may import from it or vice versa.
-packages/ephemeris/         # EphemerisEngine seam + sweph-wasm backend (§6)
+VENDORED/sweph-wasm/        # Detached upstream wrapper + published runtime; source owned here
+  swisseph/                 # Detached Swiss Ephemeris source at wrapper-pinned revision
+packages/ephemeris/         # EphemerisEngine seam + local vendored sweph-wasm backend (§6)
 packages/lore/              # Shared GraphRAG lore core, client-side storage (§8)
 packages/billing/           # TrialPolicy, usage ledger, PurchaseAdapter, license verify (§9)
 packages/design-tokens/     # Generated from LIBS/UI/FIGMA/TOKENS.md + STATE-LEDGER.json
@@ -119,7 +123,15 @@ ConsumedCode) as one JSON document, versioned by `exportVersion`.
 
 ## 6. Ephemeris subsystem (D14)
 
-Swiss Ephemeris via `sweph-wasm` is the pinned incumbent; all call sites go through the seam:
+Swiss Ephemeris via `sweph-wasm` is the pinned incumbent. The complete detached source
+repositories and matching runtime are committed under root `VENDORED/sweph-wasm/`
+(wrapper 2.6.9) and `VENDORED/sweph-wasm/swisseph/` (the wrapper-pinned C engine).
+`packages/ephemeris` depends on `file:../../VENDORED/sweph-wasm`; there are no nested
+Git repositories, active submodules, or upstream-tracking remotes. Local modifications
+are owned by natally. Origins and revisions are attribution in
+`VENDORED/sweph-wasm.UPSTREAM-VENDOR.lock.json`; the former source downloader now reads
+local files only. `DOCS/sdk/sweph-wasm/` remains a documentation snapshot, not the
+vendor source tree. All call sites go through the seam:
 
 ```ts
 interface EphemerisEngine {
@@ -137,6 +149,13 @@ interface EphemerisEngine {
   the operator's in-house engine) registers behind the same interface with a conformance
   suite (fixed-star and planet positions vs DE431 references at 0.01° tolerance; house cusps
   vs published examples for all 12 systems).
+- **House systems (closed set, 12 — SC1):** Placidus `P`, Koch `K`, Porphyry `O`,
+  Regiomontanus `R`, Campanus `C`, Equal (Asc) `A`, Vehlow Equal `V`, Whole Sign `W`,
+  Topocentric (Polich/Page) `T`, Meridian (axial rotation) `X`, Alcabitius `B`,
+  Krusinski-Pisa-Goelzer `U`. Each maps 1:1 to a `HouseSystems` code of `sweph-wasm@2.6.9`
+  (vendored snapshot `DOCS/sdk/sweph-wasm/index.d.ts`, type at line 2423; local docs per
+  TC7). The engine domain is wider (25 codes); adding a 13th chip is a decision-entry
+  event, never a silent append.
 - **Honest absence rules:** birth time unknown ⇒ solar chart (Sun on the 1st-house cusp by
   sign), no Ascendant, no houses anywhere that person appears (J1/J3/J4 branches); backend
   without Chiron ⇒ glyph shows absence, never an estimate.
@@ -219,8 +238,18 @@ hybrid: top-k vector matches (k=8) ∪ 2-hop neighbourhood of matched nodes, bud
 ### 8.4 Boundaries
 `LoreStore` is an interface (`query`, `upsert`, `export`, `delete`, `stats`) so the later
 **pysanky / 6dog** graph-navigation UI reads the same graph without re-architecting. User
-controls (Settings › Data): summary line (`[turns · nodes · runtime]`), export with J8,
-delete-everything includes lore. Deletion is real deletion (rows + vectors), not soft-hide.
+controls (Settings › Data): summary line (`[turns · nodes]`, rendered from `stats()` →
+`{turns, nodes, edges}`), export with J8, delete-everything includes lore. Deletion is real deletion (rows + vectors), not soft-hide.
+**Person removal** (People edit flow) is real deletion of the person, their `kind=person`
+lore node and every edge incident to it, and their cached charts (§5 content-addressed
+rows); their sessions and turns persist as transcript history — the transcript is the
+primary surface and is never rewritten. The action runs behind the standard confirm
+affordance.
+**Import conflicts:** `importDocument` merges by personId and lore nodeId; when an incoming
+person's id matches but birth data diverges, the **existing person wins** — incoming birth
+fields are ignored and the divergence is surfaced once in the import report
+`{merged, skipped, conflicts[]}`. Nothing is silently overwritten and nothing is deleted
+by import.
 
 ## 9. Licensing & entitlement (D11)
 
@@ -237,13 +266,22 @@ conversation that references at least one plate. Ledger: SQLite `readings(id, ts
 chartId)` append-only (house never-delete rule; corrections are compensating rows). Gate
 check runs pre-inference; outcomes map to the designed states: remaining counter (TrialIdle
 chip), exhausted (TrialExhausted composer replacement), rate-limited next-date aside.
+**Charge lifecycle:** when a turn is requested with a plate in scope, the ledger appends a
+Reading row at request time (that is the charge — append-only, §5); if the fence checker
+(§7.2) finds the produced turns reference **zero** Tier-1 values, a compensating credit row
+is appended (house never-delete rule) — the reading is refunded, not deleted. Turns whose
+request carries no plate context are never charged (§7.4 free chat). The pre-inference
+gate is a prediction over committed rows; the ledger owns charge and refund.
 
 ### 9.3 License token
 Ed25519-signed JSON `{ sub: appUserId, tier: 'unlimited', iat, exp?: null, iss:
 'natally-license-bridge', jti }` (COSE/CWT-style compact form). The **public key is baked at
 build**; verification is offline; revocation is a bridge-published, signed, dated deny-list
-checked when online (never blocks a verified unexpired token offline). Storage: OS keychain
-(native) / IndexedDB with WebCrypto-wrapped value (web).
+checked when online (never blocks a verified unexpired token offline). **Deny-list
+cadence:** fetched at app start, before any checkout/restore, and at most every 24 h
+thereafter; cached locally. **Storage:** OS keychain (native) / IndexedDB with
+WebCrypto-wrapped value (web); where no OS keychain exists, the wrapped value lives in an
+encrypted app-data file and About states so — never plaintext.
 
 ### 9.4 Processor rails & the license bridge
 One interface, six adapters, presence driven by `.env` (blank ⇒ rail hidden; the paywall's
@@ -269,8 +307,11 @@ interface PurchaseAdapter {
   SQLite ledger keyed `(processor, invoiceId)`), mints LicenseTokens with
   `LICENSE_ED25519_PRIVATE_KEY`, issues single-use redeem codes (128-bit random, stored
   SHA-256-hashed), publishes the signed deny-list, and exposes `POST /redeem` +
-  `POST /verify`. Secrets live in the bridge's `.env` per Admin-Manual convention; **no
-  processor secret and no signing key ever ships in a client**.
+  `POST /verify`. **Refund/chargeback events that identify a fulfilled purchase revoke the
+  minted jti onto the signed deny-list** — the deny-list is the only revocation path, and
+  clients enforce at the next online check (§9.3 cadence). Secrets live in the bridge's
+  `.env` per Admin-Manual convention; **no processor secret and no signing key ever ships
+  in a client**.
 
 ### 9.5 Codes
 - **Individually-redeemable:** bridge-issued, single-use, registry-deduped server-side and
@@ -293,8 +334,15 @@ Kokoro on every leg. Native: ONNX runtime in Rust, synthesis and playback fully 
 voices from the mirror (`manifest.json` shared with the LLM catalogue); Web:
 onnxruntime-web (WASM, WebGPU where present) with PCM through Web Audio. `speechSynthesis`
 is banned on all legs (CI grep guard). The Stage consumes real events only (STATES.md):
-Thinking on first streamed token, Speaking while PCM plays with the RMS envelope driving
-orb+mouth, Delighted on chart computed / unlock success, Error on engine failure.
+Thinking when a companion request is sent (no tokens yet — STATES.md's trigger), Speaking
+while PCM plays with the RMS envelope driving orb+mouth, Delighted on chart computed /
+unlock success, Error on engine failure. Asleep, waking and listening are driven by
+capability signals (model presence, engine/model load progress, composer focus), not by
+bus events; the Stage reducer consumes a `StageSignal` union — companion bus events ∪
+capability signals — defined by task C.4. **Envelope semantics:** CompanionEvent
+`envelope` is three-valued — `envelope-start`, `envelope-level(0..1)` per 20 ms window,
+`envelope-end` (raised on stream close or after a 120 ms silence threshold). `Speaking`
+spans `envelope-start` → `envelope-end`; `Idle` resumes at `envelope-end`.
 
 ## 11. Privacy & security posture
 
@@ -325,8 +373,10 @@ orb+mouth, Delighted on chart computed / unlock success, Error on engine failure
 `{ version, assets: [{ id, kind: 'llm'|'embedder'|'voice'|'voices', file, bytes, sha256,
 quant, trialEligible? }] }`. Downloads: ranged + resumable, sha256-verified before commit,
 stored under the platform cache dir (native) / Cache Storage (web); catalogue rows in
-Settings render from this manifest; removal deletes files + manifest rows. HF write token is
-an operator precondition (open item §16).
+Settings render from this manifest; removal deletes files + manifest rows. A **free-space
+precondition** (asset size + 10 %) is checked before each download starts; failure is an
+honest error, never a partial stash. HF write token is an operator precondition (open item
+§16).
 
 ## 14. Build, release, versioning
 
@@ -342,17 +392,30 @@ an operator precondition (open item §16).
 
 ## 15. Configuration surface (`.env`, see `.env.example`)
 
+Fork identity is configured in the root `.env` only: `VITE_APP_NAME` (display name),
+`VITE_APP_ID` (reverse-DNS namespace), `VITE_APP_SLUG` (release filename prefix),
+`VITE_APP_URL` (web app URL), and `VITE_LANDING_URL` (download/landing page).
+`NATALLY_DEV_PORT` selects the local development port. `.env.example` is the default
+copy template. The config loader, Vite entry, version stamper, native manifests, release
+scripts and nginx provisioning consume these variables; generated manifests are derived
+surfaces, never separate sources of configuration. Internal workspace package names may
+remain stable across forks; product identity and displayed labels come from `.env`.
+
 Build-baked client values: mirror base, app URL, trial policy block, six processor values +
-bridge URL, RevenueCat offering id, lore flags. Script/server-only: `HF_TOKEN` (local repo)
+bridge URL, RevenueCat offering id, lore flags, and `VITE_LICENSE_PUBKEY` (offline license
+verify, §9.3). Script/server-only: `HF_TOKEN` (local repo)
 and the bridge's `LICENSE_ED25519_PRIVATE_KEY`, processor webhook secrets, code registry
 (bridge host only, Admin-Manual convention). Nothing in `apps/local` reads a secret at
 runtime.
 
 ## 16. Open items register
 
-1. Operator re-clearance of the 2026-09-04 complement additions in Figma → re-freeze
-   (STATE-LEDGER `pendingFixes`).
-2. `CHECKLIST.md` + `DOCS/TEST_RUBRIC.md` (gate-2 siblings; next session).
+1. Figma visual re-clearance of the 2026-09-04 complement additions → re-freeze — **ruled
+   not a CODE blocker (D19, 2026-09-11)**; opportunistic. Still owed at re-freeze:
+   re-verifying the Stage component's five variant node-ids (`DESIGN.md`'s Stage row and
+   `STATE-LEDGER.json` disagree on 7:3, 7:5, 7:16; STATE-LEDGER is canonical for code).
+2. `DOCS/TEST_RUBRIC.md` (final gate-2 sibling; `CHECKLIST.md` was recreated 2026-09-09
+   from this reconciled edition).
 3. HF write token for the mirror (both PATs 401 on 2026-08-18).
 4. forgejo return → push `origin` with LFS; decide the GitHub artifact channel (R1 needs a
    downloadable web build before forgejo returns).
@@ -361,6 +424,9 @@ runtime.
    (§1, §9.6).
 6. Embedding model selection for lore (mirror catalogue entry + dimension pin).
 7. Ephemeris successor watch (D14 keeps the seam; conformance suite specified §6).
+8. Wider `DOCS/sdk/` snapshots (RevenueCat SDK, ort/onnxruntime-web, llama-cpp-2/wllama,
+   processor webhook schemes) are vendored at the start of their owning tasks (TC7);
+   sweph-wasm is vendored now (`DOCS/sdk/sweph-wasm/`, 2.6.9, sha256-stamped).
 
 ## 17. Traceability appendix
 
@@ -369,7 +435,7 @@ runtime.
 | §1 overview | D4, D5, D6, D10, D13 | all | DESIGN.md |
 | §5 entities | INC-19 | all | SCREEN.md ×13 |
 | §6 ephemeris | D9, D14 | atlas ×3, plates | DESIGN.md, STATE-LEDGER |
-| §7 companion | D13 | conversation ×8 variants | mascot/STATES.md |
+| §7 companion | D13 | conversation ×9 variants (incl. Desktop + 3 trial) | mascot/STATES.md |
 | §8 lore | D12 | settings (Data/Lore) | screenshot-license.png |
 | §9 licensing | D11, R2 | paywall ×7, checkout ×6, conversation trial ×3 | SCREEN.md (paywall, checkout), J10, J11 |
 | §10 voice/stage | D7, D7a | conversation, settings (Voice) | STATES.md |

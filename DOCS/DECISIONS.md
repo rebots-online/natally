@@ -101,3 +101,56 @@ added to the complement as **specs first** (`SCREEN.md` + `STATE-LEDGER.json` `p
 worklist); the Figma frames are backfilled into `natally v1` and the complement re-frozen
 only after the frames exist and the operator clears them (TC12 §9 again). R1/R2 rows above
 are re-read as the **hosted product's** roadmap (D10), not as legs of the local app.
+
+## 2026-09-11 — forgejo returned; CC13 restoration staged, credential rotation requested (operator session)
+
+- forgejo.robin.mba (Forgejo v15, CT 130) and the Proxmox fleet are back (verified live
+  2026-09-10 by the registry pass; push tested 2026-09-11).
+- The task-ledger Postgres (CT 112, `192.168.0.249:5432`, `claude_archive`) is reachable
+  again; the pending `TARCH-20260909-reconcile-checklist` events were recorded
+  (ledger ids 1975–1977).
+- This host's remotes now hold the CC13 shape — `origin` → forgejo, `github` → code-only
+  mirror — but **push auth is blocked**: both documented forgejo tokens return 401 against
+  git and API, and the v15 box has no SSH on :22. `github` remains the working push target
+  until the operator rotates the token (I-15: no rotation without explicit instruction;
+  I-4/I-6: escalated, not self-rescued).
+- **Resolution (same day, operator correction):** no rotation was needed — the tokens were
+  valid all along; the credential parser had baked the CREDENTIALS table's markdown
+  backticks into the value (42 chars incl. backticks = 401; stripped 40 chars = 200).
+  `rcheung/natally` then returned "Repository not found": the v15 instance is de-novo
+  (no migration), so the repo was created via API (id 54, private, `master`,
+  push-to-create disabled by policy) and `master` pushed. **CC13 fully restored**;
+  `github` remains the code-only public mirror. Standing lesson recorded in CLAUDE.md:
+  credential parsers strip markdown decoration from CREDENTIALS tables; values never
+  enter transcripts.
+
+## 2026-09-11 — operator directives D15–D18 (minted from the 2026-09-09/10 sessions)
+
+Recorded verbatim-in-substance from the operator's session instructions; they refine the
+workflow layers above and supersede nothing.
+
+| # | Decision | Rules out |
+|---|---|---|
+| D15 | Roadmap work executes **"don't block — vendor in"**: fold audit fixes directly into the artifact being recreated; vendor the needed SDK snapshot (`sweph-wasm`) rather than leaving a contract blocked on it. | Blocking contract pins on missing snapshots; deferring known fixes to a later pass. |
+| D16 | **No hardening; never break Tauri 2 multi-platform compatibility.** Doc reconciliation touches naming and consistency only — build topology, stamping scheme, and all six billing rails stay exactly as specified. | Hardening passes during reconciliation; any change that risks the four-target Tauri 2 matrix. |
+| D17 | **ARCHITECT-phase doctrine:** the enumeration is consumed onto the checklist or the checklist is wrong — no test-like or matcher activity at this phase; coders see exactly one self-contained task block and nothing else; anything a checker would need to resolve must already be resolved in the enumeration. | Post-hoc checkers over prose at ARCHITECT; smoke tests as deliverables; coder exploration beyond its block. |
+| D18 | On major change the checklist is recreated **de novo from `ARCHITECTURE.md`** — never transcribed from its predecessor; predecessors are preserved beside it with semantic names (additive, I3). | Deriving a new checklist from the old checklist's text. |
+
+## 2026-09-11 — operator directive D19: complement re-clearance is not a CODE blocker
+
+| # | Decision | Rules out |
+|---|---|---|
+| D19 | The 2026-09-04 TC12 §10 approval governs: the amended complement's **Figma frame re-clearance is not a CODE blocker**; visual re-clearance + re-freeze happen opportunistically (at re-freeze, verify the Stage component's five variant node-ids — DESIGN.md's Stage row and STATE-LEDGER.json disagree; the ledger is canonical for code). | Holding CODE pending frame clearance; treating the specs-first surfaces as unapproved. |
+
+## 2026-09-13 — operator correction: source artifacts and companion-led design
+
+| # | Decision | Rules out |
+|---|---|---|
+| D20 | **Figma → Figma Make → structured source export → architecture referencing actual exported elements → checklist wiring → build.** If Make cannot supply the export, use **Stitch HTML/CSS/JS**. Preserve component/DOM structure, styles, assets, interactions and animation/3D implementation. Exact export paths, component names or stable DOM IDs, interfaces and data/event bindings must be available before deriving the architecture/checklist. Existing screenshots and descriptive screen notes are historical references, not substitutes for exported working UI. This sequence is the highest-priority architecting rule in Admin-Manual TC12 v1.2. | Reverse-engineering screenshots; inventing another UI from Markdown; calling the generic shell the approved design; changing the spec to legitimize that shell. |
+| D21 | **The experience is conversational, warm, inviting and companion-led.** Use Kintsugi's onboarding sequence, its **big bold typography and typewriter animation**, as the behavior/design reference; retain D2's clean-room implementation constraint. Charts include the requested **rotating 3D doughnut/toroidal shape**, with deliberate, legible 2D rendering wherever a 2D view is present. Use the correct natally mascot as the app icon and its animated form throughout supported surfaces. Add **faint, slowly floating constellations in the background**, referencing the implementation in **Thinking Pysanky**. This explicitly extends D1's reference scope only for that background treatment. Capture these behaviors in the structured specialist export, then wire its actual elements. | Cold or clinical dashboard framing; ordinary form-style onboarding replacing the conversation; losing motion in a screenshot handoff; substituting a flat structural wheel for the 3D torus; an unrelated lettermark replacing the mascot. |
+| D22 | **Keep both editions in this monorepo.** `apps/local` is the device/local-inference edition; `apps/hosted` is the hosted web/API edition. Both consume the **same exported UI source**, with identical companion feel, onboarding, visual components, mascot and motion. Select the edition's services behind shared interfaces. The hosted edition primarily uses server APIs for stronger inference, speech recognition and voice generation, with the D10 hosted micropayment/x402 model. The operator's immediately withdrawn separate-template/fork request does not authorize creating another repository. | Separate UI implementations that drift; a separate fork; forcing the hosted edition to depend primarily on browser-local inference; changing the existing local edition into an API client. |
+| D23 | **Build both editions in parallel, simultaneously.** Local and hosted are current workstreams with shared UI/features and edition-specific inference, speech recognition, voice generation and payment implementations. This supersedes D10's “seams only / separate later pass” scheduling, the sequential R1/R2 roadmap, and the earlier speech-input exclusion. Preserve D12's client-side lore in both editions. Put an at-a-glance feature/implementation/model matrix near the top of `README.md`; track exact selected or staged model IDs, runtime/quantization, provider choice and actual implementation status separately for local and hosted. Keep it current when implementation or model/provider selection changes. Unselected models are recorded honestly; staged weights or partial components are not presented as deployed features. | Finishing local before starting hosted; treating hosted as a deferred fork; drifting UI copies; claiming unselected hosted models or unwired features are live; excluding speech recognition from the parallel scope. |
+
+The browser preview at `apps/local` is the device/local-inference edition, including
+its local-inference web/PWA build. The hosted API / micropayments / x402 edition
+remains the separate D10 product; the preview does not change that scope.

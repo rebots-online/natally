@@ -1,0 +1,27 @@
+[package]
+name = "natally"
+version = "1.13.21288"
+description = "natally native application shell"
+edition = "2021"
+license = "AGPL-3.0-or-later"
+
+[lib]
+name = "natally_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = [] }
+tokio = { version = "1", features = ["rt-multi-thread", "macros", "sync", "time"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+rusqlite = { version = "0.37", features = ["bundled"] }
+thiserror = "2"
+
+[features]
+custom-protocol = ["tauri/custom-protocol"]
+
+# Keep Cargo's generated lockfile inside this shell, independent of the JS workspace.
+[workspace]
