@@ -14,7 +14,7 @@ conversation. Charts are the things she shows you while she talks.
 
 ## Local vs. hosted — at a glance
 
-**Updated 2026-09-13 · Both editions are in scope now.** This tracks intended behavior
+**Updated 2026-09-14 · Both editions are in scope now.** This tracks intended behavior
 and observed implementation separately. **Partial** means components exist but the
 complete app flow is unfinished; **required** means directed work remains; **not
 selected** means no provider/model is pinned. No row claims a completed release.
@@ -23,7 +23,7 @@ selected** means no provider/model is pinned. No row claims a completed release.
 
 | Capability | Local / device edition | Hosted web / API edition |
 |---|---|---|
-| **Companion inference** | **Staged candidate:** Qwen3‑0.6B, `qwen3-0.6b-q4_k_m.gguf`. Native llama.cpp; local PWA uses wllama/WASM. **Partial:** model-to-app integration remains. | **Required:** stronger server-side inference behind the same companion interface. **Provider/model not selected**; no hosted adapter implemented. |
+| **Companion inference** | **Staged candidate:** Qwen3‑0.6B, `qwen3-0.6b-q4_k_m.gguf`. Native llama.cpp; local PWA uses wllama/WASM. **Partial:** model-to-app integration remains. | **Default selected 2026-09-14 (operator):** OpenRouter free tier (`openrouter/free` + config-level fallback list) with rate-limit-aware dynamic backoff; free access is trial-limited. Paid provider for unlocked/metered use **not selected**. **Not implemented:** no hosted adapter exists yet. |
 | **Speech recognition (STT)** | **Required:** device-local speech input. **Model/runtime not selected; implementation absent.** | **Required:** hosted recognition API. **Provider/model not selected; implementation absent.** |
 | **Voice generation (TTS)** | **Staged:** Kokoro‑82M v1, `kokoro-v1-q8.onnx`, voice `af_heart`. Native target: Rust ONNX synthesis/playback; local PWA: ONNX Runtime Web + Web Audio. **Partial:** web component exists; native/app integration remains. | **Required:** higher-quality hosted speech generation using the same speaking/mascot events. **Provider/model/voice not selected; implementation absent.** |
 | **Lore embeddings** | **Staged:** `all-minilm-l6-v2-q8_0.gguf`, 384 dimensions. Native llama.cpp; local PWA wllama. **Partial:** embedding components exist; app integration remains. | **Shared client-side lore** (D12): browser-local embeddings and storage, with retrieved context sent to inference. Reuse the MiniLM path; **hosted wiring pending**. |

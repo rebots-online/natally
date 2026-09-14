@@ -141,15 +141,19 @@ cap align rather than conflict.
 Unresolved at this recording (for the architect pass; likely a D-entry alongside the parked
 system-module seam decision):
 
-1. **Which webapp(s):** the local app's web PWA leg (currently specified local-inference —
-   D10 "all four legs run local inference", C.1 web lane = wllama, §11 egress = mirror +
-   license only), the future hosted SaaS (whose inference egress §8.1 already contemplates),
-   or both.
+1. **Which webapp — resolved by D22/D23 (merged into this tree 2026-09-14):** the repo now
+   carries two editions built in parallel; "webapp" reads as **`apps/hosted`**, the hosted
+   web/API edition (D22 rules out forcing it onto browser-local inference and out of turning
+   the local edition into an API client). The device edition's local-inference PWA stays on
+   local models (wllama/native). Sharp edge that remains: hosted inference server-side vs
+   browser-direct-to-OpenRouter — see key topology.
 2. **Key topology:** shared server key vs per-user BYO-key decides whether 50/day is the
    app's whole budget or each user's; the limit is account-level either way (§2).
 3. **Privacy posture:** free variants train on prompts (§2); Tier-1 chart facts + lore
-   fragments would flow to a training-enabled endpoint — §11/§8.1 wording must be amended if
-   the PWA leg is in scope, and disclosed plainly to users either way.
+   fragments would flow to a training-enabled endpoint. The hosted edition already
+   contemplates retrieval context reaching its inference API (§8.1, D12) — the amendment
+   needed is plain user disclosure, plus §11 wording only if a local-edition leg ever calls
+   OpenRouter.
 4. **Voice consistency:** `openrouter/free` routes per-request at random (§1); for the
    companion persona, pin a config-level fallback list rather than the bare router, per
    §6 item 5 (model IDs are perishable inventory).
