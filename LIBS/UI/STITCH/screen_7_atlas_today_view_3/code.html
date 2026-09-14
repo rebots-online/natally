@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..700&amp;family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;1,400&amp;family=Nunito+Sans:ital,wght@0,300..900;1,300..900&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{width:100vw;margin:0;padding:0;background-color:#120C1C;}body{overscroll-behavior:none;font-family:'Nunito Sans',sans-serif;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}
+  @keyframes spin-slow {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+  @keyframes counter-spin-slow {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(-360deg); }
+  }
+  .animate-torus-slow {
+    animation: spin-slow 120s linear infinite;
+    transform-origin: 180px 180px;
+  }
+  .animate-counter-rotate {
+    animation: counter-spin-slow 120s linear infinite;
+  }
+  .torus-perspective-container {
+    perspective: 800px;
+  }
+  .torus-3d-tilt {
+    transform: rotateX(16deg);
+    transform-style: preserve-3d;
+  }
+  .popover-pulse {
+    box-shadow: 0 0 20px rgba(159, 180, 255, 0.25), 0 8px 32px rgba(18, 12, 28, 0.85);
+  }
+</style><script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { colors: { "on-tertiary": "#122b6e", "primary-fixed-dim": "#e9c349", "background": "#120C1C", "primary": "#D4AF37", "secondary": "#ffb59f", "outline-variant": "#4d4635", "on-surface-variant": "#d0c5af", "on-secondary": "#532112", "inverse-surface": "#eadef6", "error-container": "#93000a", "outline": "#99907c", "on-error": "#690005", "on-primary-container": "#554300", "on-primary": "#3c2f00", "secondary-fixed": "#ffdbd1", "tertiary": "#9FB4FF", "error": "#ffb4ab", "on-background": "#eadef6", "secondary-fixed-dim": "#ffb59f", "on-secondary-fixed-variant": "#6f3726", "surface-container-lowest": "#0D0814", "on-tertiary-container": "#2b4184", "surface-variant": "#2a2236", "inverse-on-surface": "#342d3f", "on-error-container": "#ffdad6", "on-secondary-container": "#f4a58e", "on-primary-fixed": "#241a00", "tertiary-fixed": "#dce1ff", "on-primary-fixed-variant": "#574500", "on-tertiary-fixed": "#00164d", "secondary-container": "#723928", "surface-tint": "#D4AF37", "surface-container": "#1d1629", "on-tertiary-fixed-variant": "#2d4386", "surface": "#120C1C", "on-surface": "#eadef6", "tertiary-container": "#9FB4FF", "primary-fixed": "#ffe088", "surface-dim": "#120C1C", "surface-container-high": "#271f33", "on-secondary-fixed": "#380d02", "surface-bright": "#352b45", "tertiary-fixed-dim": "#9FB4FF", "inverse-primary": "#735c00", "primary-container": "#D4AF37", "surface-container-low": "#181223", "surface-container-highest": "#332a42" }, borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, spacing: { "space-md": "1rem", "space-sm": "0.5rem", "margin-desktop": "3rem", "gutter-desktop": "1.5rem", "space-xl": "2.5rem", "margin-tablet": "2rem", "margin": "1rem", "space-xs": "0.25rem", "space-lg": "1.5rem", "gutter": "1rem" }, fontFamily: { "body-lg": ["Nunito Sans"], "label-caps": ["IBM Plex Mono"], "display-lg-mobile": ["Fraunces"], "headline-sm": ["Fraunces"], "headline-md": ["Fraunces"], "astro-data-lg": ["IBM Plex Mono"], "oracle-voice": ["Fraunces"], "astro-data-md": ["IBM Plex Mono"], "body-sm": ["Nunito Sans"], "headline-lg": ["Fraunces"], "body-md": ["Nunito Sans"], "display-lg": ["Fraunces"] }, fontSize: { "body-lg": ["17px", { "lineHeight": "26px", "fontWeight": "400" }], "label-caps": ["11px", { "lineHeight": "14px", "letterSpacing": "0.08em", "fontWeight": "600" }], "display-lg-mobile": ["30px", { "lineHeight": "38px", "letterSpacing": "-0.01em", "fontWeight": "600" }], "headline-sm": ["18px", { "lineHeight": "26px", "fontWeight": "600" }], "headline-md": ["22px", { "lineHeight": "30px", "fontWeight": "500" }], "astro-data-lg": ["16px", { "lineHeight": "22px", "fontWeight": "500" }], "oracle-voice": ["16px", { "lineHeight": "24px", "letterSpacing": "0.01em", "fontWeight": "400" }], "astro-data-md": ["13px", { "lineHeight": "18px", "fontWeight": "400" }], "body-sm": ["13px", { "lineHeight": "18px", "fontWeight": "400" }], "headline-lg": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.01em", "fontWeight": "500" }], "body-md": ["15px", { "lineHeight": "22px", "fontWeight": "400" }], "display-lg": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "600" }] } } } };</script><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head><body class="bg-[#120C1C] text-on-surface flex flex-col min-h-screen relative selection:bg-primary selection:text-on-primary"><header class="fixed top-0 w-full z-40 pt-safe bg-[#120C1C]/85 backdrop-blur-xl shadow-[0_1px_12px_rgba(0,0,0,0.6)]"><div class="h-16 px-space-md flex items-center justify-between gap-space-sm"><div class="flex items-center gap-space-sm min-w-0"><img alt="Brand logo. - Primary color: #d4af37
+- Font: publicSans
+- Mode: dark
+- Roundness: rounded-md
+" class="h-8 w-auto object-contain shrink-0" src="https://lh3.googleusercontent.com/aida/AEtjO1UvHX1F33XQQrpxUU1G1YHVM9xDpt4c_veC4clHdq3tjZn8XMSqPypOaHS_48eQPfyt5pEXymsTE14z7qcZbAkcGIJivsSuCPBQlkb5sKrpiT6R5yML8qta2SSA3WqPVQX1NGEyH0-L4anpnZhYfe_rpSy2ZjQHW9Zx5lNKOPHcSPjRMw62LDvFv15IBxQW1TFrsdRSX3NdsY5vFebG8nrNrtYLoqwCuHmFFE8G-sycSgVDA4Y_XKL76KU"/><div class="flex flex-col min-w-0"><div class="flex items-center gap-space-xs"><span class="font-headline-sm text-headline-sm text-primary tracking-tight font-semibold">natally</span><span class="font-astro-data-md text-astro-data-md text-on-surface-variant/60">•</span><span class="font-astro-data-md text-astro-data-md text-on-surface-variant truncate font-medium">Atlas</span></div></div></div><div class="flex items-center gap-space-xs shrink-0"><div class="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-surface-container-high text-[#9FB4FF] border border-[#9FB4FF]/30"><span class="material-symbols-outlined text-[14px]">hdr_auto</span><span class="font-label-caps text-label-caps uppercase tracking-wider">Transit</span></div><button aria-label="Astronomical telemetry" class="w-11 h-11 flex items-center justify-center rounded-full text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined text-[22px]">tune</span></button><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="flex-1 flex flex-col relative w-full pt-16 pb-[390px] bg-[#120C1C] min-h-screen"><div class="flex flex-col w-full px-space-md py-space-sm gap-space-md">
+<!-- Top Navigation & Context Bar -->
+<div class="flex items-center justify-between gap-space-sm bg-surface-container-low rounded-xl px-space-md py-space-sm shadow-md border border-outline-variant/20">
+<div class="flex items-center gap-space-sm min-w-0">
+<button aria-label="Go back" class="w-9 h-9 flex items-center justify-center rounded-lg bg-surface-container-high text-on-surface hover:text-primary transition-colors shrink-0">
+<span class="material-symbols-outlined text-[20px]">arrow_back</span>
+</button>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-space-xs">
+<span class="font-headline-sm text-headline-sm text-primary font-bold">natally</span>
+<span class="font-astro-data-md text-astro-data-md text-outline">/</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant truncate">ATLAS</span>
+</div>
+<div class="flex items-center gap-1.5 min-w-0">
+<span class="relative flex h-2 w-2 shrink-0">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+</span>
+<span class="font-astro-data-md text-astro-data-md text-secondary truncate">Robin · Transits</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-space-xs shrink-0 bg-surface-container px-2.5 py-1 rounded-full shadow-inner border border-outline-variant/20">
+<span class="material-symbols-outlined text-[15px] text-[#9FB4FF]">schedule</span>
+<span class="font-astro-data-md text-astro-data-md text-on-surface-variant font-medium">18:24 UTC</span>
+</div>
+</div>
+<!-- Sub-navigation Segmented Tabs -->
+<div class="flex items-center bg-surface-container-lowest rounded-xl p-1 gap-1 shadow-inner border border-outline-variant/25">
+<button class="flex-1 py-2 rounded-lg text-center font-label-caps text-label-caps uppercase tracking-wider text-on-surface-variant hover:text-on-surface transition-all" type="button">
+      Natal
+    </button>
+<button class="flex-1 py-2 rounded-lg text-center font-label-caps text-label-caps uppercase tracking-wider text-on-surface-variant hover:text-on-surface transition-all" type="button">
+      Synastry
+    </button>
+<button class="flex-1 py-2 rounded-lg text-center font-label-caps text-label-caps uppercase tracking-wider bg-surface-container-high text-primary relative shadow-sm border border-primary/30" type="button">
+      Today
+      <span class="absolute bottom-0 left-1/2 -translate-x-1/2 w-8 h-[2px] bg-primary rounded-full"></span>
+</button>
+</div>
+<!-- Instrument Telemetry Badge -->
+<div class="flex items-center justify-between px-space-md py-2 rounded-lg bg-surface-container-low shadow-sm border border-outline-variant/20">
+<div class="flex items-center gap-2 min-w-0">
+<span class="material-symbols-outlined text-[16px] text-[#9FB4FF] shrink-0">public</span>
+<span class="font-astro-data-md text-astro-data-md text-on-surface truncate">Sky over Malmö</span>
+</div>
+<span class="font-label-caps text-label-caps text-outline shrink-0 uppercase tracking-widest">Tropical / Placidus</span>
+</div>
+<!-- Astrolabe Bi-Wheel Chamber with 3D Continuous Rotating Torus Transit Ring & Houses 1-12 -->
+<div class="flex flex-col items-center justify-center p-space-md bg-surface-container-low rounded-xl shadow-lg relative overflow-visible torus-perspective-container border border-outline-variant/25">
+<!-- Starlight Depth & Ambient Orbital Radiance -->
+<div class="absolute inset-0 rounded-xl bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#9FB4FF]/10 via-[#120C1C]/80 to-[#120C1C] pointer-events-none"></div>
+<div class="absolute inset-0 rounded-xl bg-[radial-gradient(#D4AF37_1px,transparent_1px)] [background-size:20px_20px] opacity-15 pointer-events-none"></div>
+<!-- Interactive Wheel SVG Container with subtle 3D tilt -->
+<div class="relative w-full max-w-[340px] aspect-square flex items-center justify-center torus-3d-tilt">
+<svg class="w-full h-full select-none" viewbox="0 0 360 360">
+<defs>
+<radialgradient cx="50%" cy="50%" id="brassAura" r="50%">
+<stop offset="50%" stop-color="#120C1C" stop-opacity="0.95"></stop>
+<stop offset="82%" stop-color="#1d1629" stop-opacity="0.98"></stop>
+<stop offset="100%" stop-color="#332a42" stop-opacity="0.65"></stop>
+</radialgradient>
+<radialgradient cx="50%" cy="50%" id="torusMetallicRays" r="50%">
+<stop offset="70%" stop-color="#9FB4FF" stop-opacity="0.08"></stop>
+<stop offset="90%" stop-color="#9FB4FF" stop-opacity="0.22"></stop>
+<stop offset="100%" stop-color="#9FB4FF" stop-opacity="0.05"></stop>
+</radialgradient>
+<filter height="150%" id="glowGold" width="150%" x="-25%" y="-25%">
+<fedropshadow dx="0" dy="0" flood-color="#D4AF37" flood-opacity="0.75" stddeviation="2.2"></fedropshadow>
+</filter>
+<filter height="150%" id="glowBlue" width="150%" x="-25%" y="-25%">
+<fedropshadow dx="0" dy="0" flood-color="#9FB4FF" flood-opacity="0.8" stddeviation="2.8"></fedropshadow>
+</filter>
+<filter height="130%" id="beadShadow" width="130%" x="-15%" y="-15%">
+<fedropshadow dx="0" dy="1.5" flood-color="#000000" flood-opacity="0.8" stddeviation="2"></fedropshadow>
+</filter>
+</defs>
+<!-- Static Dial Base Plate & Starlight Outer Frame -->
+<circle cx="180" cy="180" fill="url(#brassAura)" r="174"></circle>
+<circle cx="180" cy="180" fill="none" r="174" stroke="#4d4635" stroke-width="1.5"></circle>
+<circle cx="180" cy="180" fill="none" r="170" stroke="#D4AF37" stroke-dasharray="1.5,4.5" stroke-opacity="0.3" stroke-width="1"></circle>
+<!-- CONTINUOUS ROTATING 3D TORUS TRANSIT WHEEL (Outer Ring) -->
+<g class="animate-torus-slow">
+<!-- Torus Ring Metallic Glow & Ticks -->
+<circle cx="180" cy="180" fill="url(#torusMetallicRays)" r="162" stroke="#9FB4FF" stroke-opacity="0.35" stroke-width="1"></circle>
+<circle cx="180" cy="180" fill="none" r="134" stroke="#9FB4FF" stroke-opacity="0.35" stroke-width="1"></circle>
+<!-- Fine Brass Degree Ticks (30-deg intervals) -->
+<g stroke="#D4AF37" stroke-opacity="0.55" stroke-width="0.8">
+<line x1="180" x2="180" y1="134" y2="140"></line>
+<line x1="180" x2="180" y1="156" y2="162"></line>
+<line transform="rotate(30 180 180)" x1="180" x2="180" y1="134" y2="140"></line>
+<line transform="rotate(30 180 180)" x1="180" x2="180" y1="156" y2="162"></line>
+<line transform="rotate(60 180 180)" x1="180" x2="180" y1="134" y2="140"></line>
+<line transform="rotate(60 180 180)" x1="180" x2="180" y1="156" y2="162"></line>
+<line transform="rotate(90 180 180)" x1="180" x2="180" y1="134" y2="140"></line>
+<line transform="rotate(90 180 180)" x1="180" x2="180" y1="156" y2="162"></line>
+<line transform="rotate(120 180 180)" x1="180" x2="180" y1="134" y2="140"></line>
+<line transform="rotate(120 180 180)" x1="180" x2="180" y1="156" y2="162"></line>
+<line transform="rotate(150 180 180)" x1="180" x2="180" y1="134" y2="140"></line>
+<line transform="rotate(150 180 180)" x1="180" x2="180" y1="156" y2="162"></line>
+<line transform="rotate(180 180 180)" x1="180" x2="180" y1="134" y2="140"></line>
+<line transform="rotate(180 180 180)" x1="180" x2="180" y1="156" y2="162"></line>
+<line transform="rotate(210 180 180)" x1="180" x2="180" y1="134" y2="140"></line>
+<line transform="rotate(210 180 180)" x1="180" x2="180" y1="156" y2="162"></line>
+<line transform="rotate(240 180 180)" x1="180" x2="180" y1="134" y2="140"></line>
+<line transform="rotate(240 180 180)" x1="180" x2="180" y1="156" y2="162"></line>
+<line transform="rotate(270 180 180)" x1="180" x2="180" y1="134" y2="140"></line>
+<line transform="rotate(270 180 180)" x1="180" x2="180" y1="156" y2="162"></line>
+<line transform="rotate(300 180 180)" x1="180" x2="180" y1="134" y2="140"></line>
+<line transform="rotate(300 180 180)" x1="180" x2="180" y1="156" y2="162"></line>
+<line transform="rotate(330 180 180)" x1="180" x2="180" y1="134" y2="140"></line>
+<line transform="rotate(330 180 180)" x1="180" x2="180" y1="156" y2="162"></line>
+</g>
+<circle cx="180" cy="180" fill="none" r="148" stroke="#D4AF37" stroke-dasharray="1,5" stroke-opacity="0.3" stroke-width="1.2"></circle>
+<!-- TRANSITING PLANET BEADS ON ROTATING TORUS (#9FB4FF periwinkle) with click/tap triggers -->
+<!-- Transiting Saturn ♄ Bead (North position / House 10 cusp) -->
+<g class="cursor-pointer group" onclick="togglePopover('popover-saturn')" transform="translate(180, 32)">
+<circle cx="0" cy="0" fill="#181223" filter="url(#beadShadow)" r="15" stroke="#9FB4FF" stroke-width="1.8"></circle>
+<circle class="group-hover:scale-125 transition-transform" cx="0" cy="0" fill="none" r="18" stroke="#9FB4FF" stroke-opacity="0.5" stroke-width="1"></circle>
+<text class="animate-counter-rotate select-none" dominant-baseline="central" fill="#9FB4FF" filter="url(#glowBlue)" font-family="IBM Plex Mono" font-size="14" font-weight="600" text-anchor="middle" x="0" y="0">♄</text>
+</g>
+<!-- Transiting Moon ☽ Bead -->
+<g class="cursor-pointer group" onclick="togglePopover('popover-moon')" transform="translate(284, 102)">
+<circle cx="0" cy="0" fill="#181223" filter="url(#beadShadow)" r="13" stroke="#9FB4FF" stroke-width="1.5"></circle>
+<circle class="group-hover:scale-125 transition-transform" cx="0" cy="0" fill="none" r="16" stroke="#9FB4FF" stroke-opacity="0.4" stroke-width="0.8"></circle>
+<text class="animate-counter-rotate select-none" dominant-baseline="central" fill="#9FB4FF" filter="url(#glowBlue)" font-family="IBM Plex Mono" font-size="13" font-weight="600" text-anchor="middle" x="0" y="0">☽</text>
+</g>
+<!-- Transiting Mars ♂ Bead -->
+<g class="cursor-pointer group" onclick="togglePopover('popover-mars')" transform="translate(296, 204)">
+<circle cx="0" cy="0" fill="#181223" filter="url(#beadShadow)" r="13" stroke="#9FB4FF" stroke-width="1.5"></circle>
+<circle class="group-hover:scale-125 transition-transform" cx="0" cy="0" fill="none" r="16" stroke="#9FB4FF" stroke-opacity="0.4" stroke-width="0.8"></circle>
+<text class="animate-counter-rotate select-none" dominant-baseline="central" fill="#9FB4FF" filter="url(#glowBlue)" font-family="IBM Plex Mono" font-size="13" font-weight="600" text-anchor="middle" x="0" y="0">♂</text>
+</g>
+<!-- Transiting Jupiter ♃ Bead -->
+<g class="cursor-pointer group" onclick="togglePopover('popover-jupiter')" transform="translate(76, 100)">
+<circle cx="0" cy="0" fill="#181223" filter="url(#beadShadow)" r="13" stroke="#9FB4FF" stroke-width="1.5"></circle>
+<circle class="group-hover:scale-125 transition-transform" cx="0" cy="0" fill="none" r="16" stroke="#9FB4FF" stroke-opacity="0.4" stroke-width="0.8"></circle>
+<text class="animate-counter-rotate select-none" dominant-baseline="central" fill="#9FB4FF" filter="url(#glowBlue)" font-family="IBM Plex Mono" font-size="13" font-weight="600" text-anchor="middle" x="0" y="0">♃</text>
+</g>
+</g>
+<!-- INNER NATAL CHART CORE (Static against rotating transit ring) -->
+<circle cx="180" cy="180" fill="#181223" r="124" stroke="#4d4635" stroke-width="1.2"></circle>
+<!-- HOUSE SECTOR DIAL & 12 HOUSES (Render houses 1–12 with fine mono numerals) -->
+<!-- 12 House Cusp Meridian Lines (Placidus / Tropical divisions) -->
+<g opacity="0.38" stroke="#D4AF37" stroke-dasharray="2,3" stroke-width="0.8">
+<line x1="180" x2="180" y1="56" y2="304"></line>
+<line x1="56" x2="304" y1="180" y2="180"></line>
+<line x1="92" x2="268" y1="92" y2="268"></line>
+<line x1="92" x2="268" y1="268" y2="92"></line>
+<line transform="rotate(30 180 180)" x1="180" x2="180" y1="56" y2="304"></line>
+<line transform="rotate(60 180 180)" x1="180" x2="180" y1="56" y2="304"></line>
+<line transform="rotate(120 180 180)" x1="180" x2="180" y1="56" y2="304"></line>
+<line transform="rotate(150 180 180)" x1="180" x2="180" y1="56" y2="304"></line>
+</g>
+<!-- Houses 1-12 Fine Mono Numerals around House Ring (Radius ~118) -->
+<g class="cursor-pointer select-none font-mono" dominant-baseline="central" fill="#d0c5af" font-family="IBM Plex Mono" font-size="8.5" font-weight="500" opacity="0.85" text-anchor="middle">
+<!-- H1 (Ascendant East 180°) -->
+<text class="hover:fill-primary transition-colors" onclick="togglePopover('popover-house', '1 — Self &amp; Embodiment: First light, identity, vitality, physical presence.')" x="66" y="180">1</text>
+<!-- H2 -->
+<text class="hover:fill-primary transition-colors" onclick="togglePopover('popover-house', '2 — Values &amp; Resources: Grounded worth, personal wealth, sensory stability.')" x="72" y="222">2</text>
+<!-- H3 -->
+<text class="hover:fill-primary transition-colors" onclick="togglePopover('popover-house', '3 — Perception &amp; Kin: Daily cognition, siblings, immediate environment.')" x="98" y="258">3</text>
+<!-- H4 (IC Nadir) -->
+<text class="hover:fill-primary transition-colors" onclick="togglePopover('popover-house', '4 — Hearth &amp; Ancestry: Roots, foundation, private emotional sanctuary.')" x="140" y="280">4</text>
+<!-- H5 -->
+<text class="hover:fill-primary transition-colors" onclick="togglePopover('popover-house', '5 — Creative Radiance: Joy, inner child, play, spontaneous romance.')" x="180" y="288">5</text>
+<!-- H6 -->
+<text class="hover:fill-primary transition-colors" onclick="togglePopover('popover-house', '6 — Sacred Craft &amp; Rhythm: Daily rituals, physical repair, dedicated service.')" x="222" y="280">6</text>
+<!-- H7 (Descendant) -->
+<text class="hover:fill-primary transition-colors" onclick="togglePopover('popover-house', '7 — The Mirror &amp; Bond: Partnerships, deep contracts, conscious relating.')" x="294" y="180">7</text>
+<!-- H8 -->
+<text class="hover:fill-primary transition-colors" onclick="togglePopover('popover-house', '8 — Metamorphosis &amp; Shared Depths: Regeneration, joint intimacy, shadow alchemy.')" x="288" y="138">8</text>
+<!-- H9 -->
+<text class="hover:fill-primary transition-colors" onclick="togglePopover('popover-house', '9 — Horizon &amp; Wisdom: Philosophical reach, higher study, worldview expansion.')" x="262" y="102">9</text>
+<!-- H10 (Midheaven North) -->
+<text class="hover:fill-primary transition-colors fill-primary font-bold" onclick="togglePopover('popover-saturn')" x="180" y="68">10</text>
+<!-- H11 -->
+<text class="hover:fill-primary transition-colors" onclick="togglePopover('popover-house', '11 — Collective &amp; Vision: Tribe, fellowship, future ideals, shared hope.')" x="138" y="76">11</text>
+<!-- H12 -->
+<text class="hover:fill-primary transition-colors" onclick="togglePopover('popover-house', '12 — The Invisible Ocean: Solitude, dissolution of ego, spiritual subconscious.')" x="98" y="102">12</text>
+</g>
+<circle cx="180" cy="180" fill="#120C1C" r="54" stroke="#332a42" stroke-width="0.9"></circle>
+<!-- Delicate Harmonic Aspect Tension Rays across Starlight Depth -->
+<g stroke-width="1.2">
+<!-- Saturn-to-Saturn Conjunction Anchor Ray (Gold solid) -->
+<line stroke="#D4AF37" stroke-linecap="round" stroke-width="2" x1="180" x2="180" y1="36" y2="92"></line>
+<!-- Trine: Natal Sun to Transiting Moon (Periwinkle ray) -->
+<line opacity="0.75" stroke="#9FB4FF" stroke-dasharray="3,3" x1="225" x2="284" y1="210" y2="102"></line>
+<!-- Square: Natal Venus to Transiting Mars (Secondary coral chord) -->
+<line opacity="0.65" stroke="#ffb59f" stroke-dasharray="2,2.5" x1="135" x2="296" y1="228" y2="204"></line>
+<!-- Sextile: Natal Moon to Transiting Jupiter -->
+<line opacity="0.6" stroke="#9FB4FF" stroke-dasharray="3,2" x1="120" x2="76" y1="130" y2="100"></line>
+<!-- Internal Natal Trine: Sun to Moon -->
+<line opacity="0.4" stroke="#D4AF37" stroke-dasharray="2,4" x1="120" x2="225" y1="130" y2="210"></line>
+</g>
+<!-- NATAL PLANETARY GLYPHS & BEADS (Warm Gold #D4AF37 inside) -->
+<g class="cursor-pointer" dominant-baseline="central" fill="#D4AF37" filter="url(#glowGold)" font-family="IBM Plex Mono" font-size="13" font-weight="600" text-anchor="middle">
+<!-- Saturn ♄ Natal (Exact Conjunction target) -->
+<g onclick="togglePopover('popover-saturn-natal')">
+<circle cx="180" cy="94" fill="#1d1629" r="9.5" stroke="#D4AF37" stroke-width="1.2"></circle>
+<text x="180" y="94">♄</text>
+</g>
+<!-- Sun ☉ Natal -->
+<g onclick="togglePopover('popover-sun-natal')">
+<circle cx="225" cy="210" fill="#1d1629" r="9.5" stroke="#D4AF37" stroke-width="1.2"></circle>
+<text x="225" y="210">☉</text>
+</g>
+<!-- Venus ♀ Natal -->
+<g onclick="togglePopover('popover-venus-natal')">
+<circle cx="135" cy="228" fill="#1d1629" r="9.5" stroke="#D4AF37" stroke-width="1.2"></circle>
+<text x="135" y="228">♀</text>
+</g>
+<!-- Moon ☽ Natal -->
+<g onclick="togglePopover('popover-moon-natal')">
+<circle cx="120" cy="130" fill="#1d1629" r="9.5" stroke="#D4AF37" stroke-width="1.2"></circle>
+<text x="120" y="130">☽</text>
+</g>
+<!-- Jupiter ♃ Natal -->
+<g onclick="togglePopover('popover-jupiter-natal')">
+<circle cx="228" cy="145" fill="#1d1629" r="9.5" stroke="#D4AF37" stroke-width="1.2"></circle>
+<text x="228" y="145">♃</text>
+</g>
+</g>
+<!-- Center Brass Pivot Pinpoint -->
+<circle cx="180" cy="180" fill="#D4AF37" filter="url(#glowGold)" r="4"></circle>
+<circle cx="180" cy="180" fill="#120C1C" r="1.5"></circle>
+</svg>
+<!-- VISIBLY OPEN INTERACTIVE CALLOUT (DESIGN LAW REQUIREMENT: default open anchored callout) -->
+<div class="absolute -top-3 left-1/2 -translate-x-1/2 z-30 w-[90%] max-w-[310px] popover-pulse bg-[#1d1629]/95 backdrop-blur-md border border-[#9FB4FF]/60 rounded-xl p-3 shadow-2xl transition-all" id="active-callout">
+<div class="flex items-start justify-between gap-1.5 pb-1 mb-1 border-b border-outline-variant/30">
+<div class="flex items-center gap-1.5">
+<span class="px-1.5 py-0.5 rounded bg-[#9FB4FF]/20 text-[#9FB4FF] font-astro-data-md text-[11px] font-semibold">10th House • ♄ Transit</span>
+<span class="w-1.5 h-1.5 rounded-full bg-[#9FB4FF] animate-ping"></span>
+</div>
+<button aria-label="Dismiss callout" class="text-on-surface-variant hover:text-primary transition-colors text-sm" onclick="this.closest('#active-callout').classList.toggle('hidden')">✕</button>
+</div>
+<p class="font-oracle-voice text-[13px] leading-snug text-on-surface">
+<span class="font-semibold text-primary">10 — Life work &amp; vocation:</span> Transit Saturn tests what is built to endure, clearing hollow scaffolding.
+</p>
+<div class="mt-1.5 flex items-center justify-between font-label-caps text-[10px] text-[#9FB4FF]">
+<span class="font-mono">Applying Conjunction (0°14')</span>
+<span class="italic text-on-surface-variant">Tap any glyph to inspect</span>
+</div>
+<!-- Callout Pointer beak -->
+<div class="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-3 h-3 bg-[#1d1629] border-r border-b border-[#9FB4FF]/60 rotate-45"></div>
+</div>
+<!-- Dynamic Modal/Callout Drawer Container for interactive taps -->
+<div class="hidden absolute top-2 left-1/2 -translate-x-1/2 z-30 w-[90%] max-w-[310px] popover-pulse bg-[#1d1629]/95 backdrop-blur-md border border-primary/60 rounded-xl p-3 shadow-2xl transition-all" id="dynamic-popover">
+<div class="flex items-start justify-between gap-1.5 pb-1 mb-1 border-b border-outline-variant/30">
+<span class="px-1.5 py-0.5 rounded bg-primary/20 text-primary font-astro-data-md text-[11px] font-semibold" id="dynamic-title">Detail</span>
+<button aria-label="Close" class="text-on-surface-variant hover:text-primary text-sm" onclick="document.getElementById('dynamic-popover').classList.add('hidden')">✕</button>
+</div>
+<p class="font-oracle-voice text-[13px] leading-snug text-on-surface" id="dynamic-body"></p>
+</div>
+<!-- Astrolabe Ring Quick-Legend Overlay -->
+<div class="absolute bottom-2 flex items-center justify-between w-full px-space-sm pointer-events-none">
+<div class="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-surface-container-high/90 backdrop-blur-md shadow-sm border border-outline-variant/30">
+<span class="w-2 h-2 rounded-full bg-primary inline-block"></span>
+<span class="font-label-caps text-label-caps text-primary">Natal Base</span>
+</div>
+<div class="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-surface-container-high/90 backdrop-blur-md shadow-sm border border-[#9FB4FF]/30">
+<span class="w-2 h-2 rounded-full bg-[#9FB4FF] animate-pulse inline-block"></span>
+<span class="font-label-caps text-label-caps text-[#9FB4FF] tracking-wider">3D Torus Transits</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Section Header: Hits & Aspects -->
+<div class="flex items-center justify-between pt-space-xs">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[20px]">cyclone</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface tracking-tight font-semibold">Today's Hits</h2>
+</div>
+<span class="font-astro-data-md text-astro-data-md text-on-surface-variant bg-surface-container px-2.5 py-0.5 rounded-md font-medium border border-outline-variant/20">4 active orbs</span>
+</div>
+<!-- Educational Orb & Aspect Micro-Guide -->
+<div class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-container-low border border-outline-variant/25 text-xs text-on-surface-variant font-astro-data-md">
+<span class="material-symbols-outlined text-[#9FB4FF] text-[15px] shrink-0">info</span>
+<span><strong class="text-secondary font-medium">Applying</strong> = building in intensity; <strong class="text-outline font-medium">Separating</strong> = integrating aftermath.</span>
+</div>
+<!-- Transit Hits List Deck with plain-language explanations of orbs & aspects -->
+<div class="flex flex-col gap-space-sm" id="hits-deck">
+<!-- Card 1: Saturn Return Exact Conjunction -->
+<div class="flex flex-col bg-surface-container-low rounded-xl p-space-md gap-space-sm shadow-md hover:bg-surface-container transition-all cursor-pointer border border-primary/40 ring-1 ring-primary/20" onclick="showHitDetail('Saturn Conjunction Saturn', 'Conjunction (0°): Merging energies in unity. Orb 0°14′ Applying means this karmic milestone is at its crest today, requiring accountability.')">
+<div class="flex items-start justify-between gap-space-sm">
+<div class="flex items-center gap-2 min-w-0">
+<div class="flex items-center gap-1 shrink-0 bg-surface-container-high px-2 py-1 rounded-lg border border-[#9FB4FF]/30">
+<span class="font-astro-data-lg text-astro-data-lg text-[#9FB4FF] font-bold">♄</span>
+<span class="font-label-caps text-label-caps text-[#9FB4FF]">TR</span>
+</div>
+<span class="font-astro-data-lg text-astro-data-lg text-primary font-bold">☌</span>
+<div class="flex items-center gap-1 shrink-0 bg-surface-container-high px-2 py-1 rounded-lg border border-primary/30">
+<span class="font-astro-data-lg text-astro-data-lg text-primary font-bold">♄</span>
+<span class="font-label-caps text-label-caps text-outline">NAT</span>
+</div>
+<span class="font-astro-data-md text-astro-data-md text-on-surface font-semibold truncate">(28° Cap)</span>
+</div>
+<button aria-label="Inspect Saturn transit" class="w-7 h-7 flex items-center justify-center rounded-full bg-surface-container-high text-on-surface-variant hover:text-primary shrink-0">
+<span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</button>
+</div>
+<!-- Plain-Language Aspect & Orb Decoder -->
+<div class="flex flex-wrap items-center gap-2 font-astro-data-md text-astro-data-md">
+<span class="px-2 py-0.5 rounded bg-surface-container-highest text-primary font-mono font-medium" title="Angular distance from exact alignment">Orb: 0°14'</span>
+<span class="px-2 py-0.5 rounded bg-secondary-container/60 text-secondary font-mono font-semibold uppercase tracking-wider text-[11px]" title="The planets are moving closer together">APPLYING (GROWING PEAK)</span>
+<span class="font-astro-data-md text-on-surface-variant/80 font-mono">· Station direct in 3d</span>
+</div>
+<!-- Plain-language explanation -->
+<p class="font-oracle-voice text-oracle-voice text-on-surface-variant italic pl-2.5 border-l-2 border-primary/50 bg-surface-container-lowest/60 py-1.5 rounded-r-md">
+“Keystones settling into permanent mortar: maturity demands quiet authority.”
+</p>
+</div>
+<!-- Card 2: Moon Trine Sun -->
+<div class="flex flex-col bg-surface-container-low rounded-xl p-space-md gap-space-sm shadow-md hover:bg-surface-container transition-all cursor-pointer border border-outline-variant/20" onclick="showHitDetail('Moon Trine Sun', 'Trine (120°): Natural harmonious flow without resistance. Orb 0°38′ Applying indicates instinctive clarity peaking tonight.')">
+<div class="flex items-start justify-between gap-space-sm">
+<div class="flex items-center gap-2 min-w-0">
+<div class="flex items-center gap-1 shrink-0 bg-surface-container-high px-2 py-1 rounded-lg border border-[#9FB4FF]/30">
+<span class="font-astro-data-lg text-astro-data-lg text-[#9FB4FF] font-bold">☽</span>
+<span class="font-label-caps text-label-caps text-[#9FB4FF]">TR</span>
+</div>
+<span class="font-astro-data-lg text-astro-data-lg text-[#9FB4FF] font-bold">△</span>
+<div class="flex items-center gap-1 shrink-0 bg-surface-container-high px-2 py-1 rounded-lg border border-primary/30">
+<span class="font-astro-data-lg text-astro-data-lg text-primary font-bold">☉</span>
+<span class="font-label-caps text-label-caps text-outline">NAT</span>
+</div>
+<span class="font-astro-data-md text-astro-data-md text-on-surface font-semibold truncate">(11° Tau)</span>
+</div>
+<button aria-label="Inspect Moon transit" class="w-7 h-7 flex items-center justify-center rounded-full bg-surface-container-high text-on-surface-variant hover:text-primary shrink-0">
+<span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</button>
+</div>
+<!-- Telemetry Strip with Orb Meaning -->
+<div class="flex flex-wrap items-center gap-2 font-astro-data-md text-astro-data-md">
+<span class="px-2 py-0.5 rounded bg-surface-container-highest text-[#9FB4FF] font-mono font-medium">Orb: 0°38'</span>
+<span class="px-2 py-0.5 rounded bg-secondary-container/60 text-secondary font-mono font-semibold uppercase tracking-wider text-[11px]">APPLYING (ENTERING)</span>
+<span class="font-astro-data-md text-on-surface-variant/80 font-mono">· Peak at 21:10 UTC</span>
+</div>
+<div class="flex items-center gap-1.5 text-on-surface-variant/90 font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-[15px] text-[#9FB4FF]">water_drop</span>
+<span>Physical ease aligns with conscious intent; instinct supports your path.</span>
+</div>
+</div>
+<!-- Card 3: Mars Square Venus -->
+<div class="flex flex-col bg-surface-container-low rounded-xl p-space-md gap-space-sm shadow-md hover:bg-surface-container transition-all cursor-pointer border border-outline-variant/20" onclick="showHitDetail('Mars Square Venus', 'Square (90°): Creative dynamic friction and catalytic fire. Orb 1°12′ Separating means the acute tension is already resolving into insight.')">
+<div class="flex items-start justify-between gap-space-sm">
+<div class="flex items-center gap-2 min-w-0">
+<div class="flex items-center gap-1 shrink-0 bg-surface-container-high px-2 py-1 rounded-lg border border-[#9FB4FF]/30">
+<span class="font-astro-data-lg text-astro-data-lg text-[#9FB4FF] font-bold">♂</span>
+<span class="font-label-caps text-label-caps text-[#9FB4FF]">TR</span>
+</div>
+<span class="font-astro-data-lg text-astro-data-lg text-secondary font-bold">□</span>
+<div class="flex items-center gap-1 shrink-0 bg-surface-container-high px-2 py-1 rounded-lg border border-primary/30">
+<span class="font-astro-data-lg text-astro-data-lg text-primary font-bold">♀</span>
+<span class="font-label-caps text-label-caps text-outline">NAT</span>
+</div>
+<span class="font-astro-data-md text-astro-data-md text-on-surface font-semibold truncate">(19° Ari)</span>
+</div>
+<button aria-label="Inspect Mars transit" class="w-7 h-7 flex items-center justify-center rounded-full bg-surface-container-high text-on-surface-variant hover:text-primary shrink-0">
+<span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</button>
+</div>
+<!-- Telemetry Strip with Orb Meaning -->
+<div class="flex flex-wrap items-center gap-2 font-astro-data-md text-astro-data-md">
+<span class="px-2 py-0.5 rounded bg-surface-container-highest text-secondary font-mono font-medium">Orb: 1°12'</span>
+<span class="px-2 py-0.5 rounded bg-surface-container-highest text-outline font-mono font-semibold uppercase tracking-wider text-[11px]">SEPARATING (WANING)</span>
+<span class="font-astro-data-md text-on-surface-variant/80 font-mono">· Releasing tension</span>
+</div>
+<div class="flex items-center gap-1.5 text-on-surface-variant/90 font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-[15px] text-secondary">bolt</span>
+<span>Abrasive creative friction softened as impulse yields to considered grace.</span>
+</div>
+</div>
+<!-- Card 4: Jupiter Sextile Moon -->
+<div class="flex flex-col bg-surface-container-low rounded-xl p-space-md gap-space-sm shadow-md hover:bg-surface-container transition-all cursor-pointer border border-outline-variant/20" onclick="showHitDetail('Jupiter Sextile Moon', 'Sextile (60°): Supportive opportunity awaiting activation. Orb 0°45′ Applying signals an opening for emotional generosity and creative trust.')">
+<div class="flex items-start justify-between gap-space-sm">
+<div class="flex items-center gap-2 min-w-0">
+<div class="flex items-center gap-1 shrink-0 bg-surface-container-high px-2 py-1 rounded-lg border border-[#9FB4FF]/30">
+<span class="font-astro-data-lg text-astro-data-lg text-[#9FB4FF] font-bold">♃</span>
+<span class="font-label-caps text-label-caps text-[#9FB4FF]">TR</span>
+</div>
+<span class="font-astro-data-lg text-astro-data-lg text-[#9FB4FF] font-bold">⚹</span>
+<div class="flex items-center gap-1 shrink-0 bg-surface-container-high px-2 py-1 rounded-lg border border-primary/30">
+<span class="font-astro-data-lg text-astro-data-lg text-primary font-bold">☽</span>
+<span class="font-label-caps text-label-caps text-outline">NAT</span>
+</div>
+<span class="font-astro-data-md text-astro-data-md text-on-surface font-semibold truncate">(24° Leo)</span>
+</div>
+<button aria-label="Inspect Jupiter transit" class="w-7 h-7 flex items-center justify-center rounded-full bg-surface-container-high text-on-surface-variant hover:text-primary shrink-0">
+<span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</button>
+</div>
+<!-- Telemetry Strip with Orb Meaning -->
+<div class="flex flex-wrap items-center gap-2 font-astro-data-md text-astro-data-md">
+<span class="px-2 py-0.5 rounded bg-surface-container-highest text-[#9FB4FF] font-mono font-medium">Orb: 0°45'</span>
+<span class="px-2 py-0.5 rounded bg-secondary-container/60 text-secondary font-mono font-semibold uppercase tracking-wider text-[11px]">APPLYING (GROWING)</span>
+<span class="font-astro-data-md text-on-surface-variant/80 font-mono">· Expanding creative instinct</span>
+</div>
+<div class="flex items-center gap-1.5 text-on-surface-variant/90 font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-[15px] text-[#9FB4FF]">flare</span>
+<span>Generous emotional presence invites spontaneous, uncalculated expression.</span>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- DOCKED OPEN COMPANION CONVERSATION SHEET (DESIGN LAW: Natally docked open at bottom with voice reading, speaker replay icon, identity tagline, composer pill. No character artwork.) -->
+<div class="fixed bottom-16 inset-x-0 z-30 bg-[#0D0814]/95 backdrop-blur-2xl border-t border-outline-variant/30 rounded-t-2xl shadow-[0_-10px_35px_rgba(0,0,0,0.7)] px-space-md pt-3 pb-3 transition-transform">
+<!-- Sheet Handle Accent -->
+<div class="w-10 h-1 bg-outline/40 rounded-full mx-auto mb-2.5"></div>
+<div class="flex flex-col gap-2.5">
+<!-- Companion Identity Header & Replay Trigger -->
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[18px]">sparkles</span>
+<span class="font-headline-sm text-[16px] text-primary font-semibold">Natally</span>
+<span class="font-astro-data-md text-astro-data-md text-outline">·</span>
+<span class="font-oracle-voice text-[13px] text-on-surface-variant italic">The companion that knows you.</span>
+</div>
+<button aria-label="Replay audio reading" class="w-8 h-8 flex items-center justify-center rounded-full bg-surface-container-high text-on-surface-variant hover:text-primary active:scale-95 transition-all border border-outline-variant/20">
+<span class="material-symbols-outlined text-[18px]">volume_up</span>
+</button>
+</div>
+<!-- Warm Voice Reading Text Block -->
+<div class="p-2.5 rounded-xl bg-surface-container-low/90 border border-primary/20 relative">
+<p class="font-oracle-voice text-oracle-voice text-on-surface leading-relaxed">
+        “Saturn's transit touches your natal position today with exact precision—a deliberate anchor settling into place.”
+      </p>
+</div>
+<!-- Composer Pill -->
+<div class="flex items-center gap-2 bg-surface-container-high rounded-full px-3 py-1.5 border border-outline-variant/25 shadow-inner">
+<span class="material-symbols-outlined text-[18px] text-[#9FB4FF] shrink-0">psychology</span>
+<input class="flex-1 bg-transparent border-none text-body-sm text-on-surface placeholder:text-on-surface-variant/50 focus:outline-none font-body-sm" placeholder="Ask Natally about this transit..." type="text"/>
+<button aria-label="Send query" class="w-7 h-7 flex items-center justify-center rounded-full bg-primary text-on-primary hover:brightness-105 active:scale-95 transition-all shrink-0 shadow">
+<span class="material-symbols-outlined text-[16px]">arrow_upward</span>
+</button>
+</div>
+</div>
+</div>
+<nav class="fixed bottom-0 w-full z-50 pb-safe bg-[#0D0814]/95 backdrop-blur-xl border-t border-outline-variant/20 shadow-[0_-4px_24px_rgba(10,6,16,0.8)]" data-active-classes="text-primary font-semibold"><div class="flex justify-around items-center h-16 px-space-sm"><a class="flex flex-col items-center justify-center w-16 h-14 text-on-surface-variant transition-colors gap-0.5 hover:text-on-surface" data-path="oracle" href="#"><span class="material-symbols-outlined text-[24px]">auto_awesome</span><span class="font-label-caps text-label-caps uppercase tracking-wider">Oracle</span></a><a aria-current="page" class="flex flex-col items-center justify-center w-16 h-14 transition-colors gap-0.5 text-primary font-semibold" data-path="atlas" href="#"><span class="material-symbols-outlined text-[24px]">explore</span><span class="font-label-caps text-label-caps uppercase tracking-wider">Atlas</span></a><a class="flex flex-col items-center justify-center w-16 h-14 text-on-surface-variant transition-colors gap-0.5 hover:text-on-surface" data-path="people" href="#"><span class="material-symbols-outlined text-[24px]">group</span><span class="font-label-caps text-label-caps uppercase tracking-wider">People</span></a><a class="flex flex-col items-center justify-center w-16 h-14 text-on-surface-variant transition-colors gap-0.5 hover:text-on-surface" data-path="sanctum" href="#"><span class="material-symbols-outlined text-[24px]">lock_clock</span><span class="font-label-caps text-label-caps uppercase tracking-wider">Sanctum</span></a></div></nav>
+<script>
+  // Dynamic Callout and Tap Interpretation Handlers
+  const popoverData = {
+    'popover-saturn': {
+      title: 'Transiting Saturn ♄ in House 10',
+      text: '10 — Life work & vocation: Transit Saturn tests what is built to endure, clearing hollow scaffolding.'
+    },
+    'popover-moon': {
+      title: 'Transiting Moon ☽ in House 8',
+      text: '8 — Intuitive tides: Transiting Moon heightens receptive sensitivity and emotional truth beneath surface discussions.'
+    },
+    'popover-mars': {
+      title: 'Transiting Mars ♂ in House 7',
+      text: '7 — Direct confrontation & passion: Mars energizes interpersonal boundaries, asking you to state wants cleanly without guilt.'
+    },
+    'popover-jupiter': {
+      title: 'Transiting Jupiter ♃ in House 11',
+      text: '11 — Collective benefaction: Transiting Jupiter widens your reach in networks, offering optimism and mutual aid.'
+    },
+    'popover-saturn-natal': {
+      title: 'Natal Saturn ♄ (28° Capricorn)',
+      text: 'Your foundational blueprint of self-discipline, mastery, and enduring legacy across decades.'
+    },
+    'popover-sun-natal': {
+      title: 'Natal Sun ☉ (11° Taurus)',
+      text: 'Core conscious radiance rooted in calm determination, organic rhythms, and tactile permanence.'
+    },
+    'popover-venus-natal': {
+      title: 'Natal Venus ♀ (19° Aries)',
+      text: 'Spontaneous aesthetic fire; loves boldly and craves vibrant autonomy in union.'
+    },
+    'popover-moon-natal': {
+      title: 'Natal Moon ☽ (24° Leo)',
+      text: 'Warm-hearted creative devotion; finds emotional nourishment through theatrical generosity.'
+    },
+    'popover-jupiter-natal': {
+      title: 'Natal Jupiter ♃ (6° Gemini)',
+      text: 'Curious expansion through manifold ideas, cross-pollinated inquiries, and witty exploration.'
+    }
+  };
+
+  function togglePopover(key, customText) {
+    const pop = document.getElementById('dynamic-popover');
+    const titleEl = document.getElementById('dynamic-title');
+    const bodyEl = document.getElementById('dynamic-body');
+    const staticCallout = document.getElementById('active-callout');
+
+    if (customText) {
+      titleEl.innerText = 'House Realm';
+      bodyEl.innerHTML = `<span class="text-primary font-semibold">${customText}</span>`;
+      pop.classList.remove('hidden');
+      if (staticCallout) staticCallout.classList.add('hidden');
+      return;
+    }
+
+    if (popoverData[key]) {
+      titleEl.innerText = popoverData[key].title;
+      bodyEl.innerText = popoverData[key].text;
+      pop.classList.remove('hidden');
+      if (staticCallout) staticCallout.classList.add('hidden');
+    }
+  }
+
+  function showHitDetail(title, interpretation) {
+    const pop = document.getElementById('dynamic-popover');
+    const titleEl = document.getElementById('dynamic-title');
+    const bodyEl = document.getElementById('dynamic-body');
+    const staticCallout = document.getElementById('active-callout');
+    
+    titleEl.innerText = title;
+    bodyEl.innerText = interpretation;
+    pop.classList.remove('hidden');
+    if (staticCallout) staticCallout.classList.add('hidden');
+  }
+</script>
+</body></html>

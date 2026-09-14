@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..700&amp;family=IBM+Plex+Mono:wght@400;500;600;700&amp;family=Nunito+Sans:ital,wght@0,300..900;1,300..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+    @layer base {
+      html, body {
+        width: 100vw;
+        margin: 0;
+        padding: 0;
+        background-color: #120C1C;
+      }
+      body {
+        overscroll-behavior: none;
+        font-family: 'Nunito Sans', sans-serif;
+      }
+      .pb-safe { padding-bottom: env(safe-area-inset-bottom, 0px); }
+      .pt-safe { padding-top: env(safe-area-inset-top, 0px); }
+      main > :first-child { margin-top: 0 !important; }
+      main > :last-child { margin-bottom: 0 !important; }
+    }
+    ::-webkit-scrollbar { display: none; }
+
+    /* Continuous 3D Torus Bi-Wheel keyframes & perspectives */
+    .perspective-torus {
+      perspective: 800px;
+      perspective-origin: 50% 50%;
+    }
+    .torus-stage {
+      transform-style: preserve-3d;
+      transform: rotateX(24deg);
+    }
+    @keyframes spin-cw {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    @keyframes spin-ccw {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(-360deg); }
+    }
+    @keyframes counter-cw {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(-360deg); }
+    }
+    @keyframes counter-ccw {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .rotate-torus-outer {
+      animation: spin-cw 95s linear infinite;
+      transform-origin: center;
+    }
+    .rotate-torus-inner {
+      animation: spin-ccw 75s linear infinite;
+      transform-origin: center;
+    }
+    .counter-rotate-outer {
+      animation: counter-cw 95s linear infinite;
+      transform-origin: center;
+    }
+    .counter-rotate-inner {
+      animation: counter-ccw 75s linear infinite;
+      transform-origin: center;
+    }
+
+    /* Tooltip pulse indicator */
+    @keyframes beacon-ping {
+      0% { transform: scale(1); opacity: 0.9; }
+      70% { transform: scale(2.2); opacity: 0; }
+      100% { transform: scale(2.2); opacity: 0; }
+    }
+    .animate-beacon {
+      animation: beacon-ping 2.2s cubic-bezier(0, 0, 0.2, 1) infinite;
+    }
+  </style>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "on-tertiary": "#122b6e",
+            "primary-fixed-dim": "#e9c349",
+            "background": "#120C1C",
+            "primary": "#f2ca50",
+            "gold-accent": "#D4AF37",
+            "coral-accent": "#F2A38C",
+            "secondary": "#ffb59f",
+            "outline-variant": "#4d4635",
+            "on-surface-variant": "#d0c5af",
+            "on-secondary": "#532112",
+            "inverse-surface": "#eadef6",
+            "error-container": "#93000a",
+            "outline": "#99907c",
+            "on-error": "#690005",
+            "on-primary-container": "#554300",
+            "on-primary": "#3c2f00",
+            "secondary-fixed": "#ffdbd1",
+            "tertiary": "#c0cdff",
+            "error": "#ffb4ab",
+            "on-background": "#eadef6",
+            "secondary-fixed-dim": "#ffb59f",
+            "on-secondary-fixed-variant": "#6f3726",
+            "surface-container-lowest": "#0e0917",
+            "on-tertiary-container": "#2b4184",
+            "surface-variant": "#2a1e3b",
+            "inverse-on-surface": "#342d3f",
+            "on-error-container": "#ffdad6",
+            "on-secondary-container": "#f4a58e",
+            "on-primary-fixed": "#241a00",
+            "tertiary-fixed": "#dce1ff",
+            "on-primary-fixed-variant": "#574500",
+            "on-tertiary-fixed": "#00164d",
+            "secondary-container": "#723928",
+            "surface-tint": "#e9c349",
+            "surface-container": "#1C1428",
+            "on-tertiary-fixed-variant": "#2d4386",
+            "surface": "#120C1C",
+            "on-surface": "#eadef6",
+            "tertiary-container": "#9bb0fb",
+            "primary-fixed": "#ffe088",
+            "surface-dim": "#120C1C",
+            "surface-container-high": "#281c3a",
+            "on-secondary-fixed": "#380d02",
+            "surface-bright": "#36274e",
+            "tertiary-fixed-dim": "#b5c4ff",
+            "inverse-primary": "#735c00",
+            "primary-container": "#D4AF37",
+            "surface-container-low": "#181024",
+            "surface-container-highest": "#34254b"
+          },
+          borderRadius: {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          spacing: {
+            "space-md": "1rem",
+            "space-sm": "0.5rem",
+            "margin-desktop": "3rem",
+            "gutter-desktop": "1.5rem",
+            "space-xl": "2.5rem",
+            "margin-tablet": "2rem",
+            "margin": "1rem",
+            "space-xs": "0.25rem",
+            "space-lg": "1.5rem",
+            "gutter": "1rem"
+          },
+          fontFamily: {
+            "body-lg": ["Nunito Sans"],
+            "label-caps": ["IBM Plex Mono"],
+            "display-lg-mobile": ["Fraunces"],
+            "headline-sm": ["Fraunces"],
+            "headline-md": ["Fraunces"],
+            "astro-data-lg": ["IBM Plex Mono"],
+            "oracle-voice": ["Fraunces"],
+            "astro-data-md": ["IBM Plex Mono"],
+            "body-sm": ["Nunito Sans"],
+            "headline-lg": ["Fraunces"],
+            "body-md": ["Nunito Sans"],
+            "display-lg": ["Fraunces"]
+          },
+          fontSize: {
+            "body-sm": ["13px", { "lineHeight": "18px", "fontWeight": "400" }],
+            "label-caps": ["11px", { "lineHeight": "14px", "letterSpacing": "0.08em", "fontWeight": "600" }],
+            "display-lg-mobile": ["30px", { "lineHeight": "38px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "headline-sm": ["18px", { "lineHeight": "26px", "fontWeight": "600" }],
+            "headline-md": ["22px", { "lineHeight": "30px", "fontWeight": "500" }],
+            "astro-data-lg": ["16px", { "lineHeight": "22px", "fontWeight": "500" }],
+            "oracle-voice": ["16px", { "lineHeight": "24px", "letterSpacing": "0.01em", "fontWeight": "400" }],
+            "astro-data-md": ["13px", { "lineHeight": "18px", "fontWeight": "400" }],
+            "body-md": ["15px", { "lineHeight": "22px", "fontWeight": "400" }],
+            "headline-lg": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.01em", "fontWeight": "500" }],
+            "display-lg": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "600" }]
+          }
+        }
+      }
+    };
+  </script>
+</head>
+<body class="bg-background text-on-surface flex flex-col min-h-screen relative selection:bg-gold-accent selection:text-on-primary">
+<!-- Fixed Header -->
+<header class="fixed top-0 w-full z-50 pt-safe bg-[#120C1C]/85 backdrop-blur-xl border-b border-[#281c3a]/70 shadow-[0_1px_12px_rgba(0,0,0,0.6)]">
+<div class="h-16 px-space-md flex items-center justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm min-w-0">
+<img alt="Brand logo" class="h-8 w-auto object-contain shrink-0" src="https://lh3.googleusercontent.com/aida/AEtjO1UvHX1F33XQQrpxUU1G1YHVM9xDpt4c_veC4clHdq3tjZn8XMSqPypOaHS_48eQPfyt5pEXymsTE14z7qcZbAkcGIJivsSuCPBQlkb5sKrpiT6R5yML8qta2SSA3WqPVQX1NGEyH0-L4anpnZhYfe_rpSy2ZjQHW9Zx5lNKOPHcSPjRMw62LDvFv15IBxQW1TFrsdRSX3NdsY5vFebG8nrNrtYLoqwCuHmFFE8G-sycSgVDA4Y_XKL76KU"/>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-space-xs">
+<span class="font-headline-sm text-headline-sm text-gold-accent tracking-tight font-semibold">natally</span>
+<span class="font-astro-data-md text-astro-data-md text-on-surface-variant/60">•</span>
+<span class="font-astro-data-md text-astro-data-md text-on-surface-variant truncate font-medium">Atlas</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-space-xs shrink-0">
+<div class="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#1C1428] text-coral-accent border border-[#F2A38C]/20">
+<span class="material-symbols-outlined text-[14px]">hdr_auto</span>
+<span class="font-label-caps text-label-caps uppercase tracking-wider">Synastry</span>
+</div>
+<button aria-label="Astronomical telemetry" class="w-10 h-10 flex items-center justify-center rounded-full text-on-surface-variant hover:text-gold-accent transition-colors">
+<span class="material-symbols-outlined text-[22px]">tune</span>
+</button>
+<div class="w-8 h-8 rounded-full bg-gold-accent flex items-center justify-center shrink-0 shadow-[0_0_12px_rgba(212,175,55,0.45)]">
+<span class="material-symbols-outlined text-[#3c2f00] text-[18px]">person</span>
+</div>
+</div>
+</div>
+</header>
+<!-- Main Scrollable Canvas Area -->
+<main class="flex-1 flex flex-col relative w-full pt-16 pb-[370px] bg-background min-h-screen">
+<div class="flex flex-col w-full pb-8">
+<!-- Top Context & Navigation Bar -->
+<div class="px-space-md pt-2 pb-space-sm flex flex-col gap-space-sm bg-[#0e0917]/70 border-b border-[#1C1428]">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<button aria-label="Return to Chart Atlas" class="w-9 h-9 rounded-full bg-[#1C1428] flex items-center justify-center text-on-surface-variant hover:text-gold-accent transition-colors border border-[#281c3a]" type="button">
+<span class="material-symbols-outlined text-[20px]">arrow_back</span>
+</button>
+<div class="flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#1C1428] shadow-sm border border-[#2a1e3b]">
+<span class="material-symbols-outlined text-[15px] text-gold-accent" style="font-variation-settings: 'FILL' 1;">all_inclusive</span>
+<span class="font-headline-sm text-headline-sm text-gold-accent tracking-tight font-medium">natally</span>
+<span class="font-astro-data-md text-astro-data-md text-on-surface-variant/40">/</span>
+<span class="font-body-md text-body-md text-coral-accent font-semibold">Robin + Sam</span>
+</div>
+</div>
+<div class="flex items-center gap-1">
+<div class="flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#1C1428] text-gold-accent text-xs font-astro-data-md border border-gold-accent/25 shadow-sm">
+<span class="material-symbols-outlined text-[14px] animate-spin text-gold-accent" style="animation-duration: 6s;">autorenew</span>
+<span class="font-label-caps text-[10px] tracking-widest text-gold-accent uppercase font-bold">3D Live</span>
+</div>
+</div>
+</div>
+<!-- Segmented Horizon Tabs -->
+<div class="flex items-center justify-between bg-[#0e0917] p-1 rounded-lg border border-[#281c3a]/60">
+<button class="flex-1 py-1.5 text-center text-on-surface-variant hover:text-on-surface font-body-sm text-body-sm transition-colors rounded" type="button">Natal</button>
+<button class="flex-1 py-1.5 text-center relative font-body-sm text-body-sm text-gold-accent font-semibold" type="button">
+            Synastry
+            <span class="absolute bottom-0 left-1/4 right-1/4 h-[2px] bg-gold-accent rounded-full shadow-[0_0_8px_rgba(212,175,55,0.8)]"></span>
+</button>
+<button class="flex-1 py-1.5 text-center text-on-surface-variant hover:text-on-surface font-body-sm text-body-sm transition-colors rounded" type="button">Today</button>
+</div>
+</div>
+<div class="px-space-md flex flex-col gap-space-md mt-space-sm">
+<!-- 1. CONTINUOUS ROTATING 3D TORUS BI-WHEEL -->
+<div class="bg-gradient-to-b from-[#181024] to-[#0e0917] rounded-2xl p-space-md flex flex-col items-center relative overflow-visible shadow-[0_8px_36px_rgba(0,0,0,0.75)] border border-[#281c3a]">
+<!-- Background Deep Starfield & Celestial Grid -->
+<div class="absolute inset-0 pointer-events-none opacity-40 overflow-hidden rounded-2xl">
+<!-- Simulated star specs -->
+<div class="absolute w-1 h-1 bg-white rounded-full top-8 left-12 opacity-70"></div>
+<div class="absolute w-1 h-1 bg-gold-accent rounded-full top-16 right-16 opacity-60"></div>
+<div class="absolute w-1.5 h-1.5 bg-gold-accent rounded-full bottom-20 left-10 opacity-50 blur-[0.5px]"></div>
+<div class="absolute w-1 h-1 bg-coral-accent rounded-full bottom-28 right-14 opacity-80"></div>
+<div class="absolute w-0.5 h-0.5 bg-white rounded-full top-32 left-1/3 opacity-75"></div>
+<div class="absolute w-1 h-1 bg-tertiary rounded-full top-44 right-1/4 opacity-60"></div>
+<div class="absolute w-0.5 h-0.5 bg-white rounded-full bottom-12 right-1/3 opacity-50"></div>
+<!-- Concentric celestial grid guides -->
+<div class="absolute inset-0 flex items-center justify-center">
+<div class="w-[330px] h-[330px] rounded-full border border-gold-accent/10"></div>
+<div class="w-[390px] h-[390px] rounded-full border border-gold-accent/5"></div>
+</div>
+</div>
+<!-- Instrument Header Telemetry -->
+<div class="w-full flex items-center justify-between z-10 mb-1">
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-gold-accent animate-pulse shadow-[0_0_8px_#D4AF37]"></span>
+<span class="font-label-caps text-label-caps uppercase tracking-wider text-on-surface">3D TORUS BI-WHEEL ASTROLABE</span>
+</div>
+<span class="font-astro-data-md text-astro-data-md text-on-surface-variant/80">LAT 37°46'N · GEO</span>
+</div>
+<!-- Harmonic Index Pill -->
+<div class="z-10 mb-2 px-3 py-1 rounded-full bg-[#1C1428]/95 backdrop-blur-md border border-gold-accent/30 flex items-center gap-2 shadow-sm">
+<span class="material-symbols-outlined text-[14px] text-gold-accent" style="font-variation-settings: 'FILL' 1;">flare</span>
+<span class="font-label-caps text-label-caps text-on-surface tracking-wider font-semibold">
+              Harmonic Resonance: <span class="text-gold-accent font-bold">88%</span>
+</span>
+<span class="w-1 h-1 rounded-full bg-on-surface-variant/50"></span>
+<span class="font-label-caps text-label-caps text-coral-accent tracking-wider font-medium">6 Exact Aspects</span>
+</div>
+<!-- 3D Torus Perspective Container (relative for tooltips anchor) -->
+<div class="perspective-torus relative w-full max-w-[340px] aspect-square flex items-center justify-center my-1 select-none">
+<div class="torus-stage relative w-full h-full flex items-center justify-center">
+<!-- Core Astrolabe SVG with Concentric Doughnut Rings -->
+<svg class="w-full h-full" fill="none" viewbox="0 0 340 340">
+<defs>
+<!-- 3D Gold Torus Ring Gradient (Robin) -->
+<radialgradient cx="50%" cy="50%" id="robinTorusShading" r="50%">
+<stop offset="68%" stop-color="#221707" stop-opacity="0.95"></stop>
+<stop offset="85%" stop-color="#D4AF37" stop-opacity="0.35"></stop>
+<stop offset="94%" stop-color="#f2ca50" stop-opacity="0.85"></stop>
+<stop offset="100%" stop-color="#3c2f00" stop-opacity="0.45"></stop>
+</radialgradient>
+<!-- 3D Coral Torus Ring Gradient (Sam) -->
+<radialgradient cx="50%" cy="50%" id="samTorusShading" r="50%">
+<stop offset="78%" stop-color="#24110e" stop-opacity="0.9"></stop>
+<stop offset="90%" stop-color="#F2A38C" stop-opacity="0.3"></stop>
+<stop offset="97%" stop-color="#ffb59f" stop-opacity="0.8"></stop>
+<stop offset="100%" stop-color="#532112" stop-opacity="0.4"></stop>
+</radialgradient>
+<!-- Planet glow filters -->
+<filter height="200%" id="goldGlow" width="200%" x="-50%" y="-50%">
+<fedropshadow dx="0" dy="0" flood-color="#D4AF37" flood-opacity="0.85" stddeviation="3"></fedropshadow>
+</filter>
+<filter height="200%" id="coralGlow" width="200%" x="-50%" y="-50%">
+<fedropshadow dx="0" dy="0" flood-color="#F2A38C" flood-opacity="0.85" stddeviation="3"></fedropshadow>
+</filter>
+<filter height="160%" id="aspectGlow" width="160%" x="-30%" y="-30%">
+<fegaussianblur result="blur" stddeviation="1.5"></fegaussianblur>
+<femerge>
+<femergenode in="blur"></femergenode>
+<femergenode in="SourceGraphic"></femergenode>
+</femerge>
+</filter>
+</defs>
+<!-- Deep Space Center Basin -->
+<circle cx="170" cy="170" fill="#0b0713" r="162" stroke="#281c3a" stroke-opacity="0.8" stroke-width="1.5"></circle>
+<!-- HOUSE CUSPS & 1-12 NUMBERS AROUND THE WHEEL (Astrolabe division) -->
+<g opacity="0.45" stroke="#D4AF37" stroke-dasharray="2 3" stroke-width="0.8">
+<!-- 12 house cusp spokes radiating outward -->
+<line x1="170" x2="332" y1="170" y2="170"></line> <!-- 1 / ASC -->
+<line x1="170" x2="310" y1="170" y2="251"></line> <!-- 2 -->
+<line x1="170" x2="251" y1="170" y2="310"></line> <!-- 3 -->
+<line x1="170" x2="170" y1="170" y2="332"></line> <!-- 4 / IC -->
+<line x1="170" x2="89" y1="170" y2="310"></line> <!-- 5 -->
+<line x1="170" x2="30" y1="170" y2="251"></line> <!-- 6 -->
+<line x1="170" x2="8" y1="170" y2="170"></line> <!-- 7 / DSC -->
+<line x1="170" x2="30" y1="170" y2="89"></line> <!-- 8 -->
+<line x1="170" x2="89" y1="170" y2="30"></line> <!-- 9 -->
+<line x1="170" x2="170" y1="170" y2="8"></line> <!-- 10 / MC -->
+<line x1="170" x2="251" y1="170" y2="30"></line> <!-- 11 -->
+<line x1="170" x2="310" y1="170" y2="89"></line> <!-- 12 -->
+</g>
+<!-- Clear House Numbers 1–12 Ring Perimeter with interactive title tooltips -->
+<g class="font-mono select-none" fill="#d0c5af" font-family="'IBM Plex Mono', monospace" font-size="8" font-weight="600" text-anchor="middle">
+<!-- House 1 (Ascendant) -->
+<g class="cursor-pointer hover:fill-gold-accent transition-colors"><title>House 1: Self, Identity &amp; Emergence</title><text x="316" y="196">1</text></g>
+<!-- House 2 -->
+<g class="cursor-pointer hover:fill-gold-accent transition-colors"><title>House 2: Values, Material Ground &amp; Stability</title><text x="282" y="270">2</text></g>
+<!-- House 3 -->
+<g class="cursor-pointer hover:fill-gold-accent transition-colors"><title>House 3: Communication, Mind &amp; Kinship</title><text x="210" y="318">3</text></g>
+<!-- House 4 (IC) -->
+<g class="cursor-pointer hover:fill-gold-accent transition-colors"><title>House 4: Roots, Ancestry, Sanctuary &amp; Foundation</title><text x="144" y="324">4</text></g>
+<!-- House 5 -->
+<g class="cursor-pointer hover:fill-gold-accent transition-colors"><title>House 5: Play, Romantic Spark &amp; Creative Radiance</title><text x="70" y="284">5</text></g>
+<!-- House 6 -->
+<g class="cursor-pointer hover:fill-gold-accent transition-colors"><title>House 6: Daily Rhythms, Devotion &amp; Healing Rituals</title><text x="28" y="214">6</text></g>
+<!-- House 7 (Descendant) -->
+<g class="cursor-pointer hover:fill-gold-accent transition-colors"><title>House 7: One-on-One Partnership, Mirrors &amp; Commitment</title><text x="24" y="146">7</text></g>
+<!-- House 8 (Highlighted Anchor) -->
+<g class="cursor-pointer fill-gold-accent font-bold" filter="url(#goldGlow)"><title>House 8: Deep trust, shared mysteries &amp; emotional alchemy</title><text x="56" y="74">8</text></g>
+<!-- House 9 -->
+<g class="cursor-pointer hover:fill-gold-accent transition-colors"><title>House 9: Higher Philosophy, Expansive Horizons &amp; Truth</title><text x="126" y="28">9</text></g>
+<!-- House 10 (Midheaven) -->
+<g class="cursor-pointer hover:fill-gold-accent transition-colors"><title>House 10: Public Vocation, Calling &amp; Life Architecture</title><text x="194" y="24">10</text></g>
+<!-- House 11 -->
+<g class="cursor-pointer hover:fill-gold-accent transition-colors"><title>House 11: Collective Dreams, Alliances &amp; Ideals</title><text x="274" y="60">11</text></g>
+<!-- House 12 -->
+<g class="cursor-pointer hover:fill-gold-accent transition-colors"><title>House 12: Unconscious Sanctuary, Mysticism &amp; Timeless Waters</title><text x="318" y="132">12</text></g>
+</g>
+<!-- Cross-aspect lines background field (Harmonic Web across deep starfield) -->
+<!-- Delicate aspect chords linking the two torus bands with title tooltips -->
+<g filter="url(#aspectGlow)" opacity="0.95">
+<!-- Trine 120° (Sun Tau to Moon Vir) Gold harmonic -->
+<g class="cursor-pointer hover:opacity-100 transition-opacity">
+<title>Trine 120° · Robin Sun in Taurus △ Sam Moon in Virgo (0°22' APP): Harmonious emotional flow &amp; practical devotion.</title>
+<line opacity="0.9" stroke="#D4AF37" stroke-dasharray="none" stroke-linecap="round" stroke-width="1.75" x1="140" x2="276" y1="95" y2="218"></line>
+</g>
+<!-- Conjunction (Venus Ari to Mars Ari) Gold resonance -->
+<g class="cursor-pointer hover:opacity-100 transition-opacity">
+<title>Conjunction · Robin Venus ☌ Sam Mars in Aries (1°05' APP): Magnetic physical spark &amp; immediate instinctive attraction.</title>
+<line opacity="0.95" stroke="#f2ca50" stroke-linecap="round" stroke-width="2" x1="110" x2="68" y1="130" y2="128"></line>
+</g>
+<!-- Square 90° (Moon Leo to Sun Sco) Coral tension -->
+<g class="cursor-pointer hover:opacity-100 transition-opacity">
+<title>Square 90° · Robin Moon in Leo □ Sam Sun in Scorpio (2°18' SEP): Passionate friction generating creative transformation.</title>
+<line opacity="0.85" stroke="#F2A38C" stroke-dasharray="3 2" stroke-linecap="round" stroke-width="1.5" x1="230" x2="225" y1="136" y2="295"></line>
+</g>
+<!-- Sextile 60° (Mercury Gem to Venus Leo) Periwinkle tertiary -->
+<g class="cursor-pointer hover:opacity-100 transition-opacity">
+<title>Sextile 60° · Robin Mercury in Gemini ⚹ Sam Venus in Leo (0°45' APP): Playful witty banter and mutual delight.</title>
+<line opacity="0.85" stroke="#c0cdff" stroke-linecap="round" stroke-width="1.5" x1="188" x2="292" y1="92" y2="126"></line>
+</g>
+<!-- Exact Saturn Conjunction (Robin Saturn Cap to Sam Saturn Cap) -->
+<g class="cursor-pointer hover:opacity-100 transition-opacity">
+<title>Exact Conjunction · Robin Saturn ☌ Sam Saturn in Capricorn (0°12' EXACT): Unbreakable architectural covenant.</title>
+<line opacity="1" stroke="#D4AF37" stroke-linecap="round" stroke-width="2.75" x1="105" x2="72" y1="228" y2="242"></line>
+</g>
+<!-- Trine (Robin Jupiter Can to Sam Neptune Pis) -->
+<g class="cursor-pointer hover:opacity-100 transition-opacity">
+<title>Trine 120° · Robin Jupiter in Cancer △ Sam Neptune in Pisces (1°30' SEP): Shared spiritual empathy &amp; nurturing sanctuary.</title>
+<line opacity="0.85" stroke="#D4AF37" stroke-linecap="round" stroke-width="1.5" x1="210" x2="48" y1="112" y2="198"></line>
+</g>
+</g>
+<!-- SAM'S OUTER TORUS DOUGHNUT RING (Warm Coral #F2A38C) -->
+<g class="rotate-torus-outer">
+<!-- Torus rim & thickness illusion -->
+<circle cx="170" cy="170" r="156" stroke="#F2A38C" stroke-opacity="0.85" stroke-width="2.5"></circle>
+<circle cx="170" cy="170" r="126" stroke="#F2A38C" stroke-dasharray="2 3" stroke-opacity="0.5" stroke-width="1.5"></circle>
+<!-- Shaded Doughnut Bed -->
+<circle cx="170" cy="170" fill="none" r="141" stroke="url(#samTorusShading)" stroke-width="30"></circle>
+<!-- Fine Brass / Coral Degree Tick Marks on Outer Rim -->
+<g opacity="0.65" stroke="#F2A38C" stroke-width="0.8">
+<line x1="170" x2="170" y1="14" y2="22"></line>
+<line x1="245" x2="241" y1="34" y2="41"></line>
+<line x1="306" x2="299" y1="95" y2="99"></line>
+<line x1="326" x2="318" y1="170" y2="170"></line>
+<line x1="306" x2="299" y1="245" y2="241"></line>
+<line x1="245" x2="241" y1="306" y2="299"></line>
+<line x1="170" x2="170" y1="326" y2="318"></line>
+<line x1="95" x2="99" y1="306" y2="299"></line>
+<line x1="34" x2="41" y1="245" y2="241"></line>
+<line x1="14" x2="22" y1="170" y2="170"></line>
+<line x1="34" x2="41" y1="95" y2="99"></line>
+<line x1="95" x2="99" y1="34" y2="41"></line>
+</g>
+<!-- Sam's Glowing Planet Glyph Beads (Warm Coral #F2A38C) with hover/tap tooltips -->
+<!-- Moon in Virgo (~140°) -->
+<g class="cursor-pointer group" transform="translate(276, 218)">
+<title>Sam · Moon in Virgo 18° · Analytical emotional care, seeking quiet order and intentional presence</title>
+<circle class="group-hover:stroke-white transition-colors" cx="0" cy="0" fill="#231412" filter="url(#coralGlow)" r="12" stroke="#F2A38C" stroke-width="1.75"></circle>
+<circle cx="0" cy="0" fill="#F2A38C" opacity="0.4" r="3"></circle>
+<g class="counter-rotate-outer">
+<text fill="#ffb59f" font-family="'IBM Plex Mono', monospace" font-size="12" font-weight="700" text-anchor="middle" x="0" y="4">☽</text>
+<text fill="#F2A38C" font-family="'IBM Plex Mono', monospace" font-size="7.5" font-weight="600" text-anchor="middle" x="0" y="16">Vir</text>
+</g>
+</g>
+<!-- Mars in Aries (~195°) -->
+<g class="cursor-pointer group" transform="translate(68, 128)">
+<title>Sam · Mars in Aries 04° · Direct passion, bold instinctive drive, uncompromising honesty</title>
+<circle class="group-hover:stroke-white transition-colors" cx="0" cy="0" fill="#231412" filter="url(#coralGlow)" r="12" stroke="#F2A38C" stroke-width="1.75"></circle>
+<g class="counter-rotate-outer">
+<text fill="#ffb59f" font-family="'IBM Plex Mono', monospace" font-size="12" font-weight="700" text-anchor="middle" x="0" y="4">♂</text>
+<text fill="#F2A38C" font-family="'IBM Plex Mono', monospace" font-size="7.5" font-weight="600" text-anchor="middle" x="0" y="16">Ari</text>
+</g>
+</g>
+<!-- Sun in Scorpio (~290°) -->
+<g class="cursor-pointer group" transform="translate(225, 295)">
+<title>Sam · Sun in Scorpio 12° · Core soul of profound depth, psychic resilience, and emotional truth</title>
+<circle class="group-hover:stroke-white transition-colors" cx="0" cy="0" fill="#231412" filter="url(#coralGlow)" r="12" stroke="#F2A38C" stroke-width="1.75"></circle>
+<g class="counter-rotate-outer">
+<text fill="#ffb59f" font-family="'IBM Plex Mono', monospace" font-size="12" font-weight="700" text-anchor="middle" x="0" y="4">☉</text>
+<text fill="#F2A38C" font-family="'IBM Plex Mono', monospace" font-size="7.5" font-weight="600" text-anchor="middle" x="0" y="16">Sco</text>
+</g>
+</g>
+<!-- Venus in Leo (~75°) -->
+<g class="cursor-pointer group" transform="translate(292, 126)">
+<title>Sam · Venus in Leo 22° · Radiant open-hearted devotion, generous warmth, romantic majesty</title>
+<circle class="group-hover:stroke-white transition-colors" cx="0" cy="0" fill="#231412" filter="url(#coralGlow)" r="12" stroke="#F2A38C" stroke-width="1.75"></circle>
+<g class="counter-rotate-outer">
+<text fill="#ffb59f" font-family="'IBM Plex Mono', monospace" font-size="12" font-weight="700" text-anchor="middle" x="0" y="4">♀</text>
+<text fill="#F2A38C" font-family="'IBM Plex Mono', monospace" font-size="7.5" font-weight="600" text-anchor="middle" x="0" y="16">Leo</text>
+</g>
+</g>
+<!-- Saturn in Capricorn (~215°) -->
+<g class="cursor-pointer group" id="sam-saturn-glyph" transform="translate(72, 242)">
+<title>Sam · Saturn in Capricorn 26° · Enduring structural integrity, patience, karmic maturity</title>
+<circle class="group-hover:stroke-white transition-colors" cx="0" cy="0" fill="#231412" filter="url(#coralGlow)" r="12" stroke="#F2A38C" stroke-width="2"></circle>
+<g class="counter-rotate-outer">
+<text fill="#ffb59f" font-family="'IBM Plex Mono', monospace" font-size="12" font-weight="700" text-anchor="middle" x="0" y="4">♄</text>
+<text fill="#F2A38C" font-family="'IBM Plex Mono', monospace" font-size="7.5" font-weight="600" text-anchor="middle" x="0" y="16">Cap</text>
+</g>
+</g>
+<!-- Neptune in Pisces (~260°) -->
+<g class="cursor-pointer group" transform="translate(48, 198)">
+<title>Sam · Neptune in Pisces 14° · Boundless spiritual intuition, compassionate dreamscapes</title>
+<circle class="group-hover:stroke-white transition-colors" cx="0" cy="0" fill="#231412" filter="url(#coralGlow)" r="12" stroke="#F2A38C" stroke-width="1.75"></circle>
+<g class="counter-rotate-outer">
+<text fill="#ffb59f" font-family="'IBM Plex Mono', monospace" font-size="12" font-weight="700" text-anchor="middle" x="0" y="4">♆</text>
+<text fill="#F2A38C" font-family="'IBM Plex Mono', monospace" font-size="7.5" font-weight="600" text-anchor="middle" x="0" y="16">Pis</text>
+</g>
+</g>
+</g>
+<!-- ROBIN'S INNER TORUS DOUGHNUT RING (Gold #D4AF37) -->
+<g class="rotate-torus-inner">
+<!-- Torus rim & thickness illusion -->
+<circle cx="170" cy="170" r="102" stroke="#D4AF37" stroke-opacity="0.9" stroke-width="2.5"></circle>
+<circle cx="170" cy="170" r="62" stroke="#D4AF37" stroke-dasharray="1 2" stroke-opacity="0.5" stroke-width="1.5"></circle>
+<!-- Shaded Doughnut Bed -->
+<circle cx="170" cy="170" fill="none" r="82" stroke="url(#robinTorusShading)" stroke-width="40"></circle>
+<!-- Fine Brass Degree Tick Marks on Inner Rim -->
+<g opacity="0.75" stroke="#D4AF37" stroke-width="0.75">
+<line x1="170" x2="170" y1="68" y2="73"></line>
+<line x1="222" x2="218" y1="82" y2="86"></line>
+<line x1="264" x2="259" y1="124" y2="126"></line>
+<line x1="272" x2="267" y1="170" y2="170"></line>
+<line x1="258" x2="254" y1="222" y2="218"></line>
+<line x1="222" x2="218" y1="258" y2="254"></line>
+<line x1="170" x2="170" y1="272" y2="267"></line>
+<line x1="118" x2="122" y1="258" y2="254"></line>
+<line x1="82" x2="86" y1="222" y2="218"></line>
+<line x1="68" x2="73" y1="170" y2="170"></line>
+<line x1="82" x2="86" y1="118" y2="122"></line>
+<line x1="118" x2="122" y1="82" y2="86"></line>
+</g>
+<!-- Robin's Glowing Planet Glyph Beads (Gold #D4AF37) with hover/tap tooltips -->
+<!-- Sun in Taurus (~335°) -->
+<g class="cursor-pointer group" transform="translate(140, 95)">
+<title>Robin · Sun in Taurus 24° · Serene steadfast loyalty, sensory beauty, grounded presence</title>
+<circle class="group-hover:stroke-white transition-colors" cx="0" cy="0" fill="#20180a" filter="url(#goldGlow)" r="11" stroke="#D4AF37" stroke-width="1.75"></circle>
+<circle cx="0" cy="0" fill="#f2ca50" opacity="0.4" r="3"></circle>
+<g class="counter-rotate-inner">
+<text fill="#f2ca50" font-family="'IBM Plex Mono', monospace" font-size="11" font-weight="700" text-anchor="middle" x="0" y="3.5">☉</text>
+<text fill="#D4AF37" font-family="'IBM Plex Mono', monospace" font-size="7" font-weight="600" text-anchor="middle" x="0" y="15">Tau</text>
+</g>
+</g>
+<!-- Venus in Aries (~210°) -->
+<g class="cursor-pointer group" transform="translate(110, 130)">
+<title>Robin · Venus in Aries 05° · Spontaneous ardor, courage in love, fearless affection</title>
+<circle class="group-hover:stroke-white transition-colors" cx="0" cy="0" fill="#20180a" filter="url(#goldGlow)" r="11" stroke="#D4AF37" stroke-width="1.75"></circle>
+<g class="counter-rotate-inner">
+<text fill="#f2ca50" font-family="'IBM Plex Mono', monospace" font-size="11" font-weight="700" text-anchor="middle" x="0" y="3.5">♀</text>
+<text fill="#D4AF37" font-family="'IBM Plex Mono', monospace" font-size="7" font-weight="600" text-anchor="middle" x="0" y="15">Ari</text>
+</g>
+</g>
+<!-- Moon in Leo (~60°) -->
+<g class="cursor-pointer group" transform="translate(230, 136)">
+<title>Robin · Moon in Leo 14° · Dignified emotional warmth, fierce loyalty, heart-centered protection</title>
+<circle class="group-hover:stroke-white transition-colors" cx="0" cy="0" fill="#20180a" filter="url(#goldGlow)" r="11" stroke="#D4AF37" stroke-width="1.75"></circle>
+<g class="counter-rotate-inner">
+<text fill="#f2ca50" font-family="'IBM Plex Mono', monospace" font-size="11" font-weight="700" text-anchor="middle" x="0" y="3.5">☽</text>
+<text fill="#D4AF37" font-family="'IBM Plex Mono', monospace" font-size="7" font-weight="600" text-anchor="middle" x="0" y="15">Leo</text>
+</g>
+</g>
+<!-- Mercury in Gemini (~15°) -->
+<g class="cursor-pointer group" transform="translate(188, 92)">
+<title>Robin · Mercury in Gemini 21° · Lightning-fast curiosity, multifaceted wit, verbal fluency</title>
+<circle class="group-hover:stroke-white transition-colors" cx="0" cy="0" fill="#20180a" filter="url(#goldGlow)" r="11" stroke="#D4AF37" stroke-width="1.75"></circle>
+<g class="counter-rotate-inner">
+<text fill="#f2ca50" font-family="'IBM Plex Mono', monospace" font-size="11" font-weight="700" text-anchor="middle" x="0" y="3.5">☿</text>
+<text fill="#D4AF37" font-family="'IBM Plex Mono', monospace" font-size="7" font-weight="600" text-anchor="middle" x="0" y="15">Gem</text>
+</g>
+</g>
+<!-- Saturn in Capricorn (~225°) -->
+<g class="cursor-pointer group" id="robin-saturn-glyph" transform="translate(105, 228)">
+<title>Robin · Saturn in Capricorn 26° · Architect of boundaries, long-range commitment, steadfast resolve</title>
+<circle class="group-hover:stroke-white transition-colors" cx="0" cy="0" fill="#20180a" filter="url(#goldGlow)" r="11" stroke="#D4AF37" stroke-width="2"></circle>
+<g class="counter-rotate-inner">
+<text fill="#f2ca50" font-family="'IBM Plex Mono', monospace" font-size="11" font-weight="700" text-anchor="middle" x="0" y="3.5">♄</text>
+<text fill="#D4AF37" font-family="'IBM Plex Mono', monospace" font-size="7" font-weight="600" text-anchor="middle" x="0" y="15">Cap</text>
+</g>
+</g>
+<!-- Jupiter in Cancer (~40°) -->
+<g class="cursor-pointer group" transform="translate(210, 112)">
+<title>Robin · Jupiter in Cancer 12° · Generosity through protection, nurturing abundance, instinctual shelter</title>
+<circle class="group-hover:stroke-white transition-colors" cx="0" cy="0" fill="#20180a" filter="url(#goldGlow)" r="11" stroke="#D4AF37" stroke-width="1.75"></circle>
+<g class="counter-rotate-inner">
+<text fill="#f2ca50" font-family="'IBM Plex Mono', monospace" font-size="11" font-weight="700" text-anchor="middle" x="0" y="3.5">♃</text>
+<text fill="#D4AF37" font-family="'IBM Plex Mono', monospace" font-size="7" font-weight="600" text-anchor="middle" x="0" y="15">Can</text>
+</g>
+</g>
+</g>
+<!-- Central Pivot Gem -->
+<circle cx="170" cy="170" fill="#181124" r="16" stroke="#281c3a" stroke-width="1.5"></circle>
+<circle cx="170" cy="170" fill="#D4AF37" filter="url(#goldGlow)" r="7"></circle>
+<circle cx="170" cy="170" fill="#0e0917" r="2.5"></circle>
+</svg>
+</div>
+<!-- VISIBLY OPEN & ANCHORED WARM CALLOUT TOOLTIP (Design Law Update Requirement) -->
+<!-- Anchored right over the exact Saturn conjunction & House 8 vortex with beacon pulse -->
+<div class="absolute left-3 bottom-6 z-30 max-w-[270px] pointer-events-auto filter drop-shadow-[0_8px_20px_rgba(0,0,0,0.85)]">
+<!-- Small beacon pin targeting the aspect -->
+<div class="absolute -top-3 left-10 flex items-center justify-center pointer-events-none">
+<span class="w-3 h-3 rounded-full bg-gold-accent opacity-75 animate-beacon absolute"></span>
+<span class="w-2 h-2 rounded-full bg-gold-accent shadow-[0_0_8px_#D4AF37]"></span>
+</div>
+<div class="bg-[#1C1428] border border-gold-accent/70 rounded-xl p-3 shadow-2xl backdrop-blur-md relative">
+<div class="flex items-center justify-between gap-1.5 pb-1 mb-1.5 border-b border-[#281c3a]">
+<div class="flex items-center gap-1.5 min-w-0">
+<span class="font-astro-data-md text-xs font-bold text-gold-accent">♄ ☌ ♄</span>
+<span class="font-label-caps text-[9.5px] uppercase tracking-wider text-coral-accent font-semibold">House 8 · Exact 0°12'</span>
+</div>
+<span class="px-1.5 py-0.5 rounded text-[9px] font-mono font-bold bg-gold-accent/20 text-gold-accent border border-gold-accent/40">CALLOUT</span>
+</div>
+<p class="font-oracle-voice text-[13px] text-on-surface leading-snug">
+<strong class="text-gold-accent font-semibold not-italic font-sans text-xs">8 — Deep trust, shared mysteries &amp; emotional alchemy:</strong>
+<span class="italic text-on-surface-variant block mt-0.5">"Where two vessels intertwine permanently; deliberate commitments build an unshakeable fortress over decades."</span>
+</p>
+<div class="mt-2 flex items-center justify-between text-[10px] font-astro-data-md text-on-surface-variant/70 pt-1 border-t border-[#281c3a]/70">
+<span>Robin 26° Cap · Sam 26° Cap</span>
+<span class="text-gold-accent flex items-center gap-0.5 cursor-pointer hover:underline">
+        tap to pin <span class="material-symbols-outlined text-[11px]">push_pin</span>
+</span>
+</div>
+<!-- Little arrow notch pointing upward toward wheel -->
+<div class="absolute -top-1.5 left-9 w-3 h-3 bg-[#1C1428] border-t border-l border-gold-accent/70 rotate-45"></div>
+</div>
+</div>
+</div>
+<!-- Ring Identity Legend Indicator -->
+<div class="w-full flex items-center justify-around pt-3 bg-[#1C1428]/90 border border-[#281c3a] rounded-xl py-2 mt-1">
+<div class="flex items-center gap-2.5">
+<span class="w-3.5 h-3.5 rounded-full bg-gold-accent flex items-center justify-center shadow-[0_0_8px_rgba(212,175,55,0.7)]">
+<span class="w-1.5 h-1.5 rounded-full bg-background"></span>
+</span>
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm text-gold-accent leading-tight font-semibold">Robin</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant">Inner Torus · 24° Tau</span>
+</div>
+</div>
+<div class="h-6 w-[1px] bg-[#281c3a]"></div>
+<div class="flex items-center gap-2.5">
+<span class="w-3.5 h-3.5 rounded-full bg-coral-accent flex items-center justify-center shadow-[0_0_8px_rgba(242,163,140,0.7)]">
+<span class="w-1.5 h-1.5 rounded-full bg-background"></span>
+</span>
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm text-coral-accent leading-tight font-semibold">Sam</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant">Outer Torus · 12° Sco</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Resonance Brief Card -->
+<div class="bg-[#1C1428] rounded-xl p-space-md flex items-center justify-between shadow-sm border border-[#281c3a]">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-[#281c3a] flex items-center justify-center text-gold-accent shrink-0 border border-gold-accent/25">
+<span class="material-symbols-outlined text-[24px]">balance</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-headline-sm text-headline-sm text-on-surface truncate">Earth &amp; Water Dominance</span>
+<span class="font-oracle-voice text-oracle-voice text-on-surface-variant">Grounded anchors with mutual emotional receptivity.</span>
+</div>
+</div>
+<button aria-label="Audio reading of harmonic index" class="w-9 h-9 rounded-full bg-[#281c3a] flex items-center justify-center text-on-surface-variant hover:text-gold-accent transition-colors shrink-0 border border-[#2a1e3b]" type="button">
+<span class="material-symbols-outlined text-[18px]">graphic_eq</span>
+</button>
+</div>
+<!-- 3. CROSS-ASPECTS TABLE IN IBM PLEX MONO WITH HOVER/TAP CALLOUT BADGES -->
+<div class="bg-[#181024] rounded-xl overflow-hidden shadow-[0_4px_24px_rgba(0,0,0,0.55)] flex flex-col border border-[#281c3a] font-astro-data-md">
+<!-- Section Header -->
+<div class="px-space-md py-3 bg-[#1C1428] flex items-center justify-between border-b border-[#281c3a]">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-gold-accent">grain</span>
+<span class="font-label-caps text-label-caps uppercase tracking-wider text-on-surface font-semibold">INTER-CHART CROSS-ASPECTS</span>
+</div>
+<span class="font-astro-data-md text-astro-data-md text-gold-accent font-bold">6 ACTIVE</span>
+</div>
+<!-- Table Header Bar -->
+<div class="grid grid-cols-12 px-space-md py-2 bg-[#0e0917]/90 text-on-surface-variant font-label-caps text-label-caps uppercase tracking-wider border-b border-[#281c3a]">
+<div class="col-span-5">PAIR (ROBIN / SAM)</div>
+<div class="col-span-3 text-center">ASPECT</div>
+<div class="col-span-2 text-right">ORB</div>
+<div class="col-span-2 text-right">APPLY</div>
+</div>
+<!-- Cross-Aspect Rows (IBM Plex Mono with warm plain-language callout badges) -->
+<div class="divide-y divide-[#281c3a]/50 flex flex-col font-astro-data-md text-astro-data-md">
+<!-- Row 1: Trine Tau/Vir -->
+<div class="group relative flex flex-col px-space-md py-2.5 hover:bg-[#1C1428] transition-colors bg-[#181024] cursor-pointer" title="Earth trine: Natural understanding of physical needs &amp; quiet devotional rituals.">
+<div class="grid grid-cols-12 items-center">
+<div class="col-span-5 flex items-center gap-1.5 min-w-0">
+<span class="text-gold-accent font-semibold truncate">☉ Tau</span>
+<span class="text-on-surface-variant/40">/</span>
+<span class="text-coral-accent font-semibold truncate">☽ Vir</span>
+</div>
+<div class="col-span-3 flex items-center justify-center">
+<span class="px-2 py-0.5 rounded bg-[#281c3a] text-gold-accent font-label-caps text-[10px] tracking-wider flex items-center gap-1 border border-gold-accent/30">
+<span>△</span> TRINE
+</span>
+</div>
+<div class="col-span-2 text-right text-on-surface font-mono font-medium">0°22'</div>
+<div class="col-span-2 text-right font-mono text-gold-accent text-[12px] font-bold">APP</div>
+</div>
+<!-- Plain language callout badge expanding on hover/active -->
+<div class="mt-1 pt-1 text-[11px] font-oracle-voice italic text-gold-accent/90 border-t border-[#281c3a]/60 hidden group-hover:flex items-center gap-1.5 transition-all">
+<span class="material-symbols-outlined text-[13px] text-gold-accent">psychology</span>
+<span>"Steady physical sanctuary: Robin's grounded heart calms Sam's observant spirit effortlessly."</span>
+</div>
+</div>
+<!-- Row 2: Conjunction Ari/Ari -->
+<div class="group relative flex flex-col px-space-md py-2.5 hover:bg-[#1C1428] transition-colors bg-[#0e0917]/50 cursor-pointer" title="Aries conjunction: Fiery sexual chemistry and instinctive candid intimacy.">
+<div class="grid grid-cols-12 items-center">
+<div class="col-span-5 flex items-center gap-1.5 min-w-0">
+<span class="text-gold-accent font-semibold truncate">♀ Ari</span>
+<span class="text-on-surface-variant/40">/</span>
+<span class="text-coral-accent font-semibold truncate">♂ Ari</span>
+</div>
+<div class="col-span-3 flex items-center justify-center">
+<span class="px-2 py-0.5 rounded bg-[#281c3a] text-gold-accent font-label-caps text-[10px] tracking-wider flex items-center gap-1 border border-gold-accent/30">
+<span>☌</span> CONJ
+</span>
+</div>
+<div class="col-span-2 text-right text-on-surface font-mono font-medium">1°05'</div>
+<div class="col-span-2 text-right font-mono text-gold-accent text-[12px] font-bold">APP</div>
+</div>
+<div class="mt-1 pt-1 text-[11px] font-oracle-voice italic text-coral-accent border-t border-[#281c3a]/60 hidden group-hover:flex items-center gap-1.5 transition-all">
+<span class="material-symbols-outlined text-[13px] text-coral-accent">local_fire_department</span>
+<span>"Immediate spark: Desire and pursuit mirror each other with zero hesitation or artifice."</span>
+</div>
+</div>
+<!-- Row 3: Square Leo/Sco -->
+<div class="group relative flex flex-col px-space-md py-2.5 hover:bg-[#1C1428] transition-colors bg-[#181024] cursor-pointer" title="Fixed square: Passionate friction that burns off ego and deepens emotional resolve.">
+<div class="grid grid-cols-12 items-center">
+<div class="col-span-5 flex items-center gap-1.5 min-w-0">
+<span class="text-gold-accent font-semibold truncate">☽ Leo</span>
+<span class="text-on-surface-variant/40">/</span>
+<span class="text-coral-accent font-semibold truncate">☉ Sco</span>
+</div>
+<div class="col-span-3 flex items-center justify-center">
+<span class="px-2 py-0.5 rounded bg-[#281c3a] text-coral-accent font-label-caps text-[10px] tracking-wider flex items-center gap-1 border border-coral-accent/30">
+<span>□</span> SQUARE
+</span>
+</div>
+<div class="col-span-2 text-right text-on-surface font-mono font-medium">2°18'</div>
+<div class="col-span-2 text-right font-mono text-on-surface-variant text-[12px]">SEP</div>
+</div>
+<div class="mt-1 pt-1 text-[11px] font-oracle-voice italic text-coral-accent/90 border-t border-[#281c3a]/60 hidden group-hover:flex items-center gap-1.5 transition-all">
+<span class="material-symbols-outlined text-[13px] text-coral-accent">bolt</span>
+<span>"Creative catalytic tension: Generates heat and fierce loyalty once pride yields to trust."</span>
+</div>
+</div>
+<!-- Row 4: Sextile Gem/Leo -->
+<div class="group relative flex flex-col px-space-md py-2.5 hover:bg-[#1C1428] transition-colors bg-[#0e0917]/50 cursor-pointer" title="Air-Fire sextile: Continuous witty laughter, creative ideation, and shared joy.">
+<div class="grid grid-cols-12 items-center">
+<div class="col-span-5 flex items-center gap-1.5 min-w-0">
+<span class="text-gold-accent font-semibold truncate">☿ Gem</span>
+<span class="text-on-surface-variant/40">/</span>
+<span class="text-coral-accent font-semibold truncate">♀ Leo</span>
+</div>
+<div class="col-span-3 flex items-center justify-center">
+<span class="px-2 py-0.5 rounded bg-[#281c3a] text-tertiary font-label-caps text-[10px] tracking-wider flex items-center gap-1 border border-tertiary/30">
+<span>⚹</span> SEXTILE
+</span>
+</div>
+<div class="col-span-2 text-right text-on-surface font-mono font-medium">0°45'</div>
+<div class="col-span-2 text-right font-mono text-gold-accent text-[12px] font-bold">APP</div>
+</div>
+<div class="mt-1 pt-1 text-[11px] font-oracle-voice italic text-tertiary border-t border-[#281c3a]/60 hidden group-hover:flex items-center gap-1.5 transition-all">
+<span class="material-symbols-outlined text-[13px] text-tertiary">chat</span>
+<span>"Effortless intellectual play: Conversations spark new dreams that leave both feeling celebrated."</span>
+</div>
+</div>
+<!-- Row 5: Conjunction Cap/Cap (Highlighted Exact Anchor Row) -->
+<div class="group relative flex flex-col px-space-md py-2.5 bg-[#1C1428] border-l-2 border-gold-accent cursor-pointer" title="Saturn conjunction: Unbreakable karmic covenant and joint empire building.">
+<div class="grid grid-cols-12 items-center">
+<div class="col-span-5 flex items-center gap-1.5 min-w-0">
+<span class="text-gold-accent font-semibold truncate">♄ Cap</span>
+<span class="text-on-surface-variant/40">/</span>
+<span class="text-coral-accent font-semibold truncate">♄ Cap</span>
+</div>
+<div class="col-span-3 flex items-center justify-center">
+<span class="px-2 py-0.5 rounded bg-gold-accent/20 text-gold-accent font-label-caps text-[10px] tracking-wider flex items-center gap-1 border border-gold-accent/40 font-bold">
+<span>☌</span> CONJ
+</span>
+</div>
+<div class="col-span-2 text-right text-gold-accent font-mono font-bold">0°12'</div>
+<div class="col-span-2 text-right font-mono text-gold-accent text-[11px] font-extrabold tracking-wider">EXACT</div>
+</div>
+<!-- Callout badge persistently visible for this row as anchor illustration -->
+<div class="mt-1.5 pt-1 text-[11.5px] font-oracle-voice italic text-gold-accent border-t border-gold-accent/20 flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[13px] text-gold-accent">shield</span>
+<span>"Architectural Sanctuary: Mutual patience and steadfast vows that endure through decades."</span>
+</div>
+</div>
+<!-- Row 6: Trine Can/Pis -->
+<div class="group relative flex flex-col px-space-md py-2.5 hover:bg-[#1C1428] transition-colors bg-[#0e0917]/50 cursor-pointer" title="Water trine: Intuitive emotional sanctuary and unspoken psychic understanding.">
+<div class="grid grid-cols-12 items-center">
+<div class="col-span-5 flex items-center gap-1.5 min-w-0">
+<span class="text-gold-accent font-semibold truncate">♃ Can</span>
+<span class="text-on-surface-variant/40">/</span>
+<span class="text-coral-accent font-semibold truncate">♆ Pis</span>
+</div>
+<div class="col-span-3 flex items-center justify-center">
+<span class="px-2 py-0.5 rounded bg-[#281c3a] text-gold-accent font-label-caps text-[10px] tracking-wider flex items-center gap-1 border border-gold-accent/30">
+<span>△</span> TRINE
+</span>
+</div>
+<div class="col-span-2 text-right text-on-surface font-mono font-medium">1°30'</div>
+<div class="col-span-2 text-right font-mono text-on-surface-variant text-[12px]">SEP</div>
+</div>
+<div class="mt-1 pt-1 text-[11px] font-oracle-voice italic text-gold-accent/90 border-t border-[#281c3a]/60 hidden group-hover:flex items-center gap-1.5 transition-all">
+<span class="material-symbols-outlined text-[13px] text-gold-accent">water_drop</span>
+<span>"Sanctuary of grace: A restorative refuge where vulnerabilities are held with sacred care."</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- 2. DOCKED OPEN COMPANION CONVERSATION SHEET (Bottom right/bottom open with warm voice, speaker icon & composer pill) -->
+<aside class="fixed bottom-16 left-0 right-0 z-40 px-3 pb-2 pt-1 pointer-events-auto">
+<div class="mx-auto max-w-lg bg-[#1C1428]/95 backdrop-blur-xl border border-gold-accent/35 rounded-2xl p-3.5 shadow-[0_-8px_32px_rgba(10,6,16,0.9)] flex flex-col gap-2.5 transition-all">
+<!-- Top Bar of Companion Sheet: Avatar Icon + Identity Tagline + Audio Replay -->
+<div class="flex items-center justify-between pb-1.5 border-b border-[#281c3a]">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-gradient-to-tr from-gold-accent to-[#f2ca50] flex items-center justify-center text-[#3c2f00] shadow-[0_0_8px_rgba(212,175,55,0.6)]">
+<span class="material-symbols-outlined text-[14px]">auto_awesome</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-xs text-gold-accent font-semibold leading-none">Natally</span>
+<span class="font-oracle-voice text-[11px] text-on-surface-variant italic">The companion that knows you.</span>
+</div>
+</div>
+<!-- Small Speaker Replay Icon ('volume_up') & Sheet indicator -->
+<div class="flex items-center gap-1.5">
+<button aria-label="Replay vocal synthesized turn" class="w-7 h-7 rounded-full bg-[#281c3a] hover:bg-[#36274e] flex items-center justify-center text-gold-accent transition-colors border border-gold-accent/25 shadow-sm" type="button">
+<span class="material-symbols-outlined text-[16px]">volume_up</span>
+</button>
+<div class="w-1.5 h-1.5 rounded-full bg-gold-accent animate-ping"></div>
+</div>
+</div>
+<!-- Natally's Warm Spoken Turn in Fraunces -->
+<div class="relative pl-2.5 border-l-2 border-gold-accent/70">
+<p class="font-headline-md text-[15px] sm:text-[16px] text-on-surface leading-snug font-normal italic tracking-normal">
+          "Robin and Sam, your Saturn conjunction in Capricorn builds an architectural sanctuary; what begins deliberate will withstand decades."
+        </p>
+</div>
+<!-- Composer Pill -->
+<div class="mt-0.5 flex items-center gap-2 bg-[#0e0917]/95 rounded-full px-3 py-1.5 border border-[#281c3a] focus-within:border-gold-accent/60 transition-colors shadow-inner">
+<span class="material-symbols-outlined text-[18px] text-on-surface-variant">chat_bubble_outline</span>
+<input class="flex-1 bg-transparent border-none text-body-sm text-on-surface placeholder-on-surface-variant/60 focus:outline-none focus:ring-0 text-[13px]" placeholder="Ask Natally about Robin &amp; Sam..." type="text"/>
+<button aria-label="Send inquiry" class="w-7 h-7 rounded-full bg-gold-accent flex items-center justify-center text-[#3c2f00] hover:scale-105 active:scale-95 transition-transform shrink-0 shadow-sm">
+<span class="material-symbols-outlined text-[15px]">arrow_upward</span>
+</button>
+</div>
+</div>
+</aside>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 w-full z-50 pb-safe bg-[#0e0917]/95 backdrop-blur-xl border-t border-[#281c3a] shadow-[0_-4px_24px_rgba(10,6,16,0.7)]" data-active-classes="text-gold-accent font-semibold">
+<div class="flex justify-around items-center h-16 px-space-sm">
+<a class="flex flex-col items-center justify-center w-16 h-14 text-on-surface-variant transition-colors gap-0.5 hover:text-on-surface" data-path="oracle" href="#">
+<span class="material-symbols-outlined text-[24px]">auto_awesome</span>
+<span class="font-label-caps text-label-caps uppercase tracking-wider">Oracle</span>
+</a>
+<a aria-current="page" class="flex flex-col items-center justify-center w-16 h-14 transition-colors gap-0.5 text-gold-accent font-semibold" data-path="atlas" href="#">
+<span class="material-symbols-outlined text-[24px]" style="font-variation-settings: 'FILL' 1;">explore</span>
+<span class="font-label-caps text-label-caps uppercase tracking-wider">Atlas</span>
+</a>
+<a class="flex flex-col items-center justify-center w-16 h-14 text-on-surface-variant transition-colors gap-0.5 hover:text-on-surface" data-path="people" href="#">
+<span class="material-symbols-outlined text-[24px]">group</span>
+<span class="font-label-caps text-label-caps uppercase tracking-wider">People</span>
+</a>
+<a class="flex flex-col items-center justify-center w-16 h-14 text-on-surface-variant transition-colors gap-0.5 hover:text-on-surface" data-path="sanctum" href="#">
+<span class="material-symbols-outlined text-[24px]">lock_clock</span>
+<span class="font-label-caps text-label-caps uppercase tracking-wider">Sanctum</span>
+</a>
+</div>
+</nav>
+</body></html>

@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..700&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;family=Nunito+Sans:ital,wght@0,300..900;1,300..900&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{width:100%;margin:0;padding:0;background-color:#161021;color:#eadef6;}body{overscroll-behavior:none;-webkit-tap-highlight-color:transparent;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}@keyframes drift{0%{background-position:0 0, 0 0;}100%{background-position:500px 1000px, 200px 400px;}}.starfield-bg{background-color:#120C1C;background-image:radial-gradient(1px 1px at 25px 35px, rgba(241, 232, 216, 0.45), transparent), radial-gradient(1px 1px at 85px 120px, rgba(212, 175, 55, 0.35), transparent), radial-gradient(1.5px 1.5px at 160px 220px, rgba(155, 176, 251, 0.3), transparent);background-size:250px 250px, 350px 350px, 450px 450px;animation:drift 160s linear infinite;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { colors: { "tertiary-fixed-dim": "#b5c4ff", "on-secondary-fixed": "#380d02", "surface-tint": "#e9c349", "on-tertiary": "#122b6e", "on-surface-variant": "#d0c5af", "tertiary-fixed": "#dce1ff", "on-error-container": "#ffdad6", "secondary-fixed-dim": "#ffb59f", "primary-container": "#d4af37", "on-primary-fixed-variant": "#574500", "on-primary": "#3c2f00", "on-tertiary-container": "#2b4184", "on-primary-fixed": "#241a00", "error-container": "#93000a", "tertiary": "#c0cdff", "on-secondary-fixed-variant": "#6f3726", "on-tertiary-fixed-variant": "#2d4386", "on-secondary": "#532112", "surface-container-lowest": "#110b1b", "tertiary-container": "#9bb0fb", "background": "#161021", "secondary-container": "#723928", "inverse-primary": "#735c00", "inverse-surface": "#eadef6", "surface-container-low": "#1f1929", "primary-fixed-dim": "#e9c349", "inverse-on-surface": "#342d3f", "surface-bright": "#3d3648", "on-error": "#690005", "on-surface": "#eadef6", "surface-variant": "#393243", "on-tertiary-fixed": "#00164d", "error": "#ffb4ab", "surface-dim": "#161021", "on-secondary-container": "#f4a58e", "surface-container-high": "#2e2738", "secondary": "#ffb59f", "primary": "#f2ca50", "primary-fixed": "#ffe088", "surface-container-highest": "#393243", "secondary-fixed": "#ffdbd1", "surface-container": "#231d2d", "outline": "#99907c", "outline-variant": "#4d4635", "on-primary-container": "#554300", "on-background": "#eadef6", "surface": "#161021" }, borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, spacing: { "gutter": "1rem", "space-xl": "2.5rem", "margin-tablet": "2rem", "space-md": "1rem", "space-sm": "0.5rem", "gutter-desktop": "1.5rem", "margin": "1rem", "space-xs": "0.25rem", "space-lg": "1.5rem", "margin-desktop": "3rem" }, fontFamily: { "display-lg-mobile": ["Fraunces"], "display-lg": ["Fraunces"], "body-md": ["Nunito Sans"], "oracle-voice": ["Fraunces"], "astro-data-lg": ["IBM Plex Mono"], "headline-md": ["Fraunces"], "astro-data-md": ["IBM Plex Mono"], "label-caps": ["IBM Plex Mono"], "body-lg": ["Nunito Sans"], "headline-lg": ["Fraunces"], "headline-sm": ["Fraunces"], "body-sm": ["Nunito Sans"] }, fontSize: { "display-lg-mobile": ["30px", { lineHeight: "38px", letterSpacing: "-0.01em", fontWeight: "600" }], "display-lg": ["40px", { lineHeight: "48px", letterSpacing: "-0.02em", fontWeight: "600" }], "body-md": ["15px", { lineHeight: "22px", fontWeight: "400" }], "oracle-voice": ["16px", { lineHeight: "24px", letterSpacing: "0.01em", fontWeight: "400" }], "astro-data-lg": ["16px", { lineHeight: "22px", fontWeight: "500" }], "headline-md": ["22px", { lineHeight: "30px", fontWeight: "500" }], "astro-data-md": ["13px", { lineHeight: "18px", fontWeight: "400" }], "label-caps": ["11px", { lineHeight: "14px", letterSpacing: "0.08em", fontWeight: "600" }], "body-lg": ["17px", { lineHeight: "26px", fontWeight: "400" }], "headline-lg": ["28px", { lineHeight: "36px", letterSpacing: "-0.01em", fontWeight: "500" }], "headline-sm": ["18px", { lineHeight: "26px", fontWeight: "600" }], "body-sm": ["13px", { lineHeight: "18px", fontWeight: "400" }] } } } }</script></head><body class="min-h-screen starfield-bg text-on-surface font-body-md text-body-md flex flex-col relative overflow-x-hidden selection:bg-primary-container selection:text-on-primary"><main class="flex-1 flex flex-col relative w-full bg-transparent"><div class="flex flex-col w-full relative select-none overflow-hidden pb-safe">
+<!-- Subtle ambient glow layered behind center astrolabe core -->
+<div class="absolute inset-0 pointer-events-none flex items-center justify-center">
+<div class="w-80 h-80 rounded-full bg-primary/5 blur-3xl transform scale-125"></div>
+<div class="w-48 h-48 rounded-full bg-tertiary-container/10 blur-2xl"></div>
+</div>
+<!-- Decorative Celestial Chart lines in background (Hair-thin SVG geometry) -->
+<svg class="absolute inset-0 w-full h-full pointer-events-none opacity-30" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<radialgradient cx="50%" cy="45%" id="celestial-fade" r="50%">
+<stop offset="0%" stop-color="#F2CA50" stop-opacity="0.4"></stop>
+<stop offset="60%" stop-color="#C0CDFF" stop-opacity="0.15"></stop>
+<stop offset="100%" stop-color="#161021" stop-opacity="0"></stop>
+</radialgradient>
+</defs>
+<!-- Concentric Celestial rings -->
+<circle class="text-tertiary-fixed-dim/20" cx="50%" cy="44%" fill="none" r="130" stroke="currentColor" stroke-dasharray="2 6"></circle>
+<circle class="text-primary/20" cx="50%" cy="44%" fill="none" r="180" stroke="currentColor" stroke-dasharray="4 8"></circle>
+<circle class="text-tertiary/10" cx="50%" cy="44%" fill="none" r="240" stroke="currentColor" stroke-width="0.5"></circle>
+<!-- Constellation Node lines -->
+<line stroke="#9BB0FB" stroke-opacity="0.35" stroke-width="0.75" x1="15%" x2="42%" y1="28%" y2="38%"></line>
+<line stroke="#F2CA50" stroke-opacity="0.4" stroke-width="0.75" x1="42%" x2="58%" y1="38%" y2="35%"></line>
+<line stroke="#C0CDFF" stroke-opacity="0.3" stroke-width="0.75" x1="58%" x2="84%" y1="35%" y2="24%"></line>
+<line stroke="#D4AF37" stroke-opacity="0.3" stroke-width="0.75" x1="28%" x2="50%" y1="62%" y2="58%"></line>
+<line stroke="#9BB0FB" stroke-opacity="0.25" stroke-width="0.75" x1="50%" x2="76%" y1="58%" y2="68%"></line>
+<!-- Tiny star nodes -->
+<circle cx="15%" cy="28%" fill="#F1E8D8" opacity="0.8" r="1.5"></circle>
+<circle cx="42%" cy="38%" fill="#D4AF37" opacity="0.9" r="2"></circle>
+<circle cx="58%" cy="35%" fill="#F1E8D8" opacity="0.75" r="1.5"></circle>
+<circle cx="84%" cy="24%" fill="#9BB0FB" opacity="0.8" r="2"></circle>
+<circle cx="28%" cy="62%" fill="#9BB0FB" opacity="0.7" r="1.5"></circle>
+<circle cx="50%" cy="58%" fill="#F2CA50" opacity="0.85" r="2"></circle>
+<circle cx="76%" cy="68%" fill="#F1E8D8" opacity="0.7" r="1.5"></circle>
+</svg>
+<!-- Top Coordinates & Ephemeris Horizon Header -->
+<div class="w-full flex items-center justify-between px-6 pt-4 pb-2 z-10 text-on-surface-variant/70">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-sm" style="font-variation-settings: 'FILL' 1;">explore</span>
+<span class="font-astro-data-md text-astro-data-md tracking-wider">OBSERVATORY · IV</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+<span class="font-label-caps text-label-caps tracking-widest text-primary/80">ALIGNED</span>
+</div>
+</div>
+<!-- Primary Centerpiece Container -->
+<div class="flex flex-col items-center justify-center px-8 py-20 my-auto z-10 text-center">
+<!-- Astrological Emblem with Dial Ring Aura -->
+<div class="relative flex items-center justify-center mb-8">
+<!-- Outer Rotating Astrolabe Halo -->
+<div class="absolute w-24 h-24 rounded-full bg-surface-container-high/60 shadow-xl flex items-center justify-center transition-transform duration-1000">
+<svg class="w-full h-full text-primary/30" viewbox="0 0 100 100">
+<circle cx="50" cy="50" fill="none" r="46" stroke="currentColor" stroke-dasharray="3 5" stroke-width="1"></circle>
+<circle cx="50" cy="50" fill="none" r="41" stroke="currentColor" stroke-opacity="0.5" stroke-width="0.5"></circle>
+<line stroke="currentColor" stroke-width="1.5" x1="50" x2="50" y1="2" y2="8"></line>
+<line stroke="currentColor" stroke-width="1.5" x1="50" x2="50" y1="92" y2="98"></line>
+<line stroke="currentColor" stroke-width="1.5" x1="2" x2="8" y1="50" y2="50"></line>
+<line stroke="currentColor" stroke-width="1.5" x1="92" x2="98" y1="50" y2="50"></line>
+</svg>
+</div>
+<!-- Center Talisman Image Plate -->
+<div class="relative w-16 h-16 rounded-xl bg-surface-container-low shadow-2xl flex items-center justify-center p-2 z-10">
+<img alt="natally Astrological Emblem" class="w-12 h-12 rounded-lg object-contain filter drop-shadow-[0_0_8px_rgba(212,175,55,0.4)]" src="https://lh3.googleusercontent.com/aida/AEtjO1UvHX1F33XQQrpxUU1G1YHVM9xDpt4c_veC4clHdq3tjZn8XMSqPypOaHS_48eQPfyt5pEXymsTE14z7qcZbAkcGIJivsSuCPBQlkb5sKrpiT6R5yML8qta2SSA3WqPVQX1NGEyH0-L4anpnZhYfe_rpSy2ZjQHW9Zx5lNKOPHcSPjRMw62LDvFv15IBxQW1TFrsdRSX3NdsY5vFebG8nrNrtYLoqwCuHmFFE8G-sycSgVDA4Y_XKL76KU"/>
+</div>
+<!-- Ambient Sparkle Icon Accent -->
+<div class="absolute -top-2 -right-2 text-primary-fixed animate-bounce" style="animation-duration: 3s;">
+<span class="material-symbols-outlined text-xs">auto_awesome</span>
+</div>
+</div>
+<!-- Wordmark: "natally" with Typewriter Text Container -->
+<div class="min-h-[46px] flex items-center justify-center">
+<h1 class="font-display-lg-mobile text-display-lg-mobile text-on-surface tracking-tight flex items-center">
+<span class="transition-opacity duration-150" id="typewriter-target"></span>
+<span class="inline-block w-0.5 h-7 ml-0.5 bg-primary rounded-full animate-pulse" id="cursor-caret"></span>
+</h1>
+</div>
+<!-- Subtitle: Companion Identity in Warm Muted Plum/Taupe -->
+<p class="font-body-md text-body-md text-on-surface-variant/90 mt-2.5 max-w-xs tracking-wide">
+      your natal astrology companion
+    </p>
+<!-- Celestial Micro Metrics Capsule -->
+<div class="mt-8 flex items-center gap-3 px-3.5 py-1.5 rounded-full bg-surface-container-low/80 shadow-inner">
+<div class="flex items-center gap-1 text-primary">
+<span class="material-symbols-outlined text-xs">nightlight</span>
+<span class="font-astro-data-md text-astro-data-md text-primary">☽ 14° TAU</span>
+</div>
+<span class="text-surface-variant text-xs">•</span>
+<div class="flex items-center gap-1 text-tertiary-fixed-dim">
+<span class="material-symbols-outlined text-xs">wb_sunny</span>
+<span class="font-astro-data-md text-astro-data-md text-tertiary-fixed-dim">☉ 28° SCO</span>
+</div>
+<span class="text-surface-variant text-xs">•</span>
+<div class="flex items-center gap-1 text-secondary">
+<span class="material-symbols-outlined text-xs">cyclone</span>
+<span class="font-astro-data-md text-astro-data-md text-secondary">ASC 04° VIR</span>
+</div>
+</div>
+</div>
+<!-- Lower Mechanical Telemetry & Calibrating Progression Block -->
+<div class="w-full px-6 pb-10 z-10 flex flex-col gap-4">
+<!-- Telemetry Readout Card -->
+<div class="w-full bg-surface-container-low rounded-xl p-4 shadow-lg flex flex-col gap-2.5">
+<!-- Status Line & Real-time Astrometric Coordinates -->
+<div class="flex items-center justify-between text-on-surface-variant">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-sm text-primary animate-spin" style="animation-duration: 8s;">sync</span>
+<span class="font-label-caps text-label-caps text-primary tracking-wider" id="telemetry-label">
+            CALIBRATING EPHEMERIS
+          </span>
+</div>
+<span class="font-astro-data-md text-astro-data-md text-tertiary-fixed-dim" id="coordinate-readout">
+          42°N 12°E · 18:24:00 UTC
+        </span>
+</div>
+<!-- Real Loading Bar & IBM Plex Mono String -->
+<div class="w-full flex items-center justify-between font-astro-data-md text-astro-data-md text-on-surface-variant pt-1">
+<span class="text-primary font-astro-data-lg text-astro-data-lg tracking-widest leading-none" id="ascii-bar">
+          [||||||····]
+        </span>
+<span class="text-on-surface font-astro-data-md text-astro-data-md font-semibold" id="progress-percent">
+          64%
+        </span>
+</div>
+<!-- Sleek Fill Bar Component -->
+<div class="w-full h-1 bg-surface-container rounded-full overflow-hidden mt-0.5">
+<div class="h-full bg-primary-container rounded-full transition-all duration-300 ease-out" id="smooth-progress-fill" style="width: 64%;"></div>
+</div>
+</div>
+<!-- Footnote: Observatory Instrument Status -->
+<div class="flex items-center justify-center gap-2 text-center text-on-surface-variant/60">
+<span class="font-astro-data-md text-astro-data-md">
+        SWISS EPHEMERIS ENGINE · DE-441 HIGH PRECISION
+      </span>
+</div>
+</div>
+</div>
+<script>
+  (function() {
+    // Typewriter effect for "natally"
+    const targetText = "natally";
+    const typewriterElement = document.getElementById("typewriter-target");
+    let charIndex = 0;
+
+    function typeCharacter() {
+      if (!typewriterElement) return;
+      if (charIndex < targetText.length) {
+        typewriterElement.textContent += targetText.charAt(charIndex);
+        charIndex++;
+        setTimeout(typeCharacter, 140 + Math.random() * 80);
+      }
+    }
+
+    // Start typewriter after a soft celestial pause
+    setTimeout(typeCharacter, 350);
+
+    // Live loading bar and telemetry progression simulator
+    const progressPercentEl = document.getElementById("progress-percent");
+    const asciiBarEl = document.getElementById("ascii-bar");
+    const fillEl = document.getElementById("smooth-progress-fill");
+    const telemetryLabelEl = document.getElementById("telemetry-label");
+
+    let currentPercent = 64;
+    const stages = [
+      { max: 75, text: "CALIBRATING EPHEMERIS" },
+      { max: 88, text: "SYNCHRONIZING HOUSES" },
+      { max: 96, text: "CALCULATING RETROGRADES" },
+      { max: 100, text: "CHART READY" }
+    ];
+
+    function updateAsciiBar(pct) {
+      const totalTicks = 10;
+      const filledCount = Math.min(totalTicks, Math.floor((pct / 100) * totalTicks));
+      const emptyCount = Math.max(0, totalTicks - filledCount);
+      return "[" + "|".repeat(filledCount) + "·".repeat(emptyCount) + "]";
+    }
+
+    const interval = setInterval(function() {
+      if (currentPercent < 100) {
+        currentPercent += 1;
+        if (progressPercentEl) progressPercentEl.textContent = currentPercent + "%";
+        if (fillEl) fillEl.style.width = currentPercent + "%";
+        if (asciiBarEl) asciiBarEl.textContent = updateAsciiBar(currentPercent);
+
+        // Update telemetry label as percentage climbs
+        const currentStage = stages.find(function(s) { return currentPercent <= s.max; });
+        if (currentStage && telemetryLabelEl) {
+          telemetryLabelEl.textContent = currentStage.text;
+        }
+      } else {
+        clearInterval(interval);
+      }
+    }, 180);
+  })();
+</script></main></body></html>

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;family=Nunito+Sans:wght@300;400;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{width:100vw;margin:0;padding:0;}body{overscroll-behavior:none;background-color:#161021;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: 'class', theme: { extend: { colors: { 'surface-container-low': '#1f1929', 'on-primary': '#3c2f00', 'surface-tint': '#e9c349', 'on-error-container': '#ffdad6', 'on-error': '#690005', 'primary-container': '#d4af37', 'on-secondary-fixed-variant': '#6f3726', 'tertiary-fixed-dim': '#b5c4ff', 'on-tertiary': '#122b6e', 'surface-container': '#231d2d', 'on-tertiary-fixed-variant': '#2d4386', 'inverse-surface': '#eadef6', 'on-secondary': '#532112', 'on-primary-fixed': '#241a00', 'on-primary-fixed-variant': '#574500', 'tertiary-fixed': '#dce1ff', 'surface': '#161021', 'on-secondary-fixed': '#380d02', 'surface-bright': '#3d3648', 'surface-container-lowest': '#110b1b', 'outline': '#99907c', 'on-tertiary-container': '#2b4184', 'primary-fixed': '#ffe088', 'secondary-fixed': '#ffdbd1', 'primary-fixed-dim': '#e9c349', 'surface-variant': '#393243', 'tertiary-container': '#9bb0fb', 'inverse-primary': '#735c00', 'on-surface-variant': '#d0c5af', 'on-background': '#eadef6', 'surface-dim': '#161021', 'inverse-on-surface': '#342d3f', 'secondary-container': '#723928', 'surface-container-high': '#2e2738', 'secondary': '#ffb59f', 'tertiary': '#c0cdff', 'secondary-fixed-dim': '#ffb59f', 'on-surface': '#eadef6', 'surface-container-highest': '#393243', 'error': '#ffb4ab', 'on-primary-container': '#554300', 'error-container': '#93000a', 'on-tertiary-fixed': '#00164d', 'outline-variant': '#4d4635', 'background': '#161021', 'on-secondary-container': '#f4a58e', 'primary': '#f2ca50' }, borderRadius: { 'DEFAULT': '0.25rem', 'lg': '0.5rem', 'xl': '0.75rem', 'full': '9999px' }, spacing: { 'space-sm': '0.5rem', 'margin-tablet': '2rem', 'space-lg': '1.5rem', 'space-xs': '0.25rem', 'margin': '1rem', 'space-xl': '2.5rem', 'margin-desktop': '3rem', 'gutter-desktop': '1.5rem', 'gutter': '1rem', 'space-md': '1rem' }, fontFamily: { 'astro-data-lg': ['IBM Plex Mono'], 'label-caps': ['IBM Plex Mono'], 'oracle-voice': ['Fraunces'], 'body-sm': ['Nunito Sans'], 'display-lg': ['Fraunces'], 'headline-md': ['Fraunces'], 'headline-sm': ['Fraunces'], 'astro-data-md': ['IBM Plex Mono'], 'body-md': ['Nunito Sans'], 'display-lg-mobile': ['Fraunces'], 'headline-lg': ['Fraunces'], 'body-lg': ['Nunito Sans'] }, fontSize: { 'astro-data-lg': ['16px', { lineHeight: '22px', fontWeight: '500' }], 'label-caps': ['11px', { lineHeight: '14px', letterSpacing: '0.08em', fontWeight: '600' }], 'oracle-voice': ['16px', { lineHeight: '24px', letterSpacing: '0.01em', fontWeight: '400' }], 'body-sm': ['13px', { lineHeight: '18px', fontWeight: '400' }], 'display-lg': ['40px', { lineHeight: '48px', letterSpacing: '-0.02em', fontWeight: '600' }], 'headline-md': ['22px', { lineHeight: '30px', fontWeight: '500' }], 'headline-sm': ['18px', { lineHeight: '26px', fontWeight: '600' }], 'astro-data-md': ['13px', { lineHeight: '18px', fontWeight: '400' }], 'body-md': ['15px', { lineHeight: '22px', fontWeight: '400' }], 'display-lg-mobile': ['30px', { lineHeight: '38px', letterSpacing: '-0.01em', fontWeight: '600' }], 'headline-lg': ['28px', { lineHeight: '36px', letterSpacing: '-0.01em', fontWeight: '500' }], 'body-lg': ['17px', { lineHeight: '26px', fontWeight: '400' }] } } } };</script><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head><body class="bg-surface text-on-surface font-body-md text-body-md flex flex-col min-h-screen"><header class="fixed top-0 w-full z-50 pt-safe bg-surface/85 backdrop-blur-xl shadow-[0_4px_24px_rgba(8,4,14,0.6)]"><div class="h-16 px-4 flex items-center justify-between gap-3"><div class="flex items-center gap-2.5 min-w-0"><img alt="Brand logo. - Primary color: #d4af37
+- Font: publicSans
+- Mode: dark
+- Roundness: rounded-md
+" class="h-8 w-auto object-contain flex-shrink-0" src="https://lh3.googleusercontent.com/aida/AEtjO1UvHX1F33XQQrpxUU1G1YHVM9xDpt4c_veC4clHdq3tjZn8XMSqPypOaHS_48eQPfyt5pEXymsTE14z7qcZbAkcGIJivsSuCPBQlkb5sKrpiT6R5yML8qta2SSA3WqPVQX1NGEyH0-L4anpnZhYfe_rpSy2ZjQHW9Zx5lNKOPHcSPjRMw62LDvFv15IBxQW1TFrsdRSX3NdsY5vFebG8nrNrtYLoqwCuHmFFE8G-sycSgVDA4Y_XKL76KU"/><div class="flex flex-col min-w-0"><span class="font-headline-sm text-headline-sm text-primary tracking-tight truncate">Natally</span><span class="font-astro-data-md text-astro-data-md text-on-surface-variant truncate text-[11px] leading-3">Sanctum</span></div></div><div class="flex items-center gap-2 flex-shrink-0"><div class="px-2.5 py-1 rounded-full bg-surface-container-high flex items-center gap-1.5 shadow-[inset_0_1px_2px_rgba(0,0,0,0.4)]"><span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span><span class="font-label-caps text-label-caps text-tertiary uppercase tracking-widest">☉ 24° ♈</span></div><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center flex-shrink-0"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="flex-1 flex flex-col relative w-full pt-16 pb-24 bg-surface"><div class="flex flex-col w-full px-4 py-4 space-y-6">
+<!-- Top Navigation & Sanctum Heirloom Badge -->
+<div class="flex items-center justify-between w-full">
+<button aria-label="Dismiss view" class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors shadow-sm" type="button">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+<div class="px-3 py-1 rounded-full bg-surface-container-high flex items-center gap-1.5 shadow-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+<span class="font-label-caps text-label-caps text-tertiary uppercase tracking-widest">SANCTUM // HEIRLOOM</span>
+</div>
+<div class="w-10 h-10 flex items-center justify-center opacity-0 pointer-events-none">
+<span class="material-symbols-outlined">close</span>
+</div>
+</div>
+<!-- Warm Solitary Voice Intro -->
+<div class="flex flex-col items-center text-center px-3 space-y-2">
+<div class="w-7 h-7 rounded-full bg-surface-container-high flex items-center justify-center text-primary mb-1">
+<span class="material-symbols-outlined text-[16px]">all_inclusive</span>
+</div>
+<h1 class="font-headline-md text-headline-md text-on-surface font-medium">An unhurried passage.</h1>
+<p class="font-oracle-voice text-oracle-voice italic text-on-surface-variant max-w-sm leading-relaxed">
+      “Three readings were yours to wander. If our conversations have earned a place in your observatory, unlock natally permanently. She will keep your skies forever.”
+    </p>
+</div>
+<!-- Plate 1: Trial State -->
+<div class="w-full rounded-xl bg-surface-container-low p-4 space-y-3.5 shadow-md relative overflow-hidden">
+<div class="flex items-center justify-between">
+<span class="font-headline-sm text-headline-sm text-on-surface font-medium">Trial · where you are</span>
+<span class="font-label-caps text-label-caps text-tertiary bg-surface-container px-2 py-0.5 rounded-full">2 of 3 readings</span>
+</div>
+<!-- Stepper indicators -->
+<div class="bg-surface-container p-3 rounded-lg flex flex-col space-y-2.5">
+<div class="flex items-center gap-2">
+<span class="font-astro-data-lg text-astro-data-lg text-primary tracking-wider">[●]</span>
+<span class="font-astro-data-lg text-astro-data-lg text-primary tracking-wider">[●]</span>
+<span class="font-astro-data-lg text-astro-data-lg text-outline tracking-wider">[○]</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase ml-2 tracking-wider">trial model</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+        1 complimentary inquiry remains in this solar cycle.
+      </p>
+</div>
+<div class="flex items-center gap-2 text-on-surface-variant pt-0.5">
+<span class="material-symbols-outlined text-[15px] text-outline">lock_clock</span>
+<span class="font-astro-data-md text-astro-data-md">Constrained to temporary volatile cache &amp; 0.6B baseline engine</span>
+</div>
+</div>
+<!-- Plate 2: Unlimited Heirloom Definition -->
+<div class="w-full rounded-xl bg-surface-container-low p-4 space-y-4 shadow-xl relative overflow-hidden">
+<div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-primary/10 via-transparent to-transparent pointer-events-none"></div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[20px]" style="font-variation-settings: 'FILL' 1;">stars</span>
+<span class="font-headline-sm text-headline-sm text-on-surface font-semibold">Unlimited · what it is</span>
+</div>
+<span class="font-label-caps text-label-caps text-primary uppercase tracking-widest">PERPETUAL</span>
+</div>
+<!-- Feature Rows -->
+<div class="space-y-3 pt-1">
+<div class="flex items-start gap-3">
+<span class="font-astro-data-md text-astro-data-md text-primary mt-0.5 flex-shrink-0">☉</span>
+<span class="font-body-md text-body-md text-on-surface">Unlimited natal readings &amp; ephemeris consultations</span>
+</div>
+<div class="flex items-start gap-3">
+<span class="font-astro-data-md text-astro-data-md text-primary mt-0.5 flex-shrink-0">✦</span>
+<span class="font-body-md text-body-md text-on-surface">All local models unlocked (Qwen3 1.5B &amp; deep astrolabe)</span>
+</div>
+<div class="flex items-start gap-3">
+<span class="font-astro-data-md text-astro-data-md text-primary mt-0.5 flex-shrink-0">☉</span>
+<span class="font-body-md text-body-md text-on-surface">Full synastry bi-wheels &amp; transit alerts for unlimited people</span>
+</div>
+<div class="flex items-start gap-3">
+<span class="font-astro-data-md text-astro-data-md text-primary mt-0.5 flex-shrink-0">✦</span>
+<span class="font-body-md text-body-md text-on-surface">Lore memory: permanent encrypted radix archive</span>
+</div>
+<div class="flex items-start gap-3">
+<span class="font-astro-data-md text-astro-data-md text-primary mt-0.5 flex-shrink-0">☉</span>
+<span class="font-body-md text-body-md text-on-surface">Kokoro neural voice synthesizer with full emotional inflection</span>
+</div>
+<div class="flex items-start gap-3">
+<span class="font-astro-data-md text-astro-data-md text-primary mt-0.5 flex-shrink-0">✦</span>
+<span class="font-body-md text-body-md text-on-surface">100% offline &amp; private: zero telemetry, zero servers</span>
+</div>
+</div>
+</div>
+<!-- Pricing Section -->
+<div class="flex flex-col items-center text-center space-y-2 pt-2">
+<div class="px-4 py-1.5 rounded-lg bg-surface-container-high shadow-inner">
+<span class="font-astro-data-lg text-astro-data-lg text-primary tracking-wider">[ $48 · runtime ]</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant max-w-xs">
+      One-time purchase · Lifetime heirloom access · Never a subscription
+    </p>
+</div>
+<!-- Sole Primary Action -->
+<div class="w-full pt-1">
+<button class="w-full h-14 rounded-xl bg-primary text-on-primary font-body-lg font-bold flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(242,202,80,0.25)] hover:shadow-[0_0_24px_rgba(242,202,80,0.4)] active:scale-[0.99] transition-all" id="unlock-btn" type="button">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">key</span>
+<span>Unlock natally</span>
+</button>
+</div>
+<!-- Secondary Quiet Options -->
+<div class="flex items-center justify-center gap-6 pt-1 text-tertiary">
+<button class="font-body-sm text-body-sm hover:underline hover:text-primary transition-colors" type="button">
+      Enter an heirloom code
+    </button>
+<span class="text-outline text-xs">·</span>
+<button class="font-body-sm text-body-sm hover:underline hover:text-primary transition-colors" type="button">
+      Restore purchases
+    </button>
+</div>
+<!-- Footnote Verification Ledger -->
+<div class="flex flex-col items-center text-center space-y-1 pt-4 pb-2">
+<span class="font-astro-data-md text-astro-data-md text-outline tracking-wider">[ stripe · revenuecat · runtime ]</span>
+<span class="font-label-caps text-label-caps text-outline tracking-widest uppercase">Decentralized on-device key verification</span>
+</div>
+</div>
+<script>
+  (function() {
+    const unlockBtn = document.getElementById('unlock-btn');
+    if (unlockBtn) {
+      unlockBtn.addEventListener('click', function() {
+        const originalText = unlockBtn.innerHTML;
+        unlockBtn.classList.add('opacity-85', 'pointer-events-none');
+        unlockBtn.innerHTML = `
+          <span class="w-4 h-4 rounded-full border-2 border-on-primary border-t-transparent animate-spin"></span>
+          <span>Inscribing key...</span>
+        `;
+        setTimeout(() => {
+          unlockBtn.innerHTML = `
+            <span class="material-symbols-outlined text-[20px]">check</span>
+            <span>Heirloom Active</span>
+          `;
+          setTimeout(() => {
+            unlockBtn.innerHTML = originalText;
+            unlockBtn.classList.remove('opacity-85', 'pointer-events-none');
+          }, 2400);
+        }, 1200);
+      });
+    }
+  })();
+</script></main><nav class="fixed bottom-0 w-full z-50 pb-safe bg-surface-container-lowest/90 backdrop-blur-xl shadow-[0_-8px_24px_rgba(8,4,14,0.7)]" data-active-classes="text-primary font-semibold"><div class="flex justify-around items-center h-16 px-2"><a class="flex flex-col items-center justify-center min-w-[64px] min-h-[44px] text-on-surface-variant transition-colors hover:text-primary" data-path="oracle" href="#"><span class="material-symbols-outlined text-[22px]">auto_awesome</span><span class="font-label-caps text-label-caps text-[10px] mt-0.5 tracking-wider uppercase">Oracle</span></a><a class="flex flex-col items-center justify-center min-w-[64px] min-h-[44px] text-on-surface-variant transition-colors hover:text-primary" data-path="atlas" href="#"><span class="material-symbols-outlined text-[22px]">explore</span><span class="font-label-caps text-label-caps text-[10px] mt-0.5 tracking-wider uppercase">Atlas</span></a><a class="flex flex-col items-center justify-center min-w-[64px] min-h-[44px] text-on-surface-variant transition-colors hover:text-primary" data-path="people" href="#"><span class="material-symbols-outlined text-[22px]">group</span><span class="font-label-caps text-label-caps text-[10px] mt-0.5 tracking-wider uppercase">People</span></a><a aria-current="page" class="flex flex-col items-center justify-center min-w-[64px] min-h-[44px] transition-colors text-primary font-semibold" data-path="sanctum" href="#"><span class="material-symbols-outlined text-[22px]">temple_buddhist</span><span class="font-label-caps text-label-caps text-[10px] mt-0.5 tracking-wider uppercase">Sanctum</span></a></div></nav></body></html>
