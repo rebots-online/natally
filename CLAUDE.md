@@ -1,5 +1,7 @@
 # natally — agent instructions
 
+ONLY AND ALWAYS comply with `~/Admin-Manual/` — save for project-scoped, previously-discussed exceptions enumerated in this CLAUDE.md.
+
 Authority order: `~/Admin-Manual/` is the organization-wide single source of truth (its index
 is `MANUAL.md`); this file is the project layer — where it is silent, the manual governs.
 Rules are cited by code with their operative clause inlined; full text lives in the manual:
