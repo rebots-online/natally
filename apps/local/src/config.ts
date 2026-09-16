@@ -2,11 +2,7 @@
 // Vite `import.meta.env` record into the pure loader in @natally/billing
 // (ARCHITECTURE §15). All validation, freezing and derivation live there; the
 // app only ever imports the resolved frozen `config`.
-import {
-  loadConfig,
-  type EnvRecord,
-  type RuntimeConfig,
-} from "@natally/billing/config";
+import { type EnvRecord, loadConfig, type RuntimeConfig } from "@natally/billing/config";
 
 // import.meta.env typing, self-contained so this module needs no additional
 // ambient d.ts. Identical to vite/client's declaration, so the two merge

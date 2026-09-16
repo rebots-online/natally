@@ -14,6 +14,7 @@
   "dependencies": {
     "@natally/billing": "workspace:*",
     "@natally/design-tokens": "workspace:*",
+    "@natally/lore": "workspace:*",
     "react": "^19",
     "react-dom": "^19"
   },

@@ -298,7 +298,7 @@ executable subset of it).
   **Verify:** `pnpm vitest run packages/lore/tests/retrieve.test.ts`
   **Accept:** `retrieve: vector ∪ 2-hop, budget respected, person-scoped`.
 
-- [ ] **L.5 — Write-every-turn pipeline.**
+- [X] **L.5 — Write-every-turn pipeline.** ✅ pipeline: 50 turns → nodes merged, flush count = 50, delete leaves 0 rows
   **Owns:** `packages/lore/src/pipeline.ts`, tests.
   **Spec:** `LorePipeline.consume(turn)` → embed (L.2) → extract/merge (L.3) → batched
   write (single flush per turn, insert-only SQL within one transaction); `stats()` returns
@@ -320,7 +320,7 @@ executable subset of it).
   **Verify:** `pnpm vitest run packages/billing/tests/trial.test.ts`
   **Accept:** `trial: count/time/rate/licensed matrices pass (≥14 cases)`.
 
-- [ ] **B.2 — Reading ledger + billing.consume (local).**
+- [X] **B.2 — Reading ledger + billing.consume (local).** ✅ consume: licensed/trial/exhausted/rate paths exact
   **Owns:** `packages/billing/src/ledger.ts`, `packages/billing/src/consume.ts`, tests.
   **Reads:** T0.7, T0.9. **Spec:** `ReadingLedger` over injected SQLite (readings table):
   `append(reading)` (never mutate), `rowsSince(ts)`; `billing.consume(reading, deps)`:
@@ -342,7 +342,7 @@ executable subset of it).
   **Verify:** `pnpm vitest run packages/billing/tests/token.test.ts`
   **Accept:** `token: valid passes, tampered/expired/revoked rejected`.
 
-- [ ] **B.4 — Codes (single-use + hash-based).**
+- [X] **B.4 — Codes (single-use + hash-based).** ✅ codes: mint→verify→reuse rejected, 4 outcomes exact
   **Owns:** `packages/billing/src/codes.ts`, tests.
   **Spec:** format `NATALLY-XXXX-XXXX-XXXX` (Crockford base32, no I/L/O/U); hash-based
   code = base32(payload `{tier, exp}` + Ed25519 sig) packed into that shape — offline
@@ -351,7 +351,7 @@ executable subset of it).
   **Verify:** `pnpm vitest run packages/billing/tests/codes.test.ts`
   **Accept:** `codes: mint→verify→reuse rejected, 4 outcomes exact`.
 
-- [ ] **B.5a — Generic hosted-redirect adapter + bridge client.**
+- [X] **B.5a — Generic hosted-redirect adapter + bridge client.** ✅ hosted adapter: URL build, poll loop, SSRF rejects loopback/private
   **Owns:** `packages/billing/src/adapters/hosted.ts`, `packages/billing/src/bridge-client.ts`,
   tests. **Spec:** for stripe/polar/lemonsqueezy/paypal/square: `available()` = config URL
   present; `checkout(offering)` → `{kind:'redirect', url: <configured checkout URL> +
@@ -442,7 +442,7 @@ executable subset of it).
   **Verify:** `pnpm vitest run apps/local/src/companion/tools.test.ts` (jsdom)
   **Accept:** `tools: read masks secrets, write records turn, no-network grep clean`.
 
-- [ ] **C.4 — Companion event bus.**
+- [X] **C.4 — Companion event bus.** ✅ bus: event→stage reducer sequence Thinking→Speaking→Idle exact
   **Owns:** `apps/local/src/companion/bus.ts`, tests.
   **Spec:** typed pub/sub for the CompanionEvent union (§ Turn/chart/envelope/error/token);
   `subscribe(type, fn)` unsubscribe handle; replay-buffered `stageState$` derived reducer
