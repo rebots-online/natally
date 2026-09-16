@@ -9,5 +9,4 @@ dist/**/*.apk      filter=lfs diff=lfs merge=lfs -text
 dist/**/*.aab      filter=lfs diff=lfs merge=lfs -text
 dist/**/*.zip      filter=lfs diff=lfs merge=lfs -text
 dist/**/*.mp4      filter=lfs diff=lfs merge=lfs -text
-dist/**/*.aab      filter=lfs diff=lfs merge=lfs -text
 dist/**/*.tar.gz   filter=lfs diff=lfs merge=lfs -text
