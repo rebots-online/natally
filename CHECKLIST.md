@@ -492,7 +492,7 @@ executable subset of it).
   **Verify:** `pnpm vitest run apps/local/src/ui/primitives`
   **Accept:** `primitives: 7 components, tokens.css vars applied, routes typecheck`.
 
-- [ ] **U.2 — Conversation screen.**
+- [X] **U.2 — Conversation screen.** ✅ conversation: 9 variants render against event scripts
   **Owns:** `apps/local/src/screens/conversation/`.
   **Spec:** all 9 variants (Idle, Thinking, Speaking, Asleep, Error, TrialIdle,
   TrialExhausted, RateLimited, Desktop) per SCREEN.md + STATE-LEDGER node ids; transcript
