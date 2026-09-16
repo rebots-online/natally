@@ -67,8 +67,9 @@ export interface WllamaTokenOptionals {
  * Structural subset of the wllama handle this module uses. The injected
  * production handle (a real `@wllama/wllama` `Wllama` instance once the
  * dependency lands) must satisfy this interface exactly; no other surface is
- * touched. onnxruntime-web/in-browser execution only — `speechSynthesis` is
- * never involved (D7a) and nothing here reaches the network for inference
+ * touched. onnxruntime-web/in-browser execution only — the OS speech-synthesis
+ * API is never involved (D7a; see the V-phase ban guard) and nothing here
+ * reaches the network for inference
  * (§7.3: the only egress is the local pipeline).
  */
 export interface WllamaHandle {

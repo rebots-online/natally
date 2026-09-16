@@ -26,6 +26,7 @@
     "@types/react-dom": "^19",
     "@vitejs/plugin-react": "^5",
     "better-sqlite3": "^12",
+    "jsdom": "^26",
     "tailwindcss": "^4",
     "typescript": "^5.9",
     "vite": "^7"

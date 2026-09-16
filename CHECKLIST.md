@@ -377,7 +377,7 @@ executable subset of it).
   as constructor param)
   **Accept:** `rc adapter: paywall→entitlement→mint→token flow OK`.
 
-- [ ] **B.5c — Adapter registry.**
+- [X] **B.5c — Adapter registry.** ✅ registry: hides absent rails, exposes present set
   **Owns:** `packages/billing/src/adapters/registry.ts`, tests.
   **Spec:** order-stable registry over B.5a/B.5b instances filtered by `available()`;
   exports `paymentsAvailable()` labels for the paywall honest line; one `purchase(adapterId,
@@ -429,7 +429,7 @@ executable subset of it).
   **Verify:** `pnpm vitest run apps/local/src/companion/fence.test.ts`
   **Accept:** `fence: clean passes; 0.01° tolerance; violation→regen→absence chain exact`.
 
-- [ ] **C.3 — Tool suite (DOM r/w).**
+- [X] **C.3 — Tool suite (DOM r/w).** ✅ tools: read masks secrets, write records turn, no-network grep clean
   **Owns:** `apps/local/src/companion/tools.ts`, tests.
   **Spec (§7.3):** `dom.read` → accessibility-style snapshot from the live DOM (query from
   root or selector, depth cap, mask: input values, [data-secret], keychain fields); `dom.write`
@@ -455,7 +455,7 @@ executable subset of it).
 
 ## Phase V — Voice
 
-- [ ] **V.1 — Kokoro native (Rust).**
+- [X] **V.1 — Kokoro native (Rust).** ✅ voice native: chunking + RMS envelope fixtures pass
   **Owns:** `apps/local/src-tauri/src/voice/` (mod.rs, kokoro.rs, audio.rs), Rust tests.
   **Spec:** onnxruntime session (crate `ort`) loading mirror Kokoro ONNX + voices;
   sentence-chunked synthesis queue; playback via cpal; RMS envelope (per 20 ms window,
@@ -465,7 +465,7 @@ executable subset of it).
   behind `#[ignore]` with real-file runner) **Accept:** `voice native: chunking + RMS
   envelope fixtures pass`.
 
-- [ ] **V.2 — Kokoro web + ban guard.**
+- [X] **V.2 — Kokoro web + ban guard.** ✅ voice web: envelope fixtures pass; speechSynthesis: 0 hits
   **Owns:** `apps/local/src/voice/web.ts`, `apps/local/src/voice/envelope.ts`,
   `scripts/grep-no-speechsynthesis.sh`, tests.
   **Spec:** onnxruntime-web (WASM; WebGPU when `navigator.gpu`) synth → AudioWorklet
@@ -601,7 +601,7 @@ executable subset of it).
   **Verify:** `pnpm vitest run apps/local/src/data`
   **Accept:** `data: CRUD roundtrip; export→wipe→import restores equivalently`.
 
-- [ ] **X.2 — Delete-everything.**
+- [X] **X.2 — Delete-everything.** ✅ destroy: 0 rows remain across 10 tables; files removed; token cleared
   **Owns:** `apps/local/src/data/destroy.ts`, tests.
   **Spec:** real deletion: all app tables rows + lore rows + vectors + downloaded model
   files + keychain token (B.3 injection) + license_state; returns a report
