@@ -60,7 +60,7 @@ executable subset of it).
 
 ## Phase T — Scaffolding & contracts
 
-- [ ] **T0.1 — Workspace scaffold.**
+- [X] **T0.1 — Workspace scaffold.** ✅ workspace: 0 test files, typecheck+lint clean
   **Owns:** `pnpm-workspace.yaml`, root `package.json` (rewrite — version stamp preserved),
   `tsconfig.base.json`, `biome.json`, `.prettierrc`, `vitest.workspace.ts`, `scripts/check.sh`.
   **Spec:** pnpm workspace packages `apps/*`, `packages/*`; TS `strict`, `moduleResolution:

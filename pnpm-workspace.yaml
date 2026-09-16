@@ -1,0 +1,11 @@
+# natally — single pnpm workspace root (ARCHITECTURE.md §2: apps/* may import
+# packages/*; packages/* never import apps/*). One lockfile, committed (§3).
+packages:
+  - "apps/*"
+  - "packages/*"
+
+# esbuild (vite dep) ships a postinstall that validates/links its prebuilt
+# platform binary; pnpm 11 blocks undeclared build scripts, so it is approved
+# here explicitly.
+allowBuilds:
+  esbuild: true
