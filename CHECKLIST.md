@@ -157,7 +157,7 @@ executable subset of it).
   **Verify:** `pnpm vitest run packages/billing/tests/types.test.ts`
   **Accept:** `billing types: roundtrip OK`.
 
-- [ ] **T0.8 — Design tokens package.**
+- [X] **T0.8 — Design tokens package.**
   **Owns:** `packages/design-tokens/tokens.css`, `package.json`, `src/index.ts`.
   **Reads:** `LIBS/UI/FIGMA/TOKENS.md`, `STATE-LEDGER.json` (read-only).
   **Spec:** `tokens.css` = Tailwind 4 `@theme` block mirroring TOKENS.md one-to-one (colour,
