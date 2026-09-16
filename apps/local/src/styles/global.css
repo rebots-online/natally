@@ -7,6 +7,7 @@
 @import "@natally/design-tokens/tokens.css";
 
 /* S.1 fonts */
+@import "./fonts.css";
 /* Self-hosted @font-face declarations (Fraunces, Nunito Sans, IBM Plex Mono,
    woff2 under public/fonts/) land here via task S.1. Until then the display
    stack falls back to the system serif — no CDN imports, ever. */

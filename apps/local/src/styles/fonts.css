@@ -1,0 +1,55 @@
+/* natally — self-hosted fonts (S.1).
+   Three OFL-1.1 voices (DESIGN.md Type), static instanced latin-subset woff2
+   under public/fonts/. font-display: swap everywhere. Provenance and sources:
+   public/fonts/FONT_PROVENANCE.md. No CDN imports, ever (§3 fonts law). */
+
+/* Fraunces — natally's voice: her name, titles, plate titles, asides. */
+@font-face {
+  font-family: 'Fraunces';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('/fonts/fraunces-semibold-latin.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Fraunces';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/fraunces-italic-latin.woff2') format('woff2');
+}
+
+/* Nunito Sans — the interface. */
+@font-face {
+  font-family: 'Nunito Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/nunitosans-regular-latin.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Nunito Sans';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('/fonts/nunitosans-semibold-latin.woff2') format('woff2');
+}
+
+/* IBM Plex Mono — the ephemeris: every degree, orb, time, table. */
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/ibmplexmono-regular-latin.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('/fonts/ibmplexmono-medium-latin.woff2') format('woff2');
+}

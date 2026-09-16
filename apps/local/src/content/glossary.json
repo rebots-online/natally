@@ -1,0 +1,197 @@
+[
+  {
+    "term": "Aries",
+    "glyphId": "g-aries",
+    "whatItIs": "Aries is the first sign of the zodiac, a cardinal fire sign ruled by Mars. It is associated with initiative, directness, and the energy of beginnings. In a natal chart, planets in Aries are read as expressing themselves quickly, candidly, and independently."
+  },
+  {
+    "term": "Taurus",
+    "glyphId": "g-taurus",
+    "whatItIs": "Taurus is a fixed earth sign ruled by Venus, and the second sign of the zodiac. It is associated with steadiness, sensory pleasure, patience, and the building of lasting material security. Planets in Taurus are read as expressing themselves slowly, reliably, and with an eye for what endures."
+  },
+  {
+    "term": "Gemini",
+    "glyphId": "g-gemini",
+    "whatItIs": "Gemini is a mutable air sign ruled by Mercury, the third sign of the zodiac. It is associated with curiosity, language, gathering information, and moving easily between ideas and people. Planets in Gemini are read as expressing themselves verbally, adaptably, and with quicksilver variety."
+  },
+  {
+    "term": "Cancer",
+    "glyphId": "g-cancer",
+    "whatItIs": "Cancer is a cardinal water sign ruled by the Moon, the fourth sign of the zodiac. It is associated with home, memory, nurture, and the protective tides of feeling. Planets in Cancer are read as expressing themselves with care, receptivity, and strong roots in the past."
+  },
+  {
+    "term": "Leo",
+    "glyphId": "g-leo",
+    "whatItIs": "Leo is a fixed fire sign ruled by the Sun, the fifth sign of the zodiac. It is associated with creative self-expression, warmth, generosity, and the courage to be seen. Planets in Leo are read as expressing themselves dramatically, loyally, and from the heart."
+  },
+  {
+    "term": "Virgo",
+    "glyphId": "g-virgo",
+    "whatItIs": "Virgo is a mutable earth sign ruled by Mercury, the sixth sign of the zodiac. It is associated with discernment, craft, service, and the improvement of details. Planets in Virgo are read as expressing themselves precisely, practically, and through useful work."
+  },
+  {
+    "term": "Libra",
+    "glyphId": "g-libra",
+    "whatItIs": "Libra is a cardinal air sign ruled by Venus, the seventh sign of the zodiac. It is associated with balance, fairness, beauty, and the art of relationship. Planets in Libra are read as expressing themselves diplomatically, aesthetically, and with awareness of the other side."
+  },
+  {
+    "term": "Scorpio",
+    "glyphId": "g-scorpio",
+    "whatItIs": "Scorpio is a fixed water sign, classically ruled by Mars and in modern astrology by Pluto, the eighth sign of the zodiac. It is associated with depth, intensity, privacy, and processes of transformation. Planets in Scorpio are read as expressing themselves thoroughly, strategically, and beneath the surface."
+  },
+  {
+    "term": "Sagittarius",
+    "glyphId": "g-sagittarius",
+    "whatItIs": "Sagittarius is a mutable fire sign ruled by Jupiter, the ninth sign of the zodiac. It is associated with exploration, honest opinion, humor, and the search for meaning across horizons. Planets in Sagittarius are read as expressing themselves expansively, candidly, and with an appetite for the bigger picture."
+  },
+  {
+    "term": "Capricorn",
+    "glyphId": "g-capricorn",
+    "whatItIs": "Capricorn is a cardinal earth sign ruled by Saturn, the tenth sign of the zodiac. It is associated with structure, ambition, endurance, and mastery built over time. Planets in Capricorn are read as expressing themselves with discipline, realism, and long-range purpose."
+  },
+  {
+    "term": "Aquarius",
+    "glyphId": "g-aquarius",
+    "whatItIs": "Aquarius is a fixed air sign, classically ruled by Saturn and in modern astrology by Uranus, the eleventh sign of the zodiac. It is associated with community, ideals, originality, and principled independence. Planets in Aquarius are read as expressing themselves unconventionally, rationally, and with an eye on the collective."
+  },
+  {
+    "term": "Pisces",
+    "glyphId": "g-pisces",
+    "whatItIs": "Pisces is a mutable water sign, classically ruled by Jupiter and in modern astrology by Neptune, the twelfth sign of the zodiac. It is associated with imagination, compassion, art, and the dissolving of boundaries. Planets in Pisces are read as expressing themselves fluidly, empathically, and through the inner world."
+  },
+  {
+    "term": "Sun",
+    "glyphId": "g-sun",
+    "whatItIs": "The Sun is a chart's central reference: the luminary associated with identity, vitality, and the conscious self a person is growing into. Its sign, house, and aspects describe how someone shines and what they organize their life around. It is the most cited point in a natal chart, but never the whole story.",
+    "synastryNote": "In synastry, one person's Sun falling in a sign or house of the other's chart is read as where they bring visibility, confidence, and focus to that part of their partner's life."
+  },
+  {
+    "term": "Moon",
+    "glyphId": "g-moon",
+    "whatItIs": "The Moon is the second luminary, associated with emotional needs, instinct, memory, and the private inner life. Its sign, house, and aspects describe what makes a person feel safe and how they settle themselves. Where the Sun is who you are becoming, the Moon is what you need.",
+    "synastryNote": "In synastry, Moon contacts are read as emotional resonance: they describe comfort, domestic ease, and how instinctively two people understand each other's feelings."
+  },
+  {
+    "term": "Mercury",
+    "glyphId": "g-mercury",
+    "whatItIs": "Mercury is the planet of thinking, speech, learning, and all the traffic of information between minds. Its sign, house, and aspects describe how a person reasons, what delights their curiosity, and the style of their words. Mercury turns retrograde more visibly than any other body, which is why it is so often discussed.",
+    "synastryNote": "In synastry, Mercury contacts describe the conversation itself: how easily two people talk, listen, explain, and occasionally talk past each other."
+  },
+  {
+    "term": "Venus",
+    "glyphId": "g-venus",
+    "whatItIs": "Venus is the planet of affection, attraction, beauty, and value: what a person loves and how they love it. Its sign, house, and aspects describe tastes, charm, and the terms on which closeness feels good. Classically it also governed money and possessions, which is why worth, both aesthetic and material, is its recurring theme.",
+    "synastryNote": "In synastry, Venus contacts are among the most classic indicators of attraction: they describe warmth, appreciation, shared pleasure, and what each person finds lovely in the other."
+  },
+  {
+    "term": "Mars",
+    "glyphId": "g-mars",
+    "whatItIs": "Mars is the planet of drive, desire, assertion, and the capacity to act. Its sign, house, and aspects describe how a person pursues what they want, competes, and protects what matters. Traditional astrology also assigned it courage and conflict, the sharp edge of getting things done.",
+    "synastryNote": "In synastry, Mars contacts describe energy between two people: motivation, physical chemistry, and where friction can spark as well as energize."
+  },
+  {
+    "term": "Jupiter",
+    "glyphId": "g-jupiter",
+    "whatItIs": "Jupiter is the largest planet in the solar system and, in astrology, the principle of expansion: growth, learning, generosity, and meaning-making. Its sign, house, and aspects describe where a person reaches for more and tends to find room to grow. Tradition called Jupiter the greater fortune for its association with protection and abundance.",
+    "synastryNote": "In synastry, Jupiter contacts are read as encouragement: where one person enlarges the other's confidence, world, and sense of possibility."
+  },
+  {
+    "term": "Saturn",
+    "glyphId": "g-saturn",
+    "whatItIs": "Saturn is the planet of structure: boundaries, discipline, time, and the slow work of building things that last. Its sign, house, and aspects describe where a person meets limits, earns mastery, and carries responsibility. Older texts called it the greater malefic for its hardships; modern readings treat it as the teacher of patience.",
+    "synastryNote": "In synastry, Saturn contacts are read as the bones of a connection: commitment, duty, and the places where two people are asked to be dependable rather than effortless."
+  },
+  {
+    "term": "Uranus",
+    "glyphId": "g-uranus",
+    "whatItIs": "Uranus, discovered in 1781, is the first of the modern planets and is associated with disruption, originality, technology, and freedom. Its sign, house, and aspects describe where a person is unconventional and where life invites sudden change. Its discovery coincided with the age of revolutions, which astrologers read as characteristic of its themes.",
+    "synastryNote": "In synastry, Uranus contacts describe electricity: excitement, refreshment, and unpredictability, the parts of a connection that refuse to be pinned down."
+  },
+  {
+    "term": "Neptune",
+    "glyphId": "g-neptune",
+    "whatItIs": "Neptune, discovered in 1846, is associated with dreams, imagination, spirituality, and the dissolving of hard edges. Its sign, house, and aspects describe where a person idealizes, creates, and sometimes blurs the line between fact and longing. Astrologers link its discovery era to anesthesia, photography, and romanticism.",
+    "synastryNote": "In synastry, Neptune contacts are read as enchantment: inspiration, idealization, and the need to keep gentle honesty where fog likes to gather."
+  },
+  {
+    "term": "Pluto",
+    "glyphId": "g-pluto",
+    "whatItIs": "Pluto, discovered in 1930 and reclassified as a dwarf planet in 2006, remains a full astrological planet in practice, associated with transformation, depth, and power. Its sign, house, and aspects describe where a person meets profound, slow change and their own buried material. Its discovery era coincided with depth psychology and the first studies of the atom, themes astrologers read as Plutonian.",
+    "synastryNote": "In synastry, Pluto contacts describe intensity: deep bonding, mutual transformation, and themes of trust and control that ask for consciousness."
+  },
+  {
+    "term": "Chiron",
+    "glyphId": "g-chiron",
+    "whatItIs": "Chiron is a small centaur orbiting between Saturn and Uranus, used in astrology since its discovery in 1977. It is named for the wise centaur who healed others despite his own unhealable wound, and it is read as the place where sensitivity becomes skill. Its sign and house describe where a person both hurts and can teach.",
+    "synastryNote": "In synastry, Chiron contacts touch tender places: they can re-open old sensitivities, and they offer two people a chance to heal or mentor where each is most delicate."
+  },
+  {
+    "term": "North Node",
+    "glyphId": "g-north-node",
+    "whatItIs": "The North Node is not a body but a calculated point: where the Moon's orbit crosses the ecliptic heading north. In astrology it is read as a direction of growth, unfamiliar territory a person is pulled toward over a lifetime. It moves backward through the zodiac, completing a full circle in about 18.6 years.",
+    "synastryNote": "In synastry, one person's planets on another's nodes are often read as pivotal: encounters that feel like turning points in each other's growth."
+  },
+  {
+    "term": "South Node",
+    "glyphId": "g-south-node",
+    "whatItIs": "The South Node is the point exactly opposite the North Node, where the Moon's orbit crosses the ecliptic heading south. It is read as inherited fluency: talents and habits so familiar they can become a comfort zone. Astrologers pair it with the North Node as the axis of staying versus growing.",
+    "synastryNote": "In synastry, South Node contacts often feel instantly familiar, like recognizing someone: comfortable, and worth balancing with fresh ground."
+  },
+  {
+    "term": "Conjunction",
+    "glyphId": "g-conjunction",
+    "whatItIs": "A conjunction occurs when two points occupy nearly the same degree of the zodiac, blending their meanings into one combined voice. It is considered the strongest aspect, neither easy nor hard by itself: the merged energies simply speak together. A conjunction's character depends entirely on the planets involved.",
+    "synastryNote": "In synastry, conjunctions fuse functions: one person's planet operates inside the other's life, producing a strong sense of sameness or identification."
+  },
+  {
+    "term": "Opposition",
+    "glyphId": "g-opposition",
+    "whatItIs": "An opposition occurs when two points sit about 180 degrees apart, at opposite ends of an axis. It is read as polarity: two related needs pulling in opposite directions until awareness lets them alternate or cooperate. Oppositions are often experienced through other people as much as through oneself.",
+    "synastryNote": "In synastry, oppositions create attraction across a divide: complementary poles that swing between pull and stalemate, and that can balance when both sides get a turn."
+  },
+  {
+    "term": "Trine",
+    "glyphId": "g-trine",
+    "whatItIs": "A trine is an aspect of about 120 degrees, joining signs of the same element. It is read as ease: energies that flow together without friction and support one another naturally. Because trines ask so little, astrologers note that they can run idle unless deliberately used.",
+    "synastryNote": "In synastry, trines feel like effortless compatibility: talents and temperaments that simply fit, sometimes so smoothly they are taken for granted."
+  },
+  {
+    "term": "Square",
+    "glyphId": "g-square",
+    "whatItIs": "A square is an aspect of about 90 degrees, joining signs of the same modality but different elements. It is read as friction: two energies that block and provoke each other into action. Uncomfortable as it can feel, the square is the classic aspect of achievement through challenge.",
+    "synastryNote": "In synastry, squares generate heat: recurring friction that can exhaust or galvanize, and that tends to keep two people actively engaged."
+  },
+  {
+    "term": "Sextile",
+    "glyphId": "g-sextile",
+    "whatItIs": "A sextile is an aspect of about 60 degrees, joining compatible signs of different elements. It is read as opportunity: a friendly connection between energies that works when a person initiates. It delivers less than a trine automatically, but rewards a small push.",
+    "synastryNote": "In synastry, sextiles are quiet cooperators: easy openings for shared projects and conversations that flourish when someone takes the first step."
+  },
+  {
+    "term": "Quincunx",
+    "glyphId": "g-quincunx",
+    "whatItIs": "A quincunx, also called an inconjunct, is an aspect of about 150 degrees, joining signs that share neither element, modality, nor polarity. It is read as constant adjustment: two concerns with nothing in common that must nonetheless share a household. It produces a low background hum of recalibration rather than open conflict.",
+    "synastryNote": "In synastry, quincunxes describe the small accommodations of a relationship: repeated translation between two people whose instincts do not natively align."
+  },
+  {
+    "term": "Semisextile",
+    "glyphId": "g-semisextile",
+    "whatItIs": "A semisextile is an aspect of 30 degrees, joining neighboring signs that meet only at a shared border. It is read as a mild, slightly awkward acquaintance between energies: related enough to notice each other, different enough in temperament to need patience. It is the gentlest of the minor aspects in common modern use.",
+    "synastryNote": "In synastry, semisextiles register as subtle affinities: quiet, low-voltage links that soften the edges of other patterns."
+  },
+  {
+    "term": "Retrograde",
+    "glyphId": "g-retrograde",
+    "whatItIs": "Retrograde motion is an optical effect: as Earth overtakes a slower outer planet, that planet appears to move backward through the zodiac for some weeks. Nothing physically reverses. Astrologers read retrograde periods as a time when a planet's themes turn inward for review rather than outward for launch."
+  },
+  {
+    "term": "Applying",
+    "glyphId": "g-applying",
+    "whatItIs": "An applying aspect is one that has not yet reached exactness: the two points are still moving toward their precise angle. Astrologers read applying aspects as themes that are building, a matter still live and felt as anticipation or momentum. Comparing applying and separating aspects is a traditional way to read where a chart's emphasis is heading."
+  },
+  {
+    "term": "Separating",
+    "glyphId": "g-separating",
+    "whatItIs": "A separating aspect is one that has already been exact and is now loosening: the two points are moving apart. Astrologers read separating aspects as themes that have peaked and are settling into memory or integration. Together with applying aspects, this describes the rhythm by which a chart's stories arrive and resolve."
+  }
+]

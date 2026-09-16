@@ -478,7 +478,7 @@ executable subset of it).
 
 ## Phase U — UI (React; each screen owns its dir)
 
-- [ ] **U.1 — Shell, router contract, primitives.**
+- [X] **U.1 — Shell, router contract, primitives.** ✅ primitives: 7 components, tokens.css vars applied, routes typecheck
   **Owns:** `apps/local/src/ui/shell.tsx`, `apps/local/src/ui/router.ts` (contract +
   registry type), `apps/local/src/ui/primitives/` (Button, Chip, TopBar, Composer, PlateCard,
   TurnHer, TurnYou), `apps/local/src/ui/glyphs.tsx`, `apps/local/src/ui/version.tsx`.
@@ -562,7 +562,7 @@ executable subset of it).
   **Verify:** `pnpm vitest run apps/local/src/screens/splash`
   **Accept:** `splash: progress binds to engine events; routes by people count`.
 
-- [ ] **U.9 — Stage (mascot).**
+- [X] **U.9 — Stage (mascot).** ✅ stage: 8 states map to bus events; envelope scales orb; reduced-motion honored
   **Owns:** `apps/local/src/ui/stage.tsx`, `apps/local/src/assets/mascot/` (copies from
   LIBS/UI/FIGMA/mascot/), tests.
   **Spec:** 8 states driven only by C.4 bus events (STATES.md real-vs-composed table):
@@ -613,7 +613,7 @@ executable subset of it).
 
 ## Phase G — Content
 
-- [ ] **G.1 — Glossary + gazetteer.**
+- [X] **G.1 — Glossary + gazetteer.** ✅ content: 35 entries, all four fields present, gazetteer loads
   **Owns:** `apps/local/src/content/glossary.json`, `apps/local/src/content/gazetteer.json`,
   `apps/local/src/content/index.ts`, tests.
   **Spec:** GlossaryEntry per glyph (36) with `What it is` body (authored-static, INC-19) +
@@ -627,7 +627,7 @@ executable subset of it).
 
 ## Phase S — Assets
 
-- [ ] **S.1 — Fonts self-host.**
+- [X] **S.1 — Fonts self-host.** ✅ 6 woff2 present + fonts.css parses
   **Owns:** `apps/local/public/fonts/` (woff2 files), `apps/local/src/styles/fonts.css`.
   **Spec:** Fraunces (SemiBold, Italic), Nunito Sans (Regular, SemiBold), IBM Plex Mono
   (Regular, Medium) as woff2, self-hosted, `font-display: swap`; `@font-face` in fonts.css;
@@ -704,7 +704,7 @@ executable subset of it).
   `scripts/update-version.sh --post-build`. **Verify:** `bash -n && --dry-run`
   **Accept:** `dry-run sequences all targets; lock acquire/release printed`.
 
-- [ ] **R.6 — Version stamping wiring.** **Owns:** edits limited to
+- [X] **R.6 — Version stamping wiring.** ✅ version check: consistent (version.txt = version.json = package.json) **Owns:** edits limited to
   `scripts/update-version.sh` guards (already pre-wired: package.json, tauri.conf.json,
   Cargo.toml, tauri.properties). Confirm idempotency: no-op when values equal (fix the
   unconditional MINOR bump to only fire with `--bump` or when committing per house flow —
