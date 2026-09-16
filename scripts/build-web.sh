@@ -87,6 +87,12 @@ command -v pnpm >/dev/null 2>&1 || {
 echo "web: building ${APP_DIR} -> ${OUT_DIR_REL} (base ./)"
 pnpm --dir "${APP_DIR}" exec vite "${VITE_ARGS[@]}"
 
+# Service worker must be a CLASSIC script (module SWs are not registerable in
+# most browsers): bundle src/sw.ts separately with esbuild (vite dep); its
+# listeners are scope-guarded so the module stays inert in the window entry.
+echo "web: emitting sw.js (classic)"
+pnpm --dir "${APP_DIR}" exec esbuild src/sw.ts --bundle --format=iife --outfile="${OUT_DIR}/sw.js" --log-level=warning
+
 mkdir -p "${DIST_DIR}"
 tar -czf "${ARTIFACT_PATH}" -C "${OUT_DIR}" .
 echo "web: ${ARTIFACT_NAME}"
