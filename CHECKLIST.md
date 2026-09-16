@@ -686,7 +686,7 @@ executable subset of it).
   dist naming `-win.exe/-setup.exe/-win.msi/-win.msix`. **Verify:** `bash -n` +
   `--dry-run` **Accept:** `dry-run prints per-host plan (xwin vs msi/msix)`.
 
-- [ ] **R.3 — build-android.sh.** **Owns:** `scripts/build-android.sh`. apk + aab via
+- [X] **R.3 — build-android.sh.** ✅ dry-run prints apk/aab names + versionCode **Owns:** `scripts/build-android.sh`. apk + aab via
   `tauri android build`; versionCode from `version.json` (`MAJOR*100000+MINOR`).
   **Verify:** `bash -n` + `--dry-run` **Accept:** `dry-run prints apk/aab names + versionCode`.
 
