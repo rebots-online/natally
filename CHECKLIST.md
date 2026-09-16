@@ -524,7 +524,7 @@ executable subset of it).
   **Verify:** `pnpm vitest run apps/local/src/screens/people apps/local/src/screens/first-light`
   **Accept:** `intake: 4-step flow yields Person + first computed fact; unknown-time branch`.
 
-- [ ] **U.5 — Settings screen.**
+- [X] **U.5 — Settings screen.** ✅ settings: 6 sections render; trial-lock and license states bind
   **Owns:** `apps/local/src/screens/settings/`.
   **Spec:** sections exactly per amended SCREEN.md: House system (12 chips), Model
   (catalogue from M.1, real download progress %, storage used, remove, trial-eligible flag
