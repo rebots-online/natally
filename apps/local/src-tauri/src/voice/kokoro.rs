@@ -4,10 +4,13 @@
 //! documented in `super`/mod.rs). Per the V.1 architect ruling, the `ort`
 //! dependency and the feature declaration land with I.2's registry wiring —
 //! this file has therefore NOT been compiled by V.1 (no crate in the tree by
-//! ruling; `cargo check` without features never reaches this module). It is
-//! written against the `ort` 2.0-rc API surface; exact item paths / input
-//! tensor names are pinned when I.2 wires the dependency (same
-//! compile-deferred status as C.1's `inference/llama.rs`).
+//! ruling; `cargo check` without features never reaches this module). I.2
+//! pinned `ort = "2.0.0-rc"` (resolved to 2.0.0-rc.13 in Cargo.lock); this
+//! module is written against that pinned crate's actual API surface
+//! (integrator pass: `Session` is lifetime-free, owned `Value`s feed the
+//! `inputs!` macro, scalar inputs ride the zero-dimensional `()` shape,
+//! `Tensor::from_string_array` carries strings, and output extraction returns
+//! a `(shape, data)` pair).
 //!
 //! # Mirror contract (§13)
 //!
@@ -133,9 +136,10 @@ fn phonemize(_text: &str) -> Result<String, VoiceError> {
 
 /// onnxruntime session over the mirror Kokoro artifact + its voices table.
 /// Loads lazily/exactly-once per process in the session layer (`audio.rs`
-/// wiring, I.2/I.3); this type owns one resident session.
+/// wiring, I.2/I.3); this type owns one resident session. ort 2.0.0-rc.13:
+/// `Session` is lifetime-free (it owns its `SharedSessionInner`).
 pub struct KokoroEngine {
-    session: ort::session::Session<'static>,
+    session: ort::session::Session,
     voices: VoicesTable,
     voice: VoiceId,
     speed: f32,
@@ -179,8 +183,14 @@ impl KokoroEngine {
     }
 
     /// One sentence → f32 PCM (mono, nominal −1..1) at [`KOKORO_SAMPLE_RATE`].
-    /// Input tensor names/_shapes are pinned when I.2 wires the crate; the
-    /// flow is fixed: phonemize → style row → session run → "audio" output.
+    /// ort 2.0.0-rc.13 value-conversion API (verified in the vendored crate
+    /// sources): the `inputs!` macro converts owned `Value`s into
+    /// `SessionInputValue`s — raw slices/scalars have no `From` impls — so the
+    /// three inputs are built as tensors first: the phoneme string via
+    /// `Tensor::from_string_array` (shape `[1]`, one string element), the
+    /// style row as `[1, dim]` f32, and the scalar speed as a zero-dimensional
+    /// tensor (shape `()` — the crate's documented scalar shape). Flow is
+    /// fixed: phonemize → style row → session run → "audio" output.
     pub fn synth_once(&mut self, text: &str) -> Result<Vec<f32>, VoiceError> {
         if text.trim().is_empty() {
             return Err(VoiceError::Invalid(
@@ -193,16 +203,28 @@ impl KokoroEngine {
         let outputs = self
             .session
             .run(ort::inputs![
-                "phonemes" => ort::value::Value::from_string(phonemes)
-                    .map_err(|e| VoiceError::Synthesis(format!("phonemes input: {e}")))?,
-                "style" => style,
-                "speed" => speed,
+                "phonemes" => ort::value::Tensor::from_string_array((
+                    [1usize],
+                    vec![phonemes].as_slice()
+                ))
+                .map_err(|e| VoiceError::Synthesis(format!("phonemes input: {e}")))?,
+                "style" => ort::value::Tensor::from_array(([1usize, style.len()], style.to_vec()))
+                    .map_err(|e| VoiceError::Synthesis(format!("style input: {e}")))?,
+                "speed" => ort::value::Tensor::from_array(((), vec![speed]))
+                    .map_err(|e| VoiceError::Synthesis(format!("speed input: {e}")))?,
             ])
             .map_err(|e| VoiceError::Synthesis(format!("kokoro session run: {e}")))?;
-        let audio = outputs["audio"]
+        // Output extraction is by name via `get` (the `Index` impl panics on a
+        // missing key — command paths answer with an honest error instead).
+        // rc.13 `try_extract_tensor` yields a `(shape, data)` pair.
+        let (_, audio) = outputs
+            .get("audio")
+            .ok_or_else(|| {
+                VoiceError::Synthesis("kokoro produced no 'audio' output".into())
+            })?
             .try_extract_tensor::<f32>()
             .map_err(|e| VoiceError::Synthesis(format!("kokoro audio output: {e}")))?;
-        Ok(audio.iter().copied().collect())
+        Ok(audio.to_vec())
     }
 }
 

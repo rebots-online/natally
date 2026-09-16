@@ -1,13 +1,12 @@
 //! natally — inference host, llama.cpp leg (task C.1, ARCHITECTURE §7.1).
 //!
 //! Compiled ONLY under the cargo feature `inference-llama` (declared and
-//! documented in `super`/mod.rs). Per the C.1 architect ruling, the
-//! `llama-cpp-2` dependency and the feature declaration land with I.2's
-//! registry wiring — this file has therefore NOT been compiled by C.1 (no
-//! crate in the tree by ruling; `cargo check` without features never reaches
-//! this module). It is written against the `llama_cpp_2` 0.1.x API surface;
-//! exact item paths / builder names are pinned when I.2 wires the dependency.
-//!
+//! documented in `super`/mod.rs). I.2 pinned `llama-cpp-2 = "0.1"` (resolved
+//! to 0.1.156 in Cargo.lock); this module is written against that pinned
+//! crate's actual API surface (integrator pass: item paths verified in the
+//! vendored `llama_cpp_2-0.1.156` sources — `KvCacheType`,
+//! `model::params::LlamaModelParams`, `load_from_file`, `LlamaSampler::sample`,
+//! `token_to_piece_bytes`).//!
 //! # Turboquant law (§7.1) as implemented here
 //!
 //! - Weights: Q4_K_M catalogue tier — honoured by loading the artifact named
@@ -16,9 +15,10 @@
 //!   `apps/local/src/companion/inference-web.ts`).
 //! - KV cache: q8_0 default, applied to BOTH the key and value caches via the
 //!   context params (`with_type_k` / `with_type_v`); the optional q4r8
-//!   recursor tier upgrades both. ggml has no literal `q4r8` KV type — the
-//!   catalogue tier maps to q4_0 KV quantization here; the exact super-block
-//!   refinement is settled when the crate is pinned (I.2).
+//!   recursor tier upgrades both. The pinned crate has no literal `q4r8` KV
+//!   type either — the catalogue tier maps to `KvCacheType::Q4_0` here; the
+//!   exact super-block refinement stays open (an architect call, not an
+//!   integrator improvisation).
 //! - Streaming: greedy (deterministic) sampling, one `token` event per step on
 //!   the §4 bus channel, in stream order — mirroring the web engine's delta
 //!   stream.
@@ -42,13 +42,14 @@ use super::{
     ChatRole, InferencePayload, KvTier, QuantSpec, RecursorTier, TokenEventDto, WeightsTier,
     BUS_CHANNEL,
 };
-use llama_cpp_2::context::params::LlamaContextParams;
-use llama_cpp_2::ggml_type::GGMLType;
+use llama_cpp_2::context::params::{KvCacheType, LlamaContextParams};
 use llama_cpp_2::llama_backend::LlamaBackend;
 use llama_cpp_2::llama_batch::LlamaBatch;
-use llama_cpp_2::model::{AddBos, LlamaModel, LlamaModelParams};
+use llama_cpp_2::model::params::LlamaModelParams;
+use llama_cpp_2::model::{AddBos, LlamaModel};
 use llama_cpp_2::sampling::LlamaSampler;
-use llama_cpp_2::token::Special;
+use llama_cpp_2::token::LlamaToken;
+use llama_cpp_2::TokenToStringError;
 
 /// Companion context window until C.2 owns the fence budget law (§7.2).
 /// Mirrors `CONTEXT_TOKENS` in inference-web.ts.
@@ -61,23 +62,49 @@ fn fail(what: &str, error: impl std::fmt::Display) -> String {
     format!("natally inference: {what}: {error}")
 }
 
+/// Raw token → bytes. 0.1.156: `token_to_bytes` is deprecated in favour of
+/// [`LlamaModel::token_to_piece_bytes`], which takes the `special` flag as a
+/// bool (the `Special` enum only feeds the deprecated methods). `false` =
+/// special/control tokens render as plaintext — the companion never speaks
+/// control tokens; no leading-space strip. A too-small buffer comes back as
+/// `InsufficientBufferSpace(negative)` carrying the required size; grow and
+/// retry once, exactly as the crate's own `token_to_piece` does (0.1.156,
+/// model.rs). The grow path cannot loop because the retry uses the size
+/// llama.cpp itself reported.
+fn detokenize(model: &LlamaModel, token: LlamaToken) -> Result<Vec<u8>, String> {
+    const INITIAL_BUFFER: usize = 64;
+    match model.token_to_piece_bytes(token, INITIAL_BUFFER, false, None) {
+        Ok(bytes) => Ok(bytes),
+        Err(TokenToStringError::InsufficientBufferSpace(needed)) => {
+            let required =
+                usize::try_from(-i64::from(needed)).map_err(|e| fail("detokenize buffer", e))?;
+            model
+                .token_to_piece_bytes(token, required, false, None)
+                .map_err(|e| fail("detokenize", e))
+        }
+        Err(e) => Err(fail("detokenize", e)),
+    }
+}
+
 fn weights_label(tier: WeightsTier) -> &'static str {
     match tier {
         WeightsTier::Q4KM => "Q4_K_M",
     }
 }
 
-/// §7.1 KV tier → ggml context-param type. q4r8 recursor tier overrides the
-/// q8_0 default (see the module header for the tier-mapping note).
-fn kv_ggml_type(quant: &QuantSpec) -> GGMLType {
+/// §7.1 KV tier → llama-cpp-2 KV-cache type (`KvCacheType`, the pinned
+/// crate's 0.1.156 context-param vocabulary — it has no `ggml_type` re-export).
+/// q4r8 recursor tier overrides the q8_0 default (see the module header for
+/// the tier-mapping note).
+fn kv_cache_type(quant: &QuantSpec) -> KvCacheType {
     match (quant.kv, quant.recursor) {
-        (KvTier::Q8_0, Some(RecursorTier::Q4R8)) => GGMLType::Q4_0,
-        (KvTier::Q8_0, None) => GGMLType::Q8_0,
+        (KvTier::Q8_0, Some(RecursorTier::Q4R8)) => KvCacheType::Q4_0,
+        (KvTier::Q8_0, None) => KvCacheType::Q8_0,
     }
 }
 
 fn context_params(payload: &InferencePayload) -> Result<LlamaContextParams, String> {
-    let kv = kv_ggml_type(&payload.quant);
+    let kv = kv_cache_type(&payload.quant);
     let n_ctx = NonZeroU32::new(CONTEXT_TOKENS)
         .ok_or("natally inference: context window must be non-zero")?;
     Ok(LlamaContextParams::default()
@@ -149,15 +176,21 @@ fn ensure_loaded(
         None => true,
     };
     if needs_load {
-        let model =
-            LlamaModel::new_from_file(backend, &payload.model_ref, LlamaModelParams::default())
-                .map_err(|e| {
-                    format!(
-                        "natally inference: failed to load turboquant artifact {} ({} tier): {e}",
-                        payload.model_ref,
-                        weights_label(payload.quant.weights)
-                    )
-                })?;
+        // 0.1.156: the constructor is `load_from_file` and takes the params
+        // by reference; `LlamaModelParams` lives in `model::params` (it is
+        // private at the `model` level).
+        let model = LlamaModel::load_from_file(
+            backend,
+            &payload.model_ref,
+            &LlamaModelParams::default(),
+        )
+        .map_err(|e| {
+            format!(
+                "natally inference: failed to load turboquant artifact {} ({} tier): {e}",
+                payload.model_ref,
+                weights_label(payload.quant.weights)
+            )
+        })?;
         *slot = Some(CachedModel {
             model,
             model_ref: payload.model_ref.clone(),
@@ -193,8 +226,12 @@ fn run(app: &tauri::AppHandle, payload: &InferencePayload) -> Result<(), String>
     let model = &cached.model;
 
     let params = context_params(payload)?;
-    let budget =
-        usize::try_from(params.n_ctx()).map_err(|e| fail("context window", e))?;
+    // 0.1.156: `LlamaContextParams::n_ctx()` returns `Option<NonZero<u32>>`
+    // — read the (possibly clamped) window back instead of assuming.
+    let n_ctx = params
+        .n_ctx()
+        .ok_or_else(|| "natally inference: context params carry no context window".to_string())?;
+    let budget = usize::try_from(n_ctx.get()).map_err(|e| fail("context window", e))?;
     let mut ctx = model
         .new_context(backend, params)
         .map_err(|e| fail("context creation", e))?;
@@ -229,17 +266,16 @@ fn run(app: &tauri::AppHandle, payload: &InferencePayload) -> Result<(), String>
     let mut pos = i32::try_from(tokens.len()).map_err(|e| fail("position", e))?;
 
     while generated < max_new {
-        let token = match ctx.sample_token(&mut sampler) {
-            Ok(Some(token)) => token,
-            Ok(None) => break,
-            Err(e) => return Err(fail("sampling", e)),
-        };
+        // 0.1.156 sampling: `LlamaContext::sample_token` is gone — the
+        // sampler samples (and accepts) itself, from the idx-th logits of the
+        // last decode. idx -1 is the batch's final entry: the only one we
+        // asked logits for (prefill marks just the last prompt token; each
+        // step batch marks its single token).
+        let token = sampler.sample(&ctx, -1);
         if model.is_eog_token(token) {
             break;
         }
-        let piece = model
-            .token_to_bytes(token, Special::Tokenize)
-            .map_err(|e| fail("detokenize", e))?;
+        let piece = detokenize(model, token)?;
         let text = String::from_utf8_lossy(&piece).into_owned();
         if !text.is_empty() {
             app.emit(

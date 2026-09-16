@@ -117,7 +117,9 @@ pub struct InferencePayload {
 
 /// The `token` variant of the §4 `CompanionEvent` union (`@natally/lore/types`):
 /// `{ type: "token", turnId, text }`.
-#[derive(Debug, Serialize)]
+// Clone: tauri's `Emitter::emit` requires the payload `Serialize + Clone`
+// (the token event is emitted per generated token on the §4 bus).
+#[derive(Debug, Clone, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct TokenEventDto {
     #[serde(rename = "type")]
