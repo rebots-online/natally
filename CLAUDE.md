@@ -196,8 +196,10 @@ seam without re-architecting.
   fills 2026-09-11), `CHECKLIST.md` (recreated de novo, 58 tasks), `DOCS/TEST_RUBRIC.md`
   (authored 2026-09-11). **CODE is open** — D19 (2026-09-11) rules the Figma frame
   re-clearance is not a blocker; the 2026-09-04 TC12 §10 approval governs (I2/TC12/D3).
-- Open items: HF write token + `CREDENTIALS/natally.md` creation; hosted-product design
+- Open items: hosted-product design
   pass (Alby Market / x402 — separate conversation); Stage node-id verification at the
-  re-freeze. Former open item "forgejo return" is **resolved** (CC13 restored 2026-09-11).
-  Remote unification also resolved (2026-09-14): both hosts now hold `origin`=forgejo +
-  `github` mirror; master `ef92499` pushed to both.
+  re-freeze. Resolved 2026-09-14: forgejo return/CC13 + remote unification (both hosts
+  `origin`=forgejo + `github` mirror; forgejo intermittently 502 — mirror carries pushes
+  meanwhile); **HF write token arrived, verified live, canonical in
+  `~/Admin-Manual/CREDENTIALS/natally.md`, fed to repo `.env` as `HF_TOKEN`** — mirror
+  publication is now unblocked.
