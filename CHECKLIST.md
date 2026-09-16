@@ -712,7 +712,7 @@ executable subset of it).
   scripts/update-version.sh --check` **Accept:** `version check: consistent
   (version.txt = version.json = package.json)`.
 
-- [ ] **R.7 — Dormant CI + guards.** **Owns:** `.github/workflows/check.yml` (workflow
+- [X] **R.7 — Dormant CI + guards.** ✅ license-lint: AGPL + sweph consistent (state OK) **Owns:** `.github/workflows/check.yml` (workflow
   gated to run only when labeled/`workflow_dispatch` — dormant until public release),
   `scripts/license-lint.mjs`. **Spec:** workflow_dispatch-only job running I.4 suite;
   license-lint: fail if any `sweph` import exists while `package.json.license ≠

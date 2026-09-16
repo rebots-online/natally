@@ -1,0 +1,55 @@
+# natally — dormant CI (R.7).
+#
+# DORMANT until public release per house law (CLAUDE.md / AGENTS.md): this
+# workflow triggers on `workflow_dispatch` ONLY — no push and no pull_request
+# triggers — so it never runs on ordinary commits. When it wakes (§14), it
+# runs the full I.4-equivalent suite: typecheck + lint + unit/conformance
+# suites (scripts/check.sh), the speechSynthesis ban grep (D7a/TR-5),
+# license-lint (§6 AGPL posture, D14), and bundle-budget asserts.
+name: check (dormant)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  check:
+    name: check (dormant)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Version comes from package.json `packageManager` (pnpm@11.13.0).
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup node 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # I.4-equivalent suite: typecheck, lint, unit + conformance tests.
+      - name: Suite — typecheck, lint, tests (scripts/check.sh)
+        run: ./scripts/check.sh
+
+      # D7a / TR-5: the banned Web Speech API surface must never appear.
+      - name: Guard — no speechSynthesis (grep-no-speechsynthesis.sh)
+        run: bash scripts/grep-no-speechsynthesis.sh
+
+      # §6 AGPL posture / D14: sweph-wasm usage and the license field must
+      # agree in both directions.
+      - name: Guard — license-lint (license-lint.mjs)
+        run: node scripts/license-lint.mjs
+
+      # §14 wake set includes bundle-budget asserts, owned by I.4
+      # (scripts/assert-budget.mjs). The script does not exist yet, so this
+      # step is marked tolerant (continue-on-error) to reference the wake set
+      # without failing on I.4's pending deliverable; remove the flag once
+      # I.4 lands the script.
+      - name: Guard — bundle budget (assert-budget.mjs; tolerant until I.4)
+        run: node scripts/assert-budget.mjs
+        continue-on-error: true
