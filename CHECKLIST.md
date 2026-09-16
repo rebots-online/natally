@@ -690,7 +690,7 @@ executable subset of it).
   `tauri android build`; versionCode from `version.json` (`MAJOR*100000+MINOR`).
   **Verify:** `bash -n` + `--dry-run` **Accept:** `dry-run prints apk/aab names + versionCode`.
 
-- [ ] **R.4 — build-web.sh (PWA).** **Owns:** `scripts/build-web.sh`,
+- [X] **R.4 — build-web.sh (PWA).** ✅ web: artifact name printed; SW strategy map exact **Owns:** `scripts/build-web.sh`,
   `apps/local/public/manifest.webmanifest`, `apps/local/src/sw.ts`.
   **Spec:** vite build → `dist/web` (its own stamped qualifier artifact per R1 lineage);
   PWA manifest (name natally, identity `mba.robin.natally`, dark theme `#120C1C`); service
