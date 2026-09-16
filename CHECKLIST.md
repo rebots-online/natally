@@ -545,7 +545,7 @@ executable subset of it).
   **Verify:** `pnpm vitest run apps/local/src/screens/paywall apps/local/src/screens/checkout`
   **Accept:** `commerce: 13 variants render; gate→CTA→handoff→success chain binds`.
 
-- [ ] **U.7 — About + glossary-callout.**
+- [X] **U.7 — About + glossary-callout.** ✅ about+glossary: license line AGPL; 35 glyph entries open
   **Owns:** `apps/local/src/screens/about/`, `apps/local/src/screens/glossary/`.
   **Spec:** About (version, license AGPL-3.0-or-later + provenance lines ephemeris/Kokoro,
   D9 note); glossary callout per glyph with authored-static body + "Ask natally about this"
