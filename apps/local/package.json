@@ -16,11 +16,13 @@
     "@natally/design-tokens": "workspace:*",
     "@natally/ephemeris": "workspace:*",
     "@natally/lore": "workspace:*",
+    "qrcode": "^1.5.4",
     "react": "^19",
     "react-dom": "^19"
   },
   "devDependencies": {
     "@types/better-sqlite3": "^7",
+    "@types/qrcode": "^1.5.5",
     "@types/node": "^26",
     "@types/react": "^19",
     "@types/react-dom": "^19",

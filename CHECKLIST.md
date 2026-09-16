@@ -535,7 +535,7 @@ executable subset of it).
   **Verify:** `pnpm vitest run apps/local/src/screens/settings`
   **Accept:** `settings: 6 sections render; trial-lock and license states bind`.
 
-- [ ] **U.6 — Paywall + checkout screens.**
+- [X] **U.6 — Paywall + checkout screens.** ✅ commerce: 13 variants render; gate→CTA→handoff→success chain binds
   **Owns:** `apps/local/src/screens/paywall/`, `apps/local/src/screens/checkout/`.
   **Spec:** all frames per SCREEN.md files (paywall 7 variants, checkout 6); bind B.5c
   registry (Ways-to-pay line), B.1 gate states, B.4 redeem with 4 outcomes, B.5a handoff
