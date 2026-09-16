@@ -640,7 +640,7 @@ executable subset of it).
 
 ## Phase I — Integrators (⛓ idempotent consolidators; safe to re-run anytime, in any order after their inputs exist)
 
-- [ ] **I.1 — Route registry wiring.** ⛓
+- [X] **I.1 — Route registry wiring.** ⛓ ✅ routes.generated.ts lists all implemented screens; typecheck clean
   **Owns:** `apps/local/src/ui/routes.generated.ts`.
   **Spec:** generate (owned script `gen-routes.mjs`) the static import list of every
   `registerRoute` call site under `src/screens/**`; emit registry module consumed by

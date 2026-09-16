@@ -4,6 +4,10 @@ import { type ComponentType, StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 
 import { NatallyApp } from "./app";
+// R.4/I.1: the entry-side service-worker registration hook. Import-safe (its
+// install/activate/fetch listeners attach only when the file runs as an
+// actual service worker), so this static import is inert in the window.
+import { registerNatallyServiceWorker } from "./sw";
 import "./styles/global.css";
 
 /** Contract with U.1 (src/ui/router): the module must export `RouterShell`. */
@@ -34,6 +38,13 @@ root.render(
     <NatallyApp />
   </StrictMode>,
 );
+
+// Web PWA leg (R.4/I.1): best-effort registration of the compiled worker.
+// Guarded by the hook itself — a no-op where serviceWorker is unsupported,
+// and on registration failure the app continues network-only on the next
+// load. "/sw.js" is the compiled worker URL the web leg serves; its emission
+// is the web build's concern (I.3/I.4), not the entry's.
+registerNatallyServiceWorker("/sw.js");
 
 void import("./ui/router")
   .then((module: unknown) => {
