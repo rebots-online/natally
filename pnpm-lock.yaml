@@ -124,6 +124,10 @@ importers:
       zod:
         specifier: ^4.6.5
         version: 4.6.5
+    devDependencies:
+      '@vitest/web-worker':
+        specifier: ^3.2.7
+        version: 3.2.7(vitest@3.2.7(@types/node@26.6.0)(jsdom@26.1.0))
 
   packages/lore:
     dependencies:
@@ -785,6 +789,11 @@ packages:
 
   '@vitest/utils@3.2.7':
     resolution: {integrity: sha512-x6BDOd7dyo3PFLY3I9/HJ25X/6OurhGXk2/B9gOZNPF7XDVjeBK4k01lQE5uvDpbuheErh91qYuE1E2OEjK3Rw==}
+
+  '@vitest/web-worker@3.2.7':
+    resolution: {integrity: sha512-HO9MDv3K0LcuM03F3SOCS9YrEOLO2+8ixx/W1Dj5B7gnUzIMrBRTPodLg8o2LWdc/uaiLLx9/CEnh1ekHeDEOQ==}
+    peerDependencies:
+      vitest: 3.2.7
 
   agent-base@7.1.4:
     resolution: {integrity: sha512-MnA+YT8fwfJPgBx3m60MNqakm30XOkyIoH1y6huTQvC0PwZG7ki8NacLBcrPbNoo8vEZy7Jpuk7+jMO+CUovTQ==}
@@ -1976,6 +1985,13 @@ snapshots:
       '@vitest/pretty-format': 3.2.7
       loupe: 3.2.1
       tinyrainbow: 2.0.0
+
+  '@vitest/web-worker@3.2.7(vitest@3.2.7(@types/node@26.6.0)(jsdom@26.1.0))':
+    dependencies:
+      debug: 4.4.3
+      vitest: 3.2.7(@types/node@26.6.0)(jsdom@26.1.0)
+    transitivePeerDependencies:
+      - supports-color
 
   agent-base@7.1.4: {}
 

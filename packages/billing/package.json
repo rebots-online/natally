@@ -4,10 +4,11 @@
   "private": true,
   "type": "module",
   "license": "AGPL-3.0-or-later",
-  "description": "Billing contracts (ARCHITECTURE §9, §13): trial policy, readings, license payloads and tokens, offerings, checkout sessions, purchase adapters, consume results, deny-list, model manifest. Source-only package — no build step.",
+  "description": "Billing contracts (ARCHITECTURE \u00a79, \u00a713): trial policy, readings, license payloads and tokens, offerings, checkout sessions, purchase adapters, consume results, deny-list, model manifest. Source-only package \u2014 no build step.",
   "exports": {
     ".": "./src/types.ts",
-    "./config": "./src/config.ts"
+    "./config": "./src/config.ts",
+    "./token/storage-web": "./src/token/storage-web.ts"
   },
   "dependencies": {
     "zod": "^4.6.5"

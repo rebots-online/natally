@@ -231,7 +231,7 @@ executable subset of it).
   **Verify:** `pnpm vitest run packages/ephemeris/tests/solar.test.ts`
   **Accept:** `solar: absence rules hold for J1/J3/J4 branches`.
 
-- [ ] **P.3 — Worker/off-thread host.**
+- [X] **P.3 — Worker/off-thread host.** ✅ host: init→cusps roundtrip via protocol OK
   **Owns:** `packages/ephemeris/src/host/` (protocol.ts, web-worker.ts, native-task.rs at
   `packages/ephemeris/native/host.rs`).
   **Spec:** JSON protocol `{id, op: 'init'|'position'|'cusps'|'aspects', params}` →
@@ -655,7 +655,7 @@ executable subset of it).
   **Verify:** `cargo check --manifest-path apps/local/src-tauri/Cargo.toml`
   **Accept:** `registry builds; invoke_handler covers all registered commands`.
 
-- [ ] **I.3 — Capability layer resolution.** ⛓
+- [X] **I.3 — Capability layer resolution.** ⛓ ✅ capabilities: single selection point; grep clean elsewhere
   **Owns:** `apps/local/src/capabilities.ts`.
   **Spec:** single map `{db, inference, voice, keychain, opener} → {native, web}`
   implementations (imports only; selection by `window.__TAURI__` presence); no `if

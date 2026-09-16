@@ -25,7 +25,7 @@
 
 import type { CompanionEvent } from "@natally/lore/types";
 
-/** Which runtime runs the weights (I.3 wires the `__TAURI__` detection; this
+/** Which runtime runs the weights (I.3 wires the `the Tauri runtime probe (I.3 capabilities)` detection; this
  * module takes the resolved boolean in `selectLane`). */
 export type Lane = "native" | "web";
 
@@ -105,7 +105,7 @@ export interface CompleteOptions {
 }
 
 /** Lane resolution from the injected capability flag (I.3 wires the real
- * `__TAURI__` detection; here it is a plain boolean). */
+ * `the Tauri runtime probe (I.3 capabilities)` detection; here it is a plain boolean). */
 export function selectLane(nativeAvailable: boolean): Lane {
   return nativeAvailable ? "native" : "web";
 }

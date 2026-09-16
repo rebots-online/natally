@@ -1,0 +1,20 @@
+# natally ephemeris host — native leg (task P.3). Standalone crate root on
+# purpose: it must not join the apps/local/src-tauri workspace; the Tauri
+# command registry (task I.2) mounts the served task via a path dependency.
+[package]
+name = "natally-ephemeris-host"
+version = "0.0.0"
+edition = "2021"
+license = "AGPL-3.0-or-later"
+publish = false
+
+[lib]
+path = "host.rs"
+
+[dependencies]
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+tokio = { version = "1", features = ["macros", "rt", "sync"] }
+
+# Detach from any parent workspace manifest.
+[workspace]
