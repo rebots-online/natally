@@ -504,7 +504,7 @@ executable subset of it).
   **Verify:** `pnpm vitest run apps/local/src/screens/conversation`
   **Accept:** `conversation: 9 variants render against event scripts`.
 
-- [ ] **U.3 — Plates + Atlas screens.**
+- [X] **U.3 — Plates + Atlas screens.** ✅ atlas: 3 views render; wheel cusp angles match fixtures ±0.5°
   **Owns:** `apps/local/src/screens/plate-natal/`, `apps/local/src/screens/atlas/`.
   **Spec:** plate cards (natal withHouses/timeUnknown); Atlas views natal/synastry/today:
   wheel renderer (owns `apps/local/src/ui/wheel.tsx` — 272px structure, AC/MC labels, cusps
