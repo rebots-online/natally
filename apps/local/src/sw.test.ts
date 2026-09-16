@@ -6,12 +6,7 @@
 // same Verify command.
 import { describe, expect, it } from "vitest";
 
-import {
-  matchStrategy,
-  routeRequest,
-  SW_STRATEGIES,
-  type SwStrategyMap,
-} from "./sw";
+import { matchStrategy, routeRequest, SW_STRATEGIES, type SwStrategyMap } from "./sw";
 
 const ORIGIN = "https://natally.robin.mba";
 
@@ -37,52 +32,32 @@ describe("web: artifact name printed; SW strategy map exact", () => {
   });
 
   it("routes hashed build assets and self-hosted fonts cache-first", () => {
-    expect(matchStrategy(url("/assets/index-Bo1LQ0X9.js"), "GET")).toBe(
+    expect(matchStrategy(url("/assets/index-Bo1LQ0X9.js"), "GET")).toBe("cacheFirst");
+    expect(matchStrategy(url("/assets/natally-icon-1024-rgba-DoFq1ZHa.png"), "GET")).toBe(
       "cacheFirst",
     );
-    expect(
-      matchStrategy(url("/assets/natally-icon-1024-rgba-DoFq1ZHa.png"), "GET"),
-    ).toBe("cacheFirst");
     // vite output with a query string: the strategy is pathname-only.
-    expect(
-      matchStrategy(url("/assets/index-Bo1LQ0X9.js?v=1"), "GET"),
-    ).toBe("cacheFirst");
-    expect(matchStrategy(url("/fonts/fraunces-semibold-latin.woff2"), "GET")).toBe(
-      "cacheFirst",
-    );
-    expect(
-      matchStrategy(url("/fonts/nunito/nunitosans-bold.woff2"), "GET"),
-    ).toBe("cacheFirst");
+    expect(matchStrategy(url("/assets/index-Bo1LQ0X9.js?v=1"), "GET")).toBe("cacheFirst");
+    expect(matchStrategy(url("/fonts/fraunces-semibold-latin.woff2"), "GET")).toBe("cacheFirst");
+    expect(matchStrategy(url("/fonts/nunito/nunitosans-bold.woff2"), "GET")).toBe("cacheFirst");
   });
 
   it("accepts the sketch's explicit .hashed. naming as cache-first", () => {
-    expect(matchStrategy(url("/assets/main.hashed.a1b2c3d4.css"), "GET")).toBe(
-      "cacheFirst",
-    );
+    expect(matchStrategy(url("/assets/main.hashed.a1b2c3d4.css"), "GET")).toBe("cacheFirst");
   });
 
   it("routes the mirror and bridge lanes network-only", () => {
     expect(matchStrategy(url("/mirror/v1/models"), "GET")).toBe("networkOnly");
-    expect(matchStrategy(url("/bridge/license/consume"), "GET")).toBe(
-      "networkOnly",
-    );
-    expect(matchStrategy(url("/mirror/v1/models/echo-small"), "GET")).toBe(
-      "networkOnly",
-    );
+    expect(matchStrategy(url("/bridge/license/consume"), "GET")).toBe("networkOnly");
+    expect(matchStrategy(url("/mirror/v1/models/echo-small"), "GET")).toBe("networkOnly");
   });
 
   it("routes any POST network-only regardless of URL", () => {
-    expect(matchStrategy(url("/bridge/license/consume"), "POST")).toBe(
-      "networkOnly",
-    );
+    expect(matchStrategy(url("/bridge/license/consume"), "POST")).toBe("networkOnly");
     expect(matchStrategy(url("/mirror/v1/chat"), "POST")).toBe("networkOnly");
     // POST beats a cacheFirst URL: the method check runs first.
-    expect(matchStrategy(url("/assets/index-Bo1LQ0X9.js"), "POST")).toBe(
-      "networkOnly",
-    );
-    expect(matchStrategy(url("/fonts/fraunces-regular.woff2"), "POST")).toBe(
-      "networkOnly",
-    );
+    expect(matchStrategy(url("/assets/index-Bo1LQ0X9.js"), "POST")).toBe("networkOnly");
+    expect(matchStrategy(url("/fonts/fraunces-regular.woff2"), "POST")).toBe("networkOnly");
     expect(matchStrategy(url("/"), "POST", "navigate")).toBe("networkOnly");
   });
 
@@ -101,9 +76,7 @@ describe("web: artifact name printed; SW strategy map exact", () => {
   });
 
   it("keeps undeclared traffic off the cache path (network-only default)", () => {
-    expect(matchStrategy(url("/manifest.webmanifest"), "GET")).toBe(
-      "networkOnly",
-    );
+    expect(matchStrategy(url("/manifest.webmanifest"), "GET")).toBe("networkOnly");
     // A /assets/ path without a content-hash segment is not declared
     // immutable: only what the map declares cacheable touches the cache.
     expect(matchStrategy(url("/assets/logo.png"), "GET")).toBe("networkOnly");
@@ -113,15 +86,11 @@ describe("web: artifact name printed; SW strategy map exact", () => {
   });
 
   it("gives the fetch handler a complete plan per strategy", () => {
-    expect(
-      routeRequest(url("/assets/index-Bo1LQ0X9.js"), "GET", "same-origin"),
-    ).toEqual({
+    expect(routeRequest(url("/assets/index-Bo1LQ0X9.js"), "GET", "same-origin")).toEqual({
       strategy: "cacheFirst",
       navigationFallback: null,
     });
-    expect(
-      routeRequest(url("/bridge/license/consume"), "POST", "same-origin"),
-    ).toEqual({
+    expect(routeRequest(url("/bridge/license/consume"), "POST", "same-origin")).toEqual({
       strategy: "networkOnly",
       navigationFallback: null,
     });

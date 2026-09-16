@@ -4,7 +4,7 @@
 // scripts/grep-no-speechsynthesis.sh on success (the token itself must never
 // appear in apps/**/src — this file included).
 import { describe, expect, it } from "vitest";
-import { WINDOW_MS, rmsEnvelope, windowSizeFor } from "./envelope";
+import { rmsEnvelope, WINDOW_MS, windowSizeFor } from "./envelope";
 
 /** Deterministic sine: amplitude × sin(2π·i/period), i = 0..samples-1. */
 function sine(samples: number, period: number, amplitude = 1): Float32Array {

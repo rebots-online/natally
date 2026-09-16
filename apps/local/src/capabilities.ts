@@ -49,6 +49,11 @@
 // a message naming the bind fn — honest absence, never a silent fallback.
 
 import type { LicenseToken } from "@natally/billing";
+import {
+  clearLicenseToken,
+  loadLicenseToken,
+  saveLicenseToken,
+} from "@natally/billing/token/storage-web";
 import type { LoreStore } from "@natally/lore/store";
 import { createNativeLoreStore } from "@natally/lore/store/native";
 import {
@@ -56,11 +61,6 @@ import {
   type WaSqlite3Like,
   type WebLoreStoreOptions,
 } from "@natally/lore/store/web";
-import {
-  clearLicenseToken,
-  loadLicenseToken,
-  saveLicenseToken,
-} from "@natally/billing/token/storage-web";
 import { createWebEngineFactory, type WllamaHandle } from "./companion/inference-web";
 import type {
   EngineFactory,

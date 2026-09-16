@@ -3,11 +3,7 @@
 // all against injected fake OrtHandle / WebVoiceAudio handles (tests only; no
 // mocks ship in src). Events are validated against the lore CompanionEvent
 // schemas so the bus contract (packages/lore/src/types.ts) is enforced here.
-import {
-  CompanionEventSchema,
-  type CompanionEvent,
-  type EnvelopeEvent,
-} from "@natally/lore/types";
+import { type CompanionEvent, CompanionEventSchema, type EnvelopeEvent } from "@natally/lore/types";
 import { describe, expect, it } from "vitest";
 import {
   createWebVoice,

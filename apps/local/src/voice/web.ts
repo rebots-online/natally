@@ -121,11 +121,33 @@ export function hasWebGpu(): boolean {
 
 const ABBREVIATION_TOKENS: ReadonlySet<string> = new Set([
   // Honorifics & titles
-  "mr", "mrs", "ms", "dr", "prof", "st", "sr", "jr",
+  "mr",
+  "mrs",
+  "ms",
+  "dr",
+  "prof",
+  "st",
+  "sr",
+  "jr",
   // Latin & scholarly abbreviations (incl. "e.g."/"i.e." after dot-stripping)
-  "vs", "etc", "eg", "ie", "fig", "approx", "no", "vol", "inc", "ltd", "dept", "est",
+  "vs",
+  "etc",
+  "eg",
+  "ie",
+  "fig",
+  "approx",
+  "no",
+  "vol",
+  "inc",
+  "ltd",
+  "dept",
+  "est",
   // Time-of-day and locale tokens
-  "am", "pm", "us", "uk", "dc",
+  "am",
+  "pm",
+  "us",
+  "uk",
+  "dc",
 ]);
 
 const isDigit = (ch: string): boolean => ch >= "0" && ch <= "9";

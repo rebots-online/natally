@@ -120,8 +120,7 @@ export function routeRequest(url: URL, method: string, mode = ""): FetchRoute {
   const strategy = matchStrategy(url, method, mode);
   return {
     strategy,
-    navigationFallback:
-      strategy === "networkFirst-nav" ? SW_STRATEGIES.navigationFallback : null,
+    navigationFallback: strategy === "networkFirst-nav" ? SW_STRATEGIES.navigationFallback : null,
   };
 }
 
@@ -182,10 +181,7 @@ interface NatallyServiceWorkerScope {
     type: "install" | "activate",
     listener: (event: NatallyExtendableEvent) => void,
   ): void;
-  addEventListener(
-    type: "fetch",
-    listener: (event: NatallyFetchEvent) => void,
-  ): void;
+  addEventListener(type: "fetch", listener: (event: NatallyFetchEvent) => void): void;
   skipWaiting(): Promise<void>;
   clients: { claim(): Promise<void> };
 }
@@ -214,9 +210,7 @@ if (isServiceWorkerRuntime()) {
       (async () => {
         const names = await caches.keys();
         await Promise.all(
-          names
-            .filter((name) => name !== SW_CACHE_NAME)
-            .map((name) => caches.delete(name)),
+          names.filter((name) => name !== SW_CACHE_NAME).map((name) => caches.delete(name)),
         );
         await swSelf.clients.claim();
       })(),
@@ -225,11 +219,7 @@ if (isServiceWorkerRuntime()) {
 
   swSelf.addEventListener("fetch", (event) => {
     const request = event.request;
-    const route = routeRequest(
-      new URL(request.url),
-      request.method,
-      request.mode,
-    );
+    const route = routeRequest(new URL(request.url), request.method, request.mode);
     switch (route.strategy) {
       case "cacheFirst":
         event.respondWith(cacheFirstResponse(request));
@@ -256,8 +246,7 @@ export function registerNatallyServiceWorker(scriptUrl: string): void {
     return;
   }
   void navigator.serviceWorker.register(scriptUrl).catch(() => {
-    console.warn(
-      "natally: service worker registration failed; continuing network-only",
-    );
+    // Registration failure is honest absence: the app simply keeps working
+    // network-only (no offline shell). House law: no console in src. (sw)
   });
 }

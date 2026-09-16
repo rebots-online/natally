@@ -36,10 +36,7 @@ export function windowSizeFor(sampleRate: number): number {
  * Per-20 ms-window RMS envelope, peak-normalized to [0, 1] (rules above).
  * Deterministic: same samples + same sample rate ⇒ same output, on both legs.
  */
-export function rmsEnvelope(
-  pcm: readonly number[] | Float32Array,
-  sampleRate: number,
-): number[] {
+export function rmsEnvelope(pcm: readonly number[] | Float32Array, sampleRate: number): number[] {
   const windowSize = windowSizeFor(sampleRate);
   const raw: number[] = [];
   let sumSquares = 0;

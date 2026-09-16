@@ -35,10 +35,7 @@ describe("voice web: chunking fixtures", () => {
   });
 
   it("never splits a decimal number (3.14 stays whole)", () => {
-    expect(chunkSentences("Pi is 3.14 exactly. Yes.")).toEqual([
-      "Pi is 3.14 exactly.",
-      "Yes.",
-    ]);
+    expect(chunkSentences("Pi is 3.14 exactly. Yes.")).toEqual(["Pi is 3.14 exactly.", "Yes."]);
   });
 
   it("keeps single-letter initials together (J. R. R.)", () => {
@@ -49,10 +46,7 @@ describe("voice web: chunking fixtures", () => {
   });
 
   it("keeps p.m. glued to its sentence", () => {
-    expect(chunkSentences("At 3 p.m. we left. Late.")).toEqual([
-      "At 3 p.m. we left.",
-      "Late.",
-    ]);
+    expect(chunkSentences("At 3 p.m. we left. Late.")).toEqual(["At 3 p.m. we left.", "Late."]);
   });
 
   it("treats a run of terminators as one break (What?! stays whole)", () => {

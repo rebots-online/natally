@@ -663,7 +663,7 @@ executable subset of it).
   **Verify:** `pnpm vitest run apps/local/src/capabilities.test.ts`
   **Accept:** `capabilities: single selection point; grep clean elsewhere`.
 
-- [ ] **I.4 — Full workspace gate.** ⛓
+- [X] **I.4 — Full workspace gate.** ⛓ ✅ workspace: typecheck+lint+tests green; budget ≤ 300 KB gz; ban greps 0
   **Owns:** nothing new; runs checks. **Spec:** `./scripts/check.sh` (T0.1) +
   `bash scripts/grep-no-speechsynthesis.sh` + bundle budget assert script (owns
   `scripts/assert-budget.mjs`: built web initial JS ≤ 300 KB gz).
