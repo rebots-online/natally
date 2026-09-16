@@ -2,6 +2,11 @@
 # Check-only scaffold: no plugins, no feature modules. The `#[tauri::command]`
 # surface is wired through the static `natally_plugin!` registry; see the
 # contract doc in src/lib.rs before adding anything here.
+#
+# [features] + optional deps below were added by task I.2's registry wiring
+# (C.1/V.1 architect rulings deferred these pins to I.2). They are
+# NON-DEFAULT: the default build compiles the un-gated cores only and every
+# heavy native leg stays behind its feature gate.
 
 [package]
 name = "natally"
@@ -14,6 +19,16 @@ edition = "2021"
 name = "natally_lib"
 crate-type = ["staticlib", "cdylib", "rlib"]
 
+[features]
+# Heavy native legs, gated and NON-default (architect rulings on C.1/V.1,
+# pins landed by I.2):
+# - inference-llama: llama.cpp bindings for the chat-turboquant lane (§7.1);
+#   compiles src/inference/llama.rs.
+# - voice-kokoro: Kokoro ONNX synthesis + cpal playback (§10/§13); compiles
+#   src/voice/kokoro.rs and src/voice/audio.rs.
+inference-llama = ["dep:llama-cpp-2"]
+voice-kokoro = ["dep:cpal", "dep:ort"]
+
 [build-dependencies]
 tauri-build = { version = "2", features = [] }
 
@@ -24,3 +39,7 @@ serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 rusqlite = { version = "0.40", features = ["bundled"] }
 thiserror = "2"
+# Gated native legs (optional — see [features]; never default):
+llama-cpp-2 = { version = "0.1", optional = true } # inference-llama (C.1, §7.1)
+ort = { version = "2.0.0-rc", optional = true } # voice-kokoro (V.1, §10 — onnxruntime 2.0-rc API)
+cpal = { version = "0.15", optional = true } # voice-kokoro (V.1, §10 — playback)

@@ -648,7 +648,7 @@ executable subset of it).
   gen-routes.mjs && pnpm --filter @natally/local exec tsc --noEmit -p tsconfig.standalone.json`
   **Accept:** `routes.generated.ts lists all implemented screens; typecheck clean`.
 
-- [ ] **I.2 — Tauri command registry wiring.** ⛓
+- [X] **I.2 — Tauri command registry wiring.** ⛓ ✅ registry builds; invoke_handler covers all registered commands
   **Owns:** `apps/local/src-tauri/src/registry_generated.rs`.
   **Spec:** macro expansion list of every `natally_plugin!` module under src-tauri (lore,
   inference, voice, keychain, mirror-cache); regenerate on change.
