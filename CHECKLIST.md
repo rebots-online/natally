@@ -515,7 +515,7 @@ executable subset of it).
   **Verify:** `pnpm vitest run apps/local/src/screens/atlas apps/local/src/screens/plate-natal`
   **Accept:** `atlas: 3 views render; wheel cusp angles match fixtures ±0.5°`.
 
-- [ ] **U.4 — People + first-light.**
+- [X] **U.4 — People + first-light.** ✅ intake: 4-step flow yields Person + first computed fact; unknown-time branch
   **Owns:** `apps/local/src/screens/people/`, `apps/local/src/screens/first-light/`.
   **Spec:** conversational intake (name/date/place/time-or-unknown; instant computed fact
   after each answer via P.4; privacy explainer two-lane local wording); people list (name ·
