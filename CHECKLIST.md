@@ -204,7 +204,7 @@ executable subset of it).
 
 ## Phase P — Ephemeris
 
-- [ ] **P.1 — sweph-wasm backend.**
+- [X] **P.1 — sweph-wasm backend.** ✅ sweph backend: 24 cases, invariants hold
   **Owns:** `packages/ephemeris/src/sweph/` (engine.ts, tables.ts), `packages/ephemeris/tests/
   conformance.test.ts`, `packages/ephemeris/tests/fixtures/`.
   **Reads:** T0.5. **Spec:** implement `EphemerisEngine` on `sweph-wasm` (dep): `init` loads
@@ -221,7 +221,7 @@ executable subset of it).
   **Verify:** `pnpm vitest run packages/ephemeris/tests/conformance.test.ts`
   **Accept:** `sweph backend: 24 cases, invariants hold`.
 
-- [ ] **P.2 — Honest-absence & solar chart rules.**
+- [X] **P.2 — Honest-absence & solar chart rules.** ✅ solar: absence rules hold for J1/J3/J4 branches
   **Owns:** `packages/ephemeris/src/solar.ts`, tests.
   **Spec:** `chartInputs(person)` → when `timeKnown=false`: return `{ut: null-date-only,
   system: 'WholeSign', solarHouses: true}` and the rule set: no ASC, no MC, no house cusps,
@@ -241,7 +241,7 @@ executable subset of it).
   `new Worker(new URL(...), {type:'module'})` under vitest web-worker pool)
   **Accept:** `host: init→cusps roundtrip via protocol OK`.
 
-- [ ] **P.4 — ChartFacts builder + cache.**
+- [X] **P.4 — ChartFacts builder + cache.** ✅ facts: deterministic id, cache hit, synastry aspects computed
   **Owns:** `packages/ephemeris/src/facts.ts`, tests.
   **Reads:** T0.5, T0.9 (charts table via injected `put/get` — define local interface,
   X.1 adapts). **Spec:** `buildFacts(inputs)`: content id = sha256 of canonicalized inputs
@@ -255,7 +255,7 @@ executable subset of it).
 
 ## Phase L — Lore
 
-- [ ] **L.1 — LoreStore storage adapters.**
+- [X] **L.1 — LoreStore storage adapters.** ✅ store: upsert→query→export→delete cycle OK
   **Owns:** `packages/lore/src/store/` (web.ts, native.ts, common.ts), tests.
   **Reads:** T0.6, T0.9. **Spec:** web adapter: `wa-sqlite` on OPFS (fallback IndexedDB
   backend), sqlite-vec wasm extension load, exposes `LoreStore`; native adapter: same
@@ -266,7 +266,7 @@ executable subset of it).
   **Verify:** `pnpm vitest run packages/lore/tests/store.test.ts`
   **Accept:** `store: upsert→query→export→delete cycle OK`.
 
-- [ ] **L.2 — Embedder.**
+- [X] **L.2 — Embedder.** ✅ embedder: dim honored, L2 norm 1.0 ±1e-6, src purity holds
   **Owns:** `packages/lore/src/embed/` (embedder.ts, native.rs bridge file), tests incl.
   `tests/hash-embedder.ts`.
   **Spec:** `Embedder {dim, embed(text: string): Promise<number[]>}`; production impl runs

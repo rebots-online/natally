@@ -11,6 +11,7 @@
     "./types": "./src/types.ts"
   },
   "dependencies": {
+    "sweph-wasm": "2.6.9",
     "zod": "^4.6.5"
   }
 }

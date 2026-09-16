@@ -15,7 +15,7 @@ proves the tree it ran on).
 | Item | Tolerance / rule |
 |---|---|
 | Planet/body ecliptic longitude vs Swiss Ephemeris reference | **± 0.01°** — active only once the operator supplies reference tables; until then **invariant mode** (below) holds and tightening is forbidden to fake |
-| Invariant mode: positions | every `lon ∈ [0, 360)`; `|speed|` within per-body bounds table (planets ≤ 1°/day except Moon ≤ 16°/day; Chiron ≤ 0.1°/day) |
+| Invariant mode: positions | every `lon ∈ [0, 360)`; per-body `|speed|` bounds table (astronomical maxima + margin): Sun 1.03, Moon 16, Mercury 2.3, Venus 1.27, Mars 0.8, Jupiter 0.3, Saturn 0.14, Uranus 0.07, Neptune 0.06, Pluto 0.05, Chiron 0.1 °/day *(amended 2026-09-16: the original "planets ≤ 1°/day" was unphysical — Venus reaches 1.116 and Mercury 1.82 °/day, observed in P.1 conformance)* |
 | Invariant mode: cusps | cusps strictly ascending modulo 360; `|normalize(mc − asc)| ≤ 180` |
 | Wheel render (U.3) | cusp/aspect angles drawn from fixture ChartFacts match **± 0.5°** |
 | Determinism (P.4) | same canonical inputs ⇒ same content-hash id, byte-identical facts; cache hit returns the identical object |
