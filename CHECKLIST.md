@@ -674,14 +674,14 @@ executable subset of it).
 
 ## Phase R — Build & release
 
-- [ ] **R.1 — build-linux.sh.** **Owns:** `scripts/build-linux.sh`. AppImage + deb via
+- [X] **R.1 — build-linux.sh.** ✅ dry-run prints artifact names + version stamp plan **Owns:** `scripts/build-linux.sh`. AppImage + deb via
   `tauri build`; artifacts → `dist/mba.robin.natally-v<version>-linux.{AppImage,deb}`;
   runs version stamp pre-build; `set -euo pipefail`; idempotent (skip if artifact exists at
   same version unless `--force`). **Verify:** `bash -n scripts/build-linux.sh && bash
   scripts/build-linux.sh --dry-run` (owns the dry-run flag) **Accept:** `dry-run prints
   artifact names + version stamp plan`.
 
-- [ ] **R.2 — build-windows.sh.** **Owns:** `scripts/build-windows.sh`. Host-detecting
+- [X] **R.2 — build-windows.sh.** ✅ dry-run prints per-host plan (xwin vs msi/msix) **Owns:** `scripts/build-windows.sh`. Host-detecting
   (D8): Linux host → `cargo-xwin` exe + NSIS bundle; Windows host → msi + msix. Same
   dist naming `-win.exe/-setup.exe/-win.msi/-win.msix`. **Verify:** `bash -n` +
   `--dry-run` **Accept:** `dry-run prints per-host plan (xwin vs msi/msix)`.
