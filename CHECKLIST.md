@@ -385,7 +385,7 @@ executable subset of it).
   **Verify:** `pnpm vitest run packages/billing/tests/registry.test.ts`
   **Accept:** `registry: hides absent rails, exposes present set`.
 
-- [ ] **B.6 — License bridge service.**
+- [X] **B.6 — License bridge service.** ✅ bridge: 6 webhook fixtures verified idempotently; mint→verify; redeem reuse rejected
   **Owns:** `services/license-bridge/**` (Cargo.toml, src/main.rs, src/routes/*.rs,
   src/ledger.rs, src/mint.rs, src/codes.rs, .env.example, README.md), tests.
   **Spec (ARCHITECTURE §9.4):** axum service; SQLite idempotent ledger PK `(processor,
