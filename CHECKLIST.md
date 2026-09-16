@@ -698,7 +698,7 @@ executable subset of it).
   caches POSTs). **Verify:** `bash scripts/build-web.sh --dry-run && pnpm vitest run
   apps/local/src/sw.test.ts` **Accept:** `web: artifact name printed; SW strategy map exact`.
 
-- [ ] **R.5 — build-all.sh + release flow.** **Owns:** `scripts/build-all.sh`.
+- [X] **R.5 — build-all.sh + release flow.** ✅ dry-run sequences all targets; lock acquire/release printed **Owns:** `scripts/build-all.sh`.
   **Spec:** respects `release.lock` (single-flight; refuses concurrent run), sequences
   R.1–R.4 (or `--only linux,web`), stamps post-build bump via
   `scripts/update-version.sh --post-build`. **Verify:** `bash -n && --dry-run`
