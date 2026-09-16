@@ -6,6 +6,7 @@ packages:
 
 # esbuild (vite dep) ships a postinstall that validates/links its prebuilt
 # platform binary; pnpm 11 blocks undeclared build scripts, so it is approved
-# here explicitly.
+# here explicitly. better-sqlite3 compiles its native binding the same way.
 allowBuilds:
   esbuild: true
+  better-sqlite3: true
