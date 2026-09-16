@@ -554,7 +554,7 @@ executable subset of it).
   **Verify:** `pnpm vitest run apps/local/src/screens/about apps/local/src/screens/glossary`
   **Accept:** `about+glossary: license line AGPL; 36 glyph entries open`.
 
-- [ ] **U.8 — Splash.**
+- [X] **U.8 — Splash.** ✅ splash: progress binds to engine events; routes by people count
   **Owns:** `apps/local/src/screens/splash/`.
   **Spec:** wordmark + real engine-load progress only (ephemeris table mount events from
   P.3; NO fabricated progress); ready → route to conversation or first-light (people count
