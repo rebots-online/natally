@@ -1,0 +1,16 @@
+{
+  "name": "@natally/ephemeris",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "license": "AGPL-3.0-or-later",
+  "description": "natally ephemeris contracts (ARCHITECTURE §6): the EphemerisEngine seam, ChartFacts and supporting types as .ts types + zod schemas.",
+  "exports": {
+    ".": "./src/seam.ts",
+    "./seam": "./src/seam.ts",
+    "./types": "./src/types.ts"
+  },
+  "dependencies": {
+    "zod": "^4.6.5"
+  }
+}

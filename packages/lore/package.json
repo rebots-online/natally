@@ -1,0 +1,24 @@
+{
+  "name": "@natally/lore",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "license": "AGPL-3.0-or-later",
+  "description": "natally — lore & conversation contracts (ARCHITECTURE §5 entities, §8 Lore subsystem): pure types + zod schemas + the LoreStore interface.",
+  "exports": {
+    "./types": "./src/types.ts",
+    "./store": "./src/store.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "lint": "biome check src tests",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "zod": "^4"
+  },
+  "devDependencies": {
+    "typescript": "^5.9",
+    "vitest": "^3"
+  }
+}

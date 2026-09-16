@@ -101,14 +101,15 @@ executable subset of it).
 
 - [ ] **T0.4 — Token mirror test (design-tokens contract verification).**
   **Owns:** `packages/design-tokens/tests/tokens.test.ts`.
-  **Reads:** T0.8. **Spec:** test parses `tokens.css` `@theme` block and asserts: 8 colour
+  **Reads:** T0.8. **Spec:** test parses `tokens.css` `@theme` block and asserts: 10 colour
   vars + 12 zodiac vars + 4 radius + 6 space + stroke + 3 size; every
   `--color-*`/`--spacing-*` name matches the `CSS` column of `LIBS/UI/FIGMA/TOKENS.md`
   (parse the markdown table in-repo); hex values equal TOKENS.md hex column.
   **Verify:** `pnpm vitest run packages/design-tokens`
-  **Accept:** `tokens: 35 variables mirrored exactly`.
+  **Accept:** `tokens: 36 variables mirrored exactly`. *(amended 2026-09-16: defect fix —
+  frozen TOKENS.md holds 10 colour vars, 36 total; the original 8/35 was arithmetic drift)*
 
-- [ ] **T0.5 — Ephemeris contracts.**
+- [X] **T0.5 — Ephemeris contracts.** ✅ seam types: schema roundtrip OK
   **Owns:** `packages/ephemeris/src/types.ts`, `packages/ephemeris/src/seam.ts`,
   `packages/ephemeris/package.json`, `packages/ephemeris/tsconfig.json`.
   **Spec:** verbatim from ARCHITECTURE §6: `EphemerisEngine` (id, init(cfg), position, cusps,
@@ -125,7 +126,7 @@ executable subset of it).
   **Verify:** `pnpm vitest run packages/ephemeris/tests/types.test.ts` (write it; owns it)
   **Accept:** `seam types: schema roundtrip OK`.
 
-- [ ] **T0.6 — Lore & conversation contracts.**
+- [X] **T0.6 — Lore & conversation contracts.** ✅ lore types: roundtrip OK
   **Owns:** `packages/lore/src/types.ts`, `packages/lore/src/store.ts` (interface only),
   `packages/lore/package.json`, tsconfig.
   **Spec (ARCHITECTURE §5, §8):** `LoreNode {id, kind: 'person'|'fact'|'event'|'thread'|'place',
@@ -140,7 +141,7 @@ executable subset of it).
   **Verify:** `pnpm vitest run packages/lore/tests/types.test.ts`
   **Accept:** `lore types: roundtrip OK`.
 
-- [ ] **T0.7 — Billing contracts.**
+- [X] **T0.7 — Billing contracts.** ✅ billing types: roundtrip OK
   **Owns:** `packages/billing/src/types.ts`, `package.json`, tsconfig.
   **Spec (ARCHITECTURE §9):** `TrialPolicy {mode: 'count'|'time'|'rate', readings?: number,
   days?: number, cooldownDays?: number, trialModel: string}`; `Reading {id, ts, personId,
@@ -164,7 +165,9 @@ executable subset of it).
   `--color-z-<sign>`). `src/index.ts` exports the same as frozen TS const objects parsed
   once (no hand-duplicated values — parse tokens.css at build via a tiny owned script
   `scripts/gen.mjs`, output committed). **Verify:** `node packages/design-tokens/scripts/gen.mjs
-  --check` **Accept:** `tokens.css in sync with TOKENS.md (35 vars)`.
+  --check` **Accept:** `tokens.css in sync with TOKENS.md (36 vars)`. *(amended 2026-09-16:
+  defect fix — 35 was arithmetic drift; frozen TOKENS.md has 36 vars, see T0.4 note)*
+  **[X] ✅ tokens.css in sync with TOKENS.md (36 vars)**
 
 - [ ] **T0.9 — SQLite DDL & migration runner.**
   **Owns:** `packages/lore/src/ddl.ts` (shared store DDL used by both lore and app tables —

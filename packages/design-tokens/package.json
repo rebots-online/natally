@@ -1,0 +1,22 @@
+{
+  "name": "@natally/design-tokens",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "license": "AGPL-3.0-or-later",
+  "description": "natally design tokens — generated one-to-one from LIBS/UI/FIGMA/TOKENS.md (Tailwind 4 @theme + frozen TS constants).",
+  "exports": {
+    ".": "./src/index.ts",
+    "./tokens.css": "./tokens.css"
+  },
+  "scripts": {
+    "gen": "node scripts/gen.mjs",
+    "gen:check": "node scripts/gen.mjs --check",
+    "typecheck": "tsc -p tsconfig.json",
+    "lint": "biome lint --css-parse-tailwind-directives=true tokens.css && biome check src scripts package.json tsconfig.json"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2",
+    "typescript": "^5.9"
+  }
+}
