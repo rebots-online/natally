@@ -278,7 +278,7 @@ executable subset of it).
   **Verify:** `pnpm vitest run packages/lore/tests/embed.test.ts`
   **Accept:** `embedder: dim honored, L2 norm 1.0 ±1e-6, src purity holds`.
 
-- [ ] **L.3 — Extraction & merge.**
+- [X] **L.3 — Extraction & merge.** ✅ extract: entities+edges found; merge at 0.92 verified
   **Owns:** `packages/lore/src/extract.ts`, tests.
   **Spec:** deterministic extraction from a Turn: capitalized proper nouns (unicode-aware),
   dates (ISO + natural), places against the glossary gazetteer (G.1 exports the list),
@@ -289,7 +289,7 @@ executable subset of it).
   **Verify:** `pnpm vitest run packages/lore/tests/extract.test.ts`
   **Accept:** `extract: entities+edges found; merge at 0.92 verified`.
 
-- [ ] **L.4 — Hybrid retrieval.**
+- [X] **L.4 — Hybrid retrieval.** ✅ retrieve: vector ∪ 2-hop, budget respected, person-scoped
   **Owns:** `packages/lore/src/retrieve.ts`, tests.
   **Reads:** T0.6. **Spec:** `retrieve(store, {personId?, q, k=8, budgetTokens=1500})`:
   cosine kNN over vec_nodes (sqlite-vec `MATCH`) ∪ 2-hop graph expansion from matched node
@@ -310,7 +310,7 @@ executable subset of it).
 
 ## Phase B — Billing & licensing
 
-- [ ] **B.1 — Trial gate.**
+- [X] **B.1 — Trial gate.** ✅ trial: count/time/rate/licensed matrices pass (≥14 cases)
   **Owns:** `packages/billing/src/trial.ts`, tests.
   **Spec:** parse RuntimeConfig trial block; `evaluateGate(policy, ledgerRows, now)` →
   `{state: 'trial-active'|'trial-exhausted'|'rate-limited'|'licensed', remaining?,
@@ -329,7 +329,7 @@ executable subset of it).
   **Verify:** `pnpm vitest run packages/billing/tests/ledger.test.ts`
   **Accept:** `consume: licensed/trial/exhausted/rate paths exact`.
 
-- [ ] **B.3 — License token verify + storage.**
+- [X] **B.3 — License token verify + storage.** ✅ token: valid passes, tampered/expired/revoked rejected
   **Owns:** `packages/billing/src/token/` (format.ts, verify-web.ts, storage-web.ts,
   native.rs, verify.rs), tests.
   **Spec:** compact token = base64url(header).payload.Ed25519-sig (COSE-esque, no external
@@ -576,7 +576,7 @@ executable subset of it).
 
 ## Phase M — Mirror & models
 
-- [ ] **M.1 — Manifest, downloads, catalogue.**
+- [X] **M.1 — Manifest, downloads, catalogue.** ✅ mirror: resume + sha256 + atomic commit; corrupted blob rejected
   **Owns:** `apps/local/src/mirror/` (manifest.ts, download.ts, cache.ts, catalogue.ts),
   tests.
   **Reads:** T0.7 types. **Spec:** fetch `manifest.json` from mirror base (host allowlist =
