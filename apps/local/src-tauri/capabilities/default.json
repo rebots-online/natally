@@ -1,0 +1,7 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "default",
+  "description": "Default capability for the natally `main` window. Grants no permissions yet: this scaffold compiles no tauri plugins. Feature tasks append exactly the `core:` and `plugin:` permissions their own task block owns.",
+  "windows": ["main"],
+  "permissions": []
+}

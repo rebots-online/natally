@@ -72,7 +72,7 @@ executable subset of it).
   script wired. **Verify:** `pnpm install --frozen-lockfile=false && ./scripts/check.sh`
   **Accept:** `workspace: 0 test files, typecheck+lint clean` (empty workspace passes).
 
-- [ ] **T0.2 — apps/local frontend scaffold.**
+- [X] **T0.2 — apps/local frontend scaffold.** ✅ built standalone entry OK
   **Owns:** `apps/local/package.json`, `apps/local/vite.config.ts`, `apps/local/tsconfig.json`,
   `apps/local/index.html`, `apps/local/src/main.tsx`, `apps/local/src/app.tsx`,
   `apps/local/src/styles/global.css`, `apps/local/public/` (empty `.gitkeep`).
@@ -87,7 +87,7 @@ executable subset of it).
   create `tsconfig.standalone.json` (owns it) that excludes router import.
   **Accept:** `built standalone entry OK` (tsc exits 0; vite build accepted after I.1).
 
-- [ ] **T0.3 — src-tauri scaffold.**
+- [X] **T0.3 — src-tauri scaffold.** ✅ Finished with 0 errors
   **Owns:** `apps/local/src-tauri/` (Cargo.toml, tauri.conf.json, build.rs, src/main.rs,
   src/lib.rs, capabilities/default.json).
   **Spec:** Tauri 2 app `mba.robin.natally`; dev server `http://localhost:5173`; window
@@ -99,7 +99,7 @@ executable subset of it).
   **Verify:** `cargo check --manifest-path apps/local/src-tauri/Cargo.toml`
   **Accept:** `Finished` with 0 errors.
 
-- [ ] **T0.4 — Token mirror test (design-tokens contract verification).**
+- [X] **T0.4 — Token mirror test (design-tokens contract verification).** ✅ tokens: 36 variables mirrored exactly
   **Owns:** `packages/design-tokens/tests/tokens.test.ts`.
   **Reads:** T0.8. **Spec:** test parses `tokens.css` `@theme` block and asserts: 10 colour
   vars + 12 zodiac vars + 4 radius + 6 space + stroke + 3 size; every
@@ -169,7 +169,7 @@ executable subset of it).
   defect fix — 35 was arithmetic drift; frozen TOKENS.md has 36 vars, see T0.4 note)*
   **[X] ✅ tokens.css in sync with TOKENS.md (36 vars)**
 
-- [ ] **T0.9 — SQLite DDL & migration runner.**
+- [X] **T0.9 — SQLite DDL & migration runner.** ✅ migrations: fresh + re-run both OK (10 tables)
   **Owns:** `packages/lore/src/ddl.ts` (shared store DDL used by both lore and app tables —
   single ownership to keep parallel tasks disjoint), `packages/lore/src/migrate.ts`.
   **Spec:** `MIGRATIONS: {id, sql}[]` executed in order, recorded in `_migrations`. Tables
@@ -190,7 +190,7 @@ executable subset of it).
   **Verify:** `pnpm vitest run packages/lore/tests/ddl.test.ts` (in-memory better-sqlite3
   dev-dep; vec-off path) **Accept:** `migrations: fresh + re-run both OK (10 tables)`.
 
-- [ ] **T0.10 — Config loader.**
+- [X] **T0.10 — Config loader.** ✅ config: valid, blank-rails-hidden, bad-env-throws
   **Owns:** `apps/local/src/config.ts`, `packages/billing/src/config.ts`.
   **Spec:** typed `loadConfig(env)` reading the `.env.example` variables verbatim
   (ARCHITECTURE §15): trial block with validation (exactly one mode populated; trialModel

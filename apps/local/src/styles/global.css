@@ -1,0 +1,42 @@
+/* natally local — global stylesheet.
+   Order matters: Tailwind 4 first, then the frozen token @theme from
+   @natally/design-tokens (the one-to-one mirror of LIBS/UI/FIGMA/TOKENS.md —
+   the only place raw hex may live, ARCHITECTURE.md §3). */
+
+@import "tailwindcss";
+@import "@natally/design-tokens/tokens.css";
+
+/* S.1 fonts */
+/* Self-hosted @font-face declarations (Fraunces, Nunito Sans, IBM Plex Mono,
+   woff2 under public/fonts/) land here via task S.1. Until then the display
+   stack falls back to the system serif — no CDN imports, ever. */
+
+/* Tailwind scans the frontend source only: ../ from styles/ is src/. */
+@source "../";
+
+/* The midnight ground — the loading absence and every screen stand on it. */
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  background-color: var(--color-midnight);
+  color: var(--color-vellum);
+}
+
+/* Loading absence (INC-19): dark ground + static wordmark, faking no progress. */
+.natally-absence {
+  display: grid;
+  place-items: center;
+  min-height: 100dvh;
+}
+
+.natally-wordmark {
+  font-family: "Fraunces", serif; /* display font; S.1 supplies the woff2 */
+  font-size: 2rem;
+  letter-spacing: 0.08em;
+  margin: 0;
+}

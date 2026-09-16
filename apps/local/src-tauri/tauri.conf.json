@@ -1,0 +1,33 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "natally",
+  "version": "0.1.0",
+  "identifier": "mba.robin.natally",
+  "build": {
+    "devUrl": "http://localhost:5173",
+    "frontendDist": "../dist"
+  },
+  "app": {
+    "windows": [
+      {
+        "label": "main",
+        "title": "natally",
+        "width": 430,
+        "height": 932,
+        "minWidth": 430,
+        "minHeight": 932,
+        "resizable": true,
+        "theme": "dark",
+        "backgroundColor": "#120C1C"
+      }
+    ],
+    "security": {
+      "csp": null
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": ["deb"],
+    "icon": ["icons/icon.png"]
+  }
+}

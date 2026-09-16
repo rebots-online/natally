@@ -1,0 +1,26 @@
+# natally local app shell — Tauri 2 scaffold (task T0.3).
+# Check-only scaffold: no plugins, no feature modules. The `#[tauri::command]`
+# surface is wired through the static `natally_plugin!` registry; see the
+# contract doc in src/lib.rs before adding anything here.
+
+[package]
+name = "natally"
+version = "0.1.0"
+description = "natally — natal astrology + synastry companion (local app shell)"
+license = "AGPL-3.0-or-later"
+edition = "2021"
+
+[lib]
+name = "natally_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = [] }
+tokio = { version = "1", features = ["rt-multi-thread", "macros", "sync"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+rusqlite = { version = "0.40", features = ["bundled"] }
+thiserror = "2"

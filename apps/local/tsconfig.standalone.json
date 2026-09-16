@@ -1,0 +1,4 @@
+{
+  "extends": "./tsconfig.json",
+  "exclude": ["src/main.tsx", "node_modules", "dist"]
+}
