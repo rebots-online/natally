@@ -13,7 +13,7 @@ import { migrate } from "../src/migrate";
 import { createSqliteLoreStore } from "../src/store/common";
 import { createNativeLoreStore } from "../src/store/native";
 import { createWebLoreStore } from "../src/store/web";
-import type { Turn } from "../src/types";
+import type { LoreEdge, LoreNode, Turn } from "../src/types";
 
 /** Deterministic bag-of-chars toy embedder — the real model is an injected host concern. */
 const DIM = 8;
@@ -221,6 +221,167 @@ test("native adapter rejects contract-violating responses and embedder absence",
   await expect(bareStore.query(undefined, "q", 1, 100)).rejects.toThrow(/embedder/);
   const bareNative = createNativeLoreStore(async () => ({ ok: true }));
   await expect(bareNative.query(undefined, "q", 1, 100)).rejects.toThrow(/embedder/);
+});
+
+test("flushTurn: one transactional batch — evidence node, node/edge upserts, idempotent re-flush", async () => {
+  const db = openMemory();
+  migrate(db, { vec: false });
+  const store = createSqliteLoreStore(db, { vec: false, runtime: "memory" });
+  const t = turn("f1", "alice met bob", "p1");
+  const embed = [...(await toyEmbed(t.text))];
+  const nodes: LoreNode[] = [
+    {
+      id: "lore:person:alice",
+      kind: "person",
+      summary: "Alice",
+      embedding: [...(await toyEmbed("Alice"))],
+      refs: ["f1"],
+    },
+    {
+      id: "lore:person:bob",
+      kind: "person",
+      summary: "Bob",
+      embedding: [...(await toyEmbed("Bob"))],
+      refs: ["f1"],
+    },
+  ];
+  const edges: LoreEdge[] = [
+    {
+      from: "lore:person:alice",
+      to: "lore:person:bob",
+      rel: "mentions",
+      weight: 1,
+      sourceTurnId: "f1",
+    },
+    {
+      from: "lore:person:bob",
+      to: "lore:person:alice",
+      rel: "mentions",
+      weight: 1,
+      sourceTurnId: "f1",
+    },
+    // Same (from, to, rel, source_turn_id) as the first edge, different weight:
+    // the ON CONFLICT clause must collapse the duplicate to the last write.
+    {
+      from: "lore:person:alice",
+      to: "lore:person:bob",
+      rel: "mentions",
+      weight: 7,
+      sourceTurnId: "f1",
+    },
+  ];
+
+  await store.flushTurn(t, embed, { nodes, edges });
+
+  // Rows: turn + evidence node + 2 extraction nodes; 3 edge writes → 2 rows.
+  await expect(store.stats()).resolves.toEqual({
+    turns: 1,
+    nodes: 3,
+    edges: 2,
+    runtime: "memory",
+  });
+  const doc = await store.exportAll();
+  const evidence = doc.loreNodes.find((node) => node.id === "turn:f1");
+  expect(evidence).toMatchObject({ kind: "event", summary: t.text, refs: ["f1"] });
+  expect(evidence?.embedding).toHaveLength(DIM);
+  expect(doc.turns.map((row) => row.id)).toEqual(["f1"]);
+  // Weight semantics: ABSOLUTE per turn, last write wins — never accumulate.
+  const aliceBob = doc.loreEdges.find(
+    (edge) =>
+      edge.from === "lore:person:alice" && edge.to === "lore:person:bob" && edge.rel === "mentions",
+  );
+  expect(aliceBob).toMatchObject({ weight: 7, sourceTurnId: "f1" });
+
+  // Re-flush of the SAME turn: guard + turn rows are INSERT OR IGNORE, the
+  // node/edge upserts rewrite identical content — still exactly one row each.
+  await store.flushTurn(t, embed, { nodes, edges });
+  await expect(store.stats()).resolves.toEqual({
+    turns: 1,
+    nodes: 3,
+    edges: 2,
+    runtime: "memory",
+  });
+  const docAfter = await store.exportAll();
+  expect(docAfter.turns.map((row) => row.id)).toEqual(["f1"]);
+  expect(docAfter.loreNodes.map((node) => node.id).sort()).toEqual([
+    "lore:person:alice",
+    "lore:person:bob",
+    "turn:f1",
+  ]);
+  expect(
+    docAfter.loreEdges.find(
+      (edge) =>
+        edge.from === "lore:person:alice" &&
+        edge.to === "lore:person:bob" &&
+        edge.rel === "mentions",
+    ),
+  ).toMatchObject({ weight: 7 });
+});
+
+test("flushTurn: mid-transaction failure rolls back EVERYTHING — no partial rows", async () => {
+  const db = openMemory();
+  migrate(db, { vec: false });
+  // Inject exactly ONE mid-flush statement failure through the SqliteDb seam:
+  // the first lore_edges INSERT throws AFTER the session guard row, turn row,
+  // evidence node and lore node of the SAME transaction have been written
+  // (every flush statement carries a conflict clause, so no flush input can
+  // raise a native constraint error mid-flush — the injected failure is the
+  // only way to exercise the ROLLBACK path honestly).
+  let failEdgesOnce = true;
+  const flaky: SqliteDb = {
+    exec: (sql: string) => db.exec(sql),
+    prepare: (sql: string) => {
+      if (failEdgesOnce && sql.startsWith("INSERT INTO lore_edges")) {
+        failEdgesOnce = false;
+        throw new Error("lore store test: simulated mid-flush statement failure");
+      }
+      return db.prepare(sql);
+    },
+  };
+  const store = createSqliteLoreStore(flaky, { vec: false, runtime: "memory" });
+  const embed = [...(await toyEmbed("seed"))];
+  const nodes: LoreNode[] = [
+    {
+      id: "lore:person:alice",
+      kind: "person",
+      summary: "Alice",
+      embedding: embed,
+      refs: ["f1"],
+    },
+  ];
+  const edges: LoreEdge[] = [
+    {
+      from: "turn:f1",
+      to: "lore:person:alice",
+      rel: "mentions",
+      weight: 1,
+      sourceTurnId: "f1",
+    },
+  ];
+
+  await expect(store.flushTurn(turn("f1", "seed", "p1"), embed, { nodes, edges })).rejects.toThrow(
+    /mid-flush/,
+  );
+
+  // EVERYTHING rolled back: the guard session, the turn row, the evidence node
+  // and the lore node written before the failure are all gone — no partials.
+  await expect(store.stats()).resolves.toEqual({
+    turns: 0,
+    nodes: 0,
+    edges: 0,
+    runtime: "memory",
+  });
+  const sessions = db.prepare("SELECT COUNT(*) AS n FROM sessions").get() as { n: number };
+  expect(sessions.n).toBe(0);
+
+  // The store is uncorrupted: the identical flush (failure spent) succeeds.
+  await store.flushTurn(turn("f1", "seed", "p1"), embed, { nodes, edges });
+  await expect(store.stats()).resolves.toEqual({
+    turns: 1,
+    nodes: 2,
+    edges: 1,
+    runtime: "memory",
+  });
 });
 
 /** Helper mirroring toyEmbed for payload assertions (kept async-free for toMatchObject). */

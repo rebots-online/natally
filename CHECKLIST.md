@@ -365,7 +365,7 @@ executable subset of it).
   parameter, not a mock.)
   **Accept:** `hosted adapter: URL build, poll loop, SSRF rejects loopback/private`.
 
-- [ ] **B.5b — RevenueCat adapter.**
+- [X] **B.5b — RevenueCat adapter.** ✅ rc adapter: paywall→entitlement→mint→token flow OK
   **Owns:** `packages/billing/src/adapters/revenuecat.ts`, tests.
   **Spec:** web SDK (`@revenuecat/purchases-js` dep): init with web SDK key + appUserId;
   `checkout` → `presentPaywall(offeringId)`; entitlement `unlimited` present ⇒ request
@@ -406,7 +406,7 @@ executable subset of it).
 
 ## Phase C — Companion
 
-- [ ] **C.1 — Inference host (turboquant).**
+- [X] **C.1 — Inference host (turboquant).** ✅ inference: turboquant params (Q4_K_M, kv q8_0) mapped on both lanes
   **Owns:** `apps/local/src-tauri/src/inference/` (mod.rs, llama.rs), `apps/local/src/
   companion/inference-web.ts`, `packages/…` none — plus `apps/local/src/companion/lane.ts`.
   **Spec:** streaming completion API `complete(ctx: FenceContext, onToken)`; native:
@@ -417,7 +417,7 @@ executable subset of it).
   param mapping with injected engine factory) **Accept:** `inference: turboquant params
   (Q4_K_M, kv q8_0) mapped on both lanes`.
 
-- [ ] **C.2 — Prompt fence + checker.**
+- [X] **C.2 — Prompt fence + checker.** ✅ fence: clean passes; 0.01° tolerance; violation→regen→absence chain exact
   **Owns:** `apps/local/src/companion/fence.ts`, `apps/local/src/companion/persona.ts`,
   tests. **Spec (§7.2):** assemble Tier1 (serialized ChartFacts in scope + glossary
   definitions), Tier2 (L.4 fragments with sourceTurnId), Tier3 (live turn + tool results);
@@ -591,7 +591,7 @@ executable subset of it).
 
 ## Phase X — Persistence app layer
 
-- [ ] **X.1 — Repositories + export/import.**
+- [X] **X.1 — Repositories + export/import.** ✅ data: CRUD roundtrip; export→wipe→import restores equivalently
   **Owns:** `apps/local/src/data/` (db.ts adapters wiring T0.9 to native/web, people.ts,
   sessions.ts, turns.ts, charts.ts, export.ts, import.ts), tests.
   **Spec:** repos for Person/Session/Turn/ChartFacts per DDL; `exportAll()` →

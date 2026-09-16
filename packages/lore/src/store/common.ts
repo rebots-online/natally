@@ -1,7 +1,9 @@
 // natally — LoreStore core over the shared SqliteDb seam (ARCHITECTURE §8.1–§8.4).
 // ALL store SQL and row mapping lives here; the platform adapters (web.ts,
 // native.ts) are thin shells that supply an opened `SqliteDb` (ddl.ts seam) and
-// delegate to `createSqliteLoreStore`.
+// delegate to `createSqliteLoreStore`. The pipeline's one-transaction `flushTurn`
+// batch entry (§8.3, `LorePipelineStore`) also lives HERE, so every adapter built
+// on this core ships it.
 //
 // Vec policy (§8.1): this core keeps `lore_nodes` (canonical rows) and — when
 // the host loaded the sqlite-vec extension — the `vec_nodes` mirror table is
@@ -15,7 +17,12 @@
 // in `apps/local/src-tauri/src/lore_commands.rs` — keep the two in lockstep.
 
 import { type SqliteDb, STORE_TABLES, VEC_NODES_TABLE } from "../ddl";
-import type { LoreFragment, LoreStats, LoreStore } from "../store";
+// Type-only import of the pipeline seam: `flushTurn` is implemented HERE (this
+// is the production `LorePipelineStore` core), and typing the returned store as
+// the seam proves compatibility at compile time with zero runtime coupling —
+// the import is erased, so no module cycle exists.
+import type { LoreFlush, LorePipelineStore } from "../pipeline";
+import type { LoreFragment, LoreStats } from "../store";
 import {
   ChartInputsSchema,
   ConsumedCodeSchema,
@@ -112,12 +119,18 @@ function asRows(value: unknown): Record<string, unknown>[] {
 // ---------------------------------------------------------------------------
 
 /**
- * Build the platform-neutral `LoreStore` over an opened `SqliteDb`.
+ * Build the platform-neutral lore store over an opened `SqliteDb` — the full
+ * `LoreStore` surface plus the pipeline's `flushTurn` batch entry (the
+ * production `LorePipelineStore` implementation; see the seam ruling in
+ * pipeline.ts).
  *
  * The core does NOT migrate: adapters (and the test harness) call
  * `migrate(db, { vec })` first — the re-run is an idempotent no-op.
  */
-export function createSqliteLoreStore(db: SqliteDb, opts: SqliteLoreStoreOptions): LoreStore {
+export function createSqliteLoreStore(
+  db: SqliteDb,
+  opts: SqliteLoreStoreOptions,
+): LorePipelineStore {
   const runtime = opts.runtime;
 
   function requireEmbed(text: string): Promise<readonly number[]> {
@@ -191,6 +204,78 @@ export function createSqliteLoreStore(db: SqliteDb, opts: SqliteLoreStoreOptions
           embeddingToBlob(embedding),
           JSON.stringify([turn.id]),
         );
+      });
+    },
+
+    /**
+     * The pipeline's ONE flush per turn (§8.3, TR-4): session guard row, turn
+     * row, the `turn:<id>` evidence-anchor node, and the extraction nodes and
+     * edges — insert-only SQL (conflict-resolution clauses only, no standalone
+     * UPDATE/DELETE), all inside exactly ONE transaction via the shared
+     * `transaction` helper (BEGIN IMMEDIATE … COMMIT, ROLLBACK on error).
+     * Semantics ported from the proven L.5 test harness (pipeline.test.ts).
+     * Re-flushing the same turn is idempotent: the guard and turn rows are
+     * `INSERT OR IGNORE` (the same conflict shape `upsertTurn` uses for the
+     * guard) and the node/edge writes are `ON CONFLICT` upserts whose edge
+     * weights are ABSOLUTE per turn — overwrite, never accumulate (extract.ts
+     * law).
+     */
+    async flushTurn(turn: Turn, embedding: readonly number[], lore: LoreFlush): Promise<void> {
+      if (embedding.length === 0) {
+        throw new Error("lore store: flushTurn needs a non-empty embedding");
+      }
+      if (opts.embedDim !== undefined && embedding.length !== opts.embedDim) {
+        throw new Error(
+          `lore store: embedding dimension ${String(embedding.length)} != declared ${String(opts.embedDim)}`,
+        );
+      }
+      transaction(() => {
+        // Same guard shape as `upsertTurn`: the stub session carries NO person
+        // linkage, and the turn row must never strand on a missing session.
+        db.prepare(
+          "INSERT OR IGNORE INTO sessions (id, person_id, started_at) VALUES (?, ?, ?)",
+        ).run(turn.sessionId, null, turn.ts);
+        db.prepare(
+          "INSERT OR IGNORE INTO turns (id, session_id, person_id, role, text, ts, tool_ops) VALUES (?, ?, ?, ?, ?, ?, ?)",
+        ).run(
+          turn.id,
+          turn.sessionId,
+          turn.personId ?? null,
+          turn.role,
+          turn.text,
+          turn.ts,
+          turn.toolOps ? JSON.stringify(turn.toolOps) : null,
+        );
+        // The `turn:<id>` evidence anchor (§8.3) and the extraction nodes share
+        // one upsert: conflict resolves by id, the new row content wins.
+        const insertNode = db.prepare(
+          "INSERT INTO lore_nodes (id, kind, summary, embedding, refs_json) VALUES (?, ?, ?, ?, ?) " +
+            "ON CONFLICT(id) DO UPDATE SET summary = excluded.summary, embedding = excluded.embedding, refs_json = excluded.refs_json",
+        );
+        insertNode.run(
+          `turn:${turn.id}`,
+          "event",
+          turn.text,
+          embeddingToBlob(embedding),
+          JSON.stringify([turn.id]),
+        );
+        for (const node of lore.nodes) {
+          insertNode.run(
+            node.id,
+            node.kind,
+            node.summary,
+            embeddingToBlob(node.embedding),
+            JSON.stringify(node.refs),
+          );
+        }
+        // Edge weights are ABSOLUTE per turn — upsert, never accumulate.
+        const insertEdge = db.prepare(
+          "INSERT INTO lore_edges (from_id, to_id, rel, weight, source_turn_id) VALUES (?, ?, ?, ?, ?) " +
+            "ON CONFLICT(from_id, to_id, rel, source_turn_id) DO UPDATE SET weight = excluded.weight",
+        );
+        for (const edge of lore.edges) {
+          insertEdge.run(edge.from, edge.to, edge.rel, edge.weight, edge.sourceTurnId);
+        }
       });
     },
 
