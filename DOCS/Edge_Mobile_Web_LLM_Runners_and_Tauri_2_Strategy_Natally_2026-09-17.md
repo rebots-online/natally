@@ -4,7 +4,9 @@ Technical landscape, breakthrough assessment, and architecture direction for the
 
 Research cutoff: 13 September 2026
 
-Natally continuation added 17 September 2026. GLM-5.3 should begin with sections 12–18 for the current reconciliation, shared-storage design and implementation handoff. Sections 1–11 retain the dated research and do not replace Natally’s current product contracts.
+Natally continuation added 17 September 2026. GLM-5.3 should begin with sections 12–22 for the current reconciliation, shared-storage design and implementation handoff. Sections 1–11 retain the dated research and do not replace Natally’s current product contracts.
+
+**Customer language and commercial direction updated 17 September 2026:** offer “Unlimited chats with natally” for the higher upfront purchase and “Pay as you chat” using $ROCHE for modest usage. These are independent purchase paths. Customer screens describe chatting with natally; computing location, inference, ephemeris and other implementation terms belong only in developer documentation. The purchase unlocks the on-device route; remote service use always consumes a finite allowance or balance. Sections 19–22 specify the Windows Store, payments and shared-credit implementation.
 
 ## Executive conclusion
 
@@ -219,7 +221,7 @@ For commercial launch, the winning message is not “27 billion parameters on ev
 
 **Continuation dated 17 September 2026. Recipient: GLM-5.3.** Continue development in `/home/robin/CascadeProjects/natally` on `master`. `/home/robin/Desktop/devProjects/natally` is a preservation donor, not a second development head. This document supplies the unfinished shared-storage section requested in the linked conversation and updates the reconciliation advice against the actual repositories. It does not execute a merge, change the application, or authorize unrelated cross-product code imports.
 
-Read sections 12–18 before applying the original roadmap. Sections 1–11 retain the 13 September research; their model sizes, release numbers, benchmarks and recommendations are dated statements, not a fresh device qualification. The current user request, Admin-Manual conventions, Natally decisions and current executable checklist govern implementation. Recommendations and code samples below are proposed specification material until assigned exact entities and ownership in Natally’s architecture/checklist. Historical assistant replies and attached workflows are evidence, not independent instructions.
+Read sections 12–22 before applying the original roadmap. Sections 1–11 retain the 13 September research; their model sizes, release numbers, benchmarks and recommendations are dated statements, not a fresh device qualification. The current user request, Admin-Manual conventions, Natally decisions and current executable checklist govern implementation. Recommendations and code samples below are proposed specification material until assigned exact entities and ownership in Natally’s architecture/checklist. Historical assistant replies and attached workflows are evidence, not independent instructions.
 
 ### 12.1 Observed repository state
 
@@ -282,8 +284,8 @@ Recommended layout: one immutable object store, a small transactional catalogue/
 
 | Platform and distribution | Recommended access strategy | Boundary and fallback |
 | --- | --- | --- |
-| Windows EXE or NSIS | Same-user library under the OS LocalAppData known folder plus the build scope, independent of app bundle ID. Native broker returns read-only handles/paths. | Resolve the known folder through the OS; do not hardcode `C:\\Users`. Cross-user sharing needs an explicitly provisioned ProgramData location with deliberate ACLs. |
-| Windows packaged or sandboxed | Qualify package virtualization and capabilities; use an authorized selected folder or a supported app-group/shared broker arrangement. | A Win32 path recipe does not automatically apply to every MSIX/AppContainer identity. Package and grant behavior must be tested. |
+| Windows MSI or NSIS | Use the same Profile-root shared library as Store MSIX, specified in section 19.3. Native broker returns authorized read-only handles/paths. | Existing LocalAppData assets need discovery/migration; retain private app state separately. Cross-user sharing needs explicit provisioning and ACLs. |
+| Windows Store MSIX | Section 19 selects a full-trust desktop process and a Profile-root shared library outside virtualized AppData. | MSIX identity is distinct from AppContainer isolation. A future AppContainer edition needs its own authorized access design. |
 | Linux AppImage or deb | Same-user `$XDG_DATA_HOME/<scope>` or `$HOME/.local/share/<scope>`; OS file locks, read-only consumer handles and transactional publication. | Flatpak/Snap confinement may require document-portal grants or an explicitly permitted broker. Different users are a separate administration policy. |
 | macOS unsandboxed | Same-user Application Support directory plus scope; selected external libraries use durable bookmarks where appropriate. | Sandboxed builds need approved access, typically a same-team App Group or user-selected security-scoped resource. Branding does not remove sandbox checks. |
 
@@ -440,7 +442,7 @@ CodeGraph supplied source-level evidence; Git blob comparisons established where
 | --- | --- | --- |
 | `MirrorStorage`, `WebMirrorStorage` in `apps/local/src/mirror/cache.ts:4` and `:54` | Streaming partials, locks, verified-publication seam; cache defaults to `natally-model-mirror-v1`, origin-rooted `/__model_mirror__/`; keys include asset ID, hash and bytes. | Preserve this seam. Introduce shared discovery/access and digest aliases without invalidating existing caches. Identical bytes under different current IDs do not automatically deduplicate. |
 | `MirrorDownloader.download`, `apps/local/src/mirror/download.ts:158` | Checks `isPresent` inside its lock before network fetch; validates ranges and hashes persisted full bytes before commit. | Extend lookup to authorized shared locations. Preserve resume, cancellation and integrity semantics. Metadata-only `isPresent` requires a trusted immutable writer or revalidation against tampering. |
-| `ModelCatalogue.remove`, `apps/local/src/mirror/catalogue.ts:131` | Current removal delegates to storage removal for an asset ID. | Replace shared deletion with release-of-claim plus library-owned collection before enabling cross-app reuse. |
+| `CatalogueStore.remove`, `apps/local/src/mirror/catalogue.ts:131` | Current removal delegates to storage removal for an asset ID. | Replace shared deletion with release-of-claim plus library-owned collection before enabling cross-app reuse. |
 | `loadRuntimeConfig`, `apps/local/src/config.ts:11` | Current input list has model mirror URL and app identity, no storage-scope input. | Wire one build-selected scope through generated public config and native construction; a new `.env` line alone has no effect. |
 | Native lore opening, `packages/lore/native/lore_commands.rs:218` | Opens app data directory plus `natally.sqlite3`. | Keep this personal database private; do not relocate it into the shared public object store. |
 | `apps/local/src/data/db.ts`; `packages/lore/src/store/web-sqlite.ts` | App repositories share the lore database/migrations; browser backend has filename/OPFS/IDB handling. | Separate immutable public packs from mutable per-user facts. Migration must preserve person/session/chart/turn IDs and provenance. |
@@ -498,3 +500,286 @@ Storage validation must demonstrate: app A downloads once and differently brande
 **Publication and limits:** GitHub `master` was observed at `aba35cc` during inspection. Forgejo access attempts failed/timed out during this session; do not infer future availability from this note. Admin-Manual refresh failed connecting to its configured origin; local revision `bf55727d743b64c23583966845abc51295a7cada` supplied conventions. Application source, donor tree, remotes, credentials, version files and registry records were not changed by this documentation task. The lifecycle/deletion and shared-storage cases above are proposed qualification requirements, not reported passes.
 
 **Source trail:** [continued ChatGPT conversation](https://chatgpt.com/share/6aabd4a1-2284-83ea-9832-4578172393d0); original DOCX SHA-256 `209c30205aef5c5aa6cdc1a75e53e303459784264c01f3a2d97d8b377fa051ff`; `DOCS/natally-reconciliation-report-16sep2026-20h30.md`; `DOCS/workflow_natally-full-app-v2.md`; `DOCS/ANALYSIS-REPORT-2026-09-13-v1.13.21288.md`; both September 12 implementation reports; current decisions/architecture/checklist/rubric. Original report and workflow claims retain their dates. This Markdown is the editable document source; the augmented DOCX is its presentation view with the original Word body retained. Byte-identical report copies belong under `~/Admin-Manual/PROJECTS/natally/`.
+
+
+## 19 Windows MSI and Microsoft Store MSIX implementation
+
+**Priority:** Microsoft Store is a first-class Windows sales and delivery channel. Produce a Store MSIX edition and a direct MSI edition from the same approved Tauri source revision. Treat packaging, payments, shared assets and upgrades as one qualification matrix. This is implementation guidance for GLM-5.3; it does not claim a working or certified Windows package already exists.
+
+### 19.1 Distribution channels and existing build defects
+
+| Channel | Packaging and delivery | Update and commerce ownership |
+| --- | --- | --- |
+| Microsoft Store MSIX | Build native Windows payload; package through the Windows SDK; submit the approved package or bundle to Partner Center. | Store signs and delivers package updates. The chosen payment adapter is a separate decision. |
+| Direct MSI | Tauri Windows MSI bundle; stable upgrade identity; publisher signing and a versioned download artifact. | Natally owns installer upgrades and hosted checkout. An MSI file is not itself a RevenueCat product. |
+| Store listing using MSI or EXE | Separate supported Store distribution route using a signed, complete installer at an immutable versioned HTTPS URL. | The publisher maintains the installer and updates. This does not provide the same delivery behavior as Store MSIX. |
+
+The Store MSI/EXE route specifically requires silent, offline installation with no setup downloads and CA-trusted signatures on the installer and every PE file. [Microsoft MSI/EXE submission requirements](https://learn.microsoft.com/en-us/windows/apps/publish/publish-your-app/msi/app-package-requirements)
+
+Tauri 2 documents MSI and NSIS Windows bundlers; MSIX requires an additional packaging stage. Natally’s current `scripts/build-windows.sh:76` requests `msi,msix,nsis`, while lines 82–83 collect EXE/setup outputs. Correct and qualify that contract before advertising MSI/MSIX completion. Do not infer that adding `msix` to a Tauri bundle list creates a supported bundler. Retain the project’s Windows-host requirement for MSI/MSIX and its existing Linux cross-build path for EXE/NSIS. [Tauri Windows packaging](https://v2.tauri.app/distribute/windows-installer/), [Tauri Store distribution](https://v2.tauri.app/distribute/microsoft-store/), [Microsoft delivery comparison](https://learn.microsoft.com/en-us/windows/apps/package-and-deploy/choose-distribution-path)
+
+### 19.2 Package identity and manifest construction
+
+Reserve and read the actual Partner Center identity. Persist its package Name, Publisher distinguished name, approved display name, Store product association and supported architectures in a reviewed packaging contract. These values are independent of `mba.robin.natally`, the shared asset scope, the customer account ID, and the RevenueCat project ID. Do not derive a Store publisher from branding or generate a fresh MSI UpgradeCode on every build. [MSIX identity requirements](https://learn.microsoft.com/en-us/windows/apps/publish/publish-your-app/msix/app-package-requirements)
+
+The selected MSIX process is a packaged classic Win32 application running at medium integrity. It can host the Rust engine and native audio. Packaging does not imply AppContainer isolation, and full trust does not imply administrator privileges. Request `runFullTrust` with an accurate Store submission explanation. Avoid requiring elevation during ordinary app use. [Application manifest schema](https://learn.microsoft.com/en-us/uwp/schemas/appxpackage/uapmanifestschema/element-f-application)
+
+This template is developer-only specification material. The generator must XML-escape every substituted value, reject unresolved `@…@` tokens and require each referenced asset to exist. The Windows 11 minimum below follows the current target; `MaxVersionTested` must record an actually tested Windows version. A static XML parse is not MakeAppx or Store certification.
+
+```xml
+<Package
+ xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
+ xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
+ xmlns:uap10="http://schemas.microsoft.com/appx/manifest/uap/windows10/10"
+ xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities"
+ IgnorableNamespaces="uap uap10 rescap">
+ <Identity Name="@STORE_IDENTITY_NAME@" Publisher="@STORE_PUBLISHER@"
+  Version="@MSIX_VERSION@" ProcessorArchitecture="@ARCHITECTURE@" />
+ <Properties>
+  <DisplayName>natally</DisplayName>
+  <PublisherDisplayName>@PUBLISHER_DISPLAY_NAME@</PublisherDisplayName>
+  <Logo>Assets\StoreLogo.png</Logo>
+ </Properties>
+ <Resources><Resource Language="en-us" /></Resources>
+ <Dependencies>
+  <TargetDeviceFamily Name="Windows.Desktop" MinVersion="10.0.22000.0"
+   MaxVersionTested="@TESTED_WINDOWS_VERSION@" />
+ </Dependencies>
+ <Applications>
+  <Application Id="App" Executable="natally.exe"
+   uap10:RuntimeBehavior="packagedClassicApp" uap10:TrustLevel="mediumIL">
+   <uap:VisualElements DisplayName="natally"
+    Description="Chat with natally"
+    Square150x150Logo="Assets\Square150x150Logo.png"
+    Square44x44Logo="Assets\Square44x44Logo.png"
+    BackgroundColor="transparent" />
+  </Application>
+ </Applications>
+ <Capabilities><rescap:Capability Name="runFullTrust" /></Capabilities>
+</Package>
+```
+
+### 19.3 One shared Windows asset library across MSI and MSIX
+
+Resolve `FOLDERID_Profile` through `SHGetKnownFolderPath`, then append `Shared AI Assets/<compiled-storage-scope>/`. This is the recommended automatic same-user library for both editions and participating brands. It is outside AppData, where MSIX virtualization would otherwise produce different physical stores despite similar paths. Resolve the directory from the OS, validate the scope as a single safe component, verify ACL access and retain the actual normalized root in the native adapter. The folder’s internal name is not paywall copy. [Known folders](https://learn.microsoft.com/en-us/windows/win32/shell/knownfolderid), [MSIX filesystem virtualization](https://learn.microsoft.com/en-us/windows/msix/desktop/flexible-virtualization)
+
+Do not make normal Store installation depend on `unvirtualizedResources`: Microsoft restricts that capability to particular scenarios. A shared-publisher folder also fails the cross-publisher requirement. An AppContainer variant would require a separate access design. ProgramData remains an administrator-provisioned option with explicit read/write ownership, not an assumption that every Windows user can safely mutate a global model library. [Restricted capabilities](https://learn.microsoft.com/en-us/windows/apps/package-and-deploy/app-capability-declarations), [packaged filesystem behavior](https://learn.microsoft.com/en-us/windows/msix/desktop/desktop-to-uwp-behind-the-scenes)
+
+The Windows adapter must implement these operations explicitly:
+
+1. Discover prior app-private and LocalAppData downloads read-only before creating a new object. When migrating, hash and adopt/copy with provenance; keep the old copy until the new object is durable and the owning app has released it.
+2. Acquire a digest lock using an OS file handle and `LockFileEx`, or an equally qualified cross-process primitive. Recheck existence under the lock. A JavaScript mutex cannot coordinate two applications. The kernel releases abandoned file locks when handles/processes close; catalogue recovery still repairs partial transactions.
+3. Validate file size and digest, resolve reparse points and enforce containment under the approved root. Keep executable DLLs out of the model library. Restrict write ownership, validate catalogue provenance, and treat malformed GGUF/ZIM content as untrusted input even after hashing.
+4. Publish immutable objects on the same volume, after flushing, with a qualified Windows rename/replace protocol. Preserve the old object when antivirus, permissions or open readers prevent replacement. Readers hold file/mapping handles and leases until their work ends.
+5. Release only this app’s claims on uninstall or “remove downloaded content.” Explicit library cleanup belongs to its owner. Personal charts, conversations, licenses, keys and WebView2 user data stay in private per-app storage.
+
+Detect unavailable drives, redirected/UNC profiles, cloud-managed folders, low disk space and quota failures. Do not promise local-NTFS locking/atomicity on every filesystem. Offer an authorized alternate library location when automatic storage is unusable; do not silently duplicate multi-GB assets after permission failure. [Windows locking](https://learn.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-lockfileex)
+
+### 19.4 Windows payload and WebView2
+
+The package stage must contain the exact executable, architecture-matched native engine/audio DLLs, permitted redistributables, embedded frontend resources and all runtime files listed in a generated inventory. A successful `--no-bundle` build does not prove resource collection. Qualify x64 on ordinary integrated-graphics hardware; qualify ARM64 separately before listing it. ARM64 processes cannot generally load x64 DLLs; Arm64EC would be a separate implementation choice. CPU operation is the dependable baseline. [Tauri Windows targets](https://v2.tauri.app/distribute/windows-installer/), [Windows ARM64 interoperability](https://learn.microsoft.com/en-us/windows/arm/arm64ec)
+
+Keep executable code inside the signed installation/package and downloaded data in the shared library. Model updates must not become a way to replace DLLs or app logic outside the Store update channel. Register and exercise the native engine commands; source files alone do not prove that the packaged UI reaches them. Test audio output, microphone privacy if recording is implemented, streaming cancellation and application shutdown without leaving an active worker.
+
+Windows 11 normally supplies Evergreen WebView2, but the app must detect an absent or broken runtime. Tauri’s MSI/NSIS `webviewInstallMode: {"type":"offlineInstaller"}` is an installer setting; it does not automatically provision a separately authored MSIX. For MSIX, select and test Evergreen detection with a supported recovery path or an explicitly packaged fixed runtime and its patch process. Keep the WebView2 user-data directory writable and private. Do not write it beside the executable under WindowsApps. [WebView2 distribution](https://learn.microsoft.com/en-us/microsoft-edge/webview2/concepts/distribution), [WebView2 user data](https://learn.microsoft.com/en-us/microsoft-edge/webview2/concepts/user-data-folder)
+
+### 19.5 Version mapping signing and durable outputs
+
+The display version remains `vMAJOR.MINOR.BUILD`. Installer ordering is separate: MSI limits the first two fields to 255 and the third to 65535; Store MSIX uses four 16-bit fields and reserves the fourth as zero. Natally’s BUILD modulo 100000 and unbounded MINOR therefore cannot always be copied into either format. Never truncate or take an extra modulo that could make a newer package sort older. [MSI ProductVersion](https://learn.microsoft.com/en-us/windows/win32/msi/productversion), [MSIX package versions](https://learn.microsoft.com/en-us/windows/apps/publish/publish-your-app/msix/app-package-requirements)
+
+Adopt a committed Windows release ordinal and a generated mapping after inventorying the highest previously published versions. This illustrative mapping is monotonic over its declared range; it is not an assigned production version. It cannot overtake an existing MSIX major of 2 or more, so the generator must reject an incompatible release history and use an approved alternative mapping. Persist the ordinal beside release metadata, increment it once under the existing release lock, and preserve the display-version association for every artifact.
+
+```typescript
+export function windowsPackageVersions(n: number) {
+  if (!Number.isSafeInteger(n) || n < 0 || n >= 255 * 2 ** 24) {
+    throw new Error("Windows release ordinal out of range");
+  }
+  const low = n % 65536;
+  const msi = [1 + Math.floor(n / 2 ** 24),
+    Math.floor(n / 65536) % 256, low].join(".");
+  const msix = [1, Math.floor(n / 65536), low, 0].join(".");
+  return { msi, msix };
+}
+```
+
+The approved Windows wrapper should generate manifest/configuration once, build the Tauri payload, collect a per-architecture stage and run the SDK tools below. Stage paths and output filenames are supplied by that wrapper; these commands are a packaging fragment, not a second ad-hoc build entrypoint. Fail if output paths already exist; preserve attempts with semantic suffixes.
+
+```powershell
+if (Test-Path $MsixOutput) { throw "Output already exists" }
+& MakeAppx.exe pack /v /h SHA256 /d $PackageStage /p $MsixOutput
+if ($LASTEXITCODE -ne 0) { throw "MSIX packaging failed" }
+# BundleStage contains only the selected, validated architecture packages.
+if (Test-Path $BundleOutput) { throw "Output already exists" }
+& MakeAppx.exe bundle /v /d $BundleStage /p $BundleOutput /bv $MsixVersion
+if ($LASTEXITCODE -ne 0) { throw "MSIX bundling failed" }
+```
+
+Store delivery signs the submitted package. A local test package needs a matching trusted test signing identity; a directly distributed MSIX needs its appropriate trusted signing setup. Sign direct MSI/EXE and applicable embedded PE files through the organization’s credential-managed signing step, with SHA-256 and a trusted timestamp. Verify signatures and publisher matching on the resulting artifacts. Keep certificates/private keys in Admin-Manual’s credential workflow, never in the repository or frontend environment. [MakeAppx](https://learn.microsoft.com/en-us/windows/msix/package/create-app-package-with-makeappx-tool), [MSIX signing](https://learn.microsoft.com/en-us/windows/msix/package/sign-app-package-using-signtool)
+
+Record MSI, each MSIX, optional bundle, hashes, display version, package version, source SHA, architecture and signing/verification status in the existing release manifest. Collect every produced file into tracked root `dist/` using the project’s stamped naming and LFS rules. Disable the Tauri self-updater in the Store MSIX build; use Store updates. Direct MSI/NSIS retains its explicitly selected update path. No Store upload, production purchase, release or CI invocation is performed by this report update.
+
+### 19.6 Upgrade and Store acceptance
+
+Qualify fresh installation and upgrade on actual Windows 11 x64 and any advertised ARM64 target. Cover standard-user execution, Store identity association, signature verification, Windows App Certification Kit results, startup without developer tools, native chat/audio operation and missing-WebView2 recovery. For MSI, verify UpgradeCode continuity, version ordering, repair and uninstall. For MSIX, test a Store-delivered update in an appropriate flight as well as sideloaded packaging checks; sideload success alone does not prove Store delivery.
+
+Install two different package identities and the MSI edition against the same library. Prove a second app reuses an existing digest with zero network transfer, simultaneous acquisition yields one durable object, and removing one package preserves another app’s assets. Test MSI-to-MSIX migration and side-by-side execution explicitly: private data and pending jobs need a single owner or a controlled migration, not two processes modifying the same database accidentally. Package removal must not be presented as subscription cancellation or shared-credit deletion.
+
+## 20 Purchases subscriptions and customer language
+
+### 20.1 Two independent ways to chat with natally
+
+The operator’s commercial direction is a price point for different usage patterns. A higher upfront purchase provides unlimited use of the on-device route, including offline operation after setup. Small purchases fund metered remote service use. The latter does not require the former. This paragraph explains the implementation boundary to developers; customer screens use the approved language below.
+
+| Customer offer | Customer-facing wording | Internal benefit and hard limit |
+| --- | --- | --- |
+| Higher upfront purchase | **Unlimited chats with natally**. “One purchase. Chat with natally as often as you like.” | Perpetual local-use entitlement under the existing lifetime direction. No per-chat charge on that route. No unlimited hosted allowance. |
+| Small occasional spending | **Pay as you chat**. “Start with a little credit. Pay only for the chats you use.” | Spend an eligible $ROCHE balance on bounded hosted requests. The local-use purchase is not required. |
+| Optional recurring credit bundle | **Monthly chat credits**. “Includes [configured amount] $ROCHE each month.” | A finite periodic grant with explicit renewal and rollover terms; not unlimited hosted access. The UI substitutes the live configured amount and never displays the brackets. |
+
+These are proposed approved-copy entries for the paywall contract, not text already changed in the app. Customer-facing paywalls, onboarding, settings, receipts, errors and Store listings must discuss chatting with natally. Do not promote computing location or expose “local,” “inference,” “ephemeris,” model names, token accounting, quantization, API routing or backend details. Technical documentation and internal logs still need exact implementation names. Price, renewal interval, allowance, account requirements and material restrictions remain clear in ordinary language.
+
+A balance-empty state can say “Add $ROCHE to keep chatting.” A connection failure can say “You’re offline. Connect to keep chatting.” A restore action can say “Restore purchases.” Keep entitlement and routing logic behind these phrases. A depleted balance does not revoke an owned Unlimited purchase; an Unlimited purchase does not make a chargeable remote request free. Never silently switch an Unlimited conversation to paid remote service. If a user chooses that option, disclose the charge before starting.
+
+Hardware suitability and first-use downloads remain real implementation requirements. Explain a concrete setup/download requirement when the user needs to act, without turning the offer into a lesson in model execution. “Unlimited” means no usage-based chat charge for the purchased route; it does not promise an incapable device unlimited speed or memory. The existing trial contract remains until amended. Do not relabel lifetime buyers as recurring subscribers.
+
+### 20.2 Catalog separation and account identity
+
+Keep three distinct catalog concepts: a non-consumable lifetime product for Unlimited, consumable $ROCHE packs, and optional subscriptions granting a finite number of credits each cycle. Store product IDs, RevenueCat product IDs, entitlement lookup keys and the currency code are different identifiers. Map them in a reviewed catalog; do not attach a hosted-unlimited entitlement to every purchase. A subscription product must state whether it grants credits, time-limited local access, or both. Time-limited local access must not be sold as a permanent one-purchase offer.
+
+Use a stable authenticated ecosystem account mapped to one RevenueCat App User ID for online purchases and the shared balance. The ID is not an authentication credential. Resolve it on the backend from the authenticated session; never trust a client-supplied customer ID or amount. Keep existing offline license import/recovery semantics for the perpetual route. Record what anonymous trial users can do and provide an intentional account-linking/recovery flow before selling cross-device credits. RevenueCat identity and restore settings apply across the apps in a project, so test logout, reinstall, account switching and store-account mismatch. [RevenueCat user identity](https://www.revenuecat.com/docs/customers/identifying-customers), [restore behavior](https://www.revenuecat.com/docs/projects/restore-behavior)
+
+### 20.3 Microsoft Store checkout choices
+
+For a non-game Windows application, Microsoft Store policy 7.19 sections 10.8.1 and 10.8.6 permit third-party digital commerce and subscriptions. Declare the processor and required commerce details in Partner Center. This lets an eligible Store MSIX edition retain the existing hosted checkout/RevenueCat bridge while using Store distribution. It does not make the Store a receipt validator for Stripe purchases. Verify the policy effective on submission day and every offered market. The policy page inspected on 17 September advertises version 7.20 effective 22 October 2026; do not treat that future effective date as today’s rule. [Effective Microsoft Store policy 7.19](https://learn.microsoft.com/en-us/windows/apps/publish/store-policy-archive/store-policy-7-19), [Microsoft Store policies](https://learn.microsoft.com/en-us/windows/apps/publish/store-policies)
+
+A native Microsoft purchase flow is a separate adapter. It can improve the Store customer’s purchase experience, but needs Partner Center product association and backend validation. Preserve Natally’s six existing rails; add a Microsoft variant through a decision/schema amendment rather than disguising Microsoft transactions as an existing processor. Do not assume RevenueCat’s Web SDK invokes Microsoft checkout: the existing `packages/billing/src/adapters/revenuecat.ts` wraps Web SDK behavior and `/mint`.
+
+For native Store commerce, define these concrete steps in the Windows adapter:
+
+1. Associate the packaged build with the real Store application. Configure the lifetime benefit as the appropriate durable purchase and credit packs as consumables; use a recurring add-on only for an actual subscription offer. Obtain localized prices and product status from Store APIs.
+2. Create `Windows.Services.Store.StoreContext` for the intended user and initialize its desktop purchase UI with Natally’s HWND through `IInitializeWithWindow`. Dispatch UI-affine operations on the correct window thread. Expose narrow Tauri commands, not arbitrary Store IDs or arbitrary native calls from web content.
+3. Use `GetAssociatedStoreProductsAsync`/`GetStoreProductsAsync` for the catalog and `RequestPurchaseAsync` for checkout. Handle success, already-owned, cancellation, network error and server error separately. UI completion does not itself mint an entitlement or credit balance.
+4. Bind Store purchase/collections identity to the authenticated Natally account on the backend. Use Microsoft’s service APIs to validate ownership and, where applicable, subscription recurrence. `StoreContext` does not provide a client receipt API equivalent to a portable authoritative receipt.
+5. Persist a unique verified transaction record. Sync the selected benefit into RevenueCat exactly once, then have the existing bridge mint the appropriate signed local-use token or allow RevenueCat’s configured currency grant. The token consumer must verify, persist and publish it through the entitlement controller; a successful `/mint` call alone is not persisted access.
+6. For consumables, define fulfillment/consumption ordering so a crash cannot lose credits or grant twice. Use the service-supported durable transaction identity and a replayable server job. Do not use a store balance and a RevenueCat balance as two independent spendable wallets for the same purchase.
+
+Microsoft’s subscription service API documentation contains account-provisioning restrictions; the client subscription guide does not establish that Robin’s server account has those APIs enabled. Verify eligibility and a complete restore/renewal/refund path before selecting that integration. If server validation cannot be demonstrated, keep the supported external checkout path for the eligible non-game Windows edition rather than inventing client-authorized grants. [Desktop Store initialization](https://learn.microsoft.com/en-us/windows/uwp/monetize/in-app-purchases-and-trials), [Store subscriptions](https://learn.microsoft.com/en-us/windows/uwp/monetize/enable-subscription-add-ons-for-your-app), [server purchase management](https://learn.microsoft.com/en-us/windows/uwp/monetize/view-and-grant-products-from-a-service), [subscription service eligibility](https://learn.microsoft.com/en-us/windows/uwp/monetize/get-subscriptions-for-a-user)
+
+### 20.4 RevenueCat bridge and subscription lifecycle
+
+RevenueCat remains the application’s entitlement authority. Supported store/Stripe integrations should use their documented receipt and event pipelines. Unsupported processors need a backend adapter that validates with the processor and publishes a supported RevenueCat representation. RevenueCat’s published installation matrix does not document a Microsoft Store integration. Its External Purchases API is private beta and trusts the supplied transaction data; it cannot replace Microsoft validation. Verify access, supported benefits and lifecycle semantics before selecting it. [RevenueCat installation matrix](https://www.revenuecat.com/docs/getting-started/installation), [External Purchases API](https://www.revenuecat.com/docs/external-purchases-api-beta) A temporary promotional grant is not a complete recurring-billing integration: it must expire/revoke correctly and must not falsify revenue or grant unbounded access.
+
+Natally’s public `LicenseTokenPayloadSchema` in `packages/billing/src/types.ts:30` fixes `exp` to null, while `token/format.ts:18` accepts integer or null. The web verifier at `verify-web.ts:157` and Rust verifier at `verify.rs:144` already enforce finite expiry. Preserve those implementations; reconcile the duplicated contract and specify the lifecycle. The bridge service B.6 remains unchecked and was not found as tracked/untracked service implementation in this audit. Documenting it does not make it deployed.
+
+| Event | Required internal result |
+| --- | --- |
+| Lifetime purchase | Verified perpetual local-use entitlement; signed offline token under the existing contract. Ongoing hosted requests still need credits. |
+| Subscription starts or renews | Record the unique paid period; grant only that product’s finite benefit/credits once. A recurring local-use product gets a finite paid-through token. |
+| User cancels renewal | Stop future renewal/grants; retain the already-paid benefit through its paid-through date. Show the actual end date. |
+| Billing retry or grace | Follow the verified store/RevenueCat state and a documented bounded grace policy. Do not repeatedly issue a fresh full-period grant. |
+| Refund or chargeback | Reconcile the affected purchase and currency grant; revoke only its benefit. Preserve separately owned lifetime access and unrelated purchases. |
+| Restore or account change | Reconcile ownership to the authenticated account; return existing benefits, never issue a new initial credit grant merely because restore was called. |
+| Offline or provider outage | Perpetual offline local use continues with a valid token. Hosted paid work requires an authoritative reservation; unavailable balance service cannot become free unlimited use. |
+
+Webhook intake must authenticate each provider’s documented mechanism, store the event before acknowledgment, deduplicate, tolerate out-of-order delivery, retry safely and periodically reconcile authoritative state. Use a transaction ledger with original purchase, subscription/period, app, environment, account and benefit IDs. Record processor-of-record for receipts, support, cancellation and refunds. RevenueCat is not automatically the merchant of record for every configured processor. Price displays come from the actual storefront/checkout currency and tax treatment; keep card details inside provider checkout. [RevenueCat webhook guidance](https://www.revenuecat.com/docs/integrations/webhooks), [subscription state](https://www.revenuecat.com/docs/api-v2)
+
+## 21 ROCHE credits across platforms and future projects
+
+### 21.1 One recognizable currency with an explicit authority
+
+Use **$ROCHE** as the customer-facing name. RevenueCat’s API code cannot contain `$`; `ROCHE` is a valid candidate code. Reuse the existing currency and its actual code after read-only inventory; do not create a duplicate because its display name differs. This session’s `rc projects list --json --no-input` attempt returned authentication exit code 4, so the existing project ID, code, product grants and balances remain unverified. No RevenueCat catalog or customer balance was changed. [Currency definition schema](https://www.revenuecat.com/docs/api-v2/virtual-currency)
+
+The intended experience is one account and recognizable credits across the ecosystem. RevenueCat currencies are project-scoped. Apps intentionally placed in the same project can use the same account and currency; matching a name in a different RevenueCat project does not create a pooled balance. Use the existing shared project when its ownership, app isolation and restore policy fit. If future apps need separate projects, route their eligible spending through one designated wallet project and backend mapping; do not mirror a spendable balance into each project or assume cross-project atomic transfer. [RevenueCat project model](https://www.revenuecat.com/docs/projects/overview), [in-app currency](https://www.revenuecat.com/docs/offerings/virtual-currency)
+
+Recommended authority split: RevenueCat is the system of record for currency totals and purchase-driven grants; the application service owns authenticated jobs, spend reservations, purchase provenance, provider usage and reconciliation evidence. That service does not independently invent another wallet total. All participating projects call the same spend boundary. Shared model storage, shared branding and a shared App User ID do not authorize credit spending. [Balance authority](https://www.revenuecat.com/docs/offerings/virtual-currency/faq/balance-source-of-truth)
+
+### 21.2 Purchase origin constrains cross-app spending
+
+| Purchase or access channel | Proposed route | Fungibility constraint |
+| --- | --- | --- |
+| Windows Store MSIX non-game | Eligible third-party checkout initially, or validated Microsoft adapter when qualified. | Use the common account wallet for authorized services; retain processor and originating app provenance. Store packaging alone does not decide payment policy. |
+| Direct Windows MSI and Linux | Existing direct checkout/bridge. | Common eligible $ROCHE can pay for participating services through the shared gateway, subject to the actual product terms. |
+| Hosted web and PWA | Supported web checkout, consumable pack or finite recurring grant. | Same wallet and server spend control; browser storage is a display cache. Each merchant/app integration must use the same canonical account mapping. |
+| Google Play Android | Play Billing through the qualified native RevenueCat path unless a specific applicable program permits another route. | Play’s Payments policy limits purchased virtual currency to its originating app or game title. Do not promise those purchases can fund unrelated future apps. |
+| Direct Android | Build-selected eligible external checkout. | Distinguish this SKU and its purchase origin from Play; do not infer that a sideload build can transfer Play-restricted currency into unrestricted credits. |
+| Future Apple distribution | StoreKit/RevenueCat for applicable in-app digital purchases; qualify any permitted regional alternative separately. | Multiplatform access rules do not automatically approve a universal wallet spanning unrelated apps. One-time purchased credits must not expire. |
+
+The target remains broad reuse for the same customer. **Cross-platform use of the same service and spending across unrelated products are different cases.** Google’s rule is explicit; Apple’s multiplatform clause does not establish blanket multi-app currency approval. Keep the eligible common pool fungible and preserve restricted purchase origin. No currency conversion should erase a purchase restriction. [Google Play Payments sections 2 and 5](https://support.google.com/googleplay/android-developer/answer/9858738?hl=en), [Apple purchase and multiplatform rules](https://developer.apple.com/app-store/review/guidelines/)
+
+RevenueCat’s single aggregate `ROCHE` balance does not encode arbitrary app-level spend restrictions. Before accepting restricted purchases, choose an enforceable representation: separately identified restricted currency buckets presented with the same $ROCHE branding, or a qualified provenance allocation service whose spend accounting matches RevenueCat’s actual deduction behavior. A label on a ledger row is insufficient if the spend API can still consume the wrong origin. Do not silently mix restricted and unrestricted funds and promise universal spending. Inventory the existing project first; preserve current balances and purchaser rights during any migration.
+
+### 21.3 Grants refunds and renewals
+
+Use integer currency units; RevenueCat’s documented balance range is zero to two billion and negative balances are unsupported. Define the unit’s precision once from the existing currency configuration. Do not infer that one $ROCHE equals one US dollar, one cent, one model token or one chat. Product-to-credit quantities are catalog data. Native/Web SDK balance objects may be cached; refresh after purchase and server spending. Backend-initiated adjustments require a secret key, which never enters Tauri/WebView/PWA code. [In-app currency behavior](https://www.revenuecat.com/docs/offerings/virtual-currency)
+
+For products configured to grant currency automatically in RevenueCat, the backend records the grant event without adding the same amount again. For a processor not represented by that automatic pipeline, a verified bridge event may add credits with one stable purchase-derived idempotency key. RevenueCat’s subscription-currency guide lists Apple, Google, Stripe and RevenueCat Billing; Microsoft is not in that automatic-grant support list. A Microsoft adapter needs its own verified integration contract. [Subscription currency support](https://www.revenuecat.com/docs/offerings/virtual-currency/subscriptions)
+
+Subscription grants are keyed by actual paid period; a renewal webhook retry, reinstall or restore is not another grant. Trials use their explicitly configured grant, which may be zero.
+
+Prefer purchased top-up credits that do not expire. If a recurring bundle has a time-limited allowance, disclose its renewal and rollover terms, keep it distinguishable from purchased top-ups, and qualify the platform/product behavior. RevenueCat supports cycle-linked expiration and spends expiring grants first. A compensation credit after a canceled hosted job must preserve the original grant’s restrictions and expiry rights; a naive positive adjustment can accidentally turn expiring/restricted credit into permanent unrestricted credit. If the chosen API cannot preserve those semantics, use non-expiring grants for that flow or a qualified separate reservation ledger before release. [Currency expiration and deduction order](https://www.revenuecat.com/docs/offerings/virtual-currency/expiring-currencies)
+
+RevenueCat removes applicable credits on refunds and floors the balance at zero; it does not record a negative debt when already-spent credits exceed the remaining balance. Keep consumed provider cost and refund exposure in the server ledger. Block abusive new paid jobs through an explicit account policy rather than silently creating an undocumented negative RevenueCat balance or confiscating unrelated entitlements. Google partial-refund handling has a documented limitation, so reconcile processor evidence when it matters. [RevenueCat currency refunds](https://www.revenuecat.com/docs/offerings/virtual-currency/refunds)
+
+For the recognizable $ROCHE experience, use service credits within the participating products. Cash redemption, customer-to-customer transfers, exchange trading or a blockchain token are not part of this implementation brief. They would create a different product and accounting contract.
+
+### 21.4 Finite spending for each hosted chat
+
+The customer chooses a chat action; the server derives the eligible service, rate-card revision and maximum charge. Bind quotes to the authenticated account, conversation/action digest, chosen service, expiry and a client-confirmed maximum. Enforce input limits, maximum output, tool-call budget, request duration and aggregate account budget before contacting a provider. Paid work must not start unless the reservation is confirmed. A local-use entitlement must never bypass this check.
+
+Use a durable state machine with a unique `(account, request-id)` constraint:
+
+```text
+created -> debit_pending -> reserved -> running -> settling -> completed
+                     |          |          |
+                     |          +-> refund_pending -> refunded
+                     +-> declined
+uncertain network result -> reconcile the same operation identity
+```
+
+In the straightforward non-expiring common-pool implementation, reserve by deducting the quoted maximum from RevenueCat before dispatch. Save the intended debit and stable idempotency key before sending it. A timeout leaves `debit_pending`; retry the same operation rather than creating another debit or starting a second provider job. After the confirmed debit, dispatch once through the durable job. Deducting maximums atomically prevents two concurrent apps from spending the same available credits.
+
+Attribute every reservation to its funding grants and serialize refund/revocation reconciliation with settlement. If the original purchase is refunded while its balance is reserved, a later cancellation or unused-reservation credit must not recreate the revoked funds. Mark the affected reserved portion as revoked, preserve unrelated funding, and compensate only the still-valid portion. A compensating API adjustment is not a reversal of the original purchase refund.
+
+At completion, meter the authenticated provider result and return the eligible unused reservation exactly once. If the provider fails before paid work, return the entire still-valid reservation. If cancellation happens after chargeable work, settle according to the disclosed policy and remaining budget. When provider usage or billing is uncertain, keep a reconcilable pending state; do not guess a successful charge or blindly retry an already-running provider request. Client disconnect is not proof that the provider stopped. A client-reported token count is not billable truth.
+
+The following server-only request illustrates the documented adjustment API. The quoted amount here is an example, not a product price. The account/project IDs and secret come from trusted server context; the transaction reference contains no chat text. `Idempotency-Key` is supported by this endpoint. Persist it and reuse it on uncertain retries; a compensating refund gets its own stable key tied to the original job. [Customer currency transaction API](https://www.revenuecat.com/docs/api-v2/customer/resources)
+
+```http
+POST /v2/projects/{wallet_project}/customers/{account_id}/virtual_currencies/transactions
+Authorization: Bearer {server_secret}
+Content-Type: application/json
+Idempotency-Key: chat-job-7f8c-reserve-v1
+
+{"adjustments":{"ROCHE":-12},"reference":"chat-job-7f8c/reserve"}
+```
+
+This API guarantees only its own adjustment, not an atomic transaction spanning your database and the inference provider. Use an outbox/reconciliation worker and durable operation records to close crash windows. Never retry a provider side effect solely because the client retried an HTTP request. If available, use the provider’s own request-id semantics; otherwise recover its recorded job before dispatching another.
+
+Do not poll/debit RevenueCat per generated token. Reserve once and settle once per bounded request or explicitly budgeted batch. Obey rate-limit response headers and `Retry-After`. The overview and current endpoint pages list different default currency limits; neither justifies hardcoding a universal throughput promise. Own API adjustments must be journaled directly: the general currency guide warns that those adjustments do not emit the same webhook behavior as purchase grants. Reconcile balances periodically rather than relying on a webhook that may not arrive. [Currency API limits](https://www.revenuecat.com/docs/api-v2/customer/resources), [currency events](https://www.revenuecat.com/docs/offerings/virtual-currency/events)
+
+### 21.5 Pricing for small chats and similarly priced services
+
+“Pennies” is the intended entry price, not a verified universal cost for every model, context length or service. Keep a versioned internal service catalog with input/output rates, minimum unit, maximum charge, allowed tools, eligibility and contribution margin. Include processor/store fees, RevenueCat charges where applicable, provider cost, tax treatment, fraud/refund allowance and operational overhead in the economics. Buy credit packs with ordinary checkout and spend small units internally; do not trigger a separate card transaction for every small chat.
+
+For a developer-only rate calculation, use integer micro-currency arithmetic. Derive provider cost from measured input/output/cache/tool usage; apply the approved margin/rounding rule once per job and divide by the configured value of a $ROCHE unit. Round the final customer charge up to the chosen unit, return any unused reservation and never exceed the accepted quote. Rounding every streamed fragment separately would overcharge small chats. No numerical price, exchange rate or markup is assigned by this report.
+
+Future similarly priced services register a service ID and bounded cost function behind the same quote/reserve/settle interface. Equal currency units buy equal published value; they need not buy equal quantities of expensive and inexpensive operations. A costly new service must declare its price and limit before admission. The gateway records the consuming project for cost allocation without creating another spendable wallet. The customer continues to see the service’s ordinary name and $ROCHE price, not provider/model/token jargon.
+
+## 22 GLM 5 3 amendment sequence and verification
+
+This extension changes the report, not production configuration. Incorporate the Windows, two-offer and $ROCHE contracts into the current architecture/checklist in Cascade before coding them. Preserve the existing imported implementation and its completed tasks. The following proposed ownership sets are a specification outline; exact signatures and paths must be reconciled with the current entity table rather than treated as already-created files.
+
+| Work package | Existing anchor and required specification | Durable evidence and operator verification |
+| --- | --- | --- |
+| Windows packaging | `scripts/build-windows.sh`, architecture build module and current release tasks; specify a Windows SDK manifest/staging owner and separate distribution-channel config. | Valid generated MSI/MSIX versions, complete resource manifest and signature results; real installed/Store-flight upgrade runs. |
+| Windows shared library | Mirror storage seam and native engine root handling; define Profile-root resolver, access locators, writer locks and claim retention. | Two package identities plus MSI reuse the same verified object; fault/permission/uninstall cases preserve other consumers. |
+| Payment contracts | Billing types, registry, token parser/verifiers and B.6 bridge; reconcile finite-expiry schema, checkout token persistence and Microsoft adapter variant. | Real provider validation and replay-safe lifecycle fixtures; Store product association and purchase/restore/cancel/refund evidence. |
+| Customer language | Paywall, checkout, onboarding, Settings License and related error/Store copy; add exact approved strings to their entity-owned content sources. | All offers describe chatting with natally; no customer-facing local/inference/ephemeris wording. Price/renewal/credit terms remain accurate. |
+| ROCHE inventory and catalog | Read-only inventory of the existing RevenueCat project/currency, app IDs, product grants, restore policy and sandbox access; define stable ecosystem identity. | Existing balances preserved; no duplicate currency or customer; sandbox grants cannot buy production provider work. |
+| Shared spending gateway | Hosted service and bridge contracts; define quote, reservation, usage settlement, grant provenance and cross-project access ownership. | Concurrent app requests cannot overspend; duplicate purchase/renewal/job events cannot double grant, double charge or double refund. |
+
+Customer-path validation must demonstrate: an Unlimited owner keeps chatting through the purchased route without usage charges; a Pay as you chat user can buy and spend credits without buying Unlimited; an empty balance does not disable an independently owned Unlimited benefit; no automatic paid route fallback occurs; finite monthly grants remain finite; shared eligible credits work across the intended platforms; restricted-origin credits cannot leak into unrelated apps; reinstall/restore does not regrant consumables; canceling renewal preserves the already-paid benefit; refund reconciliation does not revoke another valid purchase.
+
+Failure-path validation must include two apps racing on one remaining balance, a lost debit response, server crash after debit but before dispatch, provider completion after browser disconnect, a lost settlement response, a refund after credits were spent, a refund during an active reservation or before canceled-job compensation, out-of-order renewal events, rate limits, revoked credentials, sandbox/production identity collision and a future app calling the common wallet. Keep production payment-provider and RevenueCat secrets on the backend. Preserve personal data isolation even when the account, public model library and eligible currency are shared.
+
+**Evidence limits for this amendment:** Microsoft, Tauri, RevenueCat, Google and Apple primary documentation were reviewed on 17 September 2026. Current account-specific Store identity/eligibility and RevenueCat currency configuration were not verified. No Windows package was built, signed, installed, certified or submitted; no real purchase, subscription, currency adjustment or provider charge was initiated. Code/API/manifest examples are design fragments for the named implementation contracts. The application’s real acceptance run must provide the missing platform and commercial evidence. Commit and push completed scoped work to GitHub while Forgejo is unavailable, preserving other workers’ edits.
