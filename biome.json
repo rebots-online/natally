@@ -13,7 +13,8 @@
       "!**/node_modules",
       "!**/dist",
       "!**/target",
-      "!**/STAGING_*"
+      "!**/STAGING_*",
+      "!apps/local/public/vendor"
     ]
   },
   "formatter": {

@@ -13,6 +13,8 @@ import { MirrorDownloader } from "./mirror/download.js";
 import type { ManifestAsset, ModelManifest } from "./mirror/manifest.js";
 import { fetchManifest, MirrorNetwork } from "./mirror/manifest.js";
 import type { ConversationServices } from "./screens/conversation/types.js";
+import type { WebVoice } from "./voice/web.js";
+import { createKokoroWebVoice } from "./voice/web.js";
 
 /**
  * Production composition root for the web lane (M.1 + C.1 + C.2 + B.1 over the C.4 bus).
@@ -93,6 +95,7 @@ export interface Composition {
   services: ConversationServices;
   readonly models: ReturnType<typeof createModelStore>;
   downloadModel(modelId: string): Promise<void>;
+  replayLastReply(): void;
 }
 
 let composition: Promise<Composition> | undefined;
@@ -135,7 +138,7 @@ export function createConversationComposition(): Promise<Composition> {
     }
 
     const inferenceStorage: InferenceStorage = {
-      async resolveChatModel(lane, weights): Promise<StoredInferenceModel | null> {
+      async resolveChatModel(lane, _weights): Promise<StoredInferenceModel | null> {
         if (lane !== "web" || !chatAsset || !(await storage.isPresent(chatAsset))) return null;
         const stream = await storage.read(chatAsset);
         if (!stream) return null;
@@ -184,6 +187,61 @@ export function createConversationComposition(): Promise<Composition> {
         }
       }
     }
+
+    // ---- Voice (V.2): provision the Kokoro trio and read replies aloud. ----
+    const voiceModelAsset = manifest?.assets.find((asset) => asset.id === "kokoro-v1-q8") ?? null;
+    const voiceTokenizerAsset =
+      manifest?.assets.find((asset) => asset.id === "kokoro-tokenizer") ?? null;
+    const voiceVoicesAsset =
+      manifest?.assets.find((asset) => asset.id === "kokoro-voices-af_heart") ?? null;
+
+    const provisionVoiceAssets = async (): Promise<boolean> => {
+      if (!voiceModelAsset || !voiceTokenizerAsset || !voiceVoicesAsset) return false;
+      for (const asset of [voiceModelAsset, voiceTokenizerAsset, voiceVoicesAsset]) {
+        if (!(await storage.isPresent(asset))) {
+          await downloader.download(asset, {});
+        }
+      }
+      return true;
+    };
+
+    /** Serves mirror assets to the voice module from verified M.1 cache storage. */
+    const readAsset = async (url: string): Promise<Response> => {
+      const name = url.split("/").pop() ?? "";
+      const asset = manifest?.assets.find((entry) => entry.file === name);
+      if (!asset) throw new Error(`Unknown mirror asset: ${name}`);
+      const stream = await storage.read(asset);
+      if (!stream) throw new Error(`Asset not present in M.1 storage: ${name}`);
+      return new Response(stream);
+    };
+
+    let voicePromise: Promise<WebVoice | null> | undefined;
+    const ensureVoice = async (): Promise<WebVoice | null> => {
+      voicePromise ??= (async () => {
+        if (!(await provisionVoiceAssets())) return null;
+        return createKokoroWebVoice({
+          modelUrl: "/voice/kokoro-v1-q8.onnx",
+          tokenizerUrl: "/voice/tokenizer.json",
+          voiceUrl: "/voice/af_heart.bin",
+          wasmPaths: "/vendor/ort/",
+          language: "en-us",
+          bus,
+          readAsset,
+        });
+      })();
+      return voicePromise;
+    };
+
+    let lastReplyText: string | null = null;
+    const speakReply = (text: string): void => {
+      // Voice failure must never take the written reply down with it (honest absence).
+      void ensureVoice()
+        .then((voice) => voice?.speak(text))
+        .catch(() => undefined);
+    };
+    const replayLastReply = (): void => {
+      if (lastReplyText) speakReply(lastReplyText);
+    };
 
     const downloadModel = async (modelId: string): Promise<void> => {
       if (!manifest) throw new Error("Model catalogue is unavailable");
@@ -271,9 +329,11 @@ export function createConversationComposition(): Promise<Composition> {
         const reply = newTurn(context.sessionId, "her", replyText);
         memoryTurns.push(reply);
         bus.emit({ type: "turn", turn: reply });
+        lastReplyText = replyText;
+        speakReply(replyText);
       },
     };
-    return { sessionId, services, models, downloadModel };
+    return { sessionId, services, models, downloadModel, replayLastReply };
   })();
   return composition;
 }

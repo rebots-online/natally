@@ -4,7 +4,7 @@
 // ROUTE_MAP below (closed 8-route vocabulary, router.ts). Re-running regenerates
 // identically; the output is committed. A screen without a ROUTE_MAP entry fails
 // generation loudly (SC1: closed set, no silent appends).
-import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, readdirSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
