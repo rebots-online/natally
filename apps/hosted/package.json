@@ -1,0 +1,20 @@
+{
+  "name": "@natally/hosted",
+  "private": true,
+  "version": "1.28.27885",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview --host 127.0.0.1",
+    "typecheck": "tsc --noEmit",
+    "lint": "biome check src vite.config.ts",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@natally/billing": "workspace:*",
+    "@natally/design-tokens": "workspace:*",
+    "react": "19.3.0",
+    "react-dom": "19.3.0"
+  }
+}
