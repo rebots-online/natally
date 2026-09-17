@@ -14,7 +14,8 @@
       "!**/dist",
       "!**/target",
       "!**/STAGING_*",
-      "!apps/local/public/vendor"
+      "!apps/local/public/vendor",
+      "!apps/local/src-tauri/gen"
     ]
   },
   "formatter": {

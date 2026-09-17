@@ -151,7 +151,7 @@ export function webConnection(options: WebStoreOptions = {}): StoreConnection {
   if (options.database) return synchronousConnection(options.database, options.closeDatabase);
   const worker =
     options.createWorker?.() ??
-    new Worker(new URL("../../../../../packages/lore/src/store/web.worker.ts", import.meta.url), {
+    new Worker(new URL("../../../../packages/lore/src/store/web.worker.ts", import.meta.url), {
       type: "module",
     });
   let sequence = 0;

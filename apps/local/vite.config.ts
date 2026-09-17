@@ -23,6 +23,9 @@ export default defineConfig(({ mode }) => {
         "@natally/local-shell": fileURLToPath(new URL("./src/ui/shell.tsx", import.meta.url)),
       },
     },
+    // Two module workers (ephemeris host, lore SQLite) share chunks with the app:
+    // IIFE workers cannot code-split, so workers build as ES modules.
+    worker: { format: "es" },
     server: {
       port,
       strictPort: true,
