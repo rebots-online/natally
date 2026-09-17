@@ -1,0 +1,71 @@
+/* U.8 splash — tokens only (token law); D21 big bold Fraunces display type. */
+.splash {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  gap: 16px;
+  padding: 32px;
+  text-align: center;
+  background: var(--color-midnight);
+  color: var(--color-vellum);
+}
+
+.splash__title {
+  margin: 0;
+  font-family: "Fraunces", serif;
+  font-weight: 900;
+  font-size: clamp(48px, 10vw, 96px);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: var(--color-vellum);
+}
+
+.splash__caret {
+  display: inline-block;
+  width: 0.08em;
+  height: 0.9em;
+  margin-inline-start: 0.06em;
+  vertical-align: -0.08em;
+  background: var(--color-gilt);
+}
+
+.splash__caret[data-done="false"] {
+  animation: splash-caret-blink 900ms steps(1) infinite;
+}
+
+@keyframes splash-caret-blink {
+  0%, 55% { opacity: 1; }
+  56%, 100% { opacity: 0; }
+}
+
+.splash__tagline {
+  margin: 0;
+  max-width: 32em;
+  color: var(--color-vellum-muted);
+}
+
+.splash__status {
+  margin: 0;
+  font-size: 14px;
+  color: var(--color-moonlight);
+}
+
+.splash__sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .splash__caret[data-done="false"] {
+    animation: none;
+  }
+}
