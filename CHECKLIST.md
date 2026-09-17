@@ -13,9 +13,12 @@ annotates the symbol's engaged-by cell in §5/§5.1 with `<task-id>✓` using th
 nomenclature verbatim, so parallel agents converge. Predecessors preserved: `CHECKLIST.md.bak.20260917_091435.pre-v3`
 and `CHECKLIST.md.bak.20260917_140133.pre-recipe`.
 
-**Census (this edition, counted by task block):** 44 ✅ · 1 `[X]` line (P.3; I.4 partial
-noted inline) · 43 `[ ]`. Marker discipline (SC2): `✅` only from observed runs with
-evidence citations; a coder flips at most to `[X]`; `✅` only the orchestrator.
+**Census (this edition, counted by task block):** 45 ✅ · 1 `[X]` (P.3; I.4 partial
+noted inline) · 43 `[ ]`. Marker
+discipline (SC2): coders (subagents) flip at most to `[X]` with observed runs; `✅` is
+issued **only by the orchestrator seat** on semantic evaluation of the coder's `[X]`
+work, as-completing, per task — send-back instead of ✅ when the work is not what it
+claims.
 
 ## Execution protocol
 
@@ -138,7 +141,8 @@ disjoint Owns; Verify + Accept observe durable end-state; commit+push per line; 
   **Verify:** `pnpm vitest run apps/local/src/screens` (includes OR.2 language-law scan)
   + observed walk: paywall → checkout → key-entry path with a B.4 test code.
   **Accept:** `paywall+checkout: 13 frames, exact §21.1 strings, honest availability line,
-  license-key redeem end-to-end, language law green`.
+  license-key redeem end-to-end, language law green, §11.1(a) legal links present on
+  checkout (privacy + terms beside the purchase action)`.
 
 - [ ] **U.7 About + glossary-callout** · §6 AGPL posture, INC-19 §5  **Spec:** About screen carries the AGPL-3.0-or-later line and source-offer statement per
   §6 (license-lint counterpart in R.7). Hover-term callouts: glossary terms (`GlossaryEntry`
@@ -149,7 +153,8 @@ disjoint Owns; Verify + Accept observe durable end-state; commit+push per line; 
   **Owns:** `apps/local/src/screens/about/**`, `apps/local/src/ui/glossary-callout*`.
   **Verify:** `pnpm vitest run apps/local/src/screens` + observed hover on three terms.
   **Accept:** `about: AGPL line + provenance labels present; hover callouts show authored
-  glossary text on atlas + conversation terms`.
+  glossary text on atlas + conversation terms; §11.1(a) legal links to
+  /legal/privacy.html + /legal/terms.html present`.
 
 - [ ] **U.8 Splash** · D21, §12  **Spec:** Typewriter onboarding splash (D21 — Kintsugi's big bold typography + typewriter
   as behavior reference only, clean-room D2) whose progress is the **real** engine/model
@@ -591,12 +596,12 @@ disjoint Owns; Verify + Accept observe durable end-state; commit+push per line; 
 
 ## Legal documents (§11.1)
 
-- [X] **LG.1 Privacy policy + terms of use** · §11.1, §12, §21 · [observed: HTML citation
-  + section scan GREEN (privacy 7/7, terms 11/11 Back-to-Top; 15 required phrases
-  present, node scan output quoted in session); markdown predecessors preserved at
-  ~/outbox/natally/legal-md-pre-html-2026-09-17/ per I3 and git-removed; `✅` withheld —
-  awaits orchestrator semantic evaluation, not grep proxies; RC dashboard URL fields are
-  operator-side configuration recorded in §11.1(c)]
+- ✅ **LG.1 Privacy policy + terms of use** · §11.1, §12, §21 · [orchestrator semantic
+  evaluation 2026-09-17 (observed run quoted): 22/22 privacy contract sets, 22/22 terms
+  contract sets, theming law holds — zero raw hex outside the mirrored :root; per-section
+  Back-to-Top 7/7 + 11/11; placement contract recorded §11.1 incl. RC paywall URL fields;
+  markdown predecessors outboxed per I3. Recipe defect found and fixed in the same pass:
+  U.6/U.7 Accept lines now attest the §11.1(a) legal links]
   **Spec:** Write `apps/local/public/legal/privacy.md` and `terms.md` exactly per §11.1's
   closed section sets — the single source the web app (About, first-run, checkout), the
   landing page, the order pages and the website link to (never copy). The privacy policy
