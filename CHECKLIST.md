@@ -277,7 +277,7 @@ disjoint Owns; Verify + Accept observe durable end-state; commit+push per line; 
 
 ## Shared storage (§19)
 
-- [ ] **SS.1 Scope config generator** · §19.1  **Spec:** `scripts/generate-storage-config.mjs` emits `config/asset-storage.generated.json`
+- ✅ **SS.1 Scope config generator** · §19.1  **Spec:** `scripts/generate-storage-config.mjs` emits `config/asset-storage.generated.json`
   from `VITE_STORAGE_SCOPE` (validation regex `^[a-z0-9][a-z0-9_-]{2,63}$`; scope is a
   frozen public constant like `shared-content-v1`, never a Settings switch, never a secret
   or entitlement). Both consumers read the one generated file: Vite (`apps/local/src/storage/
@@ -291,7 +291,7 @@ disjoint Owns; Verify + Accept observe durable end-state; commit+push per line; 
   **Accept:** `scope config: one generated artifact consumed by both targets, schema
   validated, invalid scopes rejected`.
 
-- [ ] **SS.2 Content-identity store types** · §19.2, §19.3  **Spec:** The §19.2 record set as frozen types: ContentIdentity (SHA-256 of exact bytes +
+- ✅ **SS.2 Content-identity store types** · §19.2, §19.3  **Spec:** The §19.2 record set as frozen types: ContentIdentity (SHA-256 of exact bytes +
   expected byte count; immutable object path `objects/sha256/<ab>/<full-digest>`; scope
   selects the library, not the hash), CatalogueAlias (asset ID + immutable revision →
   digest/format/architecture/quantization/license/minimum-runtime/dependency-bundle),
@@ -394,7 +394,7 @@ disjoint Owns; Verify + Accept observe durable end-state; commit+push per line; 
   **Verify:** validator run (schema + non-empty + DN shape) · **Accept:** `identity: all
   §20.2 fields committed, validated, referenced by WP.2/WP.3`.
 
-- [ ] **WP.2 AppxManifest generator** · §20.3  **Spec:** `scripts/gen-appx-manifest.mjs` + `config/appx-template.xml`: full-trust
+- ✅ **WP.2 AppxManifest generator** · §20.3  **Spec:** `scripts/gen-appx-manifest.mjs` + `config/appx-template.xml`: full-trust
   `packagedClassicApp` at `mediumIL`; `runFullTrust` capability; `MinVersion=10.0.22000.0`;
   `MaxVersionTested` records an actually-tested version; generator XML-escapes every
   substituted value and **rejects unresolved `@…@` tokens**; manifest is generated, never
@@ -450,7 +450,7 @@ disjoint Owns; Verify + Accept observe durable end-state; commit+push per line; 
 
 ## Offers + ROCHE + customer language (§21)
 
-- [ ] **OR.1 Offer catalog + copy** · §21.1, §21.5  **Spec:** `packages/billing/src/offers.ts` + committed copy JSON defining exactly three
+- ✅ **OR.1 Offer catalog + copy** · §21.1, §21.5  **Spec:** `packages/billing/src/offers.ts` + committed copy JSON defining exactly three
   offers with §21.1's exact strings (title + sub-line as in the table) and §21.5 catalog
   separation: non-consumable lifetime ("Unlimited chats with natally"), consumable $ROCHE
   packs ("Pay as you chat"), optional finite subscription ("Monthly chat credits" with
@@ -478,7 +478,7 @@ disjoint Owns; Verify + Accept observe durable end-state; commit+push per line; 
   on a seeded violation fixture, pass-green clean) · **Accept:** `language law: zero
   forbidden terms in customer surfaces, fail-red proven`.
 
-- [ ] **OR.3 ROCHE currency contract** · §21.3  **Spec:** `packages/billing/src/roche.ts`: integer units, range 0..2×10⁹, no negative
+- ✅ **OR.3 ROCHE currency contract** · §21.3  **Spec:** `packages/billing/src/roche.ts`: integer units, range 0..2×10⁹, no negative
   balances (invariant), unit precision defined once. Authority split encoded: RC = system
   of record for balances + purchase-driven grants; the application service = jobs,
   reservations, provenance, reconciliation — the service never computes a second wallet

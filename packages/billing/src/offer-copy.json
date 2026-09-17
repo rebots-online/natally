@@ -1,0 +1,25 @@
+{
+  "source": "DOCS/ARCHITECTURE.md §21.1 (approved copy, verbatim) + §21.2 (approved micro-copy)",
+  "offers": [
+    {
+      "id": "unlimited-lifetime",
+      "title": "Unlimited chats with natally",
+      "subtitle": "One purchase. Chat with natally as often as you like."
+    },
+    {
+      "id": "pay-as-you-chat",
+      "title": "Pay as you chat",
+      "subtitle": "Start with a little credit. Pay only for the chats you use."
+    },
+    {
+      "id": "monthly-chat-credits",
+      "title": "Monthly chat credits",
+      "subtitleTemplate": "Includes {amount} $ROCHE each month."
+    }
+  ],
+  "microCopy": {
+    "addCredits": "Add $ROCHE to keep chatting.",
+    "offline": "You're offline. Connect to keep chatting.",
+    "restore": "Restore purchases."
+  }
+}
