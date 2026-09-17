@@ -136,7 +136,7 @@ fact), `authored` (static education, labelled in UI), `generated` (companion tra
 | GrantProvenance | purchase ref, grant key, paid period, restrictions | system | RC + server ledger (§21.6) | replay-safe; no double grants | OR.1 · OR.4 |
 | Mascot | `Mascot({size?, className?, alt?})`; `apps/local/src/ui/mascot.tsx` | system (approved brand artwork) | bundled `src/assets/mascot/` | Shared animated brand image in TopBar, startup, unavailable-screen and error surfaces; reduced-motion selects frame zero. Separate from Stage's event-driven state. | U.9 · U.7 |
 | ApplicationIcons | `scripts/generate-icons.sh`; `apps/local/src-tauri/icons/`; `apps/local/public/icons/` | system (approved brand artwork) | generated icon files, HTML links and PWA manifest | All sizes derive from `LIBS/UI/FIGMA/mascot/natally-icon-1024-rgba.png`; OS launchers and installers use static formats. | R.1–R.3✓ · W7-2 |
-| LegalDocument | privacy policy + terms of use, closed section sets (§11.1) | authored (static legal text) | `apps/local/public/legal/privacy.md` + `terms.md` — single source; landing/order/web-app surfaces link, never copy | Must quote "birth data is quasi-PII (§12)" verbatim | LG.1 |
+| LegalDocument | privacy policy + terms of use, closed section sets (§11.1) | authored (static legal text) | `apps/local/public/legal/privacy.html` + `terms.html` — single source, token-themed (§11.1 theming law); landing/order/web-app surfaces link, never copy | Must quote "birth data is quasi-PII (§12)" verbatim | LG.1 |
 
 The provenance tag travels with the content into the prompt fence (§7.2) and the renderer
 (Plex Mono for `computed`, Fraunces margin for `generated`, labelled sections for
@@ -204,7 +204,7 @@ snapshot defect (§22: no blockers by recipe time).
 | capability layer (single selection point) | module | `apps/local/src/capabilities/` (I.3) | I.3 · I.2 |
 | voice native (`src-tauri/src/voice/`) | module | §10 | V.1 · I.2 · W7-4 |
 | hosted scaffold + OpenRouter adapter + hosted voice/STT + hosted billing | modules | `apps/hosted/` | H.1 · H.2 · H.3 · H.4 |
-| `legal/privacy.md` + `legal/terms.md` | documents (§11.1 closed section sets) | `apps/local/public/legal/` | LG.1 · U.7 · U.6 |
+| `legal/privacy.html` + `legal/terms.html` (token-themed per §11.1) | documents (§11.1 closed section sets) | `apps/local/public/legal/` | LG.1 · U.7 · U.6 |
 
 ## 6. Ephemeris subsystem (D14)
 
@@ -451,10 +451,27 @@ spans `envelope-start` → `envelope-end`; `Idle` resumes at `envelope-end`.
 
 ### 11.1 Legal documents (privacy policy + terms of use) — single source, SC3
 
-`apps/local/public/legal/privacy.md` and `apps/local/public/legal/terms.md` are the one
+`apps/local/public/legal/privacy.html` and `apps/local/public/legal/terms.html` are the one
 authored source for every customer-facing surface that requires them: the web app
 (About + first-run + checkout links), the landing page, the order/checkout pages, and the
-website. Generated/embedded surfaces link here; no copies.
+website. Generated/embedded surfaces link here; no copies. **Theming law:** both pages are
+standalone HTML styled only with the frozen token vocabulary (`LIBS/UI/FIGMA/TOKENS.md`):
+the colour/shape/spacing custom properties (`--color-midnight` … `--color-z-<sign>`,
+`--radius-*`, `--spacing-*`, `--stroke-hairline`), the type ramp (Fraunces titles,
+Nunito Sans body, IBM Plex Mono for the effective-date stamp; 12 px floor), dark ground
+`midnight` with `vellum` text, plates on `midnight/2` at `radius/plate` with hairline
+strokes, `gilt` reserved for the single primary mark, `moonlight` links — no raw values
+outside the mirrored `:root` block, which carries the TOKENS.md provenance comment and is
+regenerated when tokens change (SC3 derived surface). **Placement contract (closed set of
+consuming surfaces):** (a) the web app — About screen, first-run, and `/checkout` link
+`/legal/privacy.html` + `/legal/terms.html`; (b) the website and the landing page
+(`VITE_LANDING_URL` host) link the **canonical URLs**
+`https://natally.robin.mba/legal/privacy.html` and `…/legal/terms.html` — link only,
+never copies (SC3); (c) **RevenueCat paywalls** — the RC dashboard's required Privacy
+Policy URL and Terms of Service URL fields (paywall presentation, Android and web legs)
+are set to the same canonical URLs; (d) order/checkout pages link both beside every
+purchase action. The canonical URL pair is configuration truth recorded once here — any
+new surface (e.g. the hosted edition) consumes the same pair.
 
 **Privacy policy — closed section set:** summary; operator identity; data inventory
 (Person — name, birth date, birth time-or-unknown, birth place + tzid, with the

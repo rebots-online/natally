@@ -591,10 +591,12 @@ disjoint Owns; Verify + Accept observe durable end-state; commit+push per line; 
 
 ## Legal documents (§11.1)
 
-- [X] **LG.1 Privacy policy + terms of use** · §11.1, §12, §21 · [observed: citation
-  scan GREEN 15/15 (node presence+phrase check, output quoted in session); files written
-  per §11.1 closed section sets; `✅` withheld — awaits orchestrator semantic evaluation,
-  not grep proxies]
+- [X] **LG.1 Privacy policy + terms of use** · §11.1, §12, §21 · [observed: HTML citation
+  + section scan GREEN (privacy 7/7, terms 11/11 Back-to-Top; 15 required phrases
+  present, node scan output quoted in session); markdown predecessors preserved at
+  ~/outbox/natally/legal-md-pre-html-2026-09-17/ per I3 and git-removed; `✅` withheld —
+  awaits orchestrator semantic evaluation, not grep proxies; RC dashboard URL fields are
+  operator-side configuration recorded in §11.1(c)]
   **Spec:** Write `apps/local/public/legal/privacy.md` and `terms.md` exactly per §11.1's
   closed section sets — the single source the web app (About, first-run, checkout), the
   landing page, the order pages and the website link to (never copy). The privacy policy
@@ -612,8 +614,11 @@ disjoint Owns; Verify + Accept observe durable end-state; commit+push per line; 
   **Owns:** `apps/local/public/legal/**`.
   **Verify:** `node -e` presence + citation scan (each §11.1-required phrase present in
   the committed files), output quoted.
-  **Accept:** `legal: both documents exist with the full §11.1 section sets and required
-  citations; zero customer-copy conflicts with §21.2 micro-copy`.
+  **Accept:** `legal: both token-themed HTML documents with the full §11.1 section sets,
+  per-section Back-to-Top, and required citations; placed per the §11.1 placement
+  contract — app (About/first-run/checkout links), website + landing page (canonical-URL
+  links), RevenueCat paywall Privacy/Terms URL fields set to the canonical pair, order
+  pages link beside every purchase action; zero customer-copy conflicts with §21.2`.
 
 
 
