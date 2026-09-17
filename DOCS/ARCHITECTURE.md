@@ -101,7 +101,7 @@ fact), `authored` (static education, labelled in UI), `generated` (companion tra
 | Entity | Key fields | Provenance | Storage | Notes |
 |---|---|---|---|---|
 | Person | id, name, birth {date, time?, place, timeKnown} | system (input) | SQLite `people` | birth data is quasi-PII (§12) |
-| Session | id, personId, startedAt | system | SQLite `sessions` | one conversation thread |
+| Session | id, personId, startedAt; persisted `sessions.historical_person_id` retains the personId after profile deletion | system | SQLite `sessions`; migration in `packages/lore/src/ddl.ts`, repository `apps/local/src/data/sessions.ts` | one conversation thread; nullable live FK plus historical ID, no extra application table |
 | Turn | id, sessionId, role (you/her/tool), text, ts | generated (her) / system (you) | SQLite `turns` | tool turns record DOM ops (§7.3) |
 | Plate | id, sessionId, kind (natal/synastry/today), chartId | computed (rendered from ChartFacts) | derived, cached | in-transcript card |
 | ChartFacts | id, personIds[], ut/place inputs, positions[], cusps[], aspects[] | computed | SQLite `charts` (content-addressed by input hash) | immutable; from EphemerisEngine only |
@@ -114,6 +114,8 @@ fact), `authored` (static education, labelled in UI), `generated` (companion tra
 | LoreNode | id, kind, summary, embedding, refs[] | generated (derived) | SQLite+vec (§8) | D12 |
 | LoreEdge | from, to, rel, weight, sourceTurnId | generated (derived) | SQLite | §8.2 |
 | Lore itself (summaries) | — | generated | UI-labelled | never shown as computed fact |
+| Mascot | `Mascot({size?: number, className?: string, alt?: string})`; `apps/local/src/ui/mascot.tsx` | system (approved brand artwork) | bundled `src/assets/mascot/` | Shared animated brand image in TopBar, startup, unavailable-screen and error surfaces; reduced-motion selects frame zero. Separate from Stage's event-driven state. |
+| ApplicationIcons | `scripts/generate-icons.sh`; `apps/local/src-tauri/icons/`; `apps/local/public/icons/` | system (approved brand artwork) | generated icon files, HTML links and PWA manifest | All sizes derive from `LIBS/UI/FIGMA/mascot/natally-icon-1024-rgba.png`; OS launchers and installers use static formats. |
 
 The provenance tag travels with the content into the prompt fence (§7.2) and the renderer
 (Plex Mono for `computed`, Fraunces margin for `generated`, labelled sections for
@@ -329,6 +331,13 @@ In the local product this consults only the local state (§9.1–§9.3). The hos
 interface is frozen now so that edition never re-architects (R2's clause).
 
 ## 10. Voice subsystem (D7/D7a) and the Stage
+
+Operator correction (2026-09-13): the approved mascot is the application icon and
+animated brand image throughout surfaces that support animation. `Mascot` reuses the
+approved idle WebP with the original still for reduced motion; it does not emit or
+imply companion state. `Stage` continues to reflect actual companion events. Native
+launcher, installer, PWA-install and browser-tab icons use generated static mascot
+images, all derived from the same approved 1024-pixel source.
 
 Kokoro on every leg. Native: ONNX runtime in Rust, synthesis and playback fully native,
 voices from the mirror (`manifest.json` shared with the LLM catalogue); Web:

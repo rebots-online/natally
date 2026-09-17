@@ -74,6 +74,22 @@
 .ui-plate__title {
   font: 600 18px / 24px var(--font-voice, "Fraunces", serif);
 }
+.ui-topbar__brand {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+}
+.ui-topbar__brand picture {
+  flex: 0 0 40px;
+}
+.ui-screen-absence {
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  gap: var(--spacing-4);
+  min-height: 55dvh;
+  text-align: center;
+}
 .ui-topbar__context {
   margin-inline-start: auto;
   min-width: 0;

@@ -26,7 +26,8 @@
   "dependencies": {
     "zod": "4.5.4",
     "wa-sqlite": "1.0.0",
-    "sqlite-vec": "0.1.9"
+    "sqlite-vec": "0.1.9",
+    "@wllama/wllama": "3.6.1"
   },
   "devDependencies": {
     "typescript": "5.9.3",

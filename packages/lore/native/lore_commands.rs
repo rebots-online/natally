@@ -10,6 +10,23 @@ use serde::{Deserialize, Serialize};
 use std::{collections::BTreeMap, sync::Mutex, time::Duration};
 use tauri::Manager;
 
+/// Static registration follows DOCS/sdk/sqlite-vec/rust.html. SQLite copies the
+/// entrypoint into its process registry; no dynamically loaded path is involved.
+fn register_vec() -> Result<(), String> {
+    static RESULT: std::sync::OnceLock<Result<(), String>> = std::sync::OnceLock::new();
+    RESULT.get_or_init(|| {
+        let status = unsafe {
+            rusqlite::ffi::sqlite3_auto_extension(Some(std::mem::transmute::<
+                *const (),
+                unsafe extern "C" fn(*mut rusqlite::ffi::sqlite3, *mut *mut std::os::raw::c_char,
+                    *const rusqlite::ffi::sqlite3_api_routines) -> std::os::raw::c_int,
+            >(sqlite_vec::sqlite3_vec_init as *const ())))
+        };
+        if status == rusqlite::ffi::SQLITE_OK { Ok(()) }
+        else { Err(format!("sqlite-vec registration failed ({status})")) }
+    }).clone()
+}
+
 #[derive(Default)]
 pub struct LoreState(Mutex<Connections>);
 
@@ -205,6 +222,7 @@ pub fn lore_open<R: tauri::Runtime>(
     vector: Option<Migration>,
     options: MigrationOptions,
 ) -> Result<OpenResult, String> {
+    register_vec()?;
     let directory = app.path().app_data_dir().map_err(|e| e.to_string())?;
     std::fs::create_dir_all(&directory).map_err(|e| e.to_string())?;
     let mut connection =
@@ -315,6 +333,19 @@ crate::natally_plugin!(
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn native_vec_runs_real_nearest_neighbour_query() {
+        register_vec().unwrap();
+        let db = Connection::open_in_memory().unwrap();
+        db.execute_batch("CREATE VIRTUAL TABLE vectors USING vec0(embedding float[3]);
+            INSERT INTO vectors(rowid,embedding) VALUES (1,'[1,0,0]'),(2,'[0,1,0]');").unwrap();
+        let (id,distance): (i64,f64) = db.query_row(
+            "SELECT rowid,distance FROM vectors WHERE embedding MATCH '[0.99,0.01,0]' AND k=1",
+            [], |row| Ok((row.get(0)?,row.get(1)?))).unwrap();
+        assert_eq!(id,1);
+        assert!((distance-0.0141421356).abs()<1e-6);
+    }
 
     #[test]
     fn batch_roundtrips_blobs_and_rolls_back_constraint_failure() {

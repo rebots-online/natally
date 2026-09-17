@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { Mascot } from "../mascot";
 import { Button } from "./Button";
 
 export interface TopBarProps {
@@ -31,9 +32,12 @@ export function TopBar({ context, onMenu, menuOpen = false, menuId }: TopBarProp
           <path d="M4 6h16M4 12h16M4 18h16" />
         </svg>
       </Button>
-      <span className="ui-topbar__wordmark">
-        {typeof document === "undefined" ? "" : document.title}
-      </span>
+      <div className="ui-topbar__brand">
+        <Mascot size={40} />
+        <span className="ui-topbar__wordmark">
+          {typeof document === "undefined" ? "" : document.title}
+        </span>
+      </div>
       <div className="ui-topbar__context">{context}</div>
     </header>
   );

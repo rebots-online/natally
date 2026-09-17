@@ -24,13 +24,11 @@ macro_rules! natally_plugin {
     };
 }
 
-mod command_registry {
-    include!(concat!(env!("OUT_DIR"), "/natally_plugin_registry.rs"));
-}
+mod registry_generated;
 
 /// Builds the shell with all statically discovered native feature plugins.
 pub fn builder() -> tauri::Builder<tauri::Wry> {
-    command_registry::register(tauri::Builder::default())
+    registry_generated::register(tauri::Builder::default())
 }
 
 /// Shared desktop and mobile application entrypoint.

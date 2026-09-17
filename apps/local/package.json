@@ -19,7 +19,10 @@
     "@natally/lore": "workspace:*",
     "@tauri-apps/api": "2.9.1",
     "react": "19.3.0",
-    "react-dom": "19.3.0"
+    "react-dom": "19.3.0",
+    "@wllama/wllama": "3.6.1",
+    "onnxruntime-web": "1.29.0",
+    "phonemizer": "1.2.1"
   },
   "devDependencies": {
     "@tailwindcss/vite": "4.3.3",

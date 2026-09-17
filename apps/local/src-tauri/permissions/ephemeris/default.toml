@@ -1,0 +1,4 @@
+[[permission]]
+identifier = "allow-request"
+description = "Calculate charts using the bundled local ephemeris on its native worker."
+commands.allow = ["ephemeris_request"]
