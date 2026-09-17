@@ -35,11 +35,13 @@ product pillars:
    paid unlock = unlimited; six processor rails from build config; individually-redeemable
    and hash-based codes (D11).
 
-Two complementary product lines share this repo (D10): the **local app** (this document's
-scope) sells an unlimited companion; the **hosted SaaS** (designed later, separate pass)
-sells single readings over Bitcoin Lightning and standard web rails. They share the design
-system, the ephemeris seam, the lore core, and the companion persona; they differ in
-inference lane (local models vs hosted API) and billing model (`billing.consume`, §8.6).
+Two complementary product lines share this repo (D10; **D22/D23, 2026-09-13: both are
+active workstreams built in parallel**): the **local app** sells an unlimited companion;
+the **hosted web edition** (`apps/hosted`, stronger server-side inference/STT/TTS behind
+the same shared interfaces) sells single readings over Bitcoin Lightning and standard web
+rails. They share the design system, the exported UI source, the ephemeris seam, the lore
+core, and the companion persona; they differ in inference lane (local models vs hosted
+API — §7.1, §7.5) and billing model (`billing.consume`, §8.6).
 
 ## 2. Monorepo layout
 
@@ -47,8 +49,8 @@ inference lane (local models vs hosted API) and billing model (`billing.consume`
 apps/local/                 # Tauri 2 application — one codebase, four targets
   src/                      # React 19 frontend (see §3)
   src-tauri/                # Rust core (see §5–§7 host duties)
-apps/hosted/                # FUTURE (D10): web-only pay-per-reading SaaS. Empty by design;
-                            # nothing in apps/local may import from it or vice versa.
+apps/hosted/                # D22/D23: hosted web/API edition — scaffold consumes the SAME
+                            # exported UI source behind shared service interfaces.
 VENDORED/sweph-wasm/        # Detached upstream wrapper + published runtime; source owned here
   swisseph/                 # Detached Swiss Ephemeris source at wrapper-pinned revision
 packages/ephemeris/         # EphemerisEngine seam + local vendored sweph-wasm backend (§6)
@@ -449,3 +451,87 @@ runtime.
 | §9 licensing | D11, R2 | paywall ×7, checkout ×6, conversation trial ×3 | SCREEN.md (paywall, checkout), J10, J11 |
 | §10 voice/stage | D7, D7a | conversation, settings (Voice) | STATES.md |
 | §14 build | D8, CC13 | — | scripts/update-version.sh |
+## 18. Implementation amendment (v2, 2026-09-17 — D20–D23 + observed build reality)
+
+This section amends the sections it cites; it never overrides D-entries. Evidence rule:
+every "[observed]" below traces to a command run or in-browser verification recorded in
+commit messages `e5e6926…77d0dd8` (2026-09-16/17 implement session).
+
+### 18.1 UI source of record (D20; amends §3)
+- The frozen Figma complement is now **visual reference only** (paid account expired;
+  no element-level content ever left Figma). The elements-class source of record is the
+  **Google Stitch export**: `LIBS/UI/STITCH/` (2026-09-14, 25 folders, `code.html` per
+  real screen). A **Stitch v2 pass** (frozen PNGs as references + checklist entity names
+  verbatim + Pro-tier model) lands additively as `LIBS/UI/STITCH-v2/` and demotes v1 to
+  wiring reference (TC5).
+- **Wiring law:** screens wire from `code.html` element names/labels verbatim
+  (TopBar, Composer, PlateCard, TurnHer/TurnYou, shell, stage, wheel vocabulary).
+- **Input law (operator 2026-09-16):** every date entry is a structured, auto-expanded
+  date picker; free-text dates are forbidden. The fence's ambiguous-date absence is an
+  output-side backstop only.
+
+### 18.2 Mascot / Stage (D5, D7, D13; amends §10)
+- **Porthole law:** natally is present on EVERY screen — bottom-right circular
+  ship-window portal on non-conversation surfaces, and the conversation docked OPEN by
+  default (a continuous warm channel, never a cold collapsed bubble).
+- **Sprite MascotRenderer** (pluggable): real-footage idle core (the operator's
+  natally-idle loop) + authored sprite states + gold-hairline silhouette placeholders.
+  NO AI-generated character art. Idle cycle: lounging atop the composer (arms-up
+  sprawl), standing behind the gold circle (itself a natal-chart wheel), tending the
+  crystal ball, phone doom-scroll/texting, attention gestures (portal shake, bang on
+  glass, frantic wave), **time-of-day mirroring** (dawn yawn/teeth/groggy coffee),
+  cursor-grab/ride (desktop) and finger-pounce (touch) when idle. **All characters
+  animate where supported** — including Asleep: droopy eye movement, sleep twitches,
+  occasionally almost dropping then hugging the crystal ball. States drive only from
+  StageSignal (STATES.md law).
+- **Voice-on-by-default:** every companion turn is read aloud (V.2); each of her
+  bubbles carries a small speaker icon to replay. [observed: Kokoro q8 in-browser,
+  envelope events → Stage Speaking]
+
+### 18.3 Companion catalogue — Atomic Bots (operator 2026-09-16; amends §7.1)
+- Local default: **Qwen3.5-2B Q4_K_M** (`trialEligible`). 2B is the smallest
+  reasonable companion tier (DOM access + tool calling + lore decisions); Qwen3.5-0.8B
+  is below the floor (debug row only). Offered catalogue additionally lists
+  **LFM2.5-2.6B GGUF** behind a stability probe (operator-recalled crash issues) and
+  **Bonsai-27B / Ternary-Bonsai-27B 1-bit GGUF** (smart tier; slow load; offered only
+  where GPU-fit is verified — Android precondition). Compressed weight tiers
+  `UD-Q3_K_XL` / `IQ4_XS` (llama.cpp-standard); KV `q4r8` still engine-gated (D16).
+- **Hosted inference default (operator 2026-09-14): OpenRouter free**
+  (`openrouter/free` + config-level fallback list) with rate-limit-aware **dynamic
+  backoff**; free access is trial-limited; plain disclosure that free endpoints train
+  on prompts; `insufficient-credit` stays the reserved seam (§8.6). [web lane
+  observed end-to-end on-device via wllama: `e5e6926…77d0dd8`]
+
+### 18.4 Mirror & models (amends §13)
+- The verified local mirror (`.tmp/mirror-staging`: manifest + Qwen3.5-2B Q4_K_M +
+  Kokoro q8 + tokenizer + af_heart, sha256 per file) carries development; HF publish to
+  `RobinsAIWorld/natally-models` is blocked on a fresh write token (prior token 401;
+  no leak found). Native builds bake the real HF mirror and the companion stays
+  honestly Asleep until publish. [observed]
+
+### 18.5 Build reality (amends §14)
+- R.1/R.2/R.3 scripts authored and productive [observed]: linux AppImage+deb
+  (v1.21.27237), windows exe+NSIS via cargo-xwin (v1.24.27313; absolute-path cargo
+  shim required — a bare `cargo` in a PATH shim recurses), android apk+aab aarch64
+  (v1.26.27331, versionCode 100026; RUST_MIN_STACK=16MB + capped jobs after rustc
+  thin-LTO SIGSEGV under 4-ABI parallel). msi/msix only on a Windows host (D8).
+- **R.5/CC14 owed:** per-platform stamps must be unified under `release.lock` at the
+  release handback; Android defaults to single-ABI (aarch64) until a bigger-RAM host.
+
+### 18.6 Persistence & intake (amends §5, §8)
+- U.4 [observed]: intake (structured date picker, time-or-unknown, gazetteer place with
+  tzid) → Person/Session/Turn/Chart rows via X.1 SQLite (OPFS; memory fallback when
+  unavailable, honestly) → P.4 ChartFacts from the in-browser Swiss Ephemeris
+  (self-hosted `/vendor/sweph` semiset) → plate + computed greeting; reload restores
+  chart+plate+turns. Fence Tier-1 carries the real ChartFacts (§7.2).
+
+### 18.7 Open items register (supersedes §16)
+1. HF write token reissue → publish the mirror (unblocks on-device model download).
+2. Stitch v2 pass → W3 screens (atlas wheel + 3D torus, people, settings, about+glossary
+   callouts with hover explanations, paywall, checkout, splash).
+3. Hosted edition scaffold + OpenRouter adapter (§18.3) + x402 seam.
+4. I.4 full gate + TEST_RUBRIC gauntlet + TC11 screencast + CC15 Milestone-1 build
+   (single release.lock stamp across platforms).
+5. On-device behavioral verification of the native artifacts (adb/emulator + Windows box).
+6. Forgejo return → drain the LFS push queue; de-LFS staging recipe recorded in memory.
+7. Stage node-id verification re-pointed at the frozen complement + Stitch (Figma gone).
