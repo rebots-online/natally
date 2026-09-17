@@ -58,7 +58,7 @@ no mocks in shipped code.
 - ✅ **B.2 Reading ledger + billing.consume** — 28 tests (charge/refund lifecycle).
 - ✅ **B.3 License token verify + storage** — token suite green (web + Rust verify written; keychain mounting rides I.2).
 - ✅ **B.4 Codes** — [observed 2026-09-17: billing project 278/278 incl. 10 code tests — mint→verify→reuse-rejected, 4 outcomes exact, Crockford charset, foreign-key rejection]. Shape is `NATALLY-` + 4-char groups (minimal 3-group = bridge random; hash-based codes are longer, carrying length-prefixed payload + Ed25519 sig; the code text itself is never signed — it cannot exist before the signature does).
-- [ ] **B.5a Hosted-redirect adapter + bridge client** — SSRF guards, poll loop. **Owns:** `packages/billing/src/adapters/*`, `bridge-client.ts`.
+- ✅ **B.5a Hosted-redirect adapter + bridge client** — [observed 2026-09-17: billing 289/289 incl. 11 new — SSRF guards (loopback/private/reserved incl. IPv4-mapped-IPv6 + .local/.internal/.lan), checkout URL build w/ injected opener, poll loop (2s×1.5 growth, 30s cap interval, 15min cap, offline-tolerant, 4xx≠429 aborts, 408 at cap)]
 - [ ] **B.5b RevenueCat adapter.** **Owns:** `packages/billing/src/adapters/revenuecat.ts`.
 - [ ] **B.5c Adapter registry.** **Owns:** `packages/billing/src/adapters/registry.ts`.
 - [ ] **B.6 License bridge service** — axum, 6 webhooks, mint/verify, deny-list. **Owns:** `services/license-bridge/**`.
