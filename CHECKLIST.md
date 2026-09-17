@@ -38,8 +38,7 @@ Owns; Verify + Accept observe durable end-state; commit+push per line; no mocks.
 - ✅ **B.4** — codes (NATALLY- Crockford, 4 outcomes exact, `ca0fef0`).
 - ✅ **B.5a** — hosted-redirect adapter + bridge client + SSRF guards (`c1ceef3`).
 - ✅ **B.5b** — RevenueCat adapter (SDK injected, `aba35cc`).
-- [X] **B.5c Adapter registry** — files written (300/300 tests incl. 5 new), final gate
-  interrupted; **Verify:** `pnpm vitest run packages/billing/tests/registry.test.ts` ·
+- ✅ **B.5c Adapter registry** — [observed: gate GREEN 39/39 1258/1258; 5 registry tests — frozen-order availability, hides absent rails, purchase dispatch, redeem via B.4, duplicate-registration error] — **Verify:** `pnpm vitest run packages/billing/tests/registry.test.ts` ·
   **Accept:** `registry: frozen-order availability, hides absent rails, purchase dispatch,
   redeem via B.4, duplicate-registration error`.
 - [ ] **B.6 License bridge service** — axum, 6 webhooks, mint/verify, deny-list (§9.4).

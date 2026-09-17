@@ -46,7 +46,7 @@ describe("config: valid", () => {
       landingUrl: example.VITE_LANDING_URL,
       modelMirrorBase: example.VITE_MODEL_MIRROR_BASE,
       devPort: 46371,
-      trial: { mode: "count", readings: 3, trialModel: "qwen3-0.6b-q4_k_m" },
+      trial: { mode: "count", readings: 3, trialModel: "qwen3.5-2b-q4_k_m" },
       licenseBridgeUrl: undefined,
       payments: {
         stripe: undefined,
