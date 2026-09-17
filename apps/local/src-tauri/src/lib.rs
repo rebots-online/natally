@@ -26,6 +26,9 @@ macro_rules! natally_plugin {
 
 mod registry_generated;
 
+/// Build-time storage-scope config (SS.1, architecture §19.1).
+pub mod storage_config;
+
 /// Builds the shell with all statically discovered native feature plugins.
 pub fn builder() -> tauri::Builder<tauri::Wry> {
     registry_generated::register(tauri::Builder::default())

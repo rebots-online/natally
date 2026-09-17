@@ -10,6 +10,8 @@ fn main() -> Result<(), Box<dyn Error>> {
     println!("cargo:rerun-if-changed=src");
     println!("cargo:rerun-if-changed=permissions");
     println!("cargo:rerun-if-changed=icons");
+    // SS.1: rebuild when the generated storage-scope config changes (§19.1).
+    println!("cargo:rerun-if-changed=config/asset-storage.generated.json");
 
     let mut plugins = Vec::new();
     if plugins_dir.is_dir() {
