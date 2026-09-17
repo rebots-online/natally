@@ -405,7 +405,14 @@ disjoint Owns; Verify + Accept observe durable end-state; commit+push per line; 
   generates valid XML, all tokens resolved, runFullTrust declared, escape-hostile values
   safe`.
 
-- [ ] **WP.3 Version ordinal mapping** · §20.4  **Spec:** `scripts/windows-version.mjs` + committed `config/windows-release-ordinal`
+- ✅ **WP.3 Version ordinal mapping** · §20.4 · [orchestrator semantic evaluation
+  2026-09-17: source inspected — §20.4 formulas verbatim; overflow guard errors at
+  255·2²⁴ (observed); ordinal round-trip observed (bump n=1→2, restored, --check PASS);
+  adversarial probe: monotonicity asserted per numeric field-tuple (correct MSI/MSIX
+  semantics — plain string compare would break at 1.0.9 vs 1.0.10, test does it right);
+  node --test 4/4 observed by orchestrator. Note recorded: --bump is a plain write (no
+  flock helper exists in scripts/) — acceptable, CC14's release.lock unification at R.5
+  covers stamp single-flight]  **Spec:** `scripts/windows-version.mjs` + committed `config/windows-release-ordinal`
   (integer `n`, increments once under `release.lock`). Exact §20.4 formulas, verbatim:
   `msi = [1 + floor(n / 2^24), floor(n / 65536) % 256, n % 65536].join(".")` and
   `msix = [1, floor(n / 65536), n % 65536, 0].join(".")`; MSI ProductVersion field limits
