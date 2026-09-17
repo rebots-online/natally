@@ -5,6 +5,7 @@ import {
   ModelManifestSchema,
 } from "../../../../packages/billing/src/types.js";
 import type { BrowserRuntimeConfig } from "../config.js";
+import bakedCatalogue from "./catalogue.json" with { type: "json" };
 
 export type { ManifestAsset, ModelManifest };
 export type MirrorConfig = Pick<BrowserRuntimeConfig, "modelMirrorBase" | "licenseBridgeUrl">;
@@ -107,6 +108,17 @@ export function parseManifest(input: unknown, network: MirrorNetwork): Readonly<
   // Freeze the array at runtime as well as each asset: catalogue identities cannot drift.
   Object.freeze(assets);
   return Object.freeze({ version: manifest.version, assets });
+}
+
+/**
+ * MS.2 — the baked catalogue is the production manifest (§13: build-time JSON with
+ * absolute public HF URLs and sha256 pins; no server fetch, no write token). The
+ * network is still required to validate that every absolute URL's origin is on the
+ * allowlist. The old fetch-based `fetchManifest` is retained for local-dev mirrors
+ * only; production code uses this.
+ */
+export function loadBakedManifest(network: MirrorNetwork): Readonly<ModelManifest> {
+  return parseManifest(bakedCatalogue, network);
 }
 
 export async function fetchManifest(

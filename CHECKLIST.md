@@ -67,12 +67,12 @@ Owns; Verify + Accept observe durable end-state; commit+push per line; no mocks.
 
 ## NEW: Model sourcing (§13 public HF contract)
 
-- [ ] **MS.1 Build-time manifest** — committed JSON catalogue with absolute URLs +
+- ✅ **MS.1 Build-time manifest** — [observed: gen-manifest --check passes; 5 assets, all absolute huggingface.co URLs, sha256 pins present, trial model qwen3.5-2b, 1333.9 MB total] — committed JSON catalogue with absolute URLs +
   sha256 pins for all six assets (Qwen3.5-2B, LFM2.5, Kokoro q8 + tokenizer + af_heart,
   MiniLM). **Owns:** `apps/local/src/mirror/catalogue.json` + `scripts/gen-manifest.mjs`.
   **Verify:** `node scripts/gen-manifest.mjs --check` · **Accept:** `manifest: 6 assets,
   all absolute huggingface.co URLs, sha256 pins present`.
-- [ ] **MS.2 Manifest loader update** — parse the baked catalogue (not a fetch);
+- ✅ **MS.2 Manifest loader update** — [observed: composition uses loadBakedManifest; mirror tests 37/37; gate 39/39 1258/1258] — parse the baked catalogue (not a fetch);
   MirrorNetwork origin-allowlist test for `huggingface.co`. **Owns:**
   `apps/local/src/mirror/manifest.ts` update. **Verify:** `pnpm vitest run
   apps/local/src/mirror` · **Accept:** `manifest: baked JSON parsed, multi-repo absolute

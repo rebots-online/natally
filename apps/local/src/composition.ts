@@ -23,7 +23,7 @@ import {
 import { WebMirrorStorage, WebSpaceAdapter } from "./mirror/cache.js";
 import { MirrorDownloader } from "./mirror/download.js";
 import type { ManifestAsset, ModelManifest } from "./mirror/manifest.js";
-import { fetchManifest, MirrorNetwork } from "./mirror/manifest.js";
+import { loadBakedManifest, MirrorNetwork } from "./mirror/manifest.js";
 import type { ConversationPlate, ConversationServices } from "./screens/conversation/types.js";
 import type { WebVoice } from "./voice/web.js";
 import { createKokoroWebVoice } from "./voice/web.js";
@@ -350,7 +350,7 @@ export function createConversationComposition(): Promise<Composition> {
     let manifest: ModelManifest | null = null;
     let chatAsset: ManifestAsset | null = null;
     try {
-      manifest = await fetchManifest(network);
+      manifest = loadBakedManifest(network);
       chatAsset =
         manifest.assets.find((asset) => asset.id === config.trial.trialModel) ??
         manifest.assets.find((asset) => asset.kind === "llm") ??

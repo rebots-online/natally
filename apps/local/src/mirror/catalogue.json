@@ -1,0 +1,44 @@
+{
+  "version": "2026-09-17.1",
+  "assets": [
+    {
+      "id": "qwen3.5-2b-q4_k_m",
+      "kind": "llm",
+      "file": "https://huggingface.co/unsloth/Qwen3.5-2B-GGUF/resolve/main/Qwen3.5-2B-Q4_K_M.gguf",
+      "bytes": 1280835840,
+      "sha256": "aaf42c8b7c3cab2bf3d69c355048d4a0ee9973d48f16c731c0520ee914699223",
+      "quant": "Q4_K_M",
+      "trialEligible": true
+    },
+    {
+      "id": "kokoro-v1-q8",
+      "kind": "voice",
+      "file": "https://huggingface.co/onnx-community/Kokoro-82M-v1.0-ONNX/resolve/main/onnx/model_q8.onnx",
+      "bytes": 92361116,
+      "sha256": "fbae9257e1e05ffc727e951ef9b9c98418e6d79f1c9b6b13bd59f5c9028a1478",
+      "quant": "q8"
+    },
+    {
+      "id": "kokoro-tokenizer",
+      "kind": "voice",
+      "file": "https://huggingface.co/onnx-community/Kokoro-82M-v1.0-ONNX/resolve/main/tokenizer.json",
+      "bytes": 3497,
+      "sha256": "77a02c8e164413299b4b4c403b14f8e0e1c1b727db4d46a09d6327b861060a34"
+    },
+    {
+      "id": "kokoro-voices-af_heart",
+      "kind": "voices",
+      "file": "https://huggingface.co/onnx-community/Kokoro-82M-v1.0-ONNX/resolve/main/voices/af_heart.bin",
+      "bytes": 522240,
+      "sha256": "d583ccff3cdca2f7fae535cb998ac07e9fcb90f09737b9a41fa2734ec44a8f0b"
+    },
+    {
+      "id": "minilm-l6-v2-q8_0",
+      "kind": "embedder",
+      "file": "https://huggingface.co/leliuga/all-MiniLM-L6-v2-GGUF/resolve/main/all-MiniLM-L6-v2.Q8_0.gguf",
+      "bytes": 25008064,
+      "sha256": "e5ec722e8c82dc4ffaf965175ca472f5da3f97b695590b5b0780bdbfa29bcaf3",
+      "quant": "q8_0"
+    }
+  ]
+}
