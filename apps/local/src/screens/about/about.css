@@ -1,0 +1,94 @@
+/* U.7 About screen — token custom properties only, no raw values. */
+.about {
+  max-width: 640px;
+  padding: var(--spacing-6);
+  margin: 0 auto;
+  display: grid;
+  gap: var(--spacing-6);
+}
+
+.about__header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--spacing-4);
+}
+
+.about__header h1 {
+  margin: 0;
+  color: var(--color-gilt);
+  font-family: "Fraunces", serif;
+  font-size: 28px;
+  line-height: 36px;
+}
+
+.about__section {
+  padding: var(--spacing-4);
+  background: var(--color-midnight-2);
+  border: var(--stroke-hairline) solid var(--color-hairline);
+  border-radius: var(--radius-plate);
+}
+
+.about__section h2 {
+  margin: 0 0 var(--spacing-2);
+  font-family: "Fraunces", serif;
+  font-size: 20px;
+  line-height: 28px;
+}
+
+.about__section h3 {
+  margin: 0 0 var(--spacing-2);
+  font-size: 16px;
+  line-height: 24px;
+}
+
+/* The authored provenance label above each authored section's content. */
+.about__label {
+  color: var(--color-vellum-muted);
+  font-family: "Nunito Sans", sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.about__legend {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: var(--spacing-2);
+}
+
+/* §5: computed renders in Plex Mono. */
+.about__data {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 14px;
+  color: var(--color-vellum);
+}
+
+/* §5: generated renders in Fraunces, in the margin voice. */
+.about__voice {
+  font-family: "Fraunces", serif;
+  font-size: 15px;
+  color: var(--color-vellum);
+}
+
+/* §5: distinct absence treatment — muted, italic, never filled in. */
+.about__absence {
+  font-style: italic;
+  color: var(--color-vellum-muted);
+}
+
+.about a {
+  color: var(--color-moonlight);
+}
+
+.about__glossary {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-2);
+}

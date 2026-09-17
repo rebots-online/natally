@@ -1,0 +1,57 @@
+/* U.7 glossary callout — styling only through the frozen token custom properties. */
+.ui-glossary {
+  position: relative;
+  display: inline-block;
+}
+
+.ui-glossary__trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-1);
+  padding: var(--spacing-1) var(--spacing-2);
+  min-height: var(--size-touch);
+  background: none;
+  border: var(--stroke-hairline) solid transparent;
+  border-radius: var(--radius-chip);
+  color: var(--color-moonlight);
+  text-decoration: underline dotted;
+  text-underline-offset: 3px;
+  cursor: help;
+}
+
+.ui-glossary__trigger:hover,
+.ui-glossary__trigger[aria-expanded="true"] {
+  border-color: var(--color-hairline);
+  background: var(--color-midnight-2);
+}
+
+.ui-glossary__glyph {
+  color: var(--color-gilt);
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 14px;
+}
+
+.ui-glossary__tooltip {
+  position: absolute;
+  z-index: 10;
+  bottom: calc(100% + var(--spacing-2));
+  left: 0;
+  width: min(320px, 80vw);
+  padding: var(--spacing-3);
+  box-sizing: border-box;
+  background: var(--color-midnight-2);
+  border: var(--stroke-hairline) solid var(--color-hairline);
+  border-radius: var(--radius-plate);
+  color: var(--color-vellum);
+  font-size: 14px;
+  line-height: 22px;
+}
+
+.ui-glossary__label {
+  display: block;
+  margin-bottom: var(--spacing-1);
+  color: var(--color-vellum-muted);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}

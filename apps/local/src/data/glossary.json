@@ -1,0 +1,27 @@
+[
+  {
+    "term": "Ascendant",
+    "body": "The Ascendant is the degree of the ecliptic rising above the eastern horizon at the moment a chart is cast. It defines the first-house cusp in quadrant house systems and depends on a known birth time.",
+    "glyph": "↑"
+  },
+  {
+    "term": "Placidus",
+    "body": "Placidus is a quadrant house system that divides the ecliptic by proportional semi-arc, so house cusps fall at unequal distances. It is one of several house-system conventions — a coordinate choice, not a physical structure.",
+    "glyph": "⌂"
+  },
+  {
+    "term": "Synastry",
+    "body": "Synastry is the practice of comparing two natal charts by examining the angular relationships formed between each chart's positions. It is an interpretive tradition, not a measurement of a relationship's outcome.",
+    "glyph": "⚭"
+  },
+  {
+    "term": "Retrograde",
+    "body": "Retrograde describes the apparent westward motion of a planet against the stars, an effect of observing from a moving Earth. It is a perspective phenomenon and does not mean the planet reverses its orbit.",
+    "glyph": "℞"
+  },
+  {
+    "term": "Midheaven",
+    "body": "The Midheaven is the degree of the ecliptic crossing the local meridian above the horizon at the chart moment. It marks the tenth-house cusp in quadrant house systems and, like the Ascendant, depends on a known birth time.",
+    "glyph": "→"
+  }
+]
