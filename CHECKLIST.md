@@ -589,7 +589,33 @@ disjoint Owns; Verify + Accept observe durable end-state; commit+push per line; 
   resume) · **Accept:** `hosted billing: consume = ROCHE reserve/settle via OR.4,
   exhaustion copy exact, entitlement never revoked`.
 
-## Phase W7 — Close-out
+## Legal documents (§11.1)
+
+- [X] **LG.1 Privacy policy + terms of use** · §11.1, §12, §21 · [observed: citation
+  scan GREEN 15/15 (node presence+phrase check, output quoted in session); files written
+  per §11.1 closed section sets; `✅` withheld — awaits orchestrator semantic evaluation,
+  not grep proxies]
+  **Spec:** Write `apps/local/public/legal/privacy.md` and `terms.md` exactly per §11.1's
+  closed section sets — the single source the web app (About, first-run, checkout), the
+  landing page, the order pages and the website link to (never copy). The privacy policy
+  quotes **"birth data is quasi-PII (§12)"** verbatim in the data inventory, enumerates
+  every stored record class (Person fields incl. tzid, sessions/turns incl. tool turns,
+  ChartFacts, lore nodes/edges/embeddings, readings ledger, consumed codes, wrapped
+  license token + deny-list cache), the exact network egress allowlist (public
+  unauthenticated Hugging Face model downloads + license bridge + chosen payment
+  processor), no telemetry/analytics/crash-reporting/tracking cookies, the J8 export +
+  delete-everything + per-person-removal rights, and shared model bytes being
+  non-personal. Terms carry the AGPL source offer, trial policy, $ROCHE rules
+  (§21 fungibility, reserve/settle, no revocation of Unlimited), single-use codes,
+  acceptable use incl. upstream model licenses, no-warranty + liability cap (12-month
+  payments).
+  **Owns:** `apps/local/public/legal/**`.
+  **Verify:** `node -e` presence + citation scan (each §11.1-required phrase present in
+  the committed files), output quoted.
+  **Accept:** `legal: both documents exist with the full §11.1 section sets and required
+  citations; zero customer-copy conflicts with §21.2 micro-copy`.
+
+
 
 - [ ] **W7-1 TEST_RUBRIC gauntlet + TC11 screencast** · `DOCS/TEST_RUBRIC.md`  **Spec:** Run the pre-committed rubric (GR-1 pass; verdicts exactly SHIP-READY or
   DEFECTIVE; every PASS a direct semantic observation) against the built web app with the

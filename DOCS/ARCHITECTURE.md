@@ -136,6 +136,7 @@ fact), `authored` (static education, labelled in UI), `generated` (companion tra
 | GrantProvenance | purchase ref, grant key, paid period, restrictions | system | RC + server ledger (§21.6) | replay-safe; no double grants | OR.1 · OR.4 |
 | Mascot | `Mascot({size?, className?, alt?})`; `apps/local/src/ui/mascot.tsx` | system (approved brand artwork) | bundled `src/assets/mascot/` | Shared animated brand image in TopBar, startup, unavailable-screen and error surfaces; reduced-motion selects frame zero. Separate from Stage's event-driven state. | U.9 · U.7 |
 | ApplicationIcons | `scripts/generate-icons.sh`; `apps/local/src-tauri/icons/`; `apps/local/public/icons/` | system (approved brand artwork) | generated icon files, HTML links and PWA manifest | All sizes derive from `LIBS/UI/FIGMA/mascot/natally-icon-1024-rgba.png`; OS launchers and installers use static formats. | R.1–R.3✓ · W7-2 |
+| LegalDocument | privacy policy + terms of use, closed section sets (§11.1) | authored (static legal text) | `apps/local/public/legal/privacy.md` + `terms.md` — single source; landing/order/web-app surfaces link, never copy | Must quote "birth data is quasi-PII (§12)" verbatim | LG.1 |
 
 The provenance tag travels with the content into the prompt fence (§7.2) and the renderer
 (Plex Mono for `computed`, Fraunces margin for `generated`, labelled sections for
@@ -203,6 +204,7 @@ snapshot defect (§22: no blockers by recipe time).
 | capability layer (single selection point) | module | `apps/local/src/capabilities/` (I.3) | I.3 · I.2 |
 | voice native (`src-tauri/src/voice/`) | module | §10 | V.1 · I.2 · W7-4 |
 | hosted scaffold + OpenRouter adapter + hosted voice/STT + hosted billing | modules | `apps/hosted/` | H.1 · H.2 · H.3 · H.4 |
+| `legal/privacy.md` + `legal/terms.md` | documents (§11.1 closed section sets) | `apps/local/public/legal/` | LG.1 · U.7 · U.6 |
 
 ## 6. Ephemeris subsystem (D14)
 
@@ -447,6 +449,47 @@ spans `envelope-start` → `envelope-end`; `Idle` resumes at `envelope-end`.
   tokens; CI greps for `hf_`/`sk-`/private-key patterns.
 - Exported data (J8) is plaintext JSON by design (user-owned); the UI says so.
 
+### 11.1 Legal documents (privacy policy + terms of use) — single source, SC3
+
+`apps/local/public/legal/privacy.md` and `apps/local/public/legal/terms.md` are the one
+authored source for every customer-facing surface that requires them: the web app
+(About + first-run + checkout links), the landing page, the order/checkout pages, and the
+website. Generated/embedded surfaces link here; no copies.
+
+**Privacy policy — closed section set:** summary; operator identity; data inventory
+(Person — name, birth date, birth time-or-unknown, birth place + tzid, with the
+classification **"birth data is quasi-PII (§12)"** quoted verbatim; Session/Turn records
+including tool-action turns; ChartFacts; lore nodes/edges/embeddings; readings ledger;
+consumed codes; license token + deny-list cache in wrapped browser storage); storage
+location (device browser storage — IndexedDB/OPFS + service-worker caches); the exact
+network egress allowlist (public unauthenticated Hugging Face model downloads; license
+bridge + chosen payment processor); no telemetry/analytics/crash-reporting/tracking
+cookies; payment processors (the six rails, as available) and what we receive (signed
+license confirmation + purchase reference, never card data); deny-list fetch cadence
+(app start, before checkout/restore, ≤ 24 h); voice synthesis in-browser; $ROCHE handling
+(platform-held balance, reserve-then-settle, depletion never revokes Unlimited); user
+rights (J8 export of all user-owned entities; delete-everything = real deletion rows +
+vectors; per-person removal semantics §8.4 — person + lore + cached charts gone,
+transcripts persist until full delete; shared model bytes are not personal data);
+third-party birth data (synastry partners — attested consent); minors; append-only
+ledger retention with compensating rows; changes + contact.
+
+**Terms of use — closed section set:** acceptance; service description (every
+astrological value computed by the vendored Swiss Ephemeris engine; provenance labels per
+INC-19 — computed facts, authored-static education, generated companion transcripts,
+honest absence; educational/entertainment purpose; no professional advice); license grant
+and the **"Unlimited chats with natally"** perpetual local-use entitlement + trial policy
+(§9.1 count/time/rate, one trial model); $ROCHE terms (§21: integer units, consumable,
+fungibility matrix, no cash-out, reserve-before-dispatch/settle-once/refund-on-failure,
+depleted balance never revokes Unlimited, lifetime never relabelled as subscription);
+single-use codes (`NATALLY-` format); acceptable use (no entitlement bypass, no abuse of
+public download endpoints, third-party model licenses acknowledged — Qwen/Kokoro/MiniLM
+files under their upstream licenses); third-party services (Hugging Face, payment
+processors — their terms govern their leg); open-source posture (AGPL-3.0-or-later while
+sweph-wasm is in-tree; written source offer on request); data ownership per the privacy
+policy; disclaimers + no warranty; liability cap (amounts paid in the preceding 12
+months); changes; dispute path (contact first; operator's principal place of business).
+
 ## 12. Performance mandates (acceptance criteria)
 
 - Initial JS ≤ 300 KB gz; ephemeris WASM + tables, llama runtime, Kokoro weights: **lazy,
@@ -553,6 +596,7 @@ runtime.
 | §8 lore | D12 | settings (Data/Lore) | screenshot-license.png |
 | §9 licensing | D11, R2 | paywall ×7, checkout ×6, conversation trial ×3 | SCREEN.md (paywall, checkout), J10, J11 |
 | §10 voice/stage | D7, D7a | conversation, settings (Voice) | STATES.md |
+| §11 privacy/security | §11.1 legal documents | about, paywall, checkout, landing, order pages | privacy.md + terms.md |
 | §13 model download | operator 2026-09-17 | settings (Model) | public HF catalogue |
 | §14 build | D8, CC13 | — | scripts/update-version.sh |
 | §19 shared storage | strategy §13-15 | settings (Data/Storage) | strategy doc |
