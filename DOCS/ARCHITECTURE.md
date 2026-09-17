@@ -116,6 +116,16 @@ fact), `authored` (static education, labelled in UI), `generated` (companion tra
 | LoreNode | id, kind, summary, embedding, refs[] | generated (derived) | SQLite+vec (§8) | D12 |
 | LoreEdge | from, to, rel, weight, sourceTurnId | generated (derived) | SQLite | §8.2 |
 | Lore itself (summaries) | — | generated | UI-labelled | never shown as computed fact |
+| StorageScope | scope string (build-baked, §19.1) | system | generated config | public identity; never a secret or entitlement |
+| ContentIdentity | sha256, bytes; object path | system | shared object store (§19.2) | immutable; scope selects the library |
+| CatalogueAlias | assetId+revision → digest/format/quant/license | system | catalogue index (§19.2) | multiple aliases may share bytes |
+| AccessLocator | native path / fd / URI / bookmark / browser handle | system | platform adapter (§19.4) | typed; never a bare path string |
+| UsageClaim (Lease) | consumer identity, read lease/pin | system | shared store (§19.5) | active-reader protection |
+| WindowsReleaseOrdinal | committed integer `n` | system | release metadata | monotonic MSI/MSIX version mapping (§20.4) |
+| OfferCatalogEntry | offer copy, product IDs, entitlement key, currency code | authored (approved copy, §21.1) | RC/Store catalog | customer language law applies |
+| ServiceRateCard | service ID, input/output rates, minimum unit, max charge | system | server service catalog (§21.4) | versioned; margin rule applied once |
+| ReservationJobRecord | account, request-id, state, quote, debit key | system | server durable store (§21.4) | unique (account, request-id) constraint |
+| GrantProvenance | purchase ref, grant key, paid period, restrictions | system | RC + server ledger (§21.6) | replay-safe; no double grants |
 | Mascot | `Mascot({size?: number, className?: string, alt?: string})`; `apps/local/src/ui/mascot.tsx` | system (approved brand artwork) | bundled `src/assets/mascot/` | Shared animated brand image in TopBar, startup, unavailable-screen and error surfaces; reduced-motion selects frame zero. Separate from Stage's event-driven state. |
 | ApplicationIcons | `scripts/generate-icons.sh`; `apps/local/src-tauri/icons/`; `apps/local/public/icons/` | system (approved brand artwork) | generated icon files, HTML links and PWA manifest | All sizes derive from `LIBS/UI/FIGMA/mascot/natally-icon-1024-rgba.png`; OS launchers and installers use static formats. |
 
@@ -174,8 +184,8 @@ interface EphemerisEngine {
 On-device only for this product: llama.cpp (native) / WASM (PWA), configured for **atomic
 chat-turboquant**: quantized weights (Q4_K_M default catalogue tier) **and** KV-cache
 compression (q8_0 KV default, q4r8 recursor tier when the device allows), streamed token by
-token. Models come from the frozen mirror `RobinsAIWorld/natally-models`
-(`manifest.json`, sha256-verified, resumable, §13). The catalogue flags exactly one model
+token. Models download from **public unauthenticated HuggingFace repositories** (§13); no
+upload, no mirroring, no write token. The catalogue flags exactly one model
 `trialEligible` (D11).
 
 ### 7.2 Three-tier prompt fence (normative)
@@ -378,16 +388,36 @@ spans `envelope-start` → `envelope-end`; `Idle` resumes at `envelope-end`.
   reduced-motion freezes frame 0 (a11y floor).
 - Lore writes are async batched (≤ 1 flush per turn); retrieval budgeted (§8.3).
 
-## 13. Model mirror contract
+## 13. Public model download contract (operator 2026-09-17: no mirroring, no upload)
 
-`VITE_MODEL_MIRROR_BASE` → `RobinsAIWorld/natally-models` (A3). `manifest.json`:
-`{ version, assets: [{ id, kind: 'llm'|'embedder'|'voice'|'voices', file, bytes, sha256,
-quant, trialEligible? }] }`. Downloads: ranged + resumable, sha256-verified before commit,
-stored under the platform cache dir (native) / Cache Storage (web); catalogue rows in
-Settings render from this manifest; removal deletes files + manifest rows. A **free-space
-precondition** (asset size + 10 %) is checked before each download starts; failure is an
-honest error, never a partial stash. HF write token is an operator precondition (open item
-§16).
+Model weights download **directly from public unauthenticated HuggingFace repositories**.
+No `RobinsAIWorld/natally-models` repo exists or is needed; no HF write token exists or is
+needed; nothing is ever uploaded to HuggingFace on natally's behalf.
+
+**Source catalogue (frozen; adding a source is a decision-entry event):**
+
+| Asset | Kind | HF repo | File | Quant |
+|---|---|---|---|---|
+| Qwen3.5-2B (LLM default) | llm | `unsloth/Qwen3.5-2B-GGUF` | `Qwen3.5-2B-Q4_K_M.gguf` | Q4_K_M |
+| LFM2.5-2.6B (stability-gated) | llm | `LiquidAI/LFM2.5-2.6B-GGUF` | `LFM2.5-2.6B-Q4_K_M.gguf` | Q4_K_M |
+| Kokoro-82M (voice) | voice | `onnx-community/Kokoro-82M-v1.0-ONNX` | `onnx/model_q8.onnx` | q8 |
+| Kokoro tokenizer | voice | `onnx-community/Kokoro-82M-v1.0-ONNX` | `tokenizer.json` | — |
+| Kokoro af_heart voice | voices | `onnx-community/Kokoro-82M-v1.0-ONNX` | `voices/af_heart.bin` | — |
+| all-MiniLM-L6-v2 (embedder) | embedder | `gpustack/all-MiniLM-L6-v2-GGUF` | `all-minilm-l6-v2-q8_0.gguf` | q8_0 |
+
+**Manifest:** baked into the app at build time (committed JSON, not fetched from a server).
+Each asset carries: `{ id, kind: 'llm'|'embedder'|'voice'|'voices', file: <absolute URL>,
+bytes, sha256, quant?, trialEligible? }`. The `file` field is an **absolute HTTPS URL** to
+the public HF `resolve/main` path (e.g., `https://huggingface.co/unsloth/Qwen3.5-2B-GGUF/
+resolve/main/Qwen3.5-2B-Q4_K_M.gguf`). `MirrorNetwork.resolve()` accepts absolute `file`
+strings when their origin shares the configured base origin (`huggingface.co`), so
+multi-repo downloads need no code change — only manifest rows with absolute URLs.
+
+`VITE_MODEL_MIRROR_BASE` remains `https://huggingface.co` (the shared origin for the
+allowlist check). Downloads: ranged + resumable, sha256-verified before commit, stored per
+the shared-storage contract (§19). A **free-space precondition** (asset size + 10%) is
+checked before each download starts. Catalogue rows in Settings render from this manifest;
+removal releases claims per §19 (never deletes shared bytes another app needs).
 
 ## 14. Build, release, versioning
 
@@ -412,11 +442,11 @@ scripts and nginx provisioning consume these variables; generated manifests are 
 surfaces, never separate sources of configuration. Internal workspace package names may
 remain stable across forks; product identity and displayed labels come from `.env`.
 
-Build-baked client values: mirror base, app URL, trial policy block, six processor values +
-bridge URL, RevenueCat offering id, lore flags, and `VITE_LICENSE_PUBKEY` (offline license
-verify, §9.3). Script/server-only: `HF_TOKEN` (local repo)
-and the bridge's `LICENSE_ED25519_PRIVATE_KEY`, processor webhook secrets, code registry
-(bridge host only, Admin-Manual convention). Nothing in `apps/local` reads a secret at
+Build-baked client values: model source base (`huggingface.co`), storage scope (§19), app URL,
+trial policy block, six processor values + bridge URL, RevenueCat offering id, lore flags,
+and `VITE_LICENSE_PUBKEY` (offline license verify, §9.3). Script/server-only: the bridge's
+`LICENSE_ED25519_PRIVATE_KEY`, processor webhook secrets, code registry (bridge host only,
+Admin-Manual convention). Nothing in `apps/local` reads a secret at
 runtime.
 
 ## 16. Open items register
@@ -427,7 +457,8 @@ runtime.
    `STATE-LEDGER.json` disagree on 7:3, 7:5, 7:16; STATE-LEDGER is canonical for code).
 2. `DOCS/TEST_RUBRIC.md` (final gate-2 sibling; `CHECKLIST.md` was recreated 2026-09-09
    from this reconciled edition).
-3. HF write token for the mirror (both PATs 401 on 2026-08-18).
+3. ~~HF write token for the mirror~~ **resolved 2026-09-17: no mirror, no upload, no
+   write token — public HF download per §13.**
 4. forgejo return → push `origin` with LFS; decide the GitHub artifact channel (R1 needs a
    downloadable web build before forgejo returns).
 5. Hosted-product design pass (Alby Market/x402 rails, OpenRouter admin-key provisioning
@@ -450,7 +481,11 @@ runtime.
 | §8 lore | D12 | settings (Data/Lore) | screenshot-license.png |
 | §9 licensing | D11, R2 | paywall ×7, checkout ×6, conversation trial ×3 | SCREEN.md (paywall, checkout), J10, J11 |
 | §10 voice/stage | D7, D7a | conversation, settings (Voice) | STATES.md |
+| §13 model download | operator 2026-09-17 | settings (Model) | public HF catalogue |
 | §14 build | D8, CC13 | — | scripts/update-version.sh |
+| §19 shared storage | strategy §13-15 | settings (Data/Storage) | strategy doc |
+| §20 Windows packaging | strategy §19 | — | scripts/build-windows.sh |
+| §21 offers + ROCHE | strategy §20-21 | paywall, checkout, settings (License) | strategy doc |
 ## 18. Implementation amendment (v2, 2026-09-17 — D20–D23 + observed build reality)
 
 This section amends the sections it cites; it never overrides D-entries. Evidence rule:
@@ -502,12 +537,13 @@ commit messages `e5e6926…77d0dd8` (2026-09-16/17 implement session).
   on prompts; `insufficient-credit` stays the reserved seam (§8.6). [web lane
   observed end-to-end on-device via wllama: `e5e6926…77d0dd8`]
 
-### 18.4 Mirror & models (amends §13)
-- The verified local mirror (`.tmp/mirror-staging`: manifest + Qwen3.5-2B Q4_K_M +
-  Kokoro q8 + tokenizer + af_heart, sha256 per file) carries development; HF publish to
-  `RobinsAIWorld/natally-models` is blocked on a fresh write token (prior token 401;
-  no leak found). Native builds bake the real HF mirror and the companion stays
-  honestly Asleep until publish. [observed]
+### 18.4 Model sourcing (amends §13; supersedes the former "mirror" model)
+- **Public HF download** (operator 2026-09-17): absolute URLs to public repos; manifest
+  baked at build time with sha256 pins; `MirrorNetwork` base stays on `huggingface.co`
+  so multi-repo absolute `file` URLs pass the origin allowlist. No upload, no write
+  token, no `RobinsAIWorld/natally-models` repo. Local dev mirror (localhost) still
+  available via `.env.development.local` for offline development. [the in-browser
+  download→wake flow was observed end-to-end during the session]
 
 ### 18.5 Build reality (amends §14)
 - R.1/R.2/R.3 scripts authored and productive [observed]: linux AppImage+deb
@@ -526,12 +562,237 @@ commit messages `e5e6926…77d0dd8` (2026-09-16/17 implement session).
   chart+plate+turns. Fence Tier-1 carries the real ChartFacts (§7.2).
 
 ### 18.7 Open items register (supersedes §16)
-1. HF write token reissue → publish the mirror (unblocks on-device model download).
+1. ~~HF write token reissue~~ **resolved: public HF download, no token needed (§13).**
 2. Stitch v2 pass → W3 screens (atlas wheel + 3D torus, people, settings, about+glossary
    callouts with hover explanations, paywall, checkout, splash).
-3. Hosted edition scaffold + OpenRouter adapter (§18.3) + x402 seam.
+3. Hosted edition scaffold + OpenRouter adapter (§18.3) + $ROCHE seam (§21).
 4. I.4 full gate + TEST_RUBRIC gauntlet + TC11 screencast + CC15 Milestone-1 build
    (single release.lock stamp across platforms).
 5. On-device behavioral verification of the native artifacts (adb/emulator + Windows box).
-6. Forgejo return → drain the LFS push queue; de-LFS staging recipe recorded in memory.
+6. Forgejo return → drain the LFS push queue.
 7. Stage node-id verification re-pointed at the frozen complement + Stitch (Figma gone).
+
+## 19. Shared storage / reusable asset contract (strategy doc §13-15)
+
+The intended benefit: **one download of an identical multi-GB asset, reused by every
+authorized ecosystem app on that device** (EnZIME ZIMs, natally models, shared voices —
+the strongest USP). Sharing is by **content identity** (SHA-256 of exact bytes), never by
+product name, developer account, or download URL.
+
+### 19.1 Build-time scope configuration
+
+- `VITE_STORAGE_SCOPE` (e.g., `shared-content-v1`) — a public value selected at build
+  time; independent of `mba.robin`, package IDs, storefront identity, branding.
+- Generated by `scripts/generate-storage-config.mjs` → `config/asset-storage.generated.json`
+  (consumed by both Vite and Cargo via `include_str!`); generation runs under
+  `release.lock`; scope is a frozen constant, never a Settings switch.
+- Scope change = storage migration (retain old discovery aliases until assets are
+  accounted for). Validation: `^[a-z0-9][a-z0-9_-]{2,63}$`.
+
+### 19.2 Content-identity object store
+
+| Record | Contents |
+|---|---|
+| Content identity | SHA-256 of exact bytes + expected byte count; immutable object path `objects/sha256/<ab>/<full-digest>`; scope selects the library, not the hash |
+| Logical catalogue alias | Asset ID + immutable revision → digest, format, architecture, quantization, license, minimum runtime, dependency bundle |
+| Runtime qualification | Backend/version, context limit, tokenizer/template, hardware capability, compatibility evidence (separate from file presence) |
+| Access locator | Authorized native path / file descriptor + offset/length / document URI / security-scoped bookmark / browser handle (never force every platform into a path string) |
+| Usage claim | Consumer identity, active read lease/pin, lifetime and recovery rules |
+
+**Shared candidates:** public LLM weights, tokenizers, Kokoro/embedder weights, licensed
+public ZIM files, immutable authored public lore packs.
+**Private by default:** birth details, people, charts, conversations, generated companion
+text, personal GraphRAG nodes/edges/embeddings, licenses, keys, usage ledgers.
+
+### 19.3 Resolve-existing-first resolver
+
+```ts
+interface SharedAssets {
+  lock<T>(key: string, run: () => Promise<T>): Promise<T>;
+  lookup(asset: Asset, signal: AbortSignal): Promise<Lookup>;
+  acquire(asset: Asset, signal: AbortSignal): Promise<Lease>;
+}
+type Lookup =
+  | { kind: "ready"; lease: Lease }
+  | { kind: "missing" }
+  | { kind: "needs-grant" | "unavailable" | "corrupt"; reason: string };
+```
+
+`resolveExistingFirst(scope, asset, store, signal)`: validate identity → `lookup` (shared
+providers first, then authorized legacy/private caches) → if `missing`, acquire a
+`scope:digest` lock and re-lookup (single-writer) → `acquire` returns a read lease only
+after persisted bytes are verified and atomically published. Never start a multi-GB
+download after a denied/expired grant.
+
+### 19.4 Platform adapters
+
+| Platform | Shared library root | Access mechanism | Fallback |
+|---|---|---|---|
+| Windows (MSI/MSIX) | `FOLDERID_Profile` + `Shared AI Assets/<scope>/` | Native broker returns read-only handles; `LockFileEx` digest locks | Discovery/migration from LocalAppData |
+| Linux (AppImage/deb) | `$XDG_DATA_HOME/<scope>` or `$HOME/.local/share/<scope>` | OS file locks; read-only handles; transactional publication | Flatpak/Snap → document portal |
+| Android | SAF document-tree grant (user-selected) | `ContentResolver` + persisted URI permissions; `BlobStoreManager` for immutable blobs (shared `BlobHandle` identity) | Optional provider app; content URI ≠ filesystem path |
+| Browser/PWA | Same-origin OPFS / Cache Storage | Stable path layout under the storage scope; service-worker control | File System Access handles where supported |
+| Apple (ecosystem) | App Group container (`containerURL(forSecurityApplicationGroupIdentifier:)`) | Same-team entitlements only | Document picker + security-scoped bookmarks |
+
+### 19.5 Concurrency and lifecycle
+
+- Lock keyed `scope:sha256`; re-lookup inside the lock (two apps arriving simultaneously
+  produce one published object).
+- Hash the persisted full content (not just new chunks); verify size + digest + compatible
+  metadata before exposing a committed object.
+- A logical bundle is ready only when **all** required digests are available.
+- Read-only clients hold **leases**; removing a model from one app releases its claim,
+  never erases shared bytes another app needs. Library-owned GC with active-reader
+  protection.
+- Natally's delete-everything erases its private records and releases asset claims;
+  it never wipes another app's ZIMs or models.
+
+### 19.6 Integration mapping (existing code → shared contract)
+
+| Existing surface | Extension required |
+|---|---|
+| `MirrorStorage`/`WebMirrorStorage` (cache.ts) | Introduce shared discovery/access via the resolver without invalidating existing caches |
+| `MirrorDownloader.download` (download.ts) | Extend lookup to authorized shared locations; preserve resume/cancel/integrity |
+| `CatalogueStore.remove` (catalogue.ts) | Replace shared deletion with release-of-claim |
+| `loadRuntimeConfig` (config.ts) | Wire `VITE_STORAGE_SCOPE` through generated config + native construction |
+| Lore database (lore_commands.rs, web-sqlite.ts) | Stays private; never relocated into the shared object store |
+| `ManifestAsset` schema (types.ts) | Extend kinds for ZIM/public-lore bundles + dependency graphs + access locators |
+
+## 20. Windows MSI and Microsoft Store MSIX packaging (strategy doc §19)
+
+### 20.1 Distribution channels
+
+| Channel | Packaging | Update/commerce ownership |
+|---|---|---|
+| Microsoft Store MSIX | Native Windows payload via Windows SDK → Partner Center | Store signs and delivers updates; payment adapter is separate |
+| Direct MSI | Tauri Windows MSI bundle | Natally owns installer upgrades + hosted checkout |
+| Store-listed installer | Signed complete installer at an immutable HTTPS URL | Publisher maintains installer and updates |
+
+**Defect (observed):** `scripts/build-windows.sh` requests `msi,msix,nsis` on a Windows
+host but collects only EXE/setup outputs. The MSI/MSIX path must be completed and
+qualified before R.2's done-marker is honest.
+
+### 20.2 Package identity
+
+Partner Center reserves: `STORE_IDENTITY_NAME`, `STORE_PUBLISHER` (DN),
+`PUBLISHER_DISPLAY_NAME`, `MSIX_VERSION` (four 16-bit fields, fourth reserved zero),
+`TESTED_WINDOWS_VERSION`, `ARCHITECTURE`. MSI carries a stable `UpgradeCode` (generated
+once, never per build). These are independent of `mba.robin.natally`, the storage scope,
+and RevenueCat project IDs.
+
+### 20.3 AppxManifest (generated, never hand-edited)
+
+Full-trust `packagedClassicApp` at `mediumIL`; `runFullTrust` capability;
+`MinVersion=10.0.22000.0`; `MaxVersionTested` records an actually-tested version.
+Generator XML-escapes all substituted values; rejects unresolved `@…@` tokens.
+
+### 20.4 Version mapping (MSI 3-field / MSIX 4-field)
+
+A committed **Windows release ordinal** `n` maps monotonically:
+```ts
+msi  = [1 + floor(n / 2^24), floor(n / 65536) % 256, n % 65536].join(".");
+msix = [1, floor(n / 65536), n % 65536, 0].join(".");
+```
+MSI ProductVersion limits: fields ≤ 255/255/65535. Never truncate or extra-modulo.
+The ordinal persists beside release metadata; increments once under `release.lock`.
+
+### 20.5 Windows shared asset library (bridges §19)
+
+`FOLDERID_Profile` + `Shared AI Assets/<scope>/` — outside AppData virtualization,
+shared across MSI and MSIX editions. Adapter operations: discover prior downloads
+read-only → `LockFileEx` digest lock → validate (size/digest/reparse/containment) →
+same-volume atomic publish (flush + qualified rename) → release claims on uninstall.
+Private data (charts, conversations, licenses, keys, WebView2 user data) stays per-app.
+
+### 20.6 Pipeline
+
+Build payload → per-arch staging → `MakeAppx pack` / `MakeAppx bundle` → sign (SHA-256 +
+timestamp, credential-managed). Record in the release manifest: MSI, each MSIX, optional
+bundle, hashes, display version, package version, source SHA, architecture,
+signing/verification status. Disable self-updater in Store MSIX (Store owns updates).
+
+### 20.7 Acceptance
+
+Fresh install + upgrade on real Windows 11 x64 (and ARM64 if advertised); standard-user
+execution; WACK; signature verification; startup without dev tools; native chat/audio;
+missing-WebView2 recovery; two package identities + MSI share the same library with
+zero-network reuse; uninstall preserves other consumers' assets.
+
+## 21. Customer offers, $ROCHE credits, and customer language (strategy doc §20-21)
+
+### 21.1 Two independent purchase paths
+
+| Customer offer | Approved copy | Internal benefit + hard limit |
+|---|---|---|
+| Higher upfront purchase | **"Unlimited chats with natally"** — "One purchase. Chat with natally as often as you like." | Perpetual local-use entitlement; no per-chat charge on that route; no unlimited hosted allowance |
+| Small occasional spending | **"Pay as you chat"** — "Start with a little credit. Pay only for the chats you use." | Spend an eligible $ROCHE balance on bounded hosted requests; the local-use purchase is not required |
+| Optional recurring bundle | **"Monthly chat credits"** — "Includes [configured amount] $ROCHE each month." | Finite periodic grant with explicit renewal/rollover terms; not unlimited hosted access |
+
+**Hard rules:** a depleted balance never revokes an owned Unlimited purchase; Unlimited
+never makes remote requests free; no silent switch to paid remote (disclose charge
+first); never relabel lifetime buyers as subscribers.
+
+### 21.2 Customer language law
+
+Customer-facing surfaces (paywalls, onboarding, settings, receipts, errors, Store
+listings) discuss **chatting with natally** only. Forbidden in customer copy: "local,"
+"inference," "ephemeris," model names, token accounting, quantization, API routing,
+computing location. Approved micro-copy: "Add $ROCHE to keep chatting." / "You're
+offline. Connect to keep chatting." / "Restore purchases." Technical documentation and
+internal logs use exact implementation names.
+
+### 21.3 $ROCHE virtual currency
+
+- Customer name `$ROCHE`; RevenueCat API code `ROCHE` (no `$` in RC codes).
+- **Authority split:** RC = system of record for balances and purchase-driven grants;
+  the application service = authenticated jobs, reservations, provenance, reconciliation.
+  The service never invents a second wallet total; all participating projects call the
+  same spend boundary.
+- Integer units, range 0..2×10⁹, no negative balances. Unit precision defined once.
+- **Fungibility matrix:** Windows MSIX / direct MSI+Linux / hosted web+PWA → common
+  eligible pool. Google Play → currency restricted to originating app (Play Payments
+  policy). Direct Android → distinct from Play origin. Future Apple → StoreKit/RC rules.
+  Restricted-origin credits never silently mix into unrestricted funds.
+
+### 21.4 Quote/reserve/settle state machine (server-side)
+
+```text
+created → debit_pending → reserved → running → settling → completed
+                      |          |          |
+                      |          +→ refund_pending → refunded
+                      +→ declined
+uncertain network result → reconcile the same (account, request-id) operation identity
+```
+
+Reserve the quoted maximum from RC **before** dispatch (atomic deduction prevents
+concurrent overspend). Durable idempotency keys tied to the original job. At completion,
+meter the actual usage and return the unused reservation exactly once. Provider failure
+before paid work → full refund. No per-token debits — reserve once, settle once per
+bounded request.
+
+### 21.5 Catalog separation and account identity
+
+Three catalog concepts: non-consumable lifetime (Unlimited), consumable $ROCHE packs,
+optional finite subscription. Distinct Store product IDs / RC product IDs / entitlement
+keys / currency code. A subscription must state whether it grants credits, time-limited
+local access, or both. A stable authenticated ecosystem account maps to one RC App User
+ID (backend-resolved, never trusted from client).
+
+### 21.6 Grant/refund lifecycle
+
+| Event | Required result |
+|---|---|
+| Lifetime purchase | Verified perpetual entitlement; signed offline token |
+| Subscription renews | Grant only that period's finite benefit once (keyed by paid period) |
+| Cancel renewal | Stop future grants; retain already-paid benefit through paid-through date |
+| Refund/chargeback | Revoke only that purchase's benefit; preserve separately owned access |
+| Restore | Reconcile to the authenticated account; never re-issue initial credits |
+
+### 21.7 Microsoft Store commerce (Windows adapter)
+
+Policy 7.19 (§10.8.1/10.8.6) permits third-party digital commerce for non-game apps.
+`Windows.Services.Store.StoreContext` adapter: associate with real Store product →
+`RequestPurchaseAsync` for checkout → backend validates via Microsoft service APIs →
+sync-once into RevenueCat → bridge mints the appropriate token or currency grant.
+`'microsoft'` is **not** in the current `PurchaseAdapterId` enum — adding it is a
+schema/decision amendment (SC1), never a silent append.

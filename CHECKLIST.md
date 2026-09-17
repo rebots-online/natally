@@ -1,148 +1,208 @@
-# natally — implementation checklist (Gate 2 document 2 of 3) — v2
+# natally — implementation checklist — v3
 
-Regenerated **de novo 2026-09-17** from `DOCS/ARCHITECTURE.md` (reconciled 2026-09-09 +
-spec-panel fills 2026-09-11 + **§18 v2 amendment 2026-09-17**). Predecessors preserved
-beside (additive, I3): `CHECKLIST.md.bak.20260917_064811.pre-v2` (and its own 09-09
-predecessors). Marker discipline (SC2): `[ ]` untouched · `[/]` undertaken · `[X]`
-implemented (Verify ran, Accept held) · `✅` validated from an **observed run** — every
-✅ below cites its evidence (commit + run). D17: the enumeration consumed here is the
-architecture as amended; coders see exactly one block.
+Regenerated **de novo 2026-09-17** from `DOCS/ARCHITECTURE.md` v3 (the §13 public-HF
+rewrite + §19 shared storage + §20 Windows packaging + §21 offers/$ROCHE/language law).
+Predecessor preserved: `CHECKLIST.md.bak.20260917_091435.pre-v3`. Marker discipline (SC2):
+`✅` only from observed runs with evidence citations. Every task's **Spec** cites its
+architecture section.
 
-**Reconciliation seed:** the 2026-09-13 audit (`DOCS/ANALYSIS-REPORT-2026-09-13…`, §3.2
-verdict table) + the 2026-09-16/17 implement session (`e5e6926…77d0dd8`). LAG blocks are
-re-derived from in-tree code, not from old markers.
+**Census at generation: 41 ✅ / 4 [X] / 40 [ ].**
 
 ## Execution protocol
 
-Unchanged from the 09-09 edition: atomic, idempotent, order-independent tasks (⛓
-integrators excepted); disjoint Owns; Verify + Accept observe durable end-state; ✅ only
-from observed runs; commit+push per checklist line (github mirror while forgejo is down);
-no mocks in shipped code.
+Unchanged: atomic, idempotent, order-independent (⛓ integrators excepted); disjoint
+Owns; Verify + Accept observe durable end-state; commit+push per line; no mocks.
 
 ---
 
 ## Phase T — Scaffolding & contracts
 
-- ✅ **T0.1 Workspace scaffold** — observed 2026-09-13 (v1.10.21039 run log in block).
-- ✅ **T0.V Detached vendored ephemeris** — VENDORED/ lock + manifest; runtime exercised by P.1.
-  *(Audit F-note: block now carries real Verify/Accept lines below.)*
-  **Verify:** `python3 scripts/vendor-ephemeris.py` · **Accept:** `651 files, npm runtime sha matched` [observed in preservation commit d011b6c lineage].
-- ✅ **T0.2 apps/local frontend scaffold** — tsc standalone clean; entry + lazy shell.
-- ✅ **T0.3 src-tauri scaffold** — cargo check 0 errors (re-observed 2026-09-17 pre-R.1).
-- ✅ **T0.4 Token mirror test** — 36 vars mirrored (fixed from the 35/36 confusion; tokens.css ↔ TOKENS.md ↔ ledger).
-- ✅ **T0.5 Ephemeris contracts** — seam + pinned 12-system closed set (sweph-wasm@2.6.9 d.ts).
-- ✅ **T0.6 Lore & conversation contracts** — roundtrip suites green.
-- ✅ **T0.7 Billing contracts** — roundtrip suites green.
-- ✅ **T0.8 Design tokens package** — gen.mjs --check green (36 vars).
-- ✅ **T0.9 SQLite DDL & migration runner** — migrations {1,2,3}+vec; sessions.historical_person_id (migration 3).
-- ✅ **T0.10 Config loader** — valid/blank-rails/bad-env matrices; **amended 2026-09-17: mirror base allows http on loopback (matches MirrorNetwork; observed via in-browser manifest fetch).**
+- ✅ **T0.1–T0.10** — all scaffold/contract tasks complete with observed runs (evidence
+  in v2 predecessor and commit lineage `e5e6926…77d0dd8`).
 
 ## Phase P — Ephemeris
 
-- ✅ **P.1 sweph-wasm backend** — conformance 24 cases (invariants).
-- ✅ **P.2 Honest-absence & solar rules** — 96 tests.
-- [X] **P.3 Worker/off-thread host** — web worker transport green in-suite; **native transport awaits I.2 mounting** (Rust side written, unmounted).
-- ✅ **P.4 ChartFacts builder + cache** — 11 tests; **observed end-to-end in-browser 2026-09-17 (§18.6): real natal chart computed from intake.**
+- ✅ **P.1, P.2, P.4** — conformance, solar rules, chart builder; P.4 observed
+  end-to-end in-browser (real natal chart from intake, `77d0dd8`).
+- [X] **P.3 Worker/off-thread host** — web worker green; native transport awaits I.2.
 
 ## Phase L — Lore
 
-- [X] **L.1 LoreStore storage adapters** — store suite 16/16 after F-12 heal (observed); native command surface awaits I.2.
-- ✅ **L.2 Embedder** — embed suite green (wllama MiniLM observed-fixture + hash test embedder; src purity).
-- ✅ **L.3 Extraction & merge** — 30 tests.
-- ✅ **L.4 Hybrid retrieval** — [observed 2026-09-17: lore project 262/262 incl. 8 new retrieve tests — kNN∪2-hop ordering, person/general scoping, char/4 budget, empty paths]
-- ✅ **L.5 Write-every-turn pipeline** — [observed 2026-09-17: 50-turn flush-count test, extraction edges carry sourceTurnId, stats/deleteAll delegation]. Composition still writes turns directly; wiring L.5 into the submit path is a W3-followup (tracked under I.3 composition).
+- ✅ **L.1–L.5** — store, embedder, extraction, retrieval (kNN∪2-hop, `61dc3a3`),
+  write-every-turn pipeline (flush-once-per-turn, `61dc3a3`).
 
 ## Phase B — Billing & licensing
 
-- ✅ **B.1 Trial gate** — 119 tests.
-- ✅ **B.2 Reading ledger + billing.consume** — 28 tests (charge/refund lifecycle).
-- ✅ **B.3 License token verify + storage** — token suite green (web + Rust verify written; keychain mounting rides I.2).
-- ✅ **B.4 Codes** — [observed 2026-09-17: billing project 278/278 incl. 10 code tests — mint→verify→reuse-rejected, 4 outcomes exact, Crockford charset, foreign-key rejection]. Shape is `NATALLY-` + 4-char groups (minimal 3-group = bridge random; hash-based codes are longer, carrying length-prefixed payload + Ed25519 sig; the code text itself is never signed — it cannot exist before the signature does).
-- ✅ **B.5a Hosted-redirect adapter + bridge client** — [observed 2026-09-17: billing 289/289 incl. 11 new — SSRF guards (loopback/private/reserved incl. IPv4-mapped-IPv6 + .local/.internal/.lan), checkout URL build w/ injected opener, poll loop (2s×1.5 growth, 30s cap interval, 15min cap, offline-tolerant, 4xx≠429 aborts, 408 at cap)]
-- ✅ **B.5b RevenueCat adapter** — [observed 2026-09-17: billing 295/295 incl. 6 RC tests — paywall→entitlement→/mint→token; no-entitlement/no-purchase mint nothing; failed /mint surfaces; restore→token] — web SDK injected as constructor param; `checkout` → `presentPaywall(offeringId)`; entitlement `unlimited` ⇒ bridge `/mint` with the RC purchase id → LicenseToken; `restore` via RC restore; deny-list cadence §9.3. **Spec (§9.4 + 09-09 checklist):** init with `VITE_REVENUECAT_WEB_SDK_KEY` + appUserId; default offering `natally_default`; RC entitlement present ⇒ call bridge `/mint` (the bridge verifies via RC REST v2 with `RC_SECRET_KEY`) → LicenseToken; `restore` via RC restore; deny-list §9.3 fetch cadence honored. **Verify:** `pnpm vitest run packages/billing/tests/adapters-rc.test.ts` **Accept:** `rc adapter: paywall→entitlement→mint→token flow OK`.
-- [ ] **B.5c Adapter registry.** **Owns:** `packages/billing/src/adapters/registry.ts`.
-- [ ] **B.6 License bridge service** — axum, 6 webhooks, mint/verify, deny-list. **Owns:** `services/license-bridge/**`.
+- ✅ **B.1, B.2** — trial gate (119 tests), reading ledger + consume.
+- ✅ **B.3** — token verify + storage (web + Rust written; keychain via I.2).
+- ✅ **B.4** — codes (NATALLY- Crockford, 4 outcomes exact, `ca0fef0`).
+- ✅ **B.5a** — hosted-redirect adapter + bridge client + SSRF guards (`c1ceef3`).
+- ✅ **B.5b** — RevenueCat adapter (SDK injected, `aba35cc`).
+- [X] **B.5c Adapter registry** — files written (300/300 tests incl. 5 new), final gate
+  interrupted; **Verify:** `pnpm vitest run packages/billing/tests/registry.test.ts` ·
+  **Accept:** `registry: frozen-order availability, hides absent rails, purchase dispatch,
+  redeem via B.4, duplicate-registration error`.
+- [ ] **B.6 License bridge service** — axum, 6 webhooks, mint/verify, deny-list (§9.4).
+  **Owns:** `services/license-bridge/**`.
 
-## Phase C — Companion
+## Phase C / V / U / M / X / G / S / I / R — as in v2 with these amendments:
 
-- ✅ **C.1 Inference host (turboquant)** — web lane observed end-to-end (download→wllama→fenced persona reply, `77d0dd8` lineage); native llama.cpp side written, mounts with I.2. Catalogue per §18.3 (Atomic Bots).
-- ✅ **C.2 Prompt fence + checker** — 109 tests; **Tier-1 now carries a real ChartFacts (observed §18.6).**
-- ✅ **C.3 Tool suite (DOM r/w)** — 79 tests; no-network construction.
-- ✅ **C.4 Companion event bus** — StageSignal reducer; envelope semantics observed (Stage Speaking).
+- ✅ **C.1–C.4, V.2, U.1, U.2, U.4, M.1, X.1, G.1, S.1, I.1, R.1–R.4, R.6** — all
+  evidence-cited in the v2 predecessor and commit lineage.
+- [ ] **V.1 Kokoro native (Rust)** — §10 native leg. **Owns:** `src-tauri/src/voice/`.
+- [ ] **U.3 Plates + Atlas screens** — 3D torus wheel, hover callouts (§18.1 wiring law).
+- [ ] **U.5 Settings** — 6 sections. **Owns:** `screens/settings/`.
+- [ ] **U.6 Paywall + checkout** — 13 frames + **§21.1/§21.2 approved copy and language
+  law** (no tech terms; exact strings from the offer table).
+- [ ] **U.7 About + glossary-callout** — AGPL line, provenance, hover-term callouts.
+- [ ] **U.8 Splash** — typewriter (D21), real engine-load progress.
+- [ ] **U.9 Stage (sprite MascotRenderer)** — §18.2 law: porthole, docked-open, sprite
+  idle cycle, animated Asleep, reduced-motion. **Owns:** `ui/stage.tsx`, sprite assets.
+- [ ] **X.2 Delete-everything** — private data + claim release per §19.5 (never shared
+  bytes another app needs). **Owns:** `data/destroy.ts`.
+- [ ] **I.2 Tauri command registry** — mounts P.3/L.1/B.3/C.1-native/M.1-native.
+- [ ] **I.3 Capability layer** — single selection point.
+- [ ] **I.4 Full workspace gate** — check.sh green at 2 workers [X]; budget assert owed.
+- [ ] **R.5 build-all + release flow** — single `release.lock` stamp (CC14).
+- [ ] **R.7 Dormant CI + guards** — workflows + license-lint.
 
-## Phase V — Voice
+## NEW: Model sourcing (§13 public HF contract)
 
-- ✅ **V.2 Kokoro web + ban guard** — **observed: q8 model in-browser, envelope→Speaking, ban grep ships** (`scripts/grep-no-speechsynthesis.sh`).
-- [ ] **V.1 Kokoro native (Rust)** — ort session + cpal + envelope. **Owns:** `apps/local/src-tauri/src/voice/**`.
+- [ ] **MS.1 Build-time manifest** — committed JSON catalogue with absolute URLs +
+  sha256 pins for all six assets (Qwen3.5-2B, LFM2.5, Kokoro q8 + tokenizer + af_heart,
+  MiniLM). **Owns:** `apps/local/src/mirror/catalogue.json` + `scripts/gen-manifest.mjs`.
+  **Verify:** `node scripts/gen-manifest.mjs --check` · **Accept:** `manifest: 6 assets,
+  all absolute huggingface.co URLs, sha256 pins present`.
+- [ ] **MS.2 Manifest loader update** — parse the baked catalogue (not a fetch);
+  MirrorNetwork origin-allowlist test for `huggingface.co`. **Owns:**
+  `apps/local/src/mirror/manifest.ts` update. **Verify:** `pnpm vitest run
+  apps/local/src/mirror` · **Accept:** `manifest: baked JSON parsed, multi-repo absolute
+  URLs resolve, non-huggingface.co origin rejected`.
 
-## Phase U — UI
+## NEW: Shared storage (§19)
 
-- ✅ **U.1 Shell, router contract, primitives** — 8 tests incl. sprite payload equality.
-- ✅ **U.2 Conversation screen** — 22/22; 9 variants; **wired into the built app and behavior-verified (Trial chip, Asleep wake plate, transcript, Thinking/Responding).**
-- [ ] **U.3 Plates + Atlas screens** — 3D torus wheel (three_js helper export exists), numbered-house hover callouts (G.1 corpus), 12-system chips, bi-wheel. **Owns:** `apps/local/src/screens/{plate-natal,atlas}/`, `apps/local/src/ui/wheel.tsx`. Source: `LIBS/UI/STITCH(-v2)` element names verbatim (§18.1).
-- ✅ **U.4 People + first-light** — **observed 2026-09-17 (`77d0dd8`): intake → Person/SQLite → real chart → plate + greeting; reload restores.** Intake tests 4/4. *(People list/edit surface still owed — folded into W3-People below.)*
-- [ ] **U.5 Settings screen** — 6 sections; live catalogue downloads. **Owns:** `apps/local/src/screens/settings/`.
-- [ ] **U.6 Paywall + checkout screens** — 13 frames. **Owns:** `apps/local/src/screens/{paywall,checkout}/`.
-- [ ] **U.7 About + glossary-callout** — AGPL line, provenance, hover-term callouts. **Owns:** `apps/local/src/screens/{about,glossary}/`.
-- [ ] **U.8 Splash** — typewriter wordmark (D21), real engine-load progress. **Owns:** `apps/local/src/screens/splash/`.
-- [ ] **U.9 Stage (sprite MascotRenderer)** — port `stage.tsx`/`mascot.tsx` to the §18.2 law: porthole on every screen, docked-open conversation, sprite idle cycle (lounge/chart-circle/crystal/phone/time-of-day/cursor/finger), animated Asleep, reduced-motion. **Owns:** `apps/local/src/ui/stage.tsx`, sprite assets, `stage.test.tsx` extension.
+- [ ] **SS.1 Scope config generator** — `scripts/generate-storage-config.mjs` →
+  `config/asset-storage.generated.json`; Vite + Cargo consume; `cargo:rerun-if-changed`.
+  **Owns:** the script, the generated file, `apps/local/src/storage/build-config.ts`,
+  `src-tauri/src/storage_config.rs`. **Verify:** `node scripts/generate-storage-config.mjs
+  production && cargo check --manifest-path apps/local/src-tauri/Cargo.toml` ·
+  **Accept:** `scope config: generated once, consumed by both targets, schema validated`.
+- [ ] **SS.2 Content-identity store types** — ContentIdentity, CatalogueAlias,
+  AccessLocator, UsageClaim/Lease; the `SharedAssets` interface + `Lookup` union.
+  **Owns:** `packages/billing/src/storage-types.ts` (or a new `packages/storage/`).
+  **Verify:** `pnpm vitest run packages/billing/tests/storage-types.test.ts` ·
+  **Accept:** `storage types: roundtrip, lease lifecycle, Lookup union exhaustive`.
+- [ ] **SS.3 Resolve-existing-first resolver** — `resolveExistingFirst(scope, asset,
+  store, signal)` with scope+digest locking and single-writer semantics.
+  **Owns:** `packages/billing/src/storage-resolver.ts`. **Verify:** `pnpm vitest run
+  packages/billing/tests/storage-resolver.test.ts` · **Accept:** `resolver: lookup-first,
+  lock-recheck, single-writer publish, concurrent callers share one object`.
+- [ ] **SS.4 Browser adapter** — same-origin OPFS/Cache Storage shared library under
+  the storage scope; Web Locks API for scope+digest coordination.
+  **Owns:** `apps/local/src/storage/web.ts`. **Verify:** `pnpm vitest run
+  apps/local/src/storage` · **Accept:** `web adapter: cross-tab reuse zero-network,
+  partial-object recovery, quota handling`.
+- [ ] **SS.5 Linux adapter** — `$XDG_DATA_HOME/<scope>` root; file locks; atomic rename.
+  **Owns:** `apps/local/src-tauri/src/storage/linux.rs`. **Verify:** `cargo test` ·
+  **Accept:** `linux adapter: shared root resolved, digest lock, verified publish`.
+- [ ] **SS.6 Windows adapter** — `FOLDERID_Profile` + `Shared AI Assets/<scope>/`;
+  `LockFileEx`; discovery/migration from LocalAppData. **Owns:**
+  `apps/local/src-tauri/src/storage/windows.rs`. **Verify:** `cargo test` (Windows CI) ·
+  **Accept:** `windows adapter: profile root, known-folder resolution, prior-download
+  discovery, atomic publish`.
+- [ ] **SS.7 Android adapter** — SAF tree grant + persisted URI permissions;
+  `BlobStoreManager` for immutable blobs; ContentResolver descriptor semantics.
+  **Owns:** `apps/local/src-tauri/gen/android/...` (Kotlin glue) + Rust bridge.
+  **Verify:** on-device test · **Accept:** `android adapter: SAF grant persisted,
+  blob identity shared, zero-network cross-app reuse`.
+- [ ] **SS.8 Downloader integration** — MirrorDownloader consults the resolver before
+  network; catalogue removal → release-of-claim. **Owns:** `apps/local/src/mirror/
+  download.ts` + `catalogue.ts` updates. **Verify:** `pnpm vitest run
+  apps/local/src/mirror` · **Accept:** `downloader: shared hit = zero network bytes,
+  absence = download, removal = claim released`.
 
-## Phase M — Mirror
+## NEW: Windows packaging (§20)
 
-- ✅ **M.1 Manifest, downloads, catalogue** — 37 tests; **observed twice in-browser (1.28 GB streamed sha-verified commit; voice trio).** Local mirror carries dev; HF publish → open item §18.7-1.
+- [ ] **WP.1 Partner Center identity** — reserve and persist Store identity values;
+  packaging contract file. **Owns:** `config/windows-store-identity.json` +
+  documentation. **Verify:** identity file present and validated · **Accept:** `identity:
+  STORE_IDENTITY_NAME, STORE_PUBLISHER, UpgradeCode committed and referenced`.
+- [ ] **WP.2 AppxManifest generator** — XML template + generator with escaping,
+  unresolved-token rejection. **Owns:** `scripts/gen-appx-manifest.mjs` +
+  `config/appx-template.xml`. **Verify:** `node scripts/gen-appx-manifest.mjs --check` ·
+  **Accept:** `appx manifest: generates valid XML, all tokens resolved, runFullTrust
+  declared`.
+- [ ] **WP.3 Version ordinal mapping** — committed Windows release ordinal +
+  `windowsPackageVersions(n)` generator; MSI/MSIX field limits enforced. **Owns:**
+  `scripts/windows-version.mjs` + `config/windows-release-ordinal`. **Verify:**
+  `node scripts/windows-version.mjs --check` · **Accept:** `windows versions: monotonic,
+  field limits respected, ordinal persisted`.
+- [ ] **WP.4 Build pipeline completion** — extend `scripts/build-windows.sh` to stage,
+  MakeAppx pack/bundle, and sign on a Windows host. **Owns:** `scripts/build-windows.sh`
+  update. **Verify:** Windows-host build run · **Accept:** `windows: msi + msix + bundle
+  produced, signed, hashes recorded in release manifest`.
+- [ ] **WP.5 Shared library bridge** — Windows storage adapter (SS.6) integration with
+  the packaging; two-identity reuse test. **Owns:** integration test. **Verify:** on-
+  device · **Accept:** `windows shared library: MSI + MSIX apps share one digest with
+  zero network transfer`.
 
-## Phase X — Persistence
+## NEW: Offers + ROCHE + language (§21)
 
-- ✅ **X.1 Repositories + export/import** — 20/20 audit + **observed live (OPFS SQLite rows across reloads)**.
-- [ ] **X.2 Delete-everything** — destroy.ts. **Owns:** `apps/local/src/data/destroy.ts` + test.
+- [ ] **OR.1 Offer catalog + copy** — the three offers with approved strings; catalog
+  separation (lifetime/consumable/subscription); entitlement keys. **Owns:**
+  `packages/billing/src/offers.ts` + copy JSON. **Verify:** `pnpm vitest run
+  packages/billing/tests/offers.test.ts` · **Accept:** `offers: three paths, exact
+  approved copy, catalog separation, depleted-balance-never-revokes-unlimited`.
+- [ ] **OR.2 Customer language enforcement** — a test that scans all customer-facing
+  copy for forbidden terms ("local", "inference", "ephemeris", model names, "token",
+  "quantization", "API"). **Owns:** `packages/billing/tests/language-law.test.ts`.
+  **Verify:** `pnpm vitest run packages/billing/tests/language-law.test.ts` ·
+  **Accept:** `language law: zero forbidden terms in customer surfaces`.
+- [ ] **OR.3 ROCHE currency contract** — integer units, authority split, fungibility
+  matrix, grant/refund lifecycle table. **Owns:** `packages/billing/src/roche.ts`.
+  **Verify:** `pnpm vitest run packages/billing/tests/roche.test.ts` · **Accept:**
+  `roche: units, lifecycle events, fungibility rules, no-negative invariant`.
+- [ ] **OR.4 Quote/reserve/settle state machine** — the server-side durable state
+  machine with idempotency keys and reconciliation. **Owns:** server-side module in the
+  bridge or hosted service. **Verify:** integration test · **Accept:** `spend: reserve-
+  before-dispatch, settle-once, refund-on-failure, concurrent-safe, idempotent`.
+- [ ] **OR.5 Microsoft Store adapter (schema amendment)** — add `'microsoft'` to
+  `PurchaseAdapterId` (SC1 decision-entry); `StoreContext` adapter. **Owns:**
+  `packages/billing/src/types.ts` amendment + `adapters/microsoft.ts`. **Verify:**
+  `pnpm vitest run packages/billing/tests/adapters-microsoft.test.ts` · **Accept:**
+  `microsoft adapter: StoreContext flow, backend validation, sync-once into RC`.
 
-## Phase G / S
+## Phase W3 — Screens from Stitch
 
-- ✅ **G.1 Glossary + gazetteer** — 51 tests; gazetteer live in the intake (tzid used).
-- ✅ **S.1 Fonts self-host** — 6 woff2 + provenance.
+- [ ] **W3-S2 Stitch v2 export** — frozen PNG refs + entity names verbatim + Pro tier.
+  **Owns:** `LIBS/UI/STITCH-v2/`.
+- [ ] **W3-People** — list/edit/remove + export-first nudge (J3). **Owns:**
+  `screens/people/`.
+- [ ] **W3-Screens (U.3, U.5–U.8)** — atlas wheel, settings, paywall/checkout (with
+  §21 copy), about/glossary, splash. Wired from STITCH-v2 element names.
 
-## Phase I — Integrators ⛓
+## Phase H — Hosted edition
 
-- [X] **I.1 Route registry wiring** — gen-routes.mjs + routes.generated.ts live [observed]; regenerate when screens land (W3 adds ROUTE_MAP entries).
-- [ ] **I.2 Tauri command registry wiring** — registry_generated.rs + plugins mount (un-mounts P.3/L.1/B.3/C.1-native/M.1-native).
-- [ ] **I.3 Capability layer resolution** — capabilities.ts single selection point.
-- [X] **I.4 Full workspace gate** — check.sh normalized (`--maxWorkers=2`; sw dry-run test timeout 30s + bounded IPC retry) [observed gate=0: 35/35, 1229/1229]; budget assert (`scripts/assert-budget.mjs`) still owed.
-
-## Phase R — Build & release
-
-- ✅ **R.1 build-linux.sh** — AppImage+deb produced [observed v1.21.27237].
-- ✅ **R.2 build-windows.sh** — exe+NSIS via xwin shim [observed v1.24.27313]; Windows-host msi/msix path authored.
-- ✅ **R.3 build-android.sh** — apk+aab aarch64 [observed v1.26.27331, versionCode formula held].
-- ✅ **R.4 build-web.sh (PWA)** — artifacts through v1.27.27365; behavior-verified build.
-- [ ] **R.5 build-all + release flow** — **single `release.lock` stamp across platforms (CC14 owed; current per-platform stamps are reconciled here).**
-- ✅ **R.6 Version stamping wiring** — --check consistent across surfaces (observed each build).
-- [ ] **R.7 Dormant CI + guards** — workflows + license-lint.mjs; `.forgejo` sibling when forgejo returns.
-
-## Phase W3 — Screens from Stitch (new; §18.1)
-
-- [ ] **W3-S2 Stitch v2 export** — frozen PNG refs + entity names verbatim + Pro tier; lands `LIBS/UI/STITCH-v2/` additively. **Owns:** the folder + export logs.
-- [ ] **W3-People** — list/edit/remove + export-first nudge (J3). **Owns:** `apps/local/src/screens/people/`.
-- [ ] **W3-Settings/U.5, U.6, U.7, U.8, U.3** — as above, each wired from STITCH-v2 code.html element names.
-
-## Phase H — Hosted edition (new; D22/D23, §18.3)
-
-- [ ] **H.1 Hosted scaffold** — `apps/hosted/` consuming the same UI source behind shared service interfaces. **Owns:** `apps/hosted/**`.
-- [ ] **H.2 OpenRouter adapter** — free default + dynamic backoff + fallback list + training disclosure + `insufficient-credit` seam. **Owns:** `apps/hosted/src/inference/openrouter.ts` (+ web-lane reuse).
+- [ ] **H.1 Hosted scaffold** — `apps/hosted/` consuming the same UI source behind
+  shared service interfaces. **Owns:** `apps/hosted/**`.
+- [ ] **H.2 OpenRouter adapter** — free default + dynamic backoff + fallback list +
+  training disclosure + `insufficient-credit` seam (§18.3). **Owns:**
+  `apps/hosted/src/inference/openrouter.ts`.
 - [ ] **H.3 Hosted voice/STT interfaces.**
-- [ ] **H.4 x402/LN pay-per-reading** via `billing.consume` (B-chain prerequisite).
+- [ ] **H.4 Hosted billing** — $ROCHE metering via the quote/reserve/settle machine
+  (OR.4); the `billing.consume` seam maps to ROCHE debits (not just x402).
 
 ## Phase W7 — Close-out
 
-- [ ] **W7-1 TEST_RUBRIC gauntlet** on working artifacts + TC11 screencast (timecode table).
-- [ ] **W7-2 CC15 Milestone-1 provisional build** — single-stamp multiplatform set in tracked dist/ + NOT-A-RELEASE.md.
-- [ ] **W7-3 Registry & INC-9 write-backs** — APP_INVENTORY/PORTFOLIO rows (as-built stamps + dispositions); incidents: project-folder-at-registration, cross-machine copies, uncommitted-durability.
-- [ ] **W7-4 On-device verification** — adb install/launch (apk), Windows-box run (exe/setup), AppImage run.
+- [ ] **W7-1 TEST_RUBRIC gauntlet** + TC11 screencast.
+- [ ] **W7-2 CC15 Milestone-1 provisional build** (single release.lock stamp).
+- [ ] **W7-3 Registry & INC-9 write-backs.**
+- [ ] **W7-4 On-device verification** (adb install, Windows-box run, AppImage run).
 
 ---
 
 ## Completion criteria
 
 All `[ ]`/`[X]` resolved to ✅ with cited observed runs; I.4 normalized green; the
-release.lock-unified stamped set in `dist/`; TEST_RUBRIC gauntlet + CC15 screencast
-archived under `dist/rubric-runs/`. This checklist is the dispatch ledger — one block per
-coder; ARCHITECTURE §18 is the authority for every Spec above.
+release.lock-unified stamped set in `dist/`; TEST_RUBRIC + CC15 screencast archived;
+customer language law enforced (OR.2 green); shared-storage cross-app reuse demonstrated.
