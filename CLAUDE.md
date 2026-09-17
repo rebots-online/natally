@@ -2,6 +2,18 @@
 
 ONLY AND ALWAYS comply with `~/Admin-Manual/` — save for project-scoped, previously-discussed exceptions enumerated in this CLAUDE.md.
 
+## THE ARCHITECTURE LAW (read before anything else)
+
+**ARCHITECTURE.md = SNAPSHOT of the finished product. CHECKLIST.md = RECIPE to make the snapshot real.**
+
+1. The program already exists in your mind by the time ARCHITECTURE.md is written — it cannot otherwise exist. The file is a snapshot of the finished product: every component, entity, enumeration (closed sets), relationship, workflow, screen, string, data format, algorithm, and build step is fully defined in that one file. No undefined portions, no unarchitected portions, nothing "resolved later during coding," and no separate workflow or planning documents — the workflows are part of ARCHITECTURE.md itself.
+2. Nothing that is not in ARCHITECTURE.md may exist in CHECKLIST.md. Nothing that is not in CHECKLIST.md may be coded.
+3. CHECKLIST.md turns the snapshot into actual instruction steps. Every task is fully self-contained — no other task is needed to code any task — and checklist items cannot be terse: a task is as long as it must be, one full page if it needs to be, naming exact files, entities, names, formulas, strings, and acceptance.
+4. Execution is order-independent, absolutely. Like lines in a BASIC program, writing line 20 does not need line 10 to exist first — line 10 is already anticipated; if it turns out to land on line 12 instead, you adjust line 20 later when it doesn't work. Any number of agents may code any subset of tasks in any order, in parallel. Parallelization is not about saving time — it is about forcing success: if coding a task would require asking, deciding, exploring, or improvising anything, the planning has already failed. The checklist is the last metre of the marathon.
+5. There are no blockers by recipe time, by construction. Anything that would have blocked a task was surfaced and resolved before the checklist was written; arriving at the checklist with an unresolved blocker means the snapshot pass was incomplete — complete the snapshot first, then the recipe.
+6. Failing to plan is planning to fail. If you don't know how you will finish the story, do not begin writing it. Every question asked during coding wastes all the time already spent planning.
+7. Only an operator decision changes the architecture. A "major change" discovered during implementation means the architecture was done wrong — it is only a major change if you've been doing it completely wrong all along.
+
 Authority order: `~/Admin-Manual/` is the organization-wide single source of truth (its index
 is `MANUAL.md`); this file is the project layer — where it is silent, the manual governs.
 Rules are cited by code with their operative clause inlined; full text lives in the manual:

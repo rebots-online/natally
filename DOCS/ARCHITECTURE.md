@@ -14,6 +14,14 @@ Everything here is production-complete: interfaces, entities, formats and algori
 specified to be implementable without inventing; where a choice is genuinely open it is
 listed in §16, not papered over.
 
+**Edition v3 — 2026-09-17.** §13 rewritten (public unauthenticated HF download), §19–§21
+appended, §22 execution topology appended; §18 implementation amendment retained as
+written. Per the Architecture Law (CLAUDE.md): this file is the **snapshot of the finished
+product** — the program already exists, fully defined, in these sections. CHECKLIST.md is
+the recipe that makes this snapshot real; nothing that is not in CHECKLIST.md may be coded;
+nothing that is not in this file may exist in CHECKLIST.md. There is no separate workflow
+or planning document — execution topology lives in §22.
+
 ## 1. System overview
 
 natally is a person: a warm robotic fortune-teller who reads your sky aloud, in conversation
@@ -399,13 +407,15 @@ needed; nothing is ever uploaded to HuggingFace on natally's behalf.
 | Asset | Kind | HF repo | File | Quant |
 |---|---|---|---|---|
 | Qwen3.5-2B (LLM default) | llm | `unsloth/Qwen3.5-2B-GGUF` | `Qwen3.5-2B-Q4_K_M.gguf` | Q4_K_M |
-| LFM2.5-2.6B (stability-gated) | llm | `LiquidAI/LFM2.5-2.6B-GGUF` | `LFM2.5-2.6B-Q4_K_M.gguf` | Q4_K_M |
 | Kokoro-82M (voice) | voice | `onnx-community/Kokoro-82M-v1.0-ONNX` | `onnx/model_q8.onnx` | q8 |
 | Kokoro tokenizer | voice | `onnx-community/Kokoro-82M-v1.0-ONNX` | `tokenizer.json` | — |
 | Kokoro af_heart voice | voices | `onnx-community/Kokoro-82M-v1.0-ONNX` | `voices/af_heart.bin` | — |
 | all-MiniLM-L6-v2 (embedder) | embedder | `gpustack/all-MiniLM-L6-v2-GGUF` | `all-minilm-l6-v2-q8_0.gguf` | q8_0 |
 
 **Manifest:** baked into the app at build time (committed JSON, not fetched from a server).
+The catalogue for this stage is exactly these five assets — **Qwen3.5-2B is the
+default**. LFM2.5 is neither forbidden nor specified: it is not the default and is out of
+scope at this stage (revisit is a decision-entry event, SC1).
 Each asset carries: `{ id, kind: 'llm'|'embedder'|'voice'|'voices', file: <absolute URL>,
 bytes, sha256, quant?, trialEligible? }`. The `file` field is an **absolute HTTPS URL** to
 the public HF `resolve/main` path (e.g., `https://huggingface.co/unsloth/Qwen3.5-2B-GGUF/
@@ -421,8 +431,9 @@ removal releases claims per §19 (never deletes shared bytes another app needs).
 
 ## 14. Build, release, versioning
 
-- `scripts/build-linux.sh` (AppImage, deb) · `build-windows.sh` (exe+NSIS via cargo-xwin on
-  Linux; msi+msix when run on Windows — D8) · `build-android.sh` (apk, aab) · `build-web.sh`
+- `scripts/build-linux.sh` (AppImage, deb) · `build-windows.sh` **auto-detects the host**
+  (on Linux: exe+NSIS via cargo-xwin; when run on Windows: native .exe and .msi at that
+  time, msix per §20 — D8) · `build-android.sh` (apk, aab) · `build-web.sh`
   (PWA → `dist/web`) · `build-all.sh` honors `release.lock` (single-flight; post-build bump
   via `update-version.sh --post-build`).
 - Artifacts: `mba.robin.natally-v<MAJOR.MINOR.BUILD>-<qualifier>` in tracked `dist/`,
@@ -486,6 +497,7 @@ runtime.
 | §19 shared storage | strategy §13-15 | settings (Data/Storage) | strategy doc |
 | §20 Windows packaging | strategy §19 | — | scripts/build-windows.sh |
 | §21 offers + ROCHE | strategy §20-21 | paywall, checkout, settings (License) | strategy doc |
+| §22 execution topology | Architecture Law (CLAUDE.md) | — | CHECKLIST order-independence |
 ## 18. Implementation amendment (v2, 2026-09-17 — D20–D23 + observed build reality)
 
 This section amends the sections it cites; it never overrides D-entries. Evidence rule:
@@ -527,7 +539,8 @@ commit messages `e5e6926…77d0dd8` (2026-09-16/17 implement session).
 - Local default: **Qwen3.5-2B Q4_K_M** (`trialEligible`). 2B is the smallest
   reasonable companion tier (DOM access + tool calling + lore decisions); Qwen3.5-0.8B
   is below the floor (debug row only). Offered catalogue additionally lists
-  **LFM2.5-2.6B GGUF** behind a stability probe (operator-recalled crash issues) and
+  **LFM2.5-2.6B GGUF** (not the default; out of scope at this stage — operator
+  2026-09-17) and
   **Bonsai-27B / Ternary-Bonsai-27B 1-bit GGUF** (smart tier; slow load; offered only
   where GPU-fit is verified — Android precondition). Compressed weight tiers
   `UD-Q3_K_XL` / `IQ4_XS` (llama.cpp-standard); KV `q4r8` still engine-gated (D16).
@@ -550,7 +563,8 @@ commit messages `e5e6926…77d0dd8` (2026-09-16/17 implement session).
   (v1.21.27237), windows exe+NSIS via cargo-xwin (v1.24.27313; absolute-path cargo
   shim required — a bare `cargo` in a PATH shim recurses), android apk+aab aarch64
   (v1.26.27331, versionCode 100026; RUST_MIN_STACK=16MB + capped jobs after rustc
-  thin-LTO SIGSEGV under 4-ABI parallel). msi/msix only on a Windows host (D8).
+  thin-LTO SIGSEGV under 4-ABI parallel). `build-windows.sh` auto-detects the host —
+  native .exe and .msi build when it runs on Windows (D8).
 - **R.5/CC14 owed:** per-platform stamps must be unified under `release.lock` at the
   release handback; Android defaults to single-ABI (aarch64) until a bigger-RAM host.
 
@@ -796,3 +810,26 @@ Policy 7.19 (§10.8.1/10.8.6) permits third-party digital commerce for non-game 
 sync-once into RevenueCat → bridge mints the appropriate token or currency grant.
 `'microsoft'` is **not** in the current `PurchaseAdapterId` enum — adding it is a
 schema/decision amendment (SC1), never a silent append.
+
+## 22. Execution topology (order independence)
+
+There is no separate workflow document (Architecture Law) and **no execution order**.
+The program already exists in this snapshot: every interface a task touches is defined
+here, so — like lines in a BASIC program — writing task 20 does not need task 10 to have
+been written first; line 10 is already anticipated. Any number of agents may code any
+subset of tasks, in any order, in parallel. "Mount", "integrate" and "wire" reference
+interfaces defined in this file, never other tasks' completion state. If an
+implementation lands where the snapshot did not anticipate it, the dependent task simply
+adjusts afterward when it fails — a normal correction, never a blocker.
+
+Environmental facts (not ordering): WP.4 and the Windows legs of W7-2/W7-4 run on a
+Windows host; W7-4 additionally needs adb and an AppImage run; R.5 unifies the
+per-platform stamp under `release.lock` (CC14). A Verify command that observes another
+task's surface passes whenever both exist; absence defers the verification, never the
+coding.
+
+There are **no blockers** by recipe time, by construction: anything that would have
+blocked a task was surfaced and resolved before this file was written. Arriving at the
+checklist with an unresolved blocker means the snapshot pass was incomplete — the fix is
+to complete the snapshot first, then the recipe; never an in-code improvisation (I-4/I-6,
+CLAUDE.md Architecture Law).
