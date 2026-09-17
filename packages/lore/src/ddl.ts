@@ -77,6 +77,11 @@ export const MIGRATIONS: Migration[] = [
       );
     `,
   },
+  {
+    id: 3,
+    sql: `ALTER TABLE sessions ADD COLUMN historical_person_id TEXT;
+      UPDATE sessions SET historical_person_id=person_id WHERE person_id IS NOT NULL;`,
+  },
 ];
 
 /** Kept separate so an extension-free run never records the optional migration. */

@@ -668,6 +668,23 @@ here are the executable subset of it).
   **Verify:** `pnpm vitest run apps/local/src/ui/stage.test.tsx`
   **Accept:** `stage: 8 states map to StageSignal; envelope scales orb; reduced-motion honored`.
 
+- [/] **U.10 — Restore mascot branding and animation.** *(Operator correction 2026-09-13)*
+  **Owns:** `apps/local/src/ui/mascot.tsx`, `scripts/generate-icons.sh`,
+  `apps/local/src-tauri/icons/`, `apps/local/public/icons/`.
+  **Integration edits:** U.1 TopBar and shell, T0.2 app loading/error surfaces,
+  `apps/local/index.html`, `apps/local/public/manifest.webmanifest`, T0.3 bundle icons.
+  **Spec:** `Mascot({size?: number, className?: string, alt?: string})` renders the
+  approved idle WebP; a reduced-motion media source selects frame zero. Reuse it in
+  the shared header and startup/loading/unavailable/error surfaces. Stage remains
+  event-driven. Generate all launcher/installer/favicon/PWA sizes from
+  `LIBS/UI/FIGMA/mascot/natally-icon-1024-rgba.png`; keep source attribution and back up
+  existing outputs before regeneration. No substitute lettermark. Keep asset links
+  compatible with a configured Vite base path.
+  **Verify:** existing U.1 and U.9 commands plus T0.2 standalone typecheck.
+  **Accept:** shell and Stage behavior remain correct and the entry typechecks.
+  **Operator verification protocol:** observe the HTTP preview with the animated
+  mascot; reduced-motion displays the original still. Inspect generated icon artwork.
+
 ---
 
 ## Phase M — Mirror & models (§13)
@@ -700,7 +717,9 @@ here are the executable subset of it).
   wins**, incoming birth fields ignored, one row in the returned report
   `{merged, skipped, conflicts[]}` (§8.4); `removePerson(personId)` = real deletion of the
   person, their `kind=person` lore node + incident edges, and their cached charts;
-  sessions/turns persist as transcript history (§8.4); §11: exported JSON is plaintext by
+  sessions/turns persist as transcript history (§8.4): retain the historical person ID in
+  `sessions.historical_person_id` (T0.9 migration 3), clear only the live foreign key,
+  and keep the closed nine-table set; §11: exported JSON is plaintext by
   design and the UI says so. Deterministic export fixture roundtrip.
   **Verify:** `pnpm vitest run apps/local/src/data`
   **Accept:** `data: CRUD roundtrip; export→wipe→import restores equivalently; conflicts

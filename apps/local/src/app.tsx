@@ -1,4 +1,5 @@
 import { Component, lazy, type ReactNode, Suspense } from "react";
+import { Mascot } from "./ui/mascot";
 
 // U.1 owns the real router shell. Lazy loading keeps runtime engines out of the entry.
 const NatallyShell = lazy(() => import("@natally/local-shell"));
@@ -6,6 +7,7 @@ const NatallyShell = lazy(() => import("@natally/local-shell"));
 function LoadingApplication() {
   return (
     <main className="app-loading" aria-busy="true">
+      <Mascot size={200} />
       <h1>{document.title}</h1>
       <p role="status">Opening your notebook…</p>
     </main>
@@ -23,6 +25,7 @@ class ApplicationBoundary extends Component<{ children: ReactNode }, { error: Er
     if (this.state.error) {
       return (
         <main className="app-loading">
+          <Mascot size={200} />
           <h1>{document.title}</h1>
           <p role="alert">Your notebook could not open: {this.state.error.message}</p>
           <button type="button" onClick={() => window.location.reload()}>

@@ -12,6 +12,7 @@ import {
   useSyncExternalStore,
 } from "react";
 import { TopBar } from "./primitives/TopBar";
+import { Mascot } from "./mascot";
 import {
   getRegisteredRoute,
   getRegistryRevision,
@@ -49,9 +50,12 @@ class ScreenBoundary extends Component<{ children: ReactNode }, { failed: boolea
   }
   override render() {
     return this.state.failed ? (
-      <p className="ui-absence ui-absence--error" role="alert">
-        This screen is unavailable.
-      </p>
+      <div className="ui-screen-absence">
+        <Mascot size={200} />
+        <p className="ui-absence ui-absence--error" role="alert">
+          This screen is unavailable.
+        </p>
+      </div>
     ) : (
       this.props.children
     );
@@ -133,19 +137,23 @@ export function NatallyShell() {
           <ScreenBoundary key={`${hash}:${selected?.id ?? "absent"}`}>
             <Suspense
               fallback={
-                <p className="ui-absence" role="status">
-                  Loading screen…
-                </p>
+                <div className="ui-screen-absence">
+                  <Mascot size={200} />
+                  <p className="ui-absence" role="status">Loading screen…</p>
+                </div>
               }
             >
               {Screen && match ? (
                 <Screen {...match} />
               ) : (
-                <p className="ui-absence" role="status">
-                  {match
-                    ? "No screen is registered for this route yet."
-                    : "This route does not exist."}
-                </p>
+                <div className="ui-screen-absence">
+                  <Mascot size={240} />
+                  <p className="ui-absence" role="status">
+                    {match
+                      ? "No screen is registered for this route yet."
+                      : "This route does not exist."}
+                  </p>
+                </div>
               )}
             </Suspense>
           </ScreenBoundary>

@@ -6,11 +6,12 @@
 //! awaits NativeHost::request, managed NativeHost state initialized in the
 //! natally_plugin! setup hook, and matching permissions/capability grants.
 //!
-//! The parent MUST supply a real NativeEphemerisEngine factory. P.1 is a JS /
-//! Emscripten-WASM adapter, not a Rust engine: it needs an embedded JS/WASM runtime
-//! plus local asset loading, or a real native implementation of that same seam.
-//! That runtime and its dependencies are not provided by this transport. No
-//! default adapter pretends initialization or a calculation has succeeded.
+//! `engine::SwephEngine` implements the seam using the detached C source compiled
+//! by this crate. The mounting application supplies its bundled table directory.
+//! Construction, local integrity checks, calculations and destruction stay here
+//! on the dedicated worker thread.
+
+pub mod engine;
 
 use serde::{Deserialize, Serialize};
 use serde_json::{Map, Value};

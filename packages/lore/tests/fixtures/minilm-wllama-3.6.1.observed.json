@@ -1,0 +1,33 @@
+{
+  "status": "PASS",
+  "sdk": "3.6.1",
+  "modelSha256": "263215c3cadd6e16740741a7624ab4cbb6c8e777688bd5331ecfbf5681c2f8ed",
+  "dim": 384,
+  "texts": [
+    "The cat is sitting on the mat.",
+    "A kitten rests on a rug.",
+    "Database indexes speed up SQL queries."
+  ],
+  "norms": [1, 0.9999999999999997, 1],
+  "related": 0.622577369094986,
+  "unrelated": 0.0020650522668310394,
+  "repeatMaxError": 0,
+  "vectorHeads": [
+    [0.12492299525594161, -0.04217614011440429, -0.031242712584205756, 0.03680002820656383],
+    [0.0715968501033369, 0.013416993738720373, 0.01614829450206717, 0.06629931618208687],
+    [0.029225971334889255, -0.03785895155849735, -0.009851581344598417, 0.07053396053911955]
+  ],
+  "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36",
+  "observedAt": "2026-09-13T04:18:12Z",
+  "modelSource": {
+    "repository": "second-state/All-MiniLM-L6-v2-Embedding-GGUF",
+    "revision": "544f204f2eaa2d71361ffc74d6df7170285b286a",
+    "file": "all-MiniLM-L6-v2-Q8_0.gguf",
+    "bytes": 25008064
+  },
+  "runtimeWarnings": [
+    "load: special_eos_id is not in special_eog_ids - the tokenizer config may be incorrect",
+    "srv    load_model: speculative decoding not supported by this context"
+  ],
+  "unverified": ["Native llama.cpp execution", "Safari compatibility runtime"]
+}

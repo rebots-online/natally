@@ -1,0 +1,4 @@
+[[permission]]
+identifier = "allow-storage"
+description = "Read and write this application's local SQLite data."
+commands.allow = ["lore_open", "lore_batch", "lore_close"]
