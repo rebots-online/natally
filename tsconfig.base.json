@@ -13,9 +13,11 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "jsx": "react-jsx",
+    "allowImportingTsExtensions": true,
     "baseUrl": ".",
     "paths": {
-      "@natally/*": ["packages/*/src"]
+      "@natally/*": ["packages/*/src"],
+      "@natally/local-shell": ["apps/local/src/ui/shell.tsx"]
     }
   },
   "include": ["vitest.workspace.ts", "apps/*/src/**/*", "packages/*/src/**/*"],

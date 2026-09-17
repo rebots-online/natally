@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
-import { readFileSync } from "node:fs";
 import { act, cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import frozenLedger from "../../../../../LIBS/UI/FIGMA/STATE-LEDGER.json";
 import { createCompanionBus, type StageSignal } from "../../companion/bus.js";
 import { ConversationScreen, ConversationContextChip, type ConversationPlate, type ConversationScreenProps, type ConversationServices, type GateResult, type TrialPolicy, type Turn } from "./index.js";
 
@@ -393,9 +393,7 @@ describe("conversation integration and truthful rendering", () => {
   it("exports the context chip for shell integration and reads all frozen variant names", () => {
     render(<ConversationContextChip gate={{ state: "trial-active", remaining: 1 }} onClick={vi.fn()} />);
     expect(screen.getByRole("button", { name: "Conversation context" }).textContent).toBe("Trial");
-    let ledger: { screens: Record<string, Record<string, string>> };
-    try { ledger = JSON.parse(readFileSync(new URL("../../../../../LIBS/UI/FIGMA/STATE-LEDGER.json", import.meta.url), "utf8")); }
-    catch (error) { throw new Error("Frozen conversation ledger could not be read", { cause: error }); }
+    const ledger = frozenLedger as unknown as { screens: Record<string, Record<string, unknown>> };
     expect(Object.keys(ledger.screens["screen-conversation"]).sort()).toEqual(["Idle", "Thinking", "Speaking", "Asleep", "Error", "TrialIdle", "TrialExhausted", "RateLimited", "Desktop"].sort());
   });
 });
