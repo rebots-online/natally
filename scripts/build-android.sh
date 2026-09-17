@@ -54,7 +54,14 @@ if [ ! -d apps/local/src-tauri/gen/android ]; then
 fi
 
 mkdir -p dist
-pnpm --filter @natally/local exec tauri android build --apk --aab
+# rustc segfaulted in thin-LTO with all four ABIs in parallel (memory pressure):
+# raise the stack, cap cargo jobs, and build aarch64 only by default — every
+# shipping Android device is arm64; other ABIs come with a bigger-RAM host or
+# per-target invocations.
+export RUST_MIN_STACK=16777216
+export CARGO_BUILD_JOBS="${CARGO_BUILD_JOBS:-2}"
+android_targets="${NATALLY_ANDROID_TARGETS:-aarch64}"
+pnpm --filter @natally/local exec tauri android build --apk --aab --target "$android_targets"
 
 bundle_apk="$(find apps/local/src-tauri/gen/android -name '*.apk' -path '*universal*' -print -quit)"
 [ -n "$bundle_apk" ] || bundle_apk="$(find apps/local/src-tauri/gen/android -name '*arm64*.apk' -print -quit)"
