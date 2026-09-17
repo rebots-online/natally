@@ -55,7 +55,7 @@ L.2 **port-verify-flip** (B: embed + sqlite-vec + tests) · L.4 **write** (hybri
 
 ## Phase P/W2 — Companion life + data + mirror
 
-C.1 **port-verify-flip** (B: `inference-web.ts` + `lane.ts` + src-tauri `inference/`; native mount rides I.2) · V.2 **port-verify-flip** (B: `src/voice/**`; ban grep ships in the layer) · X.1 **port-verify-flip** (audit: 20/20) · X.2 **write** · B.3 **port-verify-flip** (billing token + tests) · **Mirror publish** via verified HF token (staged Qwen3/Kokoro/MiniLM + sha256 manifest). Gate: companion speaks + reads aloud in dev PWA; data round-trips.
+C.1 **port-verify-flip** (B: `inference-web.ts` + `lane.ts` + src-tauri `inference/`; native mount rides I.2) · V.2 **port-verify-flip** (B: `src/voice/**`; ban grep ships in the layer) · X.1 **port-verify-flip** (audit: 20/20) · X.2 **write** · B.3 **port-verify-flip** (billing token + tests) · **Mirror publish** via verified HF token — **Qwen3.5-2B Q4_K_M default + Qwen3.5-0.8B lite tier (unsloth GGUF, re-based 2026-09-16 from Qwen3-0.6B; compressed catalogue tiers UD-Q3_K_XL/IQ4_XS pending engine probe)** + Kokoro + MiniLM, sha256 manifest. Gate: companion speaks + reads aloud in dev PWA; data round-trips.
 
 ## Phase W3 — Screens from STITCH-v2 (B's screens demoted to wiring references)
 
