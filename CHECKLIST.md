@@ -7,7 +7,10 @@ task below is a **fully self-contained instruction block** — no other task is 
 code any task; everything the block asserts is defined in the cited architecture section.
 Nothing that is not in this file may be coded. Execution is order-independent
 (architecture §22): any subset of tasks, any order, any number of agents — no task
-requires another task to exist or be complete. Predecessors preserved: `CHECKLIST.md.bak.20260917_091435.pre-v3`
+requires another task to exist or be complete. **Attestations (Law 8):** every task's
+Spec names the exact symbols it wires from architecture §5/§5.1; in coder mode the coder
+annotates the symbol's engaged-by cell in §5/§5.1 with `<task-id>✓` using that
+nomenclature verbatim, so parallel agents converge. Predecessors preserved: `CHECKLIST.md.bak.20260917_091435.pre-v3`
 and `CHECKLIST.md.bak.20260917_140133.pre-recipe`.
 
 **Census (this edition, counted by task block):** 44 ✅ · 1 `[X]` line (P.3; I.4 partial

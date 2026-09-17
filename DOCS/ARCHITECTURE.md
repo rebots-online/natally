@@ -108,40 +108,101 @@ The mandated entity table. **Provenance** is one of the INC-19 classes: `compute
 fact), `authored` (static education, labelled in UI), `generated` (companion transcript),
 `absence` (honest absence state), `system` (never user-visible as content).
 
-| Entity | Key fields | Provenance | Storage | Notes |
-|---|---|---|---|---|
-| Person | id, name, birth {date, time?, place, timeKnown} | system (input) | SQLite `people` | birth data is quasi-PII (§12) |
-| Session | id, personId, startedAt; persisted `sessions.historical_person_id` retains the personId after profile deletion | system | SQLite `sessions`; migration in `packages/lore/src/ddl.ts`, repository `apps/local/src/data/sessions.ts` | one conversation thread; nullable live FK plus historical ID, no extra application table |
-| Turn | id, sessionId, role (you/her/tool), text, ts | generated (her) / system (you) | SQLite `turns` | tool turns record DOM ops (§7.3) |
-| Plate | id, sessionId, kind (natal/synastry/today), chartId | computed (rendered from ChartFacts) | derived, cached | in-transcript card |
-| ChartFacts | id, personIds[], ut/place inputs, positions[], cusps[], aspects[] | computed | SQLite `charts` (content-addressed by input hash) | immutable; from EphemerisEngine only |
-| GlossaryEntry | term, body, glyph | authored | bundled JSON (lib) | "What it is" labels |
-| TrialPolicy | mode, params, trialModel | system (build-baked from `.env`) | embedded config | §9.1 |
-| Reading | id, ts, personId, chartId | system | SQLite `readings` (append-only) | §9.2 |
-| LicenseToken | sub (appUserId), tier, iat, exp?, signature | system | OS keychain (native) / IndexedDB (web) | Ed25519 (§9.3) |
-| ConsumedCode | codeHash, redeemedAt | system | SQLite `consumed_codes` | single-use enforcement |
-| Offering | id, priceString, tier, durationIso | system (runtime from RevenueCat/bridge) | memory | paywall display only |
-| LoreNode | id, kind, summary, embedding, refs[] | generated (derived) | SQLite+vec (§8) | D12 |
-| LoreEdge | from, to, rel, weight, sourceTurnId | generated (derived) | SQLite | §8.2 |
-| Lore itself (summaries) | — | generated | UI-labelled | never shown as computed fact |
-| StorageScope | scope string (build-baked, §19.1) | system | generated config | public identity; never a secret or entitlement |
-| ContentIdentity | sha256, bytes; object path | system | shared object store (§19.2) | immutable; scope selects the library |
-| CatalogueAlias | assetId+revision → digest/format/quant/license | system | catalogue index (§19.2) | multiple aliases may share bytes |
-| AccessLocator | native path / fd / URI / bookmark / browser handle | system | platform adapter (§19.4) | typed; never a bare path string |
-| UsageClaim (Lease) | consumer identity, read lease/pin | system | shared store (§19.5) | active-reader protection |
-| WindowsReleaseOrdinal | committed integer `n` | system | release metadata | monotonic MSI/MSIX version mapping (§20.4) |
-| OfferCatalogEntry | offer copy, product IDs, entitlement key, currency code | authored (approved copy, §21.1) | RC/Store catalog | customer language law applies |
-| ServiceRateCard | service ID, input/output rates, minimum unit, max charge | system | server service catalog (§21.4) | versioned; margin rule applied once |
-| ReservationJobRecord | account, request-id, state, quote, debit key | system | server durable store (§21.4) | unique (account, request-id) constraint |
-| GrantProvenance | purchase ref, grant key, paid period, restrictions | system | RC + server ledger (§21.6) | replay-safe; no double grants |
-| Mascot | `Mascot({size?: number, className?: string, alt?: string})`; `apps/local/src/ui/mascot.tsx` | system (approved brand artwork) | bundled `src/assets/mascot/` | Shared animated brand image in TopBar, startup, unavailable-screen and error surfaces; reduced-motion selects frame zero. Separate from Stage's event-driven state. |
-| ApplicationIcons | `scripts/generate-icons.sh`; `apps/local/src-tauri/icons/`; `apps/local/public/icons/` | system (approved brand artwork) | generated icon files, HTML links and PWA manifest | All sizes derive from `LIBS/UI/FIGMA/mascot/natally-icon-1024-rgba.png`; OS launchers and installers use static formats. |
+| Entity | Key fields | Provenance | Storage | Notes | Engaged by |
+|---|---|---|---|---|---|
+| Person | id, name, birth {date, time?, place, timeKnown} | system (input) | SQLite `people` | birth data is quasi-PII (§12) | W3-People · X.2 · U.4✓ |
+| Session | id, personId, startedAt; persisted `sessions.historical_person_id` retains the personId after profile deletion | system | SQLite `sessions`; migration in `packages/lore/src/ddl.ts`, repository `apps/local/src/data/sessions.ts` | one conversation thread; nullable live FK plus historical ID, no extra application table | W3-People · X.2 · U.4✓ |
+| Turn | id, sessionId, role (you/her/tool), text, ts | generated (her) / system (you) | SQLite `turns` | tool turns record DOM ops (§7.3) | C.1–C.4✓ · X.2 |
+| Plate | id, sessionId, kind (natal/synastry/today), chartId | computed (rendered from ChartFacts) | derived, cached | in-transcript card | U.3 · P.4✓ |
+| ChartFacts | id, personIds[], ut/place inputs, positions[], cusps[], aspects[] | computed | SQLite `charts` (content-addressed by input hash) | immutable; from EphemerisEngine only | U.3 · P.4✓ |
+| GlossaryEntry | term, body, glyph | authored | bundled JSON (lib) | "What it is" labels | U.7 · U.3 |
+| TrialPolicy | mode, params, trialModel | system (build-baked from `.env`) | embedded config | §9.1 | B.1✓ · U.5 · U.6 |
+| Reading | id, ts, personId, chartId | system | SQLite `readings` (append-only) | §9.2 | B.2✓ · H.4 |
+| LicenseToken | sub (appUserId), tier, iat, exp?, signature | system | OS keychain (native) / IndexedDB (web) | Ed25519 (§9.3) | B.3✓ · B.6 · U.5 |
+| ConsumedCode | codeHash, redeemedAt | system | SQLite `consumed_codes` | single-use enforcement | B.4✓ · X.2 |
+| Offering | id, priceString, tier, durationIso | system (runtime from RevenueCat/bridge) | memory | paywall display only | OR.1 · U.6 |
+| LoreNode | id, kind, summary, embedding, refs[] | generated (derived) | SQLite+vec (§8) | D12 | X.2 · L.1–L.5✓ |
+| LoreEdge | from, to, rel, weight, sourceTurnId | generated (derived) | SQLite | §8.2 | X.2 · L.1–L.5✓ |
+| Lore itself (summaries) | — | generated | UI-labelled | never shown as computed fact | U.5 |
+| StorageScope | scope string (build-baked, §19.1) | system | generated config | public identity; never a secret or entitlement | SS.1 · SS.4–SS.7 |
+| ContentIdentity | sha256, bytes; object path | system | shared object store (§19.2) | immutable; scope selects the library | SS.2 · SS.3 |
+| CatalogueAlias | assetId+revision → digest/format/quant/license | system | catalogue index (§19.2) | multiple aliases may share bytes | SS.2 · MS.1✓ |
+| AccessLocator | native path / fd / URI / bookmark / browser handle | system | platform adapter (§19.4) | typed; never a bare path string | SS.2 · SS.4–SS.7 |
+| UsageClaim (Lease) | consumer identity, read lease/pin | system | shared store (§19.5) | active-reader protection | SS.2 · SS.3 · X.2 |
+| WindowsReleaseOrdinal | committed integer `n` | system | release metadata | monotonic MSI/MSIX version mapping (§20.4) | WP.3 · WP.4 |
+| OfferCatalogEntry | offer copy, product IDs, entitlement key, currency code | authored (approved copy, §21.1) | RC/Store catalog | customer language law applies | OR.1 · U.6 |
+| ServiceRateCard | service ID, input/output rates, minimum unit, max charge | system | server service catalog (§21.4) | versioned; margin rule applied once | OR.3 · OR.4 |
+| ReservationJobRecord | account, request-id, state, quote, debit key | system | server durable store (§21.4) | unique (account, request-id) constraint | OR.4 · H.4 |
+| GrantProvenance | purchase ref, grant key, paid period, restrictions | system | RC + server ledger (§21.6) | replay-safe; no double grants | OR.1 · OR.4 |
+| Mascot | `Mascot({size?, className?, alt?})`; `apps/local/src/ui/mascot.tsx` | system (approved brand artwork) | bundled `src/assets/mascot/` | Shared animated brand image in TopBar, startup, unavailable-screen and error surfaces; reduced-motion selects frame zero. Separate from Stage's event-driven state. | U.9 · U.7 |
+| ApplicationIcons | `scripts/generate-icons.sh`; `apps/local/src-tauri/icons/`; `apps/local/public/icons/` | system (approved brand artwork) | generated icon files, HTML links and PWA manifest | All sizes derive from `LIBS/UI/FIGMA/mascot/natally-icon-1024-rgba.png`; OS launchers and installers use static formats. | R.1–R.3✓ · W7-2 |
 
 The provenance tag travels with the content into the prompt fence (§7.2) and the renderer
 (Plex Mono for `computed`, Fraunces margin for `generated`, labelled sections for
 `authored`, distinct absence treatment for `absence`). Export/import (J8) serializes all
 user-owned entities (Person, Session, Turn, ChartFacts inputs, LoreNode, LoreEdge,
 ConsumedCode) as one JSON document, versioned by `exportVersion`.
+
+### 5.1 Symbol enumeration (functions, classes, interfaces, variables wired by CHECKLIST.md)
+
+Law 8 companion to the entity table: every symbol a CHECKLIST task touches appears here
+with its file and its **engaged-by** cells. Coder mode: when a task wires a symbol, it
+annotates the cell with `<task-id>✓` — exactly this nomenclature, never a synonym — so
+parallel agents converge. A symbol a task needs that is absent from this table is a
+snapshot defect (§22: no blockers by recipe time).
+
+| Symbol | Kind | File | Engaged by |
+|---|---|---|---|
+| `EphemerisEngine` (init/position/cusps/aspects/chiron) | interface | `packages/ephemeris` | P.1–P.4✓ · U.3 |
+| `CompanionTool` (dom.read/dom.write/chart.open/chart.compute/lore.recall) | type union | §7.3 | C.1–C.4✓ |
+| fence checker (Tier-1 match, 0.01° tolerance) | function | §7.2 | C.2✓ |
+| `createConversationComposition` | function | `apps/local/src/composition.ts` | C.1✓ · I.3 · SS.8 |
+| `LoreStore` (query/upsert/export/delete/stats) | interface | `packages/lore` | L.1–L.5✓ · X.2 · U.5 · W3-People |
+| `importDocument` (merge `{merged, skipped, conflicts[]}`) | function | §8.4 | W3-People · X.2 |
+| `Session` / `sessions.historical_person_id` | type + column | `packages/lore/src/types.ts` | W3-People · X.2 |
+| `redeemCode` / `CodeOutcome` / `ConsumedCodeLedger` | function/types | `packages/billing/src/codes.ts` | B.4✓ · B.6 |
+| `TrialPolicySchema` / `TrialPolicy` | schema/type | `packages/billing/src/types.ts` | B.1✓ · U.6 |
+| `ReadingSchema` / `Reading` | schema/type | `packages/billing/src/types.ts` | B.2✓ · H.4 |
+| `LicenseTokenSchema` / `LicenseTokenPayloadSchema` | schemas | `packages/billing/src/types.ts` | B.3✓ · B.6 |
+| `DenyList` / `SignedDenyList` | types | `packages/billing/src/types.ts` | B.3✓ · B.6 |
+| `verifyLicenseToken` / `TokenError` | functions | `packages/billing/src/token/` | B.3✓ · B.6 · U.5 |
+| `DenyListManager` (start/stop/refresh/verify; 24 h cadence) | class | `packages/billing/src/token/verify-web.ts` | B.3✓ · B.6 |
+| `WebTokenStorage` (store/load/clear/readDenyList/writeDenyList) | class | `packages/billing/src/token/storage-web.ts` | B.3✓ · X.2 |
+| native token store (`store`/`verify`, keychain) | Rust | `packages/billing/src/token/native.rs` | I.2 · B.3✓ |
+| `PurchaseAdapter` / `PurchaseAdapterId` / `CheckoutSession` / `Offering` | interface/types | `packages/billing/src/types.ts` | B.5a–B.5c✓ · OR.5 · U.6 |
+| `AdapterRegistry` / `createAdapterRegistry` / `RegistryOptions` / `RegistryCodeDeps` / `FROZEN_ORDER` / `waysToPayLine` | interface/functions/const | `packages/billing/src/adapters/registry.ts` | B.5c✓ · OR.5 · U.6 |
+| `ConsumeResultSchema` (`billing.consume` reasons) | schema | `packages/billing/src/types.ts` | H.2 · H.4 |
+| `ManifestAssetSchema` / `ModelManifestSchema` (kinds llm/embedder/voice/voices) | schemas | `packages/billing/src/types.ts` | MS.1✓ · MS.2✓ · SS.2 |
+| `MirrorNetwork` (resolve/fetch; origin allowlist) | class | `apps/local/src/mirror/manifest.ts` | MS.2✓ · SS.8 · V.1 |
+| `parseManifest` / `loadBakedManifest` / `fetchManifest` | functions | `apps/local/src/mirror/manifest.ts` | MS.2✓ |
+| `validateAsset` / `requiredSpace` | functions | `apps/local/src/mirror/manifest.ts` | MS.2✓ · SS.8 |
+| `StreamingSha256` | class | `apps/local/src/mirror/download.ts` | SS.3 · SS.8 |
+| `MirrorDownloader.download` (ranged resume, verify, commit) | method | `apps/local/src/mirror/download.ts` | SS.8 · V.1 · U.5 |
+| `DownloadProgress` / `DownloadOptions` / `DownloadResult` / `InsufficientSpaceError` / `IntegrityError` | types | `apps/local/src/mirror/download.ts` | SS.8 · U.5 |
+| `MirrorStorage` / `WebMirrorStorage` (isPresent/appendPartial/readPartial/commit/withLock) | interface+impl | `apps/local/src/mirror/cache.ts` | SS.4 · SS.8 |
+| `CatalogueStore.remove` → release-of-claim | method | `apps/local/src/mirror/catalogue.ts` | SS.8 · X.2 |
+| `loadRuntimeConfig` | function | `apps/local/src/config.ts` | SS.1 · I.3 |
+| `SharedAssets` (lock/lookup/acquire) / `Lookup` union / `Lease` | interface/types | `packages/storage/src/types.ts` (SS.2) | SS.2 · SS.3 · SS.4–SS.7 |
+| `resolveExistingFirst` | function | `packages/storage/src/resolver.ts` (SS.3) | SS.3 · SS.8 |
+| storage platform adapters (web/linux.rs/windows.rs/android) | modules | `apps/local/src/storage/web.ts` · `src-tauri/src/storage/` | SS.4 · SS.5 · SS.6 · SS.7 · WP.5 |
+| `StageSignal` union + envelope events (envelope-start/level/end) | type + events | `apps/local/src/ui/` (C.4✓) | V.1 · V.2✓ · U.9 · H.3 |
+| `MascotRenderer` (sprite, pluggable) | component | `apps/local/src/ui/stage.tsx` | U.9 |
+| `Mascot` | component | `apps/local/src/ui/mascot.tsx` | U.7 · U.9 |
+| offers module (three offers, exact §21.1 copy) | module | `packages/billing/src/offers.ts` (OR.1) | OR.1 · U.6 |
+| `roche` module (units 0..2×10⁹, fungibility matrix) | module | `packages/billing/src/roche.ts` (OR.3) | OR.3 · OR.4 · H.4 |
+| quote/reserve/settle machine (states per §21.4) | module | server-side (OR.4) | OR.4 · H.4 |
+| `scripts/gen-manifest.mjs` | script | repo root | MS.1✓ |
+| `scripts/generate-storage-config.mjs` → `config/asset-storage.generated.json` | script+artifact | SS.1 | SS.1 |
+| `scripts/gen-appx-manifest.mjs` + `config/appx-template.xml` | script+template | WP.2 | WP.2 · WP.4 |
+| `scripts/windows-version.mjs` + `config/windows-release-ordinal` | script+data | WP.3 | WP.3 · WP.4 |
+| `config/windows-store-identity.json` | artifact | WP.1 | WP.1 · WP.2 · WP.4 |
+| `scripts/build-windows.sh` (host auto-detect) | script | §14 | WP.4 · R.2✓ |
+| `scripts/build-all.sh` + `release.lock` + `scripts/update-version.sh` | scripts | §14 | R.5 · W7-2 |
+| `scripts/check.sh` + bundle-budget assert | script | §12 | I.4 |
+| Tauri command registry (`registry_generated.rs`) | module | `apps/local/src-tauri` | I.2 · V.1 · B.3✓ |
+| capability layer (single selection point) | module | `apps/local/src/capabilities/` (I.3) | I.3 · I.2 |
+| voice native (`src-tauri/src/voice/`) | module | §10 | V.1 · I.2 · W7-4 |
+| hosted scaffold + OpenRouter adapter + hosted voice/STT + hosted billing | modules | `apps/hosted/` | H.1 · H.2 · H.3 · H.4 |
 
 ## 6. Ephemeris subsystem (D14)
 

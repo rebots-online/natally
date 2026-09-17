@@ -13,6 +13,7 @@ ONLY AND ALWAYS comply with `~/Admin-Manual/` — save for project-scoped, previ
 5. There are no blockers by recipe time, by construction. Anything that would have blocked a task was surfaced and resolved before the checklist was written; arriving at the checklist with an unresolved blocker means the snapshot pass was incomplete — complete the snapshot first, then the recipe.
 6. Failing to plan is planning to fail. If you don't know how you will finish the story, do not begin writing it. Every question asked during coding wastes all the time already spent planning.
 7. Only an operator decision changes the architecture. A "major change" discovered during implementation means the architecture was done wrong — it is only a major change if you've been doing it completely wrong all along.
+8. ARCHITECTURE.md must carry an **exhaustive enumeration table** of every entity, variable, function, class, and interface — anything that must be wired up in executing CHECKLIST.md — and every CHECKLIST task attests to the exact symbols it wires (the entities table + attestations procedure, Admin-Manual). The table carries an **engaged-by** column mapping each symbol to the CHECKLIST tasks that wire it, so coder-mode checkoffs indicate where each one is engaged and the same nomenclature converges properly.
 
 Authority order: `~/Admin-Manual/` is the organization-wide single source of truth (its index
 is `MANUAL.md`); this file is the project layer — where it is silent, the manual governs.
