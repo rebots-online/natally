@@ -1,0 +1,24 @@
+[package]
+name = "license-bridge"
+version = "0.1.0"
+edition = "2021"
+description = "natally operator-hosted license bridge (§9.3, §9.4): processor webhooks, Ed25519 license tokens, single-use redeem codes, signed deny-list."
+license = "AGPL-3.0-or-later"
+
+[dependencies]
+axum = "0.7"
+tokio = { version = "1", features = ["rt-multi-thread", "macros", "net", "signal"] }
+rusqlite = { version = "0.31", features = ["bundled"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+ed25519-dalek = { version = "2", features = ["rand_core"] }
+rand = "0.8"
+sha2 = "0.10"
+hmac = "0.12"
+subtle = "2"
+base64 = "0.22"
+hex = "0.4"
+
+[dev-dependencies]
+tower = { version = "0.4", features = ["util"] }
+http-body-util = "0.1"
