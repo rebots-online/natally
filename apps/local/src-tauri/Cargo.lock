@@ -1894,7 +1894,7 @@ dependencies = [
 
 [[package]]
 name = "natally"
-version = "1.14.26755"
+version = "1.30.27931"
 dependencies = [
  "natally-ephemeris",
  "rusqlite",

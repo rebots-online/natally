@@ -237,7 +237,12 @@ disjoint Owns; Verify + Accept observe durable end-state; commit+push per line; 
   **Accept:** `gate: full workspace green at all workers, JS budget assert present and
   passing on the built artifact`.
 
-- [ ] **R.5 build-all + release flow** · §14, §18.5, CC14  **Spec:** `scripts/build-all.sh` honors `release.lock` single-flight: one stamp for every
+- ✅ **R.5 build-all + release flow** · §14, §18.5, CC14 · [orchestrator semantic
+  evaluation 2026-09-17: observed run artifacts verified — android apk+aab, linux
+  AppImage+deb, win exe+NSIS, web archives, ALL stamped v1.29.27910, zero off-stamp
+  outputs; android first attempt failed environmentally (rust-lld bus error) and was
+  retried honestly, never fabricated; post-build bump ran (1.30.27931, --check
+  consistent); update-version.sh --check quoted]  **Spec:** `scripts/build-all.sh` honors `release.lock` single-flight: one stamp for every
   platform in one invocation; post-build bump via `update-version.sh --post-build`; every
   artifact named `mba.robin.natally-v<MAJOR.MINOR.BUILD>-<qualifier>` in tracked `dist/`;
   never an unstamped or wrongly-stamped artifact left behind. Android stays single-ABI
