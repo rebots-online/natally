@@ -43,7 +43,7 @@ describe("migrations", () => {
     loadVec(db);
     migrate(db, { vec: true, vecDimensions: 384 });
     expect(tables()).toContain("vec_nodes");
-    expect(ledger()).toEqual([{ id: 1 }, { id: VEC_MIGRATION_ID }]);
+    expect(ledger()).toEqual([{ id: 1 }, { id: VEC_MIGRATION_ID }, { id: 3 }]);
     const vector = JSON.stringify(Array.from({ length: 384 }, (_, index) => (index === 0 ? 1 : 0)));
     db.prepare("INSERT INTO vec_nodes(id, embedding) VALUES (?, ?)").run("node-1", vector);
     migrate(db, { vec: true, vecDimensions: 384 });
@@ -52,7 +52,7 @@ describe("migrations", () => {
         .prepare("SELECT id, distance FROM vec_nodes WHERE embedding MATCH ? AND k = 1")
         .get(vector),
     ).toEqual({ id: "node-1", distance: 0 });
-    expect(ledger()).toHaveLength(2);
+    expect(ledger()).toHaveLength(3);
   });
 
   it("creates exactly nine application tables plus the migration ledger", () => {
@@ -69,7 +69,7 @@ describe("migrations", () => {
     migrate(db, { vec: false });
     db.exec(`
       INSERT INTO people VALUES ('p', 'Robin', '2000-01-02', NULL, 0, 'Toronto', 1);
-      INSERT INTO sessions VALUES ('s', 'p', 2);
+      INSERT INTO sessions VALUES ('s', 'p', 2, NULL);
       INSERT INTO turns VALUES ('t', 's', 'p', 'you', 'Hello', 3, NULL);
       INSERT INTO charts VALUES ('c', '{}', '{"computed":true}', 4);
       INSERT INTO readings VALUES ('r', 5, 'p', 'c');
@@ -108,6 +108,7 @@ describe("migrations", () => {
         ["id", "TEXT"],
         ["person_id", "TEXT"],
         ["started_at", "INTEGER"],
+        ["historical_person_id", "TEXT"],
       ],
       turns: [
         ["id", "TEXT"],

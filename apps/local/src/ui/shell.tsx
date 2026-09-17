@@ -11,8 +11,8 @@ import {
   useState,
   useSyncExternalStore,
 } from "react";
-import { TopBar } from "./primitives/TopBar";
 import { Mascot } from "./mascot";
+import { TopBar } from "./primitives/TopBar";
 import {
   getRegisteredRoute,
   getRegistryRevision,
@@ -139,7 +139,9 @@ export function NatallyShell() {
               fallback={
                 <div className="ui-screen-absence">
                   <Mascot size={200} />
-                  <p className="ui-absence" role="status">Loading screen…</p>
+                  <p className="ui-absence" role="status">
+                    Loading screen…
+                  </p>
                 </div>
               }
             >

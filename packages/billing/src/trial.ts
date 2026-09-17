@@ -72,10 +72,11 @@ export function evaluateGate(
     }
     case "time": {
       const installs = ledgerRows.filter((row) => row.id === "install");
-      if (installs.length !== 1) {
+      const install = installs[0];
+      if (installs.length !== 1 || !install) {
         throw new Error("Time trials require exactly one install bootstrap row");
       }
-      const expiresAt = deadline(installs[0]!.ts, trial.days!);
+      const expiresAt = deadline(install.ts, trial.days!);
       return {
         state: timestamp(now()) < expiresAt ? "trial-active" : "trial-exhausted",
       };

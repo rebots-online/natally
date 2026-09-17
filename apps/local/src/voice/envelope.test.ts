@@ -7,7 +7,9 @@ describe("voice web: envelope fixtures", () => {
     expect(rmsEnvelope(new Float32Array(240))).toBe(0);
     expect(rmsEnvelope([0.5, 0.5, 0.5])).toBe(0.5);
     expect(rmsEnvelope([-0.5, 0.5, -0.5, 0.5])).toBe(0.5);
-    const sine = Float32Array.from({ length: 240 }, (_, index) => Math.sin(2 * Math.PI * index / 240));
+    const sine = Float32Array.from({ length: 240 }, (_, index) =>
+      Math.sin((2 * Math.PI * index) / 240),
+    );
     expect(rmsEnvelope(sine)).toBeCloseTo(Math.SQRT1_2, 7);
   });
 

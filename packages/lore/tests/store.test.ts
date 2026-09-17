@@ -234,7 +234,10 @@ describe("LoreStore using real in-memory SQLite through the web adapter", () => 
     const reopened = await createWebLoreStore({ database: db });
     stores.push(reopened);
     expect((await reopened.exportAll()).nodes[0]?.summary).toBe("persistent");
-    expect(db.prepare("SELECT id FROM _migrations ORDER BY id").all()).toEqual([{ id: 1 }, { id: 3 }]);
+    expect(db.prepare("SELECT id FROM _migrations ORDER BY id").all()).toEqual([
+      { id: 1 },
+      { id: 3 },
+    ]);
     await reopened.deleteAll();
     await reopened.deleteAll();
     expect(await reopened.exportAll()).toEqual({ nodes: [], edges: [] });

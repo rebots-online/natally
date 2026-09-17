@@ -278,7 +278,7 @@ class BrowserWorkerContract {
   ) {}
   addEventListener(type: string, listener: (event: unknown) => void) {
     if (!this.listeners.has(type)) this.listeners.set(type, new Set());
-    this.listeners.get(type)!.add(listener);
+    this.listeners.get(type)?.add(listener);
   }
   removeEventListener(type: string, listener: (event: unknown) => void) {
     this.listeners.get(type)?.delete(listener);

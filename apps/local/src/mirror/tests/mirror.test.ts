@@ -3,6 +3,7 @@ import { createHash } from "node:crypto";
 import { createServer, type Server } from "node:http";
 import type { AddressInfo } from "node:net";
 import { join } from "node:path";
+import { fileURLToPath } from "node:url";
 import { createServer as createViteServer, type ViteDevServer } from "vite";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { WebSpaceAdapter } from "../cache.js";
@@ -39,7 +40,9 @@ beforeAll(async () => {
   vite = await createViteServer({
     configFile: false,
     envFile: false,
-    root: process.cwd(),
+    // Deterministic repo root regardless of the vitest project's cwd: the browser imports
+    // "/apps/local/src/mirror/*.ts", which only resolves when the Vite root IS the repo root.
+    root: fileURLToPath(new URL("../../../../../", import.meta.url)),
     cacheDir: join(import.meta.dirname, "STAGING_vite"),
     appType: "custom",
     optimizeDeps: { noDiscovery: true, include: [] },

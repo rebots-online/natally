@@ -1,5 +1,5 @@
 import type { InferenceSession, Tensor } from "onnxruntime-web";
-import { companionBus, type CompanionBus } from "../companion/bus";
+import { type CompanionBus, companionBus } from "../companion/bus";
 import { rmsEnvelope } from "./envelope";
 
 export const KOKORO_SAMPLE_RATE = 24_000;
@@ -96,7 +96,10 @@ function localUrl(value: string, directory = false): string {
   return url.href;
 }
 
-async function fetchAsset(url: string, readAsset: (url: string) => Promise<Response>): Promise<Response> {
+async function fetchAsset(
+  url: string,
+  readAsset: (url: string) => Promise<Response>,
+): Promise<Response> {
   const response = await readAsset(url);
   if (!response.ok) throw new Error(`Kokoro asset request failed (${response.status}): ${url}`);
   return response;
@@ -108,7 +111,12 @@ function vocabularyFrom(value: unknown): Vocabulary {
     throw new TypeError("Expected Kokoro tokenizer.json model.vocab");
   }
   const entries = Object.entries(vocab);
-  if (!entries.length || entries.some(([key, id]) => [...key].length !== 1 || !Number.isSafeInteger(id) || id < 0 || id > 177)) {
+  if (
+    !entries.length ||
+    entries.some(
+      ([key, id]) => [...key].length !== 1 || !Number.isSafeInteger(id) || id < 0 || id > 177,
+    )
+  ) {
     throw new TypeError("Invalid Kokoro character vocabulary");
   }
   if ((vocab as Vocabulary).$ !== 0) throw new TypeError("Kokoro boundary token must be $ = 0");
@@ -116,10 +124,14 @@ function vocabularyFrom(value: unknown): Vocabulary {
 }
 
 /** Real eSpeak-NG IPA, with punctuation retained and Kokoro's IPA substitutions. */
-async function phonemesFor(text: string, language: KokoroWebOptions["language"], phonemize: Phonemize): Promise<string> {
+async function phonemesFor(
+  text: string,
+  language: KokoroWebOptions["language"],
+  phonemize: Phonemize,
+): Promise<string> {
   const normalized = text.normalize("NFKC").replace(/[‘’]/g, "'").replace(/\s+/g, " ").trim();
   // Keep decimal numbers, grouped thousands and clock times intact for eSpeak.
-  const pieces = normalized.split(/([;!?¡¿—…"«»“”(){}\[\]]+|(?<!\d)[,:.]+|[,:.]+(?!\d))/u);
+  const pieces = normalized.split(/([;!?¡¿—…"«»“”(){}[\]]+|(?<!\d)[,:.]+|[,:.]+(?!\d))/u);
   const result: string[] = [];
   // eSpeak uses a shared voice; serialize calls instead of racing set_voice.
   for (let index = 0; index < pieces.length; index += 1) {
@@ -131,7 +143,12 @@ async function phonemesFor(text: string, language: KokoroWebOptions["language"],
       result.push(`${/^\s/.test(piece) ? " " : ""}${phones}${/\s$/.test(piece) ? " " : ""}`);
     }
   }
-  let phones = result.join("").replace(/ʲ/g, "j").replace(/r/g, "ɹ").replace(/x/g, "k").replace(/ɬ/g, "l");
+  let phones = result
+    .join("")
+    .replace(/ʲ/g, "j")
+    .replace(/r/g, "ɹ")
+    .replace(/x/g, "k")
+    .replace(/ɬ/g, "l");
   if (language === "en-us") phones = phones.replace(/(?<=nˈaɪn)ti(?!ː)/g, "di");
   return phones.trim();
 }
@@ -141,7 +158,7 @@ function tokenChunks(phonemes: string, vocabulary: Vocabulary): number[][] {
   const characters = [...phonemes].filter((character) => Object.hasOwn(vocabulary, character));
   if (!characters.length) throw new Error("No Kokoro tokens in phonemized text");
   const chunks: number[][] = [];
-  for (let start = 0; start < characters.length;) {
+  for (let start = 0; start < characters.length; ) {
     let end = Math.min(start + MAX_PHONEMES, characters.length);
     if (end < characters.length) {
       for (let boundary = end - 1; boundary > start; boundary -= 1) {
@@ -185,7 +202,8 @@ export async function createKokoroWebVoice(options: KokoroWebOptions): Promise<W
   const tokenizerUrl = localUrl(options.tokenizerUrl);
   const voiceUrl = localUrl(options.voiceUrl);
   const wasmPaths = localUrl(options.wasmPaths, true);
-  if (!["en-us", "en"].includes(options.language)) throw new TypeError("Unsupported Kokoro voice language");
+  if (!["en-us", "en"].includes(options.language))
+    throw new TypeError("Unsupported Kokoro voice language");
   const language = options.language;
   const bus = options.bus ?? companionBus;
   const readAsset = options.readAsset ?? ((url: string) => fetch(url, { redirect: "error" }));
@@ -216,17 +234,24 @@ export async function createKokoroWebVoice(options: KokoroWebOptions): Promise<W
       // Browsers can expose navigator.gpu without an available adapter. ORT can
       // silently remove an unavailable provider, so check this before selecting it.
       if (await gpu.requestAdapter()) backend = "webgpu";
-    } catch { /* Adapter unavailable: initialize the WASM execution provider. */ }
+    } catch {
+      /* Adapter unavailable: initialize the WASM execution provider. */
+    }
   }
   let session: InferenceSession;
   try {
-    session = await ort.InferenceSession.create(model, { executionProviders: backend === "webgpu" ? ["webgpu", "wasm"] : ["wasm"] });
+    session = await ort.InferenceSession.create(model, {
+      executionProviders: backend === "webgpu" ? ["webgpu", "wasm"] : ["wasm"],
+    });
   } catch (error) {
     if (backend !== "webgpu") throw error;
     backend = "wasm";
     session = await ort.InferenceSession.create(model, { executionProviders: ["wasm"] });
   }
-  if (!["input_ids", "style", "speed"].every((name) => session.inputNames.includes(name)) || !session.outputNames.includes("waveform")) {
+  if (
+    !["input_ids", "style", "speed"].every((name) => session.inputNames.includes(name)) ||
+    !session.outputNames.includes("waveform")
+  ) {
     await session.release();
     throw new TypeError("Expected Kokoro ONNX input_ids/style/speed -> waveform export");
   }
@@ -237,12 +262,19 @@ export async function createKokoroWebVoice(options: KokoroWebOptions): Promise<W
   let disposal: Promise<void> | undefined;
   const loadWorklet = async (audio: AudioContext): Promise<void> => {
     const url = URL.createObjectURL(new Blob([KOKORO_WORKLET_SOURCE], { type: "text/javascript" }));
-    try { await audio.audioWorklet.addModule(url); }
-    finally { URL.revokeObjectURL(url); }
+    try {
+      await audio.audioWorklet.addModule(url);
+    } finally {
+      URL.revokeObjectURL(url);
+    }
   };
   let workletReady: Promise<void> | undefined;
 
-  async function synthesize(text: string, speed: number, signal: AbortSignal): Promise<Float32Array> {
+  async function synthesize(
+    text: string,
+    speed: number,
+    signal: AbortSignal,
+  ): Promise<Float32Array> {
     assertActive(signal);
     const phonemes = await abortable(phonemesFor(text, language, phonemize), signal);
     const chunks: Float32Array[] = [];
@@ -250,8 +282,14 @@ export async function createKokoroWebVoice(options: KokoroWebOptions): Promise<W
       assertActive(signal);
       const row = Math.min(ids.length, 509);
       const feeds: Record<string, Tensor> = {
-        input_ids: new ort.Tensor("int64", BigInt64Array.from([0, ...ids, 0], BigInt), [1, ids.length + 2]),
-        style: new ort.Tensor("float32", voice.slice(row * STYLE_DIM, (row + 1) * STYLE_DIM), [1, STYLE_DIM]),
+        input_ids: new ort.Tensor("int64", BigInt64Array.from([0, ...ids, 0], BigInt), [
+          1,
+          ids.length + 2,
+        ]),
+        style: new ort.Tensor("float32", voice.slice(row * STYLE_DIM, (row + 1) * STYLE_DIM), [
+          1,
+          STYLE_DIM,
+        ]),
         speed: new ort.Tensor("float32", Float32Array.of(speed), [1]),
       };
       let outputs: InferenceSession.ReturnType | undefined;
@@ -264,13 +302,22 @@ export async function createKokoroWebVoice(options: KokoroWebOptions): Promise<W
         }
         chunks.push(pcm.slice());
       } finally {
-        Object.values(feeds).forEach((tensor) => tensor.dispose());
-        if (outputs) Object.values(outputs).forEach((tensor) => tensor.dispose());
+        for (const tensor of Object.values(feeds)) {
+          tensor.dispose();
+        }
+        if (outputs) {
+          for (const tensor of Object.values(outputs)) {
+            tensor.dispose();
+          }
+        }
       }
     }
     const pcm = new Float32Array(chunks.reduce((size, chunk) => size + chunk.length, 0));
     let offset = 0;
-    for (const chunk of chunks) { pcm.set(chunk, offset); offset += chunk.length; }
+    for (const chunk of chunks) {
+      pcm.set(chunk, offset);
+      offset += chunk.length;
+    }
     return pcm;
   }
 
@@ -279,7 +326,9 @@ export async function createKokoroWebVoice(options: KokoroWebOptions): Promise<W
     if (audio.state !== "running") throw new Error("Audio playback was interrupted");
     await new Promise<void>((resolve, reject) => {
       const node = new AudioWorkletNode(audio, "natally-kokoro", {
-        numberOfInputs: 0, numberOfOutputs: 1, outputChannelCount: [1],
+        numberOfInputs: 0,
+        numberOfOutputs: 1,
+        outputChannelCount: [1],
         processorOptions: { pcm, sourceRate: KOKORO_SAMPLE_RATE },
       });
       let started = false;
@@ -293,8 +342,11 @@ export async function createKokoroWebVoice(options: KokoroWebOptions): Promise<W
         node.onprocessorerror = null;
         node.disconnect();
         node.port.close();
-        try { if (started) bus.emit({ type: "envelope-end" }); }
-        catch (failure) { error ??= failure; }
+        try {
+          if (started) bus.emit({ type: "envelope-end" });
+        } catch (failure) {
+          error ??= failure;
+        }
         if (error !== undefined) reject(error);
         else resolve();
       };
@@ -309,23 +361,34 @@ export async function createKokoroWebVoice(options: KokoroWebOptions): Promise<W
         if (finished) return;
         try {
           if (event.data.type === "start") {
-            if (!started) { started = true; bus.emit({ type: "envelope-start" }); }
+            if (!started) {
+              started = true;
+              bus.emit({ type: "envelope-start" });
+            }
           } else if (event.data.type === "frame" && started) {
             bus.emit({ type: "envelope-level", level: rmsEnvelope(event.data.samples) });
           } else if (event.data.type === "done") finish();
-        } catch (error) { finish(error); }
+        } catch (error) {
+          finish(error);
+        }
       };
-      try { node.connect(audio.destination); }
-      catch (error) { finish(error); }
+      try {
+        node.connect(audio.destination);
+      } catch (error) {
+        finish(error);
+      }
     });
   }
 
   return {
-    get backend() { return backend; },
+    get backend() {
+      return backend;
+    },
     speak(text, { speed = 1, signal } = {}) {
       if (disposed) return Promise.reject(new Error("Kokoro voice is disposed"));
       if (active) return Promise.reject(new Error("Kokoro voice is already speaking"));
-      if (!Number.isFinite(speed) || speed <= 0) return Promise.reject(new RangeError("Voice speed must be positive"));
+      if (!Number.isFinite(speed) || speed <= 0)
+        return Promise.reject(new RangeError("Voice speed must be positive"));
       if (signal?.aborted) return Promise.reject(abortError());
       if (!text.trim()) return Promise.resolve();
       const controller = new AbortController();
@@ -338,29 +401,47 @@ export async function createKokoroWebVoice(options: KokoroWebOptions): Promise<W
           const resumed = context.resume();
           await abortable(resumed, controller.signal);
           assertActive(controller.signal);
-          workletReady ??= loadWorklet(context).catch((error) => { workletReady = undefined; throw error; });
+          workletReady ??= loadWorklet(context).catch((error) => {
+            workletReady = undefined;
+            throw error;
+          });
           await abortable(workletReady, controller.signal);
           const pcm = await synthesize(text, speed, controller.signal);
           await play(context, pcm, controller.signal);
         } catch (error) {
-          if (!controller.signal.aborted) bus.emit({ type: "error", message: error instanceof Error ? error.message : String(error) });
+          if (!controller.signal.aborted)
+            bus.emit({
+              type: "error",
+              message: error instanceof Error ? error.message : String(error),
+            });
           throw error;
         } finally {
           signal?.removeEventListener("abort", onAbort);
         }
       })();
-      const tracked = promise.finally(() => { active = undefined; });
+      const tracked = promise.finally(() => {
+        active = undefined;
+      });
       active = { controller, promise: tracked };
       return tracked;
     },
-    stop() { active?.controller.abort(); },
+    stop() {
+      active?.controller.abort();
+    },
     dispose() {
       disposal ??= (async () => {
         disposed = true;
         active?.controller.abort();
-        try { await active?.promise; } catch { /* speak reports its own failure. */ }
-        try { if (context && context.state !== "closed") await context.close(); }
-        finally { await session.release(); }
+        try {
+          await active?.promise;
+        } catch {
+          /* speak reports its own failure. */
+        }
+        try {
+          if (context && context.state !== "closed") await context.close();
+        } finally {
+          await session.release();
+        }
       })();
       return disposal;
     },

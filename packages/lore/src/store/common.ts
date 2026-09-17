@@ -83,8 +83,8 @@ export async function migrateAsync(
       await db.all("INSERT INTO _migrations (id) VALUES (?)", [migration.id]);
     }
     const capability = await vectorCapability(db.all.bind(db), options, false);
-    if (capability.enabled) {
-      const migration = vecMigration(capability.dimensions!);
+    if (capability.enabled && capability.dimensions !== undefined) {
+      const migration = vecMigration(capability.dimensions);
       if (!(await db.all("SELECT id FROM _migrations WHERE id = ?", [migration.id])).length) {
         await db.exec(migration.sql);
         await db.all("INSERT INTO _migrations (id) VALUES (?)", [migration.id]);
@@ -345,9 +345,9 @@ export class SqliteLoreStore implements ManagedLoreStore {
         remaining -= cost;
         return true;
       };
-      const nodes = rows!.map(decodeNode).filter((node) => fits(node.summary));
+      const nodes = (rows ?? []).map(decodeNode).filter((node) => fits(node.summary));
       const ids = new Set(nodes.map((node) => node.id));
-      const edges = edgeRows!
+      const edges = (edgeRows ?? [])
         .map(decodeEdge)
         .filter(
           (edge) =>
@@ -363,7 +363,7 @@ export class SqliteLoreStore implements ManagedLoreStore {
         { sql: `SELECT ${nodeColumns} FROM lore_nodes ORDER BY id` },
         { sql: `SELECT ${edgeColumns} FROM lore_edges ORDER BY ${edgeOrder}` },
       ]);
-      return { nodes: nodes!.map(decodeNode), edges: edges!.map(decodeEdge) };
+      return { nodes: (nodes ?? []).map(decodeNode), edges: (edges ?? []).map(decodeEdge) };
     });
   }
 
@@ -385,7 +385,8 @@ export class SqliteLoreStore implements ManagedLoreStore {
         (SELECT COUNT(*) FROM lore_nodes) AS nodes, (SELECT COUNT(*) FROM lore_edges) AS edges`,
         },
       ]);
-      const row = rows![0]!;
+      const row = rows?.[0];
+      if (!row) throw new Error("stats query returned no row");
       return { turns: Number(row.turns), nodes: Number(row.nodes), edges: Number(row.edges) };
     });
   }

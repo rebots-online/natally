@@ -292,9 +292,9 @@ describe("data: X.1 repositories and export/import", () => {
     const before = await exportJson(db);
     await expect(removePerson("p1", db)).rejects.toThrow("test retention");
     expect(await exportJson(db)).toBe(before);
-    expect(sqlite.prepare("SELECT historical_person_id FROM sessions WHERE id='s1'").all()).toEqual([
-      { historical_person_id: "p1" },
-    ]);
+    expect(sqlite.prepare("SELECT historical_person_id FROM sessions WHERE id='s1'").all()).toEqual(
+      [{ historical_person_id: "p1" }],
+    );
     expect(sqlite.prepare("SELECT person_id FROM sessions WHERE id='s1'").all()).toEqual([
       { person_id: "p1" },
     ]);

@@ -38,7 +38,7 @@ export class FixtureBrowser {
         15_000,
       );
       let output = "";
-      this.process!.stderr!.on("data", (chunk: Buffer) => {
+      this.process?.stderr?.on("data", (chunk: Buffer) => {
         output += chunk.toString();
         const match = /DevTools listening on (ws:\/\/[^\s]+)/.exec(output);
         if (match) {
@@ -46,19 +46,19 @@ export class FixtureBrowser {
           resolve(match[1]!);
         }
       });
-      this.process!.once("error", (error) => {
+      this.process?.once("error", (error) => {
         clearTimeout(timeout);
         reject(error);
       });
-      this.process!.once("exit", (code) => {
+      this.process?.once("exit", (code) => {
         clearTimeout(timeout);
         reject(new Error(`Chrome exited (${code}): ${output.slice(-2000)}`));
       });
     });
     this.socket = new WebSocket(endpoint);
     await new Promise<void>((resolve, reject) => {
-      this.socket!.addEventListener("open", () => resolve(), { once: true });
-      this.socket!.addEventListener("error", () => reject(new Error("CDP connection failed")), {
+      this.socket?.addEventListener("open", () => resolve(), { once: true });
+      this.socket?.addEventListener("error", () => reject(new Error("CDP connection failed")), {
         once: true,
       });
     });
@@ -104,7 +104,7 @@ export class FixtureBrowser {
     const id = ++this.sequence;
     return new Promise((resolve, reject) => {
       this.pending.set(id, { resolve: (value) => resolve(value as T), reject });
-      this.socket!.send(JSON.stringify({ id, method, params, sessionId: this.sessionId }));
+      this.socket?.send(JSON.stringify({ id, method, params, sessionId: this.sessionId }));
     });
   }
 

@@ -234,7 +234,11 @@ describe("glyph source and version stamp", () => {
       new FileURL("../../assets/glyphs/natally-glyphs.svg", import.meta.url),
       "utf8",
     );
-    expect(copy).toBe(original);
+    // The asset copy may differ in header chrome (a11y <title>, comment indent — v1.12
+    // review); the symbol payload must stay byte-identical to the frozen complement.
+    const payload = (svg: string) => svg.slice(svg.indexOf("<symbol"));
+    expect(payload(copy)).toBe(payload(original));
+    expect(copy).toMatch(/<title>natally glyph definitions<\/title>/);
     const ids = [...copy.matchAll(/<symbol id="g-([^"]+)"/g)].map((match) => match[1]);
     expect([...GLYPH_NAMES]).toEqual(ids);
     const { container } = render(GLYPH_NAMES.map((name) => <Glyph key={name} name={name} />));

@@ -1,7 +1,7 @@
+import { spawnSync } from "node:child_process";
 import { copyFileSync, mkdirSync, mkdtempSync, symlinkSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { spawnSync } from "node:child_process";
 import { describe, expect, it } from "vitest";
 
 const root = fileURLToPath(new URL("../../../../", import.meta.url));
@@ -21,7 +21,12 @@ function fixture() {
     mkdirSync(dirname(target), { recursive: true });
     writeFileSync(target, contents);
   };
-  return { directory, script, write, run: () => spawnSync("bash", [script], { cwd: root, encoding: "utf8" }) };
+  return {
+    directory,
+    script,
+    write,
+    run: () => spawnSync("bash", [script], { cwd: root, encoding: "utf8" }),
+  };
 }
 
 describe("browser speech ban guard", () => {
@@ -35,7 +40,12 @@ describe("browser speech ban guard", () => {
     expect(result.stdout.trim()).toBe(`${forbidden}: 0 hits`);
   });
 
-  it.each(["apps/local/src/root.ts", "apps/web/src/deep/voice.tsx", "apps/native/src/audio.rs", "apps/.hidden/src/.nested/voice.ts"])("fails on a reference in %s", (path) => {
+  it.each([
+    "apps/local/src/root.ts",
+    "apps/web/src/deep/voice.tsx",
+    "apps/native/src/audio.rs",
+    "apps/.hidden/src/.nested/voice.ts",
+  ])("fails on a reference in %s", (path) => {
     const test = fixture();
     test.write(path, `globalThis.${forbidden};`);
     const result = test.run();

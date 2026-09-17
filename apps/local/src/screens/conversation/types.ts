@@ -5,8 +5,15 @@ import type { Turn } from "../../../../../packages/lore/src/types.js";
 import type { CompanionBus } from "../../companion/bus.js";
 
 export type ConversationVariant =
-  | "Idle" | "Thinking" | "Speaking" | "Asleep" | "Error"
-  | "TrialIdle" | "TrialExhausted" | "RateLimited" | "Desktop";
+  | "Idle"
+  | "Thinking"
+  | "Speaking"
+  | "Asleep"
+  | "Error"
+  | "TrialIdle"
+  | "TrialExhausted"
+  | "RateLimited"
+  | "Desktop";
 
 /** These labels describe provenance, never inferred from a tool's arbitrary text. */
 export type ConversationContent =

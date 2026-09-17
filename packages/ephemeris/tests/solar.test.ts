@@ -295,7 +295,9 @@ describe("solar: absence rules hold for J1/J3/J4 branches", () => {
 
     it.each([0, 1])("rejects stale houses for unknown person %i", (index) => {
       const charts = pair(false, false);
-      charts[index]!.facts.cusps = aCusps;
+      const chart = charts[index];
+      if (!chart) throw new Error("fixture index out of range");
+      chart.facts.cusps = aCusps;
       expect(() => directionalHouseOverlays(...charts)).toThrow("cusps");
     });
 
@@ -328,11 +330,13 @@ describe("solar: absence rules hold for J1/J3/J4 branches", () => {
     it("does not mutate inputs and returns independent results on repeated calls", () => {
       const charts = pair(true, true);
       for (const chart of charts) {
+        const frozenCusps = chart.facts.cusps;
+        if (!frozenCusps) throw new Error("time-known fixture must carry cusps");
         chart.facts = {
           positions: Object.freeze(chart.facts.positions.map((item) => Object.freeze({ ...item }))),
-          cusps: { ...chart.facts.cusps!, cusps: [...chart.facts.cusps!.cusps] },
+          cusps: { ...frozenCusps, cusps: [...frozenCusps.cusps] },
         };
-        Object.freeze(chart.facts.cusps!.cusps);
+        Object.freeze(chart.facts.cusps?.cusps);
         Object.freeze(chart.facts.cusps);
         Object.freeze(chart.facts);
         Object.freeze(chart);
@@ -340,7 +344,9 @@ describe("solar: absence rules hold for J1/J3/J4 branches", () => {
       const first = directionalHouseOverlays(...charts);
       const second = directionalHouseOverlays(...charts);
       expect(first).toEqual(second);
-      first.aInB[0]!.house = 7;
+      const firstRow = first.aInB[0];
+      if (!firstRow) throw new Error("overlay fixture must return a first row");
+      firstRow.house = 7;
       expect(second.aInB[0]).toEqual({ body: "sun", house: 12 });
       const solarPositions = Object.freeze(aPositions.map((item) => Object.freeze({ ...item })));
       expect(solarHousesBySign(solarPositions)).toEqual(solarHousesBySign(aPositions));

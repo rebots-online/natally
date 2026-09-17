@@ -234,7 +234,7 @@ export class MirrorDownloader {
           await response.body?.cancel().catch(() => undefined);
           throw error;
         }
-        const reader = response.body!.getReader();
+        const reader = response.body?.getReader();
         try {
           while (true) {
             options.signal?.throwIfAborted();
