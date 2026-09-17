@@ -1,5 +1,7 @@
 import { Component, lazy, type ReactNode, Suspense } from "react";
 import { Mascot } from "./ui/mascot";
+// I.1: the generated registry registers every implemented screen at entry evaluation.
+import "./ui/routes.generated.js";
 
 // U.1 owns the real router shell. Lazy loading keeps runtime engines out of the entry.
 const NatallyShell = lazy(() => import("@natally/local-shell"));

@@ -1,0 +1,14 @@
+{
+  "name": "natally",
+  "short_name": "natally",
+  "id": "mba.robin.natally",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#120C1C",
+  "theme_color": "#120C1C",
+  "icons": [
+    { "src": "icons/192x192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/512x512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" }
+  ]
+}
