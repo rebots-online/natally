@@ -49,8 +49,8 @@ no mocks in shipped code.
 - [X] **L.1 LoreStore storage adapters** — store suite 16/16 after F-12 heal (observed); native command surface awaits I.2.
 - ✅ **L.2 Embedder** — embed suite green (wllama MiniLM observed-fixture + hash test embedder; src purity).
 - ✅ **L.3 Extraction & merge** — 30 tests.
-- [ ] **L.4 Hybrid retrieval** — vector kNN ∪ 2-hop, budget, person-scoping. **Owns:** `packages/lore/src/retrieve.ts` + tests.
-- [ ] **L.5 Write-every-turn pipeline** — consume(turn) → embed→extract→merge→batched write; stats; deleteAll. **Owns:** `packages/lore/src/pipeline.ts` + tests. **Note:** the conversation composition currently writes turns directly; L.5 wraps that path.
+- ✅ **L.4 Hybrid retrieval** — [observed 2026-09-17: lore project 262/262 incl. 8 new retrieve tests — kNN∪2-hop ordering, person/general scoping, char/4 budget, empty paths]
+- ✅ **L.5 Write-every-turn pipeline** — [observed 2026-09-17: 50-turn flush-count test, extraction edges carry sourceTurnId, stats/deleteAll delegation]. Composition still writes turns directly; wiring L.5 into the submit path is a W3-followup (tracked under I.3 composition).
 
 ## Phase B — Billing & licensing
 
@@ -106,7 +106,7 @@ no mocks in shipped code.
 - [X] **I.1 Route registry wiring** — gen-routes.mjs + routes.generated.ts live [observed]; regenerate when screens land (W3 adds ROUTE_MAP entries).
 - [ ] **I.2 Tauri command registry wiring** — registry_generated.rs + plugins mount (un-mounts P.3/L.1/B.3/C.1-native/M.1-native).
 - [ ] **I.3 Capability layer resolution** — capabilities.ts single selection point.
-- [ ] **I.4 Full workspace gate** — check.sh green observed at 2 workers (1217/1217; full-parallel flake is env IPC pressure — normalize with `--maxWorkers` in check.sh); + budget assert ≤300 KB gz.
+- [X] **I.4 Full workspace gate** — check.sh normalized (`--maxWorkers=2`; sw dry-run test timeout 30s + bounded IPC retry) [observed gate=0: 35/35, 1229/1229]; budget assert (`scripts/assert-budget.mjs`) still owed.
 
 ## Phase R — Build & release
 

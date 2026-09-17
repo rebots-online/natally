@@ -291,7 +291,9 @@ describe("R.4 web plan and source manifest", () => {
     });
   });
 
-  it("prints the artifact and staging plan without changing release inputs or outputs", () => {
+  it("prints the artifact and staging plan without changing release inputs or outputs", {
+    timeout: 30_000,
+  }, () => {
     function snapshot() {
       const entries: Record<string, string> = {};
       const visit = (path: string) => {
@@ -325,10 +327,21 @@ describe("R.4 web plan and source manifest", () => {
       return entries;
     }
     const before = snapshot();
-    const output = execFileSync("bash", [resolve(root, "scripts/build-web.sh"), "--dry-run"], {
-      cwd: root,
-      encoding: "utf8",
-    });
+    // The dry-run script is deterministic; under full-suite load the child's IPC
+    // channel can die from environment pressure (ERR_IPC_CHANNEL_CLOSED), which is
+    // not the property under test — one bounded retry covers exactly that failure.
+    let output = "";
+    for (let attempt = 0; attempt < 2; attempt += 1) {
+      try {
+        output = execFileSync("bash", [resolve(root, "scripts/build-web.sh"), "--dry-run"], {
+          cwd: root,
+          encoding: "utf8",
+        });
+        break;
+      } catch (error) {
+        if (attempt === 1 || !String(error).includes("ERR_IPC_CHANNEL_CLOSED")) throw error;
+      }
+    }
     expect(output).toMatch(/web: artifact name [\w.-]+-v\d+\.\d+\.\d+-web-[\w.-]+\.tar\.gz/);
     expect(output).toContain("apps/local/dist (emptyOutDir: false)");
     expect(output).toContain("stage dist/web");
