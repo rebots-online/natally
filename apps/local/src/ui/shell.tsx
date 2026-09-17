@@ -43,10 +43,13 @@ function screenFor(load: RouteLoad) {
   return screen;
 }
 
-class ScreenBoundary extends Component<{ children: ReactNode }, { failed: boolean }> {
-  override state = { failed: false };
-  static getDerivedStateFromError() {
-    return { failed: true };
+class ScreenBoundary extends Component<
+  { children: ReactNode },
+  { failed: boolean; reason: string | null }
+> {
+  override state = { failed: false, reason: null };
+  static getDerivedStateFromError(error: unknown) {
+    return { failed: true, reason: error instanceof Error ? error.message : String(error) };
   }
   override render() {
     return this.state.failed ? (
@@ -55,6 +58,8 @@ class ScreenBoundary extends Component<{ children: ReactNode }, { failed: boolea
         <p className="ui-absence ui-absence--error" role="alert">
           This screen is unavailable.
         </p>
+        {/* Honest failure: state the observed reason, never a silent blank. */}
+        {this.state.reason ? <p className="ui-absence">{this.state.reason}</p> : null}
       </div>
     ) : (
       this.props.children

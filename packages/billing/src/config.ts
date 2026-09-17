@@ -10,6 +10,21 @@ const httpsUrl = text.pipe(z.url({ protocol: /^https$/ })).refine((value) => {
     return false;
   }
 }, "URL must not contain credentials");
+/**
+ * Mirror base: https in production; http is permitted only on loopback hosts, matching
+ * MirrorNetwork's own rule (manifest.ts checkedURL) so local dev mirrors and the M.1
+ * fixture servers validate without weakening the production posture.
+ */
+const mirrorBaseUrl = text.pipe(z.url({ protocol: /^https?$/ })).refine((value) => {
+  try {
+    const url = new URL(value);
+    if (url.username !== "" || url.password !== "") return false;
+    if (url.protocol === "https:") return true;
+    return ["localhost", "127.0.0.1", "[::1]"].includes(url.hostname);
+  } catch {
+    return false;
+  }
+}, "Mirror base must be https, or http on a loopback host, without credentials");
 const positiveInteger = text
   .regex(/^[1-9]\d*$/, "Expected a positive decimal integer")
   .transform(Number)
@@ -42,7 +57,7 @@ const envSchema = z
       /^[a-z0-9]+(?:[.-][a-z0-9]+)*$/,
       "Expected a lowercase artifact basename without paths",
     ),
-    VITE_MODEL_MIRROR_BASE: httpsUrl,
+    VITE_MODEL_MIRROR_BASE: mirrorBaseUrl,
     VITE_APP_URL: httpsUrl,
     VITE_LANDING_URL: httpsUrl,
     // Vite's Node configuration can supply this; public import.meta.env omits it.

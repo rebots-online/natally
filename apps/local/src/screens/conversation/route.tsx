@@ -1,4 +1,4 @@
-import { type ComponentType, use } from "react";
+import { type ComponentType, use, useSyncExternalStore } from "react";
 import { createConversationComposition } from "../../composition.js";
 import { loadRuntimeConfig } from "../../config.js";
 import type { RouteScreenProps } from "../../ui/router.js";
@@ -18,12 +18,20 @@ function conversationComposition() {
 }
 
 const ConversationRouteScreen: ComponentType<RouteScreenProps> = () => {
-  const { sessionId, services } = use(conversationComposition());
+  const { sessionId, services, models, downloadModel } = use(conversationComposition());
+  const model = useSyncExternalStore(
+    (listener) => models.subscribe(listener),
+    () => models.get(),
+  );
   return (
     <ConversationScreen
       sessionId={sessionId}
       services={services}
       trialPolicy={loadRuntimeConfig().trial}
+      model={model.row}
+      onDownloadModel={(modelId) => {
+        void downloadModel(modelId);
+      }}
       onUnlock={() => {
         window.location.hash = "#/paywall";
       }}
