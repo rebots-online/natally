@@ -70,13 +70,9 @@ run_step() {
   fi
 }
 
-# Android is best-effort in this matrix: environmental failure (no SDK/NDK, toolchain)
-# is an honest SKIP, not a matrix failure. Never fabricated as success.
-android_disposition="built"
-if ! run_step android scripts/build-android.sh; then
-  echo "android: skipped — see failure above (environmental: SDK/NDK or toolchain unavailable); matrix continues"
-  android_disposition="skipped"
-fi
+# A complete matrix requires Android. Missing SDK/NDK/toolchain state is a build
+# failure to repair, never a partial-success disposition.
+run_step android scripts/build-android.sh
 
 run_step web scripts/build-web.sh
 run_step linux scripts/build-linux.sh
@@ -102,6 +98,8 @@ fi
 web_staged=$(find dist -maxdepth 1 -name "${slug}-v${stamp}-web-*.tar.gz" -newermt "@${run_start}" | head -n 1)
 [ -n "$web_staged" ] || { echo "release: FAIL — no ${slug}-v${stamp}-web-<runId> archive staged this run" >&2; exit 1; }
 for expected in \
+  "${slug}-v${stamp}-android.apk" \
+  "${slug}-v${stamp}-android.aab" \
   "${slug}-v${stamp}-linux.AppImage" \
   "${slug}-v${stamp}-linux.deb" \
   "${slug}-v${stamp}-win.exe" \
@@ -120,4 +118,4 @@ else
 fi
 
 bash scripts/update-version.sh --check
-echo "release: matrix complete (stamp v${stamp}; android: ${android_disposition})"
+echo "release: matrix complete (stamp v${stamp}; android apk+aab built)"

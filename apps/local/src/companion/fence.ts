@@ -253,7 +253,7 @@ export function buildFencePrompt(input: FenceInput): readonly FenceMessage[] {
   return freeze([
     {
       role: "system",
-      content: `${persona.system}\nTier 1 — immutable system context. Every astrological number must exist here. Derived placements and UTC dates are computed solely from these ChartFacts.\n${JSON.stringify({ chartFacts: tier1.charts, glossary: tier1.glossary, computed: evidence(tier1) })}`,
+      content: `${persona.system}\nTier 1 — immutable system context. Every astrological number must exist here. Derived placements and UTC dates are computed solely from the locally validated ChartFacts.\n${JSON.stringify({ glossary: tier1.glossary, computed: evidence(tier1) })}`,
     },
     {
       role: "user",

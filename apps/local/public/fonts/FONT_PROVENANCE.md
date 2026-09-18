@@ -1,7 +1,7 @@
 # Font provenance — S.1
 
-These six static faces are self-hosted at `/fonts/` and declared in
-`apps/local/src/styles/fonts.css`. There are no runtime font-service requests.
+The original six static faces and the onboarding's Playfair Display variable face are
+self-hosted at `/fonts/`. There are no runtime font-service requests.
 
 ## Selection
 
@@ -120,3 +120,15 @@ ordinary CSS rules:
 
 S.1 owns the font files, licenses, this provenance file, and `fonts.css`.
 The parent owns the `global.css` import and integration verification.
+
+## Playfair Display — U.4-TW, 2026-09-18
+
+Self-hosted variable normal face, weights 400–900, Latin subset from Google Fonts v40.
+The versioned source is
+`https://fonts.gstatic.com/s/playfairdisplay/v40/nuFiD-vYSZviVYUb_rj3ij__anPXDTzYgA.woff2`.
+It is stored verbatim as `playfair-display-latin.woff2` (38,404 bytes); other scripts use
+the Georgia/serif fallback. The license is retained in `OFL-PlayfairDisplay.txt` from
+Google Fonts commit `1e1aa08e994ff7db50116e86ccc7b52a4e4ae5b8`. No runtime CDN requests.
+
+WOFF2 SHA-256: `e0c764a8e9e1cce92163c55bac4b2ad6cd4cf8c696ce2289ab5c41565e65b7e2`.
+License SHA-256: `566be814f8e96e93dfa16101331557eb6b5467e9e03f627c0910fe93ca12300e`.

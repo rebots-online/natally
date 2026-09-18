@@ -384,7 +384,7 @@ export function createConversationComposition(): Promise<Composition> {
       const model = await inferenceStorage.resolveChatModel("web", "Q4_K_M");
       if (!model) throw new Error("Downloaded model is not present in M.1 storage");
       engine = await createWebInferenceEngine(
-        { lane: "web", model, params: turboquantParams(4096, 1), onReady: () => undefined },
+        { lane: "web", model, params: turboquantParams(), onReady: () => undefined },
         { wasm: WLLAMA_WASM_PATH },
       );
       bus.signal({ type: "engine-load", fraction: 1 });
@@ -493,6 +493,7 @@ export function createConversationComposition(): Promise<Composition> {
               "arrives. Charts still work while I sleep."
             );
           }
+          const activeEngine = engine;
           const tier1 = createTier1(chart ? [chart] : [], []);
           const ask = async (regeneration: string | null): Promise<string> => {
             const messages = buildFencePrompt({
@@ -513,7 +514,7 @@ export function createConversationComposition(): Promise<Composition> {
                 ]
               : messages;
             let output = "";
-            await engine!.complete(
+            await activeEngine.complete(
               { messages: finalMessages, maxTokens: 512, signal: context.signal },
               (token) => {
                 output += token;

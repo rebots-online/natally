@@ -232,7 +232,8 @@ describe("three tiers and persona", () => {
     const messages = buildFencePrompt(input());
     expect(messages).toHaveLength(3);
     expect(messages.map((message) => message.role)).toEqual(["system", "user", "user"]);
-    expect(messages[0]?.content).toContain('"chartFacts"');
+    expect(messages[0]?.content).not.toContain('"chartFacts"');
+    expect(messages[0]?.content).toContain('"computed"');
     expect(messages[0]?.content).toContain('"degree":12.34');
     expect(messages[0]?.content).toContain('"dates":["2000-01-01"]');
     expect(messages[0]?.content).toContain("Authored-static education.");

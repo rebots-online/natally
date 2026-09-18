@@ -27,13 +27,38 @@ apk="dist/mba.robin.natally-v${version}-android.apk"
 aab="dist/mba.robin.natally-v${version}-android.aab"
 
 if [ "$dry" -eq 1 ]; then
-  echo "android: plan (re)stamp; tauri android build (apk + aab); versionCode ${code} from version.json (MAJOR*100000+MINOR)"
+  echo "android: plan (re)stamp; tauri android build; production-sign + verify apk and aab; versionCode ${code} from version.json (MAJOR*100000+MINOR)"
   echo "android: artifacts -> ${apk} and ${aab}"
   exit 0
 fi
 
+for key in \
+  NATALLY_ANDROID_KEYSTORE_PATH \
+  NATALLY_ANDROID_KEYSTORE_PASSWORD \
+  NATALLY_ANDROID_KEY_ALIAS \
+  NATALLY_ANDROID_KEY_PASSWORD; do
+  [ -n "${!key:-}" ] || { echo "android: required signing variable ${key} is missing" >&2; exit 2; }
+done
+[ -f "$NATALLY_ANDROID_KEYSTORE_PATH" ] || {
+  echo "android: signing keystore does not exist: ${NATALLY_ANDROID_KEYSTORE_PATH}" >&2
+  exit 2
+}
+build_tools="$(find "$ANDROID_HOME/build-tools" -mindepth 1 -maxdepth 1 -type d | sort -V | tail -n 1)"
+apksigner="$build_tools/apksigner"
+[ -x "$apksigner" ] || { echo "android: apksigner is unavailable under ${build_tools}" >&2; exit 2; }
+
+verify_android_artifacts() {
+  "$apksigner" verify --verbose "$apk" >/dev/null
+  unzip -Z1 "$aab" | grep -Eq '^META-INF/[^/]+\.(RSA|DSA|EC)$'
+  jarsigner -verify "$aab" | grep -q 'jar verified'
+}
+
 if [ -f "$apk" ] && [ -f "$aab" ] && [ "$force" -eq 0 ]; then
-  echo "android: v${version} artifacts already present; nothing to do (use --force to rebuild)"
+  verify_android_artifacts || {
+    echo "android: existing v${version} artifacts are not correctly signed" >&2
+    exit 1
+  }
+  echo "android: v${version} signed artifacts already present and verified; nothing to do (use --force to rebuild)"
   exit 0
 fi
 
@@ -68,7 +93,21 @@ bundle_apk="$(find apps/local/src-tauri/gen/android -name '*.apk' -path '*univer
 bundle_aab="$(find apps/local/src-tauri/gen/android -name '*.aab' -print -quit)"
 [ -n "$bundle_apk" ] && [ -f "$bundle_apk" ] || { echo "android: no apk produced" >&2; exit 1; }
 [ -n "$bundle_aab" ] && [ -f "$bundle_aab" ] || { echo "android: no aab produced" >&2; exit 1; }
-cp "$bundle_apk" "$apk"
-cp "$bundle_aab" "$aab"
-echo "android: staged ${apk} (versionCode ${code})"
-echo "android: staged ${aab}"
+"$apksigner" sign \
+  --ks "$NATALLY_ANDROID_KEYSTORE_PATH" \
+  --ks-key-alias "$NATALLY_ANDROID_KEY_ALIAS" \
+  --ks-pass env:NATALLY_ANDROID_KEYSTORE_PASSWORD \
+  --key-pass env:NATALLY_ANDROID_KEY_PASSWORD \
+  --v4-signing-enabled false \
+  --out "$apk" \
+  "$bundle_apk"
+jarsigner \
+  -keystore "$NATALLY_ANDROID_KEYSTORE_PATH" \
+  -storepass:env NATALLY_ANDROID_KEYSTORE_PASSWORD \
+  -keypass:env NATALLY_ANDROID_KEY_PASSWORD \
+  -signedjar "$aab" \
+  "$bundle_aab" \
+  "$NATALLY_ANDROID_KEY_ALIAS" >/dev/null
+verify_android_artifacts
+echo "android: staged and verified production-signed ${apk} (versionCode ${code})"
+echo "android: staged and verified production-signed ${aab}"

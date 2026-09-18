@@ -31,6 +31,7 @@ function checkedURL(value: string, base?: URL): URL {
 export class MirrorNetwork {
   readonly base: string;
   private readonly origins: ReadonlySet<string>;
+  private readonly allowsHuggingFaceRedirects: boolean;
 
   constructor(
     config: MirrorConfig,
@@ -40,6 +41,7 @@ export class MirrorNetwork {
     if (base.search) throw new Error("Model mirror base must not contain a query");
     base.pathname = `${base.pathname.replace(/\/$/, "")}/`;
     this.base = base.href;
+    this.allowsHuggingFaceRedirects = base.hostname === "huggingface.co";
     this.origins = new Set([
       base.origin,
       ...(config.licenseBridgeUrl ? [checkedURL(config.licenseBridgeUrl).origin] : []),
@@ -52,17 +54,31 @@ export class MirrorNetwork {
     return url.href;
   }
 
+  private responseURLAllowed(value: string): boolean {
+    const url = checkedURL(value);
+    if (this.origins.has(url.origin)) return true;
+    return (
+      this.allowsHuggingFaceRedirects &&
+      url.protocol === "https:" &&
+      (url.hostname === "hf.co" || url.hostname.endsWith(".hf.co"))
+    );
+  }
+
   async fetch(file: string, init: RequestInit = {}): Promise<Response> {
     const response = await this.fetcher.call(globalThis, this.resolve(file), {
       ...init,
       credentials: "omit",
-      redirect: "error",
+      redirect: "follow",
       cache: "no-store",
     });
-    // Also check adapters that return a followed response despite redirect: error.
-    if (response.url) this.resolve(response.url);
-    if (response.redirected || response.type === "opaqueredirect") {
-      throw new Error("Mirror redirects are not permitted");
+    // Hugging Face resolves large public assets through signed *.hf.co CDN URLs.
+    // Every other configured source remains exact-origin, including local mirrors
+    // and the license bridge. Validate the browser's final URL before exposing bytes.
+    if (response.url && !this.responseURLAllowed(response.url)) {
+      throw new Error(`Mirror response host is not allowed: ${new URL(response.url).origin}`);
+    }
+    if (response.type === "opaqueredirect") {
+      throw new Error("Opaque mirror redirects are not permitted");
     }
     return response;
   }

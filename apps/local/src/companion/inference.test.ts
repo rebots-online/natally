@@ -81,6 +81,10 @@ function testWllama(
 }
 
 describe("inference", () => {
+  it("reserves enough default context for the factual fence and a generated reply", () => {
+    expect(turboquantParams()).toMatchObject({ contextSize: 16_384, threads: 4 });
+  });
+
   it("requires the lane selected by I.3", () => {
     const common = { bus: createCompanionBus(), storage: { resolveChatModel: vi.fn() } };
     expect(createInferenceHost({ ...common, lane: "native" }).lane).toBe("native");
@@ -104,7 +108,7 @@ describe("inference", () => {
           cacheTypeK: "q8_0",
           cacheTypeV: "q8_0",
           recursor: "unsupported",
-          contextSize: 4096,
+          contextSize: 16_384,
           threads: 2,
         });
         expect(args.model.quantization).toBe("Q4_K_M");

@@ -1,6 +1,9 @@
 # natally — architecture (Gate 2 document 1 of 3)
 
-Normative for the **local-app product** (Linux, Windows, Android, web PWA — all legs
+Normative for the **local-app product** (Android is the authoritative primary target;
+Linux and Windows are additional installed legs. In this implementation portion,
+`apps/local` in the browser/PWA is only a convenience test harness for shared React UI and
+cannot satisfy Android build or on-device acceptance — all installed legs
 local-inference) and for the monorepo seams the **hosted web-only SaaS** (Alby Market /
 Bitcoin LN / x402, pay-per-reading) will occupy later (D10). Written 2026-09-04 against the
 amended complement (D10–D14). Reconciled 2026-09-09 against the frozen complement, the
@@ -528,7 +531,7 @@ needed; nothing is ever uploaded to HuggingFace on natally's behalf.
 | Asset | Kind | HF repo | File | Quant |
 |---|---|---|---|---|
 | Qwen3.5-2B (LLM default) | llm | `unsloth/Qwen3.5-2B-GGUF` | `Qwen3.5-2B-Q4_K_M.gguf` | Q4_K_M |
-| Kokoro-82M (voice) | voice | `onnx-community/Kokoro-82M-v1.0-ONNX` | `onnx/model_q8.onnx` | q8 |
+| Kokoro-82M (voice) | voice | `onnx-community/Kokoro-82M-v1.0-ONNX` | `onnx/model_quantized.onnx` | q8 |
 | Kokoro tokenizer | voice | `onnx-community/Kokoro-82M-v1.0-ONNX` | `tokenizer.json` | — |
 | Kokoro af_heart voice | voices | `onnx-community/Kokoro-82M-v1.0-ONNX` | `voices/af_heart.bin` | — |
 | all-MiniLM-L6-v2 (embedder) | embedder | `gpustack/all-MiniLM-L6-v2-GGUF` | `all-minilm-l6-v2-q8_0.gguf` | q8_0 |
@@ -543,12 +546,18 @@ the public HF `resolve/main` path (e.g., `https://huggingface.co/unsloth/Qwen3.5
 resolve/main/Qwen3.5-2B-Q4_K_M.gguf`). `MirrorNetwork.resolve()` accepts absolute `file`
 strings when their origin shares the configured base origin (`huggingface.co`), so
 multi-repo downloads need no code change — only manifest rows with absolute URLs.
+The public resolver may follow its signed redirect only to an HTTPS `hf.co` host; the
+final response URL is checked before any response bytes reach the downloader. Local mirror
+and license-bridge redirects remain restricted to their configured exact origins.
 
 `VITE_MODEL_MIRROR_BASE` remains `https://huggingface.co` (the shared origin for the
 allowlist check). Downloads: ranged + resumable, sha256-verified before commit, stored per
 the shared-storage contract (§19). A **free-space precondition** (asset size + 10%) is
 checked before each download starts. Catalogue rows in Settings render from this manifest;
 removal releases claims per §19 (never deletes shared bytes another app needs).
+The companion inference context is 16,384 tokens: enough for the complete timed-chart factual
+fence and the bounded 512-token reply without truncating source facts or validation data. The
+engine requests four CPU threads; wllama falls back to one when a runtime cannot use shared WASM.
 
 ## 14. Build, release, versioning
 
@@ -687,8 +696,10 @@ commit messages `e5e6926…77d0dd8` (2026-09-16/17 implement session).
   (v1.26.27331, versionCode 100026; RUST_MIN_STACK=16MB + capped jobs after rustc
   thin-LTO SIGSEGV under 4-ABI parallel). `build-windows.sh` auto-detects the host —
   native .exe and .msi build when it runs on Windows (D8).
-- **R.5/CC14 owed:** per-platform stamps must be unified under `release.lock` at the
-  release handback; Android defaults to single-ABI (aarch64) until a bigger-RAM host.
+- **R.5/CC14:** per-platform stamps are unified under `release.lock` at the release
+  handback. Android is the primary target and a mandatory matrix gate: both APK and AAB
+  must build before the matrix can complete. Android defaults to single-ABI (aarch64)
+  until a bigger-RAM host.
 
 ### 18.6 Persistence & intake (amends §5, §8)
 - U.4 [observed]: intake (structured date picker, time-or-unknown, gazetteer place with
@@ -696,6 +707,31 @@ commit messages `e5e6926…77d0dd8` (2026-09-16/17 implement session).
   unavailable, honestly) → P.4 ChartFacts from the in-browser Swiss Ephemeris
   (self-hosted `/vendor/sweph` semiset) → plate + computed greeting; reload restores
   chart+plate+turns. Fence Tier-1 carries the real ChartFacts (§7.2).
+
+### 18.6.1 Typewriter intake (operator amendment, 2026-09-18)
+
+The supplied Typewriter Onboarding design and Kintsugi tauri2 OnboardingHost,
+KintsugiCaret and ConstellationField are behavior references for a clean-room
+revision of FirstLight. This supersedes the simultaneous form presentation only.
+The existing IntakeDraft / FirstLightProps / onCreate persistence seam is unchanged.
+
+| Entity | Exact location | Contract | Engaged by / provenance |
+|---|---|---|---|
+| FirstLight | apps/local/src/screens/first-light/FirstLight.tsx:26 | Existing FirstLightProps → JSX; sequential name, date, place, time; native date/time pickers, gazetteer match, unknown time; final onCreate once | U.4-TW / input and honest absence |
+| QUESTION_SEQUENCE | apps/local/src/screens/first-light/FirstLight.tsx | Ordered readonly entries {kind, prompt, type, placeholder}; name/date/place/time with the attachment's four exact prompts | U.4-TW / authored interface copy |
+| first-light stage and caret selectors | apps/local/src/screens/first-light/first-light.css | Scoped #111415 ground, #7C3AED aura, 24 deterministic gold stars, original SVG veins; Playfair Display locally served, Georgia fallback; prompts 36/48px, answers 60/96px; gold 10px×0.9em caret, 1.06s step-end blink | U.4-TW / authored visual design |
+
+55ms character reveal resets per question and hides input/actions until complete.
+Reduced motion reveals immediately and stops decorative animation. A hidden full
+prompt supplies the accessible heading without announcing every character. Text
+input stays native; an inert same-metrics mirror follows selection and horizontal
+scroll, including long answers. Structured date/time keep native picker editing.
+Focus follows reveal and pointer interaction without stealing the unknown-time
+checkbox. Enter ignores IME composition/repeat, validates, then advances once;
+Back revisits retained values. Final submission is guarded against duplicate
+activation until a parent error allows retry. Factual answer acknowledgements may
+appear; no invented horoscope rewards or compatibility prose. Timed question
+reveal is not load progress; the separate U.8 capability-driven splash is unchanged.
 
 ### 18.7 Open items register (supersedes §16)
 1. ~~HF write token reissue~~ **resolved: public HF download, no token needed (§13).**

@@ -81,7 +81,7 @@ disjoint Owns; Verify + Accept observe durable end-state; commit+push per line; 
   evidence-cited in the v2 predecessor and commit lineage.
 
 - [ ] **V.1 Kokoro native (Rust)** · §10, §18.2  **Spec:** Voice synthesis + playback fully native in `src-tauri/src/voice/`: ONNX
-  runtime in Rust loading §13's baked-manifest voice assets (`onnx/model_q8.onnx`,
+  runtime in Rust loading §13's baked-manifest voice assets (`onnx/model_quantized.onnx`,
   `tokenizer.json`, `voices/af_heart.bin` — obtained through the mirror storage seam, never
   WebView audio, D7). Input: sentence chunks from the companion turn (§4 pipeline). Output:
   PCM playback through Rust audio **plus** the three-valued envelope event stream —
@@ -242,16 +242,19 @@ disjoint Owns; Verify + Accept observe durable end-state; commit+push per line; 
   AppImage+deb, win exe+NSIS, web archives, ALL stamped v1.29.27910, zero off-stamp
   outputs; android first attempt failed environmentally (rust-lld bus error) and was
   retried honestly, never fabricated; post-build bump ran (1.30.27931, --check
-  consistent); update-version.sh --check quoted]  **Spec:** `scripts/build-all.sh` honors `release.lock` single-flight: one stamp for every
+  consistent); update-version.sh --check quoted; 2026-09-18 rerun produced the full
+  v1.31.28919 matrix, including production-signed APK and AAB independently verified,
+  then advanced the canonical source to v1.32.28929]  **Spec:** `scripts/build-all.sh` honors `release.lock` single-flight: one stamp for every
   platform in one invocation; post-build bump via `update-version.sh --post-build`; every
   artifact named `mba.robin.natally-v<MAJOR.MINOR.BUILD>-<qualifier>` in tracked `dist/`;
   never an unstamped or wrongly-stamped artifact left behind. Android stays single-ABI
-  (aarch64) until a bigger-RAM host (§18.5). No destructive clean (`emptyOutDir: false`
+  (aarch64) until a bigger-RAM host (§18.5); Android is mandatory, and any Android failure
+  fails the full matrix. The final audit requires both the stamped APK and AAB. No destructive clean (`emptyOutDir: false`
   law); regenerated artifacts renamed with semantic suffixes (TC5).
   **Verify:** one observed `./scripts/build-all.sh` run under `release.lock` — quote the
   stamp and the resulting artifact list.
-  **Accept:** `release: single release.lock stamp across all platform artifacts in dist/,
-  zero unstamped outputs, post-build bump ran`.
+  **Accept:** `release: single release.lock stamp across Android apk+aab, web, Linux and
+  Windows artifacts in dist/, zero unstamped outputs, post-build bump ran`.
 
 - [ ] **R.7 Dormant CI + guards** · §6, §10, §11, CC3/TC14  **Spec:** Dormant workflows authored (`.github/workflows/` + `.forgejo/workflows/`
   sibling, CC3 — uninvoked until public release, TC14). Guards wired into them:
@@ -677,3 +680,38 @@ All `[ ]`/`[X]` resolved to ✅ with cited observed runs; I.4 normalized green; 
 release.lock-unified stamped set in `dist/`; TEST_RUBRIC + CC15 screencast archived;
 customer language law enforced (OR.2 green); shared-storage cross-app reuse demonstrated
 (WP.5 or SS platform observation).
+
+
+## Operator amendment — typewriter intake, 2026-09-18
+
+- ✅ **U.4-TW — FirstLight typewriter onboarding.** · [orchestrator semantic
+  evaluation 2026-09-18: 11/11 focused intake tests passed; local-app typecheck
+  passed; desktop, mobile-width, and reduced-motion browser sessions observed the
+  prompt gates, focus progression, structured fields, unknown-time path, error
+  recovery, and single Begin emission]
+  **Authority:** attached Typewriter Onboarding design; ARCHITECTURE §18.6.1.
+  **Owns:** apps/local/src/screens/first-light/FirstLight.tsx,
+  apps/local/src/screens/first-light/first-light.css,
+  apps/local/src/screens/first-light/FirstLight.test.tsx,
+  apps/local/public/fonts/playfair-display-latin.woff2,
+  apps/local/public/fonts/OFL-PlayfairDisplay.txt,
+  apps/local/public/fonts/FONT_PROVENANCE.md.
+  **Do:** Preserve IntakeDraft and FirstLightProps. Export QUESTION_SEQUENCE ordered
+  name/date/place/time, exact prompts “What may I call you?”, “When were you born?”,
+  “Where were you born?”, “What time were you born?”. Use 55ms reveal, hide controls
+  until done, focus current field. Keep field IDs first-light-name/date/place/time;
+  Next/Back/Begin controls; native structured date/time; gazetteer match required;
+  unknown checkbox disables time. Final Begin emits existing draft once. Ignore
+  repeated Enter/composition. Mirror text caret follows selection/scroll; native
+  picker chrome remains usable. Implement scoped attachment colors/timings, local
+  Playfair, dark aura/stars/veins, responsive display sizing, static reduced motion.
+  Existing FirstLight.tsx owns flow; new CSS is scoped because global.css owns app
+  defaults. No invented rewards. Tests own timing, gated controls, focus, navigation,
+  known/unknown drafts, invalid place, IME, repeats, busy/error/retry and cleanup.
+  **Verify:** NATALLY_DEV_PORT=43827 VITE_APP_NAME=natally pnpm exec vitest run
+  apps/local/src/screens/first-light/FirstLight.test.tsx; pnpm --filter @natally/local
+  typecheck; pnpm exec biome check apps/local/src/screens/first-light.
+  **Accept:** intake tests pass, typecheck and scoped lint exit zero.
+  **Operator verification protocol:** browser at desktop/mobile widths; observe
+  timed prompts, focus, long-answer caret, all four steps and reduced motion as a
+  convenience UI check; Android build and on-device behavior remain authoritative.

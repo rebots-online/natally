@@ -72,6 +72,11 @@ beforeAll(async () => {
         res.end();
         return;
       }
+      if (path.endsWith("/redirect-safe.bin")) {
+        res.writeHead(302, { Location: `${base}/fixture/asset.bin` });
+        res.end();
+        return;
+      }
       if (path.endsWith("/missing.bin")) {
         res.writeHead(404);
         res.end();
@@ -207,6 +212,17 @@ describe("manifest contract", () => {
       licenseBridgeUrl: undefined,
     });
     await expect(network.fetch("redirect.bin")).rejects.toThrow();
+  });
+
+  it("follows a redirect that finishes on an allowed origin", async () => {
+    const network = new MirrorNetwork({
+      modelMirrorBase: `${base}/fixture/`,
+      licenseBridgeUrl: undefined,
+    });
+    const response = await network.fetch("redirect-safe.bin");
+    expect(response.ok).toBe(true);
+    expect(response.redirected).toBe(true);
+    expect(response.url).toBe(`${base}/fixture/asset.bin`);
   });
 
   it("rejects invalid JSON from an actual HTTP response", async () => {

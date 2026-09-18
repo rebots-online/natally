@@ -1,6 +1,7 @@
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
+import offerCopyJson from "../src/offer-copy.json";
 import {
   APPROVED_MICRO_COPY,
   COPY_MONTHLY_SUBTITLE_TEMPLATE,
@@ -9,14 +10,13 @@ import {
   COPY_PAYG_TITLE,
   COPY_UNLIMITED_SUBTITLE,
   COPY_UNLIMITED_TITLE,
+  DEFAULT_MONTHLY_AMOUNT,
   MICRO_COPY_ADD_CREDITS,
   MICRO_COPY_OFFLINE,
   MICRO_COPY_RESTORE,
   OFFER_CATALOG,
   renderMonthlySubtitle,
-  DEFAULT_MONTHLY_AMOUNT,
 } from "../src/offers.js";
-import offerCopyJson from "../src/offer-copy.json";
 
 /**
  * OR.2 — Customer language enforcement, architecture §21.2.
@@ -85,7 +85,10 @@ function offersTsCopyStrings(): Array<{ file: string; value: string }> {
   const catalogCopy = OFFER_CATALOG.flatMap((entry) => [
     { file: "packages/billing/src/offers.ts", value: entry.copy.title },
     { file: "packages/billing/src/offers.ts", value: entry.copy.subtitle },
-    { file: "packages/billing/src/offers.ts", value: renderMonthlySubtitle(DEFAULT_MONTHLY_AMOUNT) },
+    {
+      file: "packages/billing/src/offers.ts",
+      value: renderMonthlySubtitle(DEFAULT_MONTHLY_AMOUNT),
+    },
   ]);
   return [...constants, ...catalogCopy];
 }
@@ -132,12 +135,15 @@ describe("language law (architecture §21.2)", () => {
       offers: Array<{ id: string; title: string; subtitle: string; subtitleTemplate?: string }>;
       microCopy: { addCredits: string; offline: string; restore: string };
     };
-    expect(json.offers[0].title).toBe(COPY_UNLIMITED_TITLE);
-    expect(json.offers[0].subtitle).toBe(COPY_UNLIMITED_SUBTITLE);
-    expect(json.offers[1].title).toBe(COPY_PAYG_TITLE);
-    expect(json.offers[1].subtitle).toBe(COPY_PAYG_SUBTITLE);
-    expect(json.offers[2].title).toBe(COPY_MONTHLY_TITLE);
-    expect(json.offers[2].subtitleTemplate).toBe(COPY_MONTHLY_SUBTITLE_TEMPLATE);
+    const [unlimited, payg, monthly] = json.offers;
+    if (!unlimited || !payg || !monthly)
+      throw new Error("Approved offer copy must have three rows");
+    expect(unlimited.title).toBe(COPY_UNLIMITED_TITLE);
+    expect(unlimited.subtitle).toBe(COPY_UNLIMITED_SUBTITLE);
+    expect(payg.title).toBe(COPY_PAYG_TITLE);
+    expect(payg.subtitle).toBe(COPY_PAYG_SUBTITLE);
+    expect(monthly.title).toBe(COPY_MONTHLY_TITLE);
+    expect(monthly.subtitleTemplate).toBe(COPY_MONTHLY_SUBTITLE_TEMPLATE);
     expect(json.microCopy.addCredits).toBe(MICRO_COPY_ADD_CREDITS);
     expect(json.microCopy.offline).toBe(MICRO_COPY_OFFLINE);
     expect(json.microCopy.restore).toBe(MICRO_COPY_RESTORE);
@@ -150,8 +156,16 @@ describe("language law (architecture §21.2)", () => {
       { file: "FIXTURE", value: "Unlimited chats with natally" },
     ]);
     expect(seeded).toEqual([
-      { file: "FIXTURE", term: "inference", value: "Powered by on-device inference with the Kokoro engine" },
-      { file: "FIXTURE", term: "kokoro", value: "Powered by on-device inference with the Kokoro engine" },
+      {
+        file: "FIXTURE",
+        term: "inference",
+        value: "Powered by on-device inference with the Kokoro engine",
+      },
+      {
+        file: "FIXTURE",
+        term: "kokoro",
+        value: "Powered by on-device inference with the Kokoro engine",
+      },
       { file: "FIXTURE", term: "token", value: "Your $ROCHE balance is fine; token count hidden" },
     ]);
   });
@@ -172,9 +186,7 @@ describe("language law (architecture §21.2)", () => {
       "packages/billing/src/offers.ts",
     ]);
     // The real JSON file on disk matches the imported module (guards against drift).
-    const onDisk = JSON.parse(
-      readFileSync(resolve(__dirname, "../src/offer-copy.json"), "utf8"),
-    );
+    const onDisk = JSON.parse(readFileSync(resolve(__dirname, "../src/offer-copy.json"), "utf8"));
     expect(onDisk).toEqual(offerCopyJson);
     expect(ALL_CUSTOMER_COPY.length).toBeGreaterThan(0);
   });

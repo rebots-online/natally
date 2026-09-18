@@ -64,7 +64,14 @@ export interface EngineFactoryInput {
 }
 export type InferenceEngineFactory = (input: EngineFactoryInput) => Promise<InferenceEngine>;
 
-export function turboquantParams(contextSize = 4096, threads = 1): InferenceParams {
+/** Fits the full factual fence for timed charts plus the bounded generated reply. */
+export const DEFAULT_COMPANION_CONTEXT_SIZE = 16_384;
+export const DEFAULT_COMPANION_THREADS = 4;
+
+export function turboquantParams(
+  contextSize = DEFAULT_COMPANION_CONTEXT_SIZE,
+  threads = DEFAULT_COMPANION_THREADS,
+): InferenceParams {
   if (!Number.isInteger(contextSize) || contextSize < 32 || contextSize > 131072)
     throw new RangeError("Inference context size must be an integer in [32, 131072]");
   if (!Number.isInteger(threads) || threads < 1 || threads > 256)

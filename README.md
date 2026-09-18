@@ -5,6 +5,11 @@ animated fortune-teller with the crystal ball who reads your sky to you, out lou
 conversation. Charts are the things she shows you while she talks.
 
 - Identity: `mba.robin.natally` (Tauri identifier, Android applicationId, package name)
+- **Primary product target: Android installed app.** In this implementation portion,
+  `apps/local` running in a browser/PWA is only a convenient test harness for the shared
+  React UI. It is not a co-equal release or acceptance target and never replaces the
+  required Android APK+AAB or on-device verification. `apps/hosted` is a different web/API
+  edition.
 - **One monorepo, two editions built in parallel:** `apps/local` (device inference,
   including the local-inference PWA) and `apps/hosted` (web app with hosted inference
   and voice APIs). Both use the **same exported UI source** and companion experience
@@ -48,7 +53,7 @@ it is a different edition from the hosted web app.
 | **Memory / lore / data** | Local knowledge graph + vector store; export/delete controls | Browser-local lore; retrieval context may go to the API | **Partial:** storage/retrieval components exist; complete controls and hosted wiring remain. |
 | **Offline behavior** | Target: charts, chat and voice after required assets are installed | Hosted inference, STT and TTS require connectivity | **Required:** demonstrate these behaviors in the integrated editions. |
 | **Payment / access** | Configurable trial → paid unlimited; RevenueCat entitlement truth; Stripe, RevenueCat, Polar, LemonSqueezy, PayPal, Square and coupons | Metered pay-per-reading/API access; Lightning / Alby and x402 workstream | **Partial:** local contracts/ledger work exists. Processor integration and hosted payment protocol/settlement remain. |
-| **Build / delivery** | Linux, Windows, Android and local-inference web PWA | Hosted web app + API service | **Parallel workstreams required.** Local scaffold/build scripts exist; `apps/hosted` has no tracked implementation yet. Complete artifacts and deployment remain. |
+| **Build / delivery** | **Android authoritative** (APK+AAB and on-device verification required); Linux/Windows are additional installed targets; `apps/local` in the browser/PWA is a convenience test harness in this portion | Separate `apps/hosted` web app + API service | `build-all.sh` fails if Android does not build; browser observation cannot substitute for Android acceptance; hosted deployment remains separate. |
 
 **Current preview:** `apps/local`, with incomplete screen/service wiring. Existing
 source components and frozen image references do not establish a finished or approved
