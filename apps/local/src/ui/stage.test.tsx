@@ -2,7 +2,7 @@
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
-import { act, cleanup, render, screen } from "@testing-library/react";
+import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   type CompanionBus,
@@ -10,6 +10,7 @@ import {
   createCompanionBus,
   type StageSignal,
 } from "../companion/bus.js";
+import { isDawn, selectIdleBehavior } from "./mascot-behaviors.js";
 import { Stage } from "./stage.js";
 
 let reducedMotion: boolean;
@@ -30,6 +31,8 @@ beforeEach(() => {
     vi.fn((query: string) => ({
       media: query,
       get matches() {
+        if (query === "(pointer: fine)") return true;
+        if (query === "(pointer: coarse)") return false;
         return reducedMotion;
       },
       addEventListener: (_type: string, listener: () => void) => mediaListeners.add(listener),
@@ -121,20 +124,14 @@ describe("Stage U.9", () => {
     expect(screen.getByRole("img").getAttribute("aria-label")).toContain(state);
     expect(screen.getByRole("status").textContent).toContain(state);
     expect(bus.getSnapshot().state).toBe(state);
-    if (["Asleep", "Waking", "Error"].includes(state)) {
-      expect(container.querySelector("img")?.getAttribute("src")).toContain(
-        "natally-still-400.png",
-      );
-    } else if (state === "Thinking") {
-      expect(container.querySelector("video")?.getAttribute("src")).toContain(
-        "natally-source-loop.mp4",
-      );
+    // §18.2 (supersedes the old paused-Asleep reading of STATES.md): every state
+    // animates where motion is allowed — Asleep, Waking and Error included.
+    expect(container.querySelector("video")?.getAttribute("src")).toContain(
+      "natally-source-loop.mp4",
+    );
+    if (state === "Thinking") {
       expect(container.querySelector("video")?.playbackRate).toBe(0.8);
       expect(element(container, ".natally-stage__swirl").style.animation).toContain("6s");
-    } else {
-      expect(container.querySelector("img")?.getAttribute("src")).toContain(
-        "natally-idle-400.webp",
-      );
     }
     if (state !== "Idle" && state !== "Thinking") {
       expect(container.querySelector(`[data-stage-overlay="${state}"]`)).not.toBeNull();
@@ -276,7 +273,9 @@ describe("Stage U.9", () => {
   it("plays footage only while on screen and the document is visible", () => {
     const bus = createCompanionBus();
     const { container } = render(<Stage bus={bus} />);
-    expect(container.querySelector("img")?.getAttribute("src")).toContain("natally-idle-400.webp");
+    expect(container.querySelector("video")?.getAttribute("src")).toContain(
+      "natally-source-loop.mp4",
+    );
     act(() => observeVisibility(false));
     expect(container.querySelector("img")?.getAttribute("src")).toContain("natally-still-400.png");
     send(bus, request);
@@ -307,6 +306,133 @@ describe("Stage U.9", () => {
     send(bus, { type: "chart-computed", chartId: "late" });
     expect(container.querySelector("[data-stage-overlay=Delighted]")).toBeNull();
     expect(element(container, "[data-stage-state]").dataset.stageState).toBe("Error");
+  });
+
+  it("animates Asleep: droopy eyes, twitches and the near-drop-and-hug — all frozen without motion", () => {
+    const bus = createCompanionBus();
+    const { container } = render(<Stage bus={bus} />);
+    send(bus, { type: "model-presence", present: false });
+    const overlay = element(container, "[data-stage-overlay=Asleep]");
+    const groups = overlay.querySelectorAll<SVGGElement>("g[style]");
+    expect(groups.length).toBe(3);
+    for (const group of groups) {
+      expect(group.style.animation).toContain("natally-stage-asleep");
+    }
+    expect(container.querySelector("video")).not.toBeNull();
+    act(() => observeVisibility(false));
+    for (const group of element(
+      container,
+      "[data-stage-overlay=Asleep]",
+    ).querySelectorAll<SVGGElement>("g[style]")) {
+      expect(group.style.animation).toBe("none");
+    }
+  });
+
+  it("cycles authored §18.2 idle vignettes only while Idle and motion is on", () => {
+    vi.useFakeTimers();
+    const bus = createCompanionBus();
+    const { container } = render(<Stage bus={bus} />);
+    send(bus, { type: "engine-load", fraction: 1 });
+    expect(element(container, "[data-idle-behavior]").getAttribute("data-idle-behavior")).toBe(
+      "lounge",
+    );
+    act(() => void vi.advanceTimersByTime(9_000));
+    expect(element(container, "[data-idle-behavior]").getAttribute("data-idle-behavior")).toBe(
+      "wheel-stand",
+    );
+    act(() => void vi.advanceTimersByTime(27_000));
+    expect(element(container, "[data-idle-behavior]").getAttribute("data-idle-behavior")).toBe(
+      "attention",
+    );
+    // Thinking suspends the vignette; the rotation is presentation pacing only.
+    send(bus, request);
+    expect(container.querySelector("[data-idle-behavior]")).toBeNull();
+    act(() => void vi.advanceTimersByTime(60_000));
+    expect(container.querySelector("[data-idle-behavior]")).toBeNull();
+    send(bus, {
+      type: "turn",
+      turn: { id: "t2", sessionId: "session-u9", role: "her", text: "ok", ts: 2 },
+    });
+    expect(element(container, "[data-idle-behavior]").getAttribute("data-idle-behavior")).toBe(
+      "attention",
+    );
+    // Offscreen: the still renders and no vignette timer advances the pose.
+    act(() => observeVisibility(false));
+    expect(container.querySelector("img")?.getAttribute("src")).toContain("natally-still-400.png");
+  });
+
+  it("reduces idle vignettes to authored stills under reduced motion", () => {
+    reducedMotion = true;
+    const bus = createCompanionBus();
+    const { container } = render(<Stage bus={bus} />);
+    send(bus, { type: "engine-load", fraction: 1 });
+    const vignette = element(container, "[data-idle-behavior]");
+    expect(vignette.getAttribute("data-idle-behavior")).toBe("lounge");
+    for (const node of vignette.querySelectorAll<HTMLElement>("g[style]")) {
+      expect(node.style.animation).toBe("none");
+    }
+  });
+
+  it("projects cursor-ride and finger-pounce from real pointer hardware", () => {
+    const bus = createCompanionBus();
+    const { container } = render(<Stage bus={bus} />);
+    send(bus, { type: "engine-load", fraction: 1 });
+    // Default stub reports a fine pointer: hover selects cursor-ride.
+    const pose = () => container.querySelector<HTMLElement>(".natally-stage__pose");
+    act(() => {
+      fireEvent.pointerEnter(pose() as HTMLElement);
+    });
+    expect(element(container, "[data-idle-behavior]").getAttribute("data-idle-behavior")).toBe(
+      "cursor-ride",
+    );
+    act(() => {
+      fireEvent.pointerLeave(pose() as HTMLElement);
+    });
+    expect(element(container, "[data-idle-behavior]").getAttribute("data-idle-behavior")).toBe(
+      "lounge",
+    );
+    // A touch tap must not throw; the coarse-pointer pounce mapping is covered
+    // by the selectIdleBehavior unit test (hardware traits are fixed per test).
+    act(() => {
+      fireEvent.pointerDown(pose() as HTMLElement, { pointerType: "touch" });
+    });
+    expect(element(container, "[data-stage-state]").dataset.stageState).toBe("Idle");
+  });
+
+  it("selectIdleBehavior maps dawn hours, pointers and the base cycle (closed set)", () => {
+    const base = { finePointer: true, coarsePointer: false, pointerEngaged: false };
+    expect(isDawn(5)).toBe(true);
+    expect(isDawn(9)).toBe(false);
+    expect(selectIdleBehavior({ ...base, hour: 6, tick: 3 })).toBe("dawn-yawn");
+    expect(selectIdleBehavior({ ...base, hour: 14, tick: 0 })).toBe("lounge");
+    expect(selectIdleBehavior({ ...base, hour: 14, tick: 2 })).toBe("tend");
+    expect(selectIdleBehavior({ ...base, hour: 14, tick: 4 })).toBe("attention");
+    expect(selectIdleBehavior({ ...base, hour: 14, tick: 0, pointerEngaged: true })).toBe(
+      "cursor-ride",
+    );
+    expect(
+      selectIdleBehavior({
+        hour: 14,
+        finePointer: false,
+        coarsePointer: true,
+        pointerEngaged: true,
+        tick: 0,
+      }),
+    ).toBe("finger-pounce");
+  });
+
+  it("accepts a pluggable MascotRenderer (§18.2) without leaking state fabrication", () => {
+    const bus = createCompanionBus();
+    const renderer = vi.fn(({ state }: { state: string }) => (
+      <div data-custom-renderer={state}>custom</div>
+    ));
+    const { container } = render(<Stage bus={bus} renderer={renderer} />);
+    send(bus, { type: "model-presence", present: false });
+    expect(renderer).toHaveBeenCalled();
+    expect(element(container, "[data-custom-renderer]").getAttribute("data-custom-renderer")).toBe(
+      "Asleep",
+    );
+    expect(element(container, "[data-stage-state]").dataset.stageState).toBe("Asleep");
   });
 
   it("uses the shared bus by default and releases listeners when switching instances or unmounting", () => {
