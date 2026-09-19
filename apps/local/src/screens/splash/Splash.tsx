@@ -1,9 +1,5 @@
 import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
-import {
-  type CompanionBus,
-  companionBus,
-  type StageSnapshot,
-} from "../../companion/bus.js";
+import { type CompanionBus, companionBus, type StageSnapshot } from "../../companion/bus.js";
 import "./splash.css";
 
 const motionQuery = "(prefers-reduced-motion: reduce)";

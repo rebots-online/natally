@@ -57,7 +57,8 @@ describe("LorePipeline.consume (write-every-turn)", () => {
       gazetteer,
     });
     await pipeline.consume(turn("t1", "Robin was born in Malmö on 1990-05-02.", 1_000));
-    const graph = flushes[0]!;
+    const graph = flushes[0];
+    if (!graph) throw new Error("expected a flushed LoreGraph");
     expect(graph.nodes.length).toBeGreaterThan(0);
     expect(graph.edges.length).toBeGreaterThan(0);
     for (const edge of graph.edges) expect(edge.sourceTurnId).toBe("t1");

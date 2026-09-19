@@ -1,5 +1,4 @@
 import type { Embedder } from "./embed/embedder.js";
-import type { LoreGraph } from "./extract.js";
 import { cosineSimilarity, extractTurn, type GazetteerEntry } from "./extract.js";
 import type { LoreStore } from "./store.js";
 import type { LoreEdge, LoreNode, Turn } from "./types.js";

@@ -13,20 +13,12 @@ annotates the symbol's engaged-by cell in §5/§5.1 with `<task-id>✓` using th
 nomenclature verbatim, so parallel agents converge. Predecessors preserved: `CHECKLIST.md.bak.20260917_091435.pre-v3`
 and `CHECKLIST.md.bak.20260917_140133.pre-recipe`.
 
-**Census (reconciled 2026-09-18, counted by task block):** 52 ✅ · 2 `[X]` (P.3 with
-I.4 partial noted inline; U.9 awaiting orchestrator semantic observation) · 36 `[ ]`.
-Marker
+**Census (this edition, counted by task block):** 45 ✅ · 1 `[X]` (P.3; I.4 partial
+noted inline) · 43 `[ ]`. Marker
 discipline (SC2): coders (subagents) flip at most to `[X]` with observed runs; `✅` is
 issued **only by the orchestrator seat** on semantic evaluation of the coder's `[X]`
 work, as-completing, per task — send-back instead of ✅ when the work is not what it
 claims.
-
-**Marker-sync law (2026-09-18 reconciliation):** a commit that records ✅/`[X]`
-validation MUST flip this file's marker in that same commit — a commit-message claim
-without the file flip is a verification-integrity defect (the frontier read
-re-executes completed work). Six such drifts were reconciled 2026-09-18 from commits
-`c1dd77d` (B.6), `89ca7bc` (U.7), `c0b9a43` (U.8), `979b299` (SS.3), `90a62b1` (OR.2),
-`b658941` (H.1), plus U.9's `[X]` from `cdac4f9`.
 
 ## Execution protocol
 
@@ -62,10 +54,7 @@ disjoint Owns; Verify + Accept observe durable end-state; commit+push per line; 
   frozen-order availability, hides absent rails, purchase dispatch, redeem via B.4,
   duplicate-registration error].
 
-- ✅ **B.6 License bridge service** · §9.4 — [marker reconciled 2026-09-18: orchestrator validation was recorded in commit
-  `c1dd77d` (six-rail HMAC webhooks, SQLite idempotency, Ed25519 mint/verify, NATALLY-
-  redeem 4 outcomes, refund→deny-list, cargo test 5/5 observed, zero client-side secrets)
-  but this file's marker flip was missed; re-verified 2026-09-18: cargo test 5/5, exit 0]  **Spec:** Operator-hosted Rust/axum service at `services/license-bridge/`. HTTP surface,
+- [ ] **B.6 License bridge service** · §9.4  **Spec:** Operator-hosted Rust/axum service at `services/license-bridge/`. HTTP surface,
   exactly: one webhook endpoint per processor rail (stripe, revenuecat, polar,
   lemonsqueezy, paypal, square — §9.4's six), `POST /redeem`, `POST /verify`, and a
   deny-list publication route. Webhooks are HMAC-verified against per-processor secrets
@@ -155,10 +144,7 @@ disjoint Owns; Verify + Accept observe durable end-state; commit+push per line; 
   license-key redeem end-to-end, language law green, §11.1(a) legal links present on
   checkout (privacy + terms beside the purchase action)`.
 
-- ✅ **U.7 About + glossary-callout** · §6 AGPL posture, INC-19 §5 — [marker reconciled 2026-09-18 from commit `89ca7bc`
-  (AGPL line + written-source-offer, provenance legend ×4 treatments, legal links,
-  keyboard-accessible callout, 83 tests green, tsc/biome clean, orchestrator evaluation
-  observed; file flip missed)]  **Spec:** About screen carries the AGPL-3.0-or-later line and source-offer statement per
+- [ ] **U.7 About + glossary-callout** · §6 AGPL posture, INC-19 §5  **Spec:** About screen carries the AGPL-3.0-or-later line and source-offer statement per
   §6 (license-lint counterpart in R.7). Hover-term callouts: glossary terms (`GlossaryEntry`
   term/body/glyph, authored provenance) surface as hover explanations across screens;
   shared callout component consumed by U.3 atlas glyphs. Provenance rendering follows §5:
@@ -170,10 +156,7 @@ disjoint Owns; Verify + Accept observe durable end-state; commit+push per line; 
   glossary text on atlas + conversation terms; §11.1(a) legal links to
   /legal/privacy.html + /legal/terms.html present`.
 
-- ✅ **U.8 Splash** · D21, §12 — [marker reconciled 2026-09-18 from commit `c0b9a43`
-  (Fraunces typewriter paced purely by real C.4 CompanionBus capability signals,
-  stall-honest, completion-once, reduced-motion static + still gated, tests 6/6 incl.
-  zero-fabrication-before-signal proof, orchestrator evaluation observed; file flip missed)]  **Spec:** Typewriter onboarding splash (D21 — Kintsugi's big bold typography + typewriter
+- [ ] **U.8 Splash** · D21, §12  **Spec:** Typewriter onboarding splash (D21 — Kintsugi's big bold typography + typewriter
   as behavior reference only, clean-room D2) whose progress is the **real** engine/model
   load progress from capability signals (model presence, engine load progress — §10 Stage
   signal sources); never a fake timer. First plate budget §12 unchanged (≤150 ms after
@@ -184,13 +167,7 @@ disjoint Owns; Verify + Accept observe durable end-state; commit+push per line; 
   **Accept:** `splash: typewriter paced by real capability signals, reduced-motion honored,
   no fabricated progress`.
 
-- [X] **U.9 Stage (sprite MascotRenderer)** · §18.2, §10, STATES.md — [marker reconciled 2026-09-18:
-  implementation committed in `cdac4f9` (pluggable MascotRenderer, §18.2 authored idle
-  vignettes closed set, animated Asleep, MP4 footage per motion state, porthole circular
-  clip; stage tests rewritten to §18.2 semantics, 52 green, tsc+biome clean) but neither
-  the `[X]` flip nor an orchestrator ✅ was recorded; **✅ withheld pending orchestrator
-  semantic observation of the live stage** (send turn → Thinking → Speaking bound to
-  envelope; idle → Asleep cycle; reduced-motion frame 0)]  **Spec:** Porthole law: natally present on EVERY screen — bottom-right circular
+- [ ] **U.9 Stage (sprite MascotRenderer)** · §18.2, §10, STATES.md  **Spec:** Porthole law: natally present on EVERY screen — bottom-right circular
   ship-window portal on non-conversation surfaces; conversation docked OPEN by default.
   Sprite MascotRenderer (pluggable): real-footage idle core (operator's natally-idle loop)
   + authored sprite states + gold-hairline silhouette placeholders; **no AI-generated
@@ -341,10 +318,7 @@ disjoint Owns; Verify + Accept observe durable end-state; commit+push per line; 
   roundtrips, Lookup union exhaustive (compile-time assert), lease lifecycle states valid
   transitions only`.
 
-- ✅ **SS.3 Resolve-existing-first resolver** · §19.3, §19.5 — [marker reconciled 2026-09-18 from commit `979b299`
-  (lookup-first, lock-recheck single-writer, lease compatibility, needs-grant/
-  unavailable short-circuit, corrupt-retry-once; 10-way concurrency → exactly one
-  acquire; 24/24 suite green, orchestrator evaluation observed; file flip missed)]  **Spec:** `resolveExistingFirst(scope, asset, store, signal)`: validate identity →
+- [ ] **SS.3 Resolve-existing-first resolver** · §19.3, §19.5  **Spec:** `resolveExistingFirst(scope, asset, store, signal)`: validate identity →
   `lookup` (shared providers first, then authorized legacy/private caches) → on `missing`,
   acquire the `scope:digest` lock and **re-lookup inside the lock** (single-writer: two
   apps arriving simultaneously produce one published object) → `acquire` returns a read
@@ -499,10 +473,7 @@ disjoint Owns; Verify + Accept observe durable end-state; commit+push per line; 
   `offers: three paths, exact approved copy, catalog separation, hard-rule assertions
   green`.
 
-- ✅ **OR.2 Customer language enforcement** · §21.2 — [marker reconciled 2026-09-18 from commit `90a62b1`
-  (whole-word case-insensitive scanner over the closed §21.2 forbidden set, legal-HTML
-  exemption, fail-red on seeded violations + no-false-positive probes, 6/6 observed by
-  orchestrator; file flip missed)]  **Spec:** `packages/billing/tests/language-law.test.ts` scans every customer-facing
+- [ ] **OR.2 Customer language enforcement** · §21.2  **Spec:** `packages/billing/tests/language-law.test.ts` scans every customer-facing
   surface (paywall, onboarding, settings, receipts, error strings, Store-listing copy) for
   the forbidden terms: "local", "inference", "ephemeris", model names, "token",
   "quantization", "API", computing-location wording. Allowed micro-copy set: "Add $ROCHE
@@ -596,10 +567,7 @@ disjoint Owns; Verify + Accept observe durable end-state; commit+push per line; 
 
 ## Phase H — Hosted edition (D22/D23)
 
-- ✅ **H.1 Hosted scaffold** · §2 layout, D22 — [marker reconciled 2026-09-18 from commit `b658941`
-  (Vite+React19 strict build green, four EMPTY D22 service seams with §10 envelope
-  semantics, design-tokens shell, zero shared-file edits, orchestrator evaluation
-  observed; file flip missed; re-verified 2026-09-18: `pnpm --filter hosted build` exit 0)]  **Spec:** `apps/hosted/` consuming the **same** exported UI source (STITCH-v2) behind
+- [ ] **H.1 Hosted scaffold** · §2 layout, D22  **Spec:** `apps/hosted/` consuming the **same** exported UI source (STITCH-v2) behind
   shared service interfaces — identical companion feel, onboarding, components, mascot,
   motion; edition services (inference, STT, TTS, payments) selected behind the shared
   interfaces per D22. Dependency law unchanged: `apps/*` → `packages/*`; platform-agnostic

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // WP.3 — Version ordinal mapping, ARCHITECTURE §20.4 (normative formulas, transcribed exactly).
 // Ordinal persists in config/windows-release-ordinal; increments once per release.
-import { readFileSync, writeFileSync, existsSync } from "node:fs";
+import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -30,7 +30,10 @@ export function writeOrdinal(n, path = ORDINAL_PATH) {
   if (!Number.isInteger(n) || n < 0) {
     throw new Error(`ordinal must be a non-negative integer, got ${n}`);
   }
-  writeFileSync(path, `# Windows release ordinal n (ARCHITECTURE §20.4). One integer per line; # comments allowed.\n${n}\n`);
+  writeFileSync(
+    path,
+    `# Windows release ordinal n (ARCHITECTURE §20.4). One integer per line; # comments allowed.\n${n}\n`,
+  );
 }
 
 // §20.4, EXACTLY:

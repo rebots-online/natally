@@ -191,8 +191,6 @@ snapshot defect (§22: no blockers by recipe time).
 | storage platform adapters (web/linux.rs/windows.rs/android) | modules | `apps/local/src/storage/web.ts` · `src-tauri/src/storage/` | SS.4 · SS.5 · SS.6 · SS.7 · WP.5 |
 | `StageSignal` union + envelope events (envelope-start/level/end) | type + events | `apps/local/src/ui/` (C.4✓) | V.1 · V.2✓ · U.9 · H.3 |
 | `MascotRenderer` (sprite, pluggable) | component | `apps/local/src/ui/stage.tsx` | U.9 |
-| `IDLE_BEHAVIORS` / `selectIdleBehavior` / `behaviorForState` (§18.2 closed idle set) | const+functions | `apps/local/src/ui/mascot-behaviors.ts` | U.9 |
-| `IdleBehaviorVignette` (authored idle vignette renderer) | component | `apps/local/src/ui/mascot-vignettes.tsx` | U.9 |
 | `Mascot` | component | `apps/local/src/ui/mascot.tsx` | U.7 · U.9 |
 | offers module (three offers, exact §21.1 copy) | module | `packages/billing/src/offers.ts` (OR.1) | OR.1 · U.6 |
 | `roche` module (units 0..2×10⁹, fungibility matrix) | module | `packages/billing/src/roche.ts` (OR.3) | OR.3 · OR.4 · H.4 |

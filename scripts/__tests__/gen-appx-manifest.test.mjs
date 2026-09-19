@@ -1,22 +1,15 @@
 // WP.2 — tests for scripts/gen-appx-manifest.mjs (architecture §20.3).
 // Includes a small, real XML well-formedness checker (tokenizer + nesting +
 // entity validation) — no regex-balance shortcut, no dependencies.
-import { describe, expect, it } from "vitest";
+
 import { readFileSync } from "node:fs";
-import { resolve, dirname } from "node:path";
+import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import {
-  escapeXml,
-  generateManifest,
-  selfTestFixture,
-  substitute,
-} from "../gen-appx-manifest.mjs";
+import { describe, expect, it } from "vitest";
+import { escapeXml, generateManifest, selfTestFixture, substitute } from "../gen-appx-manifest.mjs";
 
 const REPO_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
-const TEMPLATE = readFileSync(
-  resolve(REPO_ROOT, "config/appx-template.xml"),
-  "utf8",
-);
+const TEMPLATE = readFileSync(resolve(REPO_ROOT, "config/appx-template.xml"), "utf8");
 
 // --- well-formedness checker -------------------------------------------------
 
@@ -36,15 +29,17 @@ function decodeEntities(text) {
   });
 }
 function validateNameChars(text, where) {
-  if (!/^[A-Za-z_:][A-Za-z0-9._:\-]*$/.test(text)) throw new Error(`invalid name "${text}" in ${where}`);
+  if (!/^[A-Za-z_:][A-Za-z0-9._:-]*$/.test(text))
+    throw new Error(`invalid name "${text}" in ${where}`);
 }
 
 /** Parses an XML document and throws on any well-formedness violation. */
-export function assertWellFormedXml(xml) {
+function assertWellFormedXml(xml) {
   let i = 0;
   const stack = [];
   // XML or text prologue: optional BOM, decl, doctype, comments, whitespace.
-  const prologue = /^\s*(?:<\?xml[\s\S]*?\?>)?\s*(?:<!--[\s\S]*?-->\s*)*(?:<!DOCTYPE[^>[\]]*(?:\[[^[\]]*\])?[^>]*>\s*)?/;
+  const prologue =
+    /^\s*(?:<\?xml[\s\S]*?\?>)?\s*(?:<!--[\s\S]*?-->\s*)*(?:<!DOCTYPE[^>[\]]*(?:\[[^[\]]*\])?[^>]*>\s*)?/;
   const m = prologue.exec(xml);
   if (m) i = m[0].length;
   let sawContent = false;
@@ -71,7 +66,8 @@ export function assertWellFormedXml(xml) {
         validateNameChars(name, "end tag");
         const open = stack.pop();
         if (open === undefined) throw new Error(`end tag </${name}> with no open element`);
-        if (open !== name) throw new Error(`mismatched end tag: expected </${open}>, got </${name}>`);
+        if (open !== name)
+          throw new Error(`mismatched end tag: expected </${open}>, got </${name}>`);
         i = end + 1;
         sawContent = true;
       } else {
@@ -89,12 +85,12 @@ export function assertWellFormedXml(xml) {
         // Attributes: name="value" or name='value'.
         const attrRe = /([^\s=/>]+)\s*=\s*("([^"]*)"|'([^']*)')/g;
         let cursor = nameMatch[0].length;
-        let attr;
         const seen = new Set();
-        while ((attr = attrRe.exec(inner)) !== null) {
+        for (const attr of inner.matchAll(attrRe)) {
           // Reject junk between attributes (non-whitespace, non-attribute).
           const junk = inner.slice(cursor, attr.index);
-          if (/[^\s]/.test(junk)) throw new Error(`malformed attribute region in <${nameMatch[1]}>: "${junk}"`);
+          if (/[^\s]/.test(junk))
+            throw new Error(`malformed attribute region in <${nameMatch[1]}>: "${junk}"`);
           if (seen.has(attr[1])) throw new Error(`duplicate attribute ${attr[1]}`);
           seen.add(attr[1]);
           decodeEntities(attr[3] ?? attr[4] ?? "");
@@ -133,7 +129,7 @@ function filledTemplate(values) {
 
 describe("escapeXml", () => {
   it("escapes all five XML-special characters", () => {
-    expect(escapeXml('&<>"\'')).toBe("&amp;&lt;&gt;&quot;&apos;");
+    expect(escapeXml("&<>\"'")).toBe("&amp;&lt;&gt;&quot;&apos;");
   });
   it("leaves ordinary text alone", () => {
     expect(escapeXml("natally v1.0 (x64)")).toBe("natally v1.0 (x64)");
@@ -191,11 +187,11 @@ describe("escape-hostile values round-trip", () => {
     IDENTITY_NAME: 'Id&Co<Weird>"Quote"',
     PUBLISHER: "CN='Single & Double <Tag>>' Test",
     DISPLAY_NAME: 'natally & <the> "Companion"',
-    PUBLISHER_DISPLAY_NAME: "Ben & Jerry's <Ice \"Cream\">",
+    PUBLISHER_DISPLAY_NAME: 'Ben & Jerry\'s <Ice "Cream">',
     VERSION: "1&0<0>0\"0'",
     ARCHITECTURE: 'x&64"',
     EXECUTABLE: "natally & <friends>.exe",
-    MAX_VERSION_TESTED: '10.0.22621&<>"\'',
+    MAX_VERSION_TESTED: "10.0.22621&<>\"'",
   };
   const xml = filledTemplate(hostile);
 
@@ -214,10 +210,7 @@ describe("escape-hostile values round-trip", () => {
   });
 
   it("re-parses to the original values (round-trip)", () => {
-    const roundTripped = (attr) =>
-      decodeEntities(
-        new RegExp(`${attr}="([^"]*)"`).exec(xml)[1],
-      );
+    const roundTripped = (attr) => decodeEntities(new RegExp(`${attr}="([^"]*)"`).exec(xml)[1]);
     expect(roundTripped("Name")).toBe(hostile.IDENTITY_NAME);
     expect(roundTripped("Publisher")).toBe(hostile.PUBLISHER);
     expect(roundTripped("Version")).toBe(hostile.VERSION);
@@ -238,7 +231,13 @@ describe("unresolved-token rejection", () => {
     expect(err).toBeDefined();
     expect(Array.isArray(err.unresolvedTokens)).toBe(true);
     expect(err.unresolvedTokens).toEqual(
-      expect.arrayContaining(["PUBLISHER", "VERSION", "ARCHITECTURE", "EXECUTABLE", "MAX_VERSION_TESTED"]),
+      expect.arrayContaining([
+        "PUBLISHER",
+        "VERSION",
+        "ARCHITECTURE",
+        "EXECUTABLE",
+        "MAX_VERSION_TESTED",
+      ]),
     );
     expect(err.message).toContain("@PUBLISHER@");
   });
@@ -249,7 +248,10 @@ describe("CLI exit behavior", () => {
     const { main } = await import("../gen-appx-manifest.mjs?case=ok");
     const chunks = [];
     const orig = process.stdout.write.bind(process.stdout);
-    process.stdout.write = (c) => { chunks.push(c); return true; };
+    process.stdout.write = (c) => {
+      chunks.push(c);
+      return true;
+    };
     try {
       const code = main(["--check"], {});
       expect(code).toBe(0);
@@ -265,7 +267,10 @@ describe("CLI exit behavior", () => {
     const { main } = await import("../gen-appx-manifest.mjs?case=fail");
     const errs = [];
     const orig = process.stderr.write.bind(process.stderr);
-    process.stderr.write = (c) => { errs.push(c); return true; };
+    process.stderr.write = (c) => {
+      errs.push(c);
+      return true;
+    };
     let code;
     try {
       code = main([], {});

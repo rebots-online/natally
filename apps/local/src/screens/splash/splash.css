@@ -36,8 +36,14 @@
 }
 
 @keyframes splash-caret-blink {
-  0%, 55% { opacity: 1; }
-  56%, 100% { opacity: 0; }
+  0%,
+  55% {
+    opacity: 1;
+  }
+  56%,
+  100% {
+    opacity: 0;
+  }
 }
 
 .splash__tagline {

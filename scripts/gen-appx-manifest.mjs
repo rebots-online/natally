@@ -2,7 +2,7 @@
 // WP.2 — AppxManifest generator (architecture §20.3, DOCS/ARCHITECTURE.md).
 // Substitutes @…@ tokens in config/appx-template.xml with XML-escaped values,
 // rejects any unresolved token, writes to stdout or --out. No dependencies.
-import { readFileSync, writeFileSync, existsSync } from "node:fs";
+import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -15,7 +15,11 @@ const IDENTITY_KEYS = {
   IDENTITY_NAME: ["identityName", "STORE_IDENTITY_NAME", "identity_name"],
   PUBLISHER: ["publisher", "STORE_PUBLISHER", "publisher_dn"],
   DISPLAY_NAME: ["displayName", "DISPLAY_NAME", "display_name"],
-  PUBLISHER_DISPLAY_NAME: ["publisherDisplayName", "PUBLISHER_DISPLAY_NAME", "publisher_display_name"],
+  PUBLISHER_DISPLAY_NAME: [
+    "publisherDisplayName",
+    "PUBLISHER_DISPLAY_NAME",
+    "publisher_display_name",
+  ],
   VERSION: ["version", "MSIX_VERSION", "msix_version"],
   ARCHITECTURE: ["architecture", "ARCHITECTURE"],
   EXECUTABLE: ["executable", "EXECUTABLE"],
@@ -25,12 +29,18 @@ const IDENTITY_KEYS = {
 export function escapeXml(value) {
   return String(value).replace(/[&<>"']/g, (ch) => {
     switch (ch) {
-      case "&": return "&amp;";
-      case "<": return "&lt;";
-      case ">": return "&gt;";
-      case '"': return "&quot;";
-      case "'": return "&apos;";
-      default: return ch;
+      case "&":
+        return "&amp;";
+      case "<":
+        return "&lt;";
+      case ">":
+        return "&gt;";
+      case '"':
+        return "&quot;";
+      case "'":
+        return "&apos;";
+      default:
+        return ch;
     }
   });
 }

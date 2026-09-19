@@ -1,11 +1,7 @@
 // @vitest-environment jsdom
 import { act, cleanup, render, screen } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import {
-  type CompanionBus,
-  createCompanionBus,
-  type StageSignal,
-} from "../../companion/bus.js";
+import { type CompanionBus, createCompanionBus, type StageSignal } from "../../companion/bus.js";
 import { Splash } from "./Splash.js";
 
 const TITLE = "natally"; // 7 characters — the default D21 display line.
@@ -38,7 +34,10 @@ beforeEach(() => {
       return nextFrame;
     }),
   );
-  vi.stubGlobal("cancelAnimationFrame", vi.fn((id: number) => frames.delete(id)));
+  vi.stubGlobal(
+    "cancelAnimationFrame",
+    vi.fn((id: number) => frames.delete(id)),
+  );
 });
 
 afterEach(() => {

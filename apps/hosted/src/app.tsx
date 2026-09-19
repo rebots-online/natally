@@ -1,8 +1,8 @@
-import type { ReactNode } from "react";
 // D20/§18.1: both editions consume the same exported UI source; until W3-S2
 // (Stitch v2) lands, the shared surface here is @natally/design-tokens only.
 // apps/local's screens are NOT imported (§2 dependency rule holds one way).
 import { tokens } from "@natally/design-tokens";
+import type { ReactNode } from "react";
 import type { HostedBilling, HostedInference, HostedSpeech, HostedVoice } from "./seams";
 
 const SEAMS: readonly { name: string; seam: string; type: string }[] = [
