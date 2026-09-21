@@ -12,3 +12,6 @@ STAGING_*
 .codegraph/
 .playwright-mcp/
 *.log
+
+# Operator-local UI library bundle (523MB, personal archive — never commit)
+/natally-UI-LIBS-*.zip
