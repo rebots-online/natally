@@ -1,0 +1,1 @@
+import{j as r}from"./index-c2YnJ1OL.js";function i({variant:t="secondary",type:o="button",className:n="",...u}){return r.jsx("button",{...u,type:o,className:`ui-button ui-button--${t} ${n}`.trim()})}export{i as B};

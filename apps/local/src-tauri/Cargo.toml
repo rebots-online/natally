@@ -1,6 +1,6 @@
 [package]
 name = "natally"
-version = "1.32.28929"
+version = "1.34.33290"
 description = "natally native application shell"
 edition = "2021"
 license = "AGPL-3.0-or-later"

@@ -99,8 +99,11 @@ const publicKeys = [
 const define = Object.fromEntries(publicKeys.filter((key) => env[key] !== undefined)
   .map((key) => [`import.meta.env.${key}`, JSON.stringify(env[key])]));
 // Audit retained output before copying anything into tracked dist/, then audit the build.
+// NATALLY_ANDROID_KEY_ALIAS is a signing identifier (e.g. "upload"), not credential
+// material — as a short common word it false-positives inside bundles. Passwords stay audited.
 const privateValues = Object.entries(env).filter(([key, value]) =>
-  !publicKeys.includes(key) && key !== "NATALLY_DEV_PORT" && value.length > 0).map(([, value]) => Buffer.from(value));
+  !publicKeys.includes(key) && key !== "NATALLY_DEV_PORT" && key !== "NATALLY_ANDROID_KEY_ALIAS"
+  && value.length > 0).map(([, value]) => Buffer.from(value));
 function audit(directory) {
   for (const entry of readdirSync(directory, { withFileTypes: true })) {
     const path = join(directory, entry.name);

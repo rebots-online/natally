@@ -49,8 +49,13 @@ apksigner="$build_tools/apksigner"
 
 verify_android_artifacts() {
   "$apksigner" verify --verbose "$apk" >/dev/null
-  unzip -Z1 "$aab" | grep -Eq '^META-INF/[^/]+\.(RSA|DSA|EC)$'
-  jarsigner -verify "$aab" | grep -q 'jar verified'
+  # Capture producer output before grepping: an early-exit grep (-q) on a live
+  # pipe SIGPIPEs the producer, which pipefail then reports as exit 141.
+  local listing jars
+  listing="$(unzip -Z1 "$aab")"
+  grep -Eq '^META-INF/[^/]+\.(RSA|DSA|EC)$' <<<"$listing"
+  jars="$(jarsigner -verify "$aab" 2>&1)"
+  grep -q 'jar verified' <<<"$jars"
 }
 
 if [ -f "$apk" ] && [ -f "$aab" ] && [ "$force" -eq 0 ]; then
