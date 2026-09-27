@@ -141,3 +141,10 @@ completion was not yet verified when this report was written. CodeGraph provided
 current source for the initial traces, then reported queue contention and later
 an empty index during rebuild. Named targeted reads closed those specific gaps.
 No healthy-bootstrap or release-readiness verdict is asserted.
+
+Post-review tooling update: the first rebuild exited 1 with `EAGAIN: resource
+temporarily unavailable, write` while emitting progress. Status then showed an
+empty index. A recovery attempt, `codegraph index --quiet`, is running with
+progress suppressed and has repopulated hundreds of files. Its remaining work
+includes tracked historical dist JavaScript; final graph health is still pending.
+The report's findings do not rely on the incomplete graph's relationship counts.
