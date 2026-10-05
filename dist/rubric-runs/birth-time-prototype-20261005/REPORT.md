@@ -1,5 +1,12 @@
 # Birth-time prototype rubric observations — 2026-10-05
 
+**Evidence classification:** design-prototype observations only. The static HTTP
+server served the exported HTML artifact, not a Vite development process and
+not the built Natally application. These files do **not** satisfy TC11's built-app
+release gauntlet, regardless of their archive location or use of rubric rows.
+The production gauntlet is unrun. No release acceptance or production completion
+may be inferred from these recordings. This clarification changes no observation.
+
 **Prototype verdict: DEFECTIVE** under the precommitted rubric's rule that a
 mandatory unobserved item prevents completion: BT-P8 Android keyboard behavior
 has not been observed. The desktop/browser portion worked in the journeys below.
@@ -56,6 +63,13 @@ supported interface with recording contained inside each awaited tool call
 succeeded for all six segments (55, 94, 119, 139, 68, 65 frames, no recorded errors).
 No browser security controls were disabled or bypassed. Viewport and media
 overrides were reset after observation.
+
+Precision about the retry: the same raw-CDP capability was used through the
+documented browser interface. The supported stop command then succeeded, and
+subsequent start/frame/ack/stop commands were accepted within awaited calls.
+Those successful responses establish permission for those individual commands;
+they do not establish the root cause of the earlier policy-check failure. The
+review's later phrase “no raw-CDP path was retried” is inaccurate.
 
 ## Remaining acceptance
 
