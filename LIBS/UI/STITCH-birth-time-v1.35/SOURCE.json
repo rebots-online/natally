@@ -1,0 +1,18 @@
+{
+  "captured_at_utc": "2026-10-05T07:03:55.937073+00:00",
+  "figma": {
+    "file": "TmZDFVgkUeeL1VEYWtuaJL",
+    "node": "15:148"
+  },
+  "stitch": {
+    "project": "8460014353109836944",
+    "initial_screen": "bc0be9d09f3546dfb0e384e75d5cf439",
+    "refined_screen": "07a9a049170c488b9c56283d45055389"
+  },
+  "runnable_entrypoint": "index.html",
+  "sha256": {
+    "index.html": "0d7611da003e579847071e79dfbf32a6a32eda4a7913fea19ec571d25cb6e804",
+    "stitch-export.html": "d451195a722080bafd43d2e351027db67ec9986c3c43ef785b268f582eb7d90f",
+    "stitch-refined-source.html.txt": "435729be37e2a8d263152f0b5c2f009dcfe01163e693f4bcd4d4456966b18142"
+  }
+}

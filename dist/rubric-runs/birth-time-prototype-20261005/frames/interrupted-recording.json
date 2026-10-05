@@ -1,0 +1,15 @@
+{
+  "frames": [
+    {
+      "file": "frame-000000.jpg",
+      "timestamp": 1791183383.598039,
+      "received": 1791183383614
+    },
+    {
+      "file": "frame-000001.jpg",
+      "timestamp": 1791183383.631819,
+      "received": 1791183383660
+    }
+  ],
+  "error": "Error: Browser Use could not complete this action because a browser security check was unavailable. Reason: The admin-enforced policy could not be verified, so access was not granted. Browser use could not verify the Browser Use origin policy before using raw CDP. This failure may be temporary. The agent may retry after the issue is resolved, but must not bypass browser security controls or use an indirect workaround."
+}

@@ -154,3 +154,15 @@ workflow layers above and supersede nothing.
 The browser preview at `apps/local` is the device/local-inference edition, including
 its local-inference web/PWA build. The hosted API / micropayments / x402 edition
 remains the separate D10 product; the preview does not change that scope.
+
+## 2026-10-05 — original Natally deployment and birth-time repair design
+
+| # | Decision | Rules out |
+|---|---|---|
+| D24 | Robin explicitly requires **no unit testing and no smoke testing**; verification is the precommitted rubric with direct UI screenshot/screencast evidence. This supersedes historical test-run commands in project architecture, checklist and rubric for the current original-Natally work. Static inspection and artifact identity records may support findings but do not establish runtime acceptance. | Running Vitest/cargo test/check.sh as an acceptance shortcut; citing old pass counts as current working-product proof. |
+| D25 | Deploy the existing original-Natally build unchanged to **natally.surge.sh before creating the 1.35 checklist**. Checkout version 1.34.33290 does not relabel the existing built artifact 1.33.33267. Preserve Figma → Google Stitch → working HTML controls and event bindings → architecture → checklist. A generated picture is optional design input only. | Substituting natally-asrock.surge.sh without direction; mixing Alby-marketplace work; incrementing/rebuilding merely to redeploy; deriving the new checklist from its predecessor. |
+
+Deployment attempt on asrock failed with Surge's domain-ownership rejection. The
+design prototype and architecture continue independently; the 1.35 checklist is
+held until this prerequisite is resolved. See `DELIVERY-2026-10-05.md` for exact
+attempts, captured constraints, KStore reminder findings and rubric evidence.

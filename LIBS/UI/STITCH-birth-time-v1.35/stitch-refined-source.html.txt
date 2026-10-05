@@ -1,0 +1,1524 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>natally</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;400;500;600&amp;family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;1,400&amp;family=Nunito+Sans:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<style>
+    :root {
+      --bg: #161021;
+      --aura: rgba(124, 58, 237, 0.16);
+      --gold: #d4af37;
+      --gold-dim: rgba(212, 175, 55, 0.28);
+      --gold-glow: rgba(212, 175, 55, 0.18);
+      --vellum: #eadef6;
+      --vellum-muted: #d0c5af;
+      --vellum-faint: rgba(212, 175, 55, 0.4);
+      --surface: #1f1929;
+      --surface-raised: #282135;
+      --border: rgba(212, 175, 55, 0.24);
+      --focus-ring: #f2ca50;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--vellum);
+      font-family: 'Nunito Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      position: relative;
+      overflow-x: hidden;
+      overflow-y: auto;
+      line-height: 1.45;
+    }
+
+    /* Ambient aura & constellation background */
+    .constellation-bg {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      background:
+        radial-gradient(circle at 50% 16%, var(--aura) 0%, rgba(22, 16, 33, 0) 65%),
+        radial-gradient(circle at 85% 75%, rgba(124, 58, 237, 0.1) 0%, rgba(22, 16, 33, 0) 55%),
+        #161021;
+    }
+
+    .constellation-svg {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      opacity: 0.32;
+      z-index: 0;
+    }
+
+    .app-viewport {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 420px;
+      min-width: 320px;
+      min-height: 100dvh;
+      padding: 32px 20px 36px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    header {
+      margin-bottom: 24px;
+    }
+
+    .top-meta {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      margin-bottom: 20px;
+    }
+
+    .brand-mark {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .brand-mark::before {
+      content: '';
+      display: inline-block;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--gold);
+      box-shadow: 0 0 8px var(--gold);
+    }
+
+    h1.prompt-title {
+      font-family: 'Fraunces', Georgia, serif;
+      font-size: 32px;
+      line-height: 1.2;
+      font-weight: 400;
+      color: var(--vellum);
+      text-align: left;
+      letter-spacing: -0.01em;
+    }
+
+    .typewriter-cursor {
+      display: inline-block;
+      width: 2px;
+      height: 1em;
+      vertical-align: -0.1em;
+      background-color: var(--gold);
+      margin-left: 3px;
+      animation: blink 1.1s steps(2, start) infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    /* Main Interaction Container */
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* Interactive Outer Time Row */
+    .time-slot-card {
+      width: 100%;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      min-height: 64px;
+      text-align: left;
+      color: inherit;
+      transition: border-color 0.2s, background-color 0.2s, box-shadow 0.2s;
+    }
+
+    .time-slot-card:focus-visible {
+      outline: 2px solid var(--focus-ring);
+      outline-offset: 2px;
+    }
+
+    .time-slot-card:hover:not(.disabled) {
+      border-color: var(--gold);
+      background: #251e33;
+    }
+
+    .time-slot-card.disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      border-color: rgba(212, 175, 55, 0.12);
+    }
+
+    .slot-label-group {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .slot-title {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--vellum-muted);
+    }
+
+    .slot-value {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 20px;
+      font-weight: 500;
+      color: var(--vellum);
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+    }
+
+    .slot-value.empty {
+      color: var(--vellum-faint);
+      font-size: 15px;
+      font-family: 'Nunito Sans', sans-serif;
+      font-weight: 400;
+      font-style: italic;
+    }
+
+    .slot-action-btn {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 16px;
+      color: var(--gold);
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding-left: 12px;
+    }
+
+    /* Modal / Expanded Editor Panel */
+    .editor-panel {
+      display: none;
+      background: var(--surface);
+      border: 1px solid var(--gold);
+      border-radius: 16px;
+      padding: 16px 14px 18px;
+      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.65), 0 0 20px var(--gold-glow);
+      animation: panelIn 0.22s ease-out;
+    }
+
+    @keyframes panelIn {
+      from { opacity: 0; transform: translateY(-4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .editor-panel.open {
+      display: block;
+    }
+
+    .editor-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 14px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(212, 175, 55, 0.15);
+    }
+
+    .mode-switch-group {
+      display: flex;
+      background: var(--surface-raised);
+      border-radius: 8px;
+      padding: 3px;
+      gap: 3px;
+    }
+
+    .mode-btn {
+      min-height: 44px;
+      min-width: 76px;
+      padding: 0 12px;
+      background: transparent;
+      border: none;
+      color: var(--vellum-muted);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px;
+      letter-spacing: 0.04em;
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: color 0.15s, background-color 0.15s;
+    }
+
+    .mode-btn:focus-visible {
+      outline: 2px solid var(--focus-ring);
+    }
+
+    .mode-btn.active {
+      background: var(--gold);
+      color: #110b1b;
+      font-weight: 600;
+    }
+
+    .am-pm-toggle {
+      display: flex;
+      background: var(--surface-raised);
+      border-radius: 8px;
+      padding: 3px;
+      gap: 3px;
+    }
+
+    .ampm-btn {
+      min-height: 44px;
+      min-width: 44px;
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--vellum-muted);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 13px;
+      font-weight: 500;
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: color 0.15s, background-color 0.15s, border-color 0.15s;
+    }
+
+    .ampm-btn:focus-visible {
+      outline: 2px solid var(--focus-ring);
+    }
+
+    .ampm-btn.active {
+      background: var(--gold);
+      color: #110b1b;
+      font-weight: 600;
+    }
+
+    /* Live Draft Display in Editor */
+    .draft-display-bar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin: 10px 0 14px;
+      padding: 8px 12px;
+      background: rgba(17, 11, 27, 0.75);
+      border-radius: 8px;
+      border: 1px dashed var(--gold-dim);
+    }
+
+    .draft-preview-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px;
+      color: var(--vellum-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .draft-preview-time {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 22px;
+      font-weight: 600;
+      color: var(--gold);
+      letter-spacing: 0.05em;
+    }
+
+    /* Dial Mode switcher (Hours vs Minutes) */
+    .dial-submode-tabs {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 12px;
+      gap: 8px;
+    }
+
+    .dial-submode-btn {
+      min-height: 44px;
+      padding: 0 16px;
+      border-radius: 6px;
+      background: var(--surface-raised);
+      border: 1px solid rgba(212, 175, 55, 0.15);
+      color: var(--vellum-muted);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s;
+    }
+
+    .dial-submode-btn:focus-visible {
+      outline: 2px solid var(--focus-ring);
+    }
+
+    .dial-submode-btn.active {
+      border-color: var(--gold);
+      background: rgba(212, 175, 55, 0.15);
+      color: var(--gold);
+      font-weight: 600;
+    }
+
+    /* Circular Dial Face Container */
+    .clock-face-wrapper {
+      position: relative;
+      width: 270px;
+      height: 270px;
+      margin: 4px auto 14px;
+      border-radius: 50%;
+      background: radial-gradient(circle at center, #261f33 0%, #1a1425 70%);
+      border: 1px solid var(--border);
+      box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.6);
+      user-select: none;
+      touch-action: none;
+    }
+
+    .clock-svg-layer {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    .clock-hand {
+      transform-origin: 135px 135px;
+      transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .clock-hand.no-hand {
+      opacity: 0;
+    }
+
+    /* 12 selectable real button targets placed along circle */
+    .dial-button {
+      position: absolute;
+      width: 44px;
+      height: 44px;
+      min-width: 44px;
+      min-height: 44px;
+      border-radius: 50%;
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--vellum);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transform: translate(-50%, -50%);
+      transition: background-color 0.15s, color 0.15s, border-color 0.15s, transform 0.12s;
+      z-index: 2;
+    }
+
+    .dial-button:focus-visible {
+      outline: 2px solid var(--focus-ring);
+      outline-offset: 2px;
+      z-index: 3;
+    }
+
+    .dial-button:hover {
+      background: rgba(212, 175, 55, 0.2);
+      border-color: var(--gold-dim);
+    }
+
+    .dial-button.selected {
+      background: var(--gold);
+      color: #110b1b;
+      font-weight: 600;
+      border-color: var(--gold);
+      box-shadow: 0 0 12px rgba(212, 175, 55, 0.5);
+    }
+
+    /* Exact minute +/- controls */
+    .exact-minute-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--surface-raised);
+      border-radius: 8px;
+      padding: 4px 10px;
+      border: 1px solid rgba(212, 175, 55, 0.15);
+      margin-top: 4px;
+    }
+
+    .step-btn {
+      min-height: 44px;
+      min-width: 48px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--gold);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.12s;
+    }
+
+    .step-btn:focus-visible {
+      outline: 2px solid var(--focus-ring);
+    }
+
+    .step-btn:active {
+      transform: scale(0.96);
+      background: var(--gold);
+      color: #110b1b;
+    }
+
+    .step-info {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px;
+      color: var(--vellum-muted);
+      text-align: center;
+    }
+
+    /* View: Type Mode */
+    .view-type {
+      display: none;
+      flex-direction: column;
+      gap: 12px;
+      padding: 8px 0;
+    }
+
+    .type-inputs-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 12px 0 6px;
+    }
+
+    .type-field {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .type-field label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--vellum-muted);
+    }
+
+    .time-input {
+      width: 88px;
+      min-height: 56px;
+      background: var(--surface-raised);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--gold);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 28px;
+      font-weight: 500;
+      text-align: center;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .time-input:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 12px rgba(212, 175, 55, 0.3);
+    }
+
+    .time-input.invalid {
+      border-color: #ffb4ab;
+      color: #ffb4ab;
+    }
+
+    .time-colon-separator {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 28px;
+      color: var(--gold);
+      margin-top: 18px;
+    }
+
+    .type-hint {
+      font-size: 12px;
+      color: var(--vellum-muted);
+      text-align: center;
+      font-weight: 400;
+    }
+
+    .validation-msg {
+      min-height: 18px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px;
+      color: #ffb4ab;
+      text-align: center;
+    }
+
+    /* Editor Actions: Cancel / Set */
+    .editor-action-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px solid rgba(212, 175, 55, 0.15);
+    }
+
+    .btn-secondary {
+      flex: 1;
+      min-height: 44px;
+      background: transparent;
+      border: 1px solid rgba(212, 175, 55, 0.24);
+      border-radius: 8px;
+      color: var(--vellum-muted);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .btn-secondary:focus-visible {
+      outline: 2px solid var(--focus-ring);
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--vellum);
+      color: var(--vellum);
+    }
+
+    .btn-commit {
+      flex: 1.3;
+      min-height: 44px;
+      background: var(--gold);
+      border: 1px solid var(--gold);
+      border-radius: 8px;
+      color: #110b1b;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+      box-shadow: 0 4px 14px rgba(212, 175, 55, 0.25);
+    }
+
+    .btn-commit:focus-visible {
+      outline: 2px solid var(--focus-ring);
+      outline-offset: 2px;
+    }
+
+    .btn-commit:hover:not(:disabled) {
+      background: #f2ca50;
+      box-shadow: 0 4px 18px rgba(212, 175, 55, 0.4);
+    }
+
+    .btn-commit:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    /* Unknown birth time checkbox row */
+    .unknown-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 16px;
+      background: rgba(31, 25, 41, 0.65);
+      border: 1px solid rgba(212, 175, 55, 0.16);
+      border-radius: 12px;
+      cursor: pointer;
+      user-select: none;
+      min-height: 48px;
+    }
+
+    .unknown-row:focus-within {
+      outline: 2px solid var(--focus-ring);
+      outline-offset: 1px;
+    }
+
+    .custom-checkbox {
+      width: 22px;
+      height: 22px;
+      min-width: 22px;
+      border: 1.5px solid var(--gold-dim);
+      border-radius: 5px;
+      background: var(--bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s;
+    }
+
+    .unknown-input:checked + .custom-checkbox {
+      background: var(--gold);
+      border-color: var(--gold);
+    }
+
+    .custom-checkbox svg {
+      display: none;
+      width: 14px;
+      height: 14px;
+      stroke: #110b1b;
+      stroke-width: 2.6;
+      fill: none;
+    }
+
+    .unknown-input:checked + .custom-checkbox svg {
+      display: block;
+    }
+
+    .unknown-input {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .unknown-label-text {
+      font-size: 14px;
+      color: var(--vellum-muted);
+      font-weight: 400;
+    }
+
+    /* Outcome Confirmation Display: STRICT user entered time ONLY */
+    .confirmed-outcome {
+      display: none;
+      background: rgba(212, 175, 55, 0.08);
+      border: 1px solid var(--gold-dim);
+      border-radius: 10px;
+      padding: 16px;
+      text-align: center;
+    }
+
+    .confirmed-outcome.visible {
+      display: block;
+    }
+
+    .outcome-detail {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 18px;
+      font-weight: 500;
+      color: var(--gold);
+      letter-spacing: 0.04em;
+    }
+
+    /* Bottom Action Area */
+    .bottom-action-container {
+      margin-top: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .btn-begin {
+      width: 100%;
+      min-height: 52px;
+      background: var(--gold);
+      color: #110b1b;
+      border: none;
+      border-radius: 10px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s;
+      box-shadow: 0 4px 20px rgba(212, 175, 55, 0.3);
+    }
+
+    .btn-begin:focus-visible {
+      outline: 2px solid var(--focus-ring);
+      outline-offset: 3px;
+    }
+
+    .btn-begin:hover:not(:disabled) {
+      background: #f2ca50;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 24px rgba(212, 175, 55, 0.45);
+    }
+
+    .btn-begin:disabled {
+      background: rgba(234, 222, 246, 0.1);
+      color: rgba(234, 222, 246, 0.32);
+      cursor: not-allowed;
+      box-shadow: none;
+      transform: none;
+    }
+
+    /* Reduced Motion */
+    @media (prefers-reduced-motion: reduce) {
+      *, ::before, ::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+      }
+      .clock-hand {
+        transition: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+<!-- Ambient Constellation Vein Background -->
+<div aria-hidden="true" class="constellation-bg"></div>
+<svg aria-hidden="true" class="constellation-svg" preserveaspectratio="none" viewbox="0 0 400 800" xmlns="http://www.w3.org/2000/svg">
+<!-- Constellation Lines -->
+<path d="M 60 120 L 140 180 L 220 150 L 320 230 L 270 340 L 340 460" fill="none" opacity="0.32" stroke="#d4af37" stroke-dasharray="3 3" stroke-width="0.75"></path>
+<path d="M 140 180 L 110 310 L 180 390 L 150 510 L 70 600" fill="none" opacity="0.22" stroke="#d4af37" stroke-width="0.6"></path>
+<path d="M 270 340 L 180 390" fill="none" opacity="0.22" stroke="#d4af37" stroke-width="0.6"></path>
+<!-- Node Stars -->
+<circle cx="60" cy="120" fill="#d4af37" r="2"></circle>
+<circle cx="140" cy="180" fill="#eadef6" r="2.5"></circle>
+<circle cx="220" cy="150" fill="#d4af37" r="2"></circle>
+<circle cx="320" cy="230" fill="#eadef6" r="3"></circle>
+<circle cx="270" cy="340" fill="#d4af37" r="2"></circle>
+<circle cx="110" cy="310" fill="#d4af37" r="1.5"></circle>
+<circle cx="180" cy="390" fill="#eadef6" r="2.5"></circle>
+<circle cx="340" cy="460" fill="#d4af37" r="2"></circle>
+<circle cx="150" cy="510" fill="#d4af37" r="1.5"></circle>
+<circle cx="70" cy="600" fill="#d4af37" r="2"></circle>
+</svg>
+<div class="app-viewport">
+<header>
+<div class="top-meta">
+<span class="brand-mark">natally</span>
+</div>
+<h1 class="prompt-title">What time were you born?<span aria-hidden="true" class="typewriter-cursor"></span></h1>
+</header>
+<main>
+<!-- Outer Time Row -->
+<section>
+<button aria-controls="birthTimeEditor" aria-expanded="false" aria-label="Birth time entry slot" class="time-slot-card" id="timeSlotTrigger" type="button">
+<div class="slot-label-group">
+<span class="slot-title">Birth Time</span>
+<span class="slot-value empty" id="slotDisplay">Tap to select time</span>
+</div>
+<span aria-hidden="true" class="slot-action-btn" id="slotActionText">Select →</span>
+</button>
+</section>
+<!-- App-Owned Birth-Time Editor -->
+<section aria-label="Birth time editor" class="editor-panel" id="birthTimeEditor">
+<!-- Editor Controls Bar -->
+<div class="editor-header">
+<!-- Clock / Type Mode switch -->
+<div aria-label="Input Mode" class="mode-switch-group" role="tablist">
+<button aria-controls="viewClock" aria-selected="true" class="mode-btn active" id="modeBtnClock" role="tab" tabindex="0" type="button">Clock</button>
+<button aria-controls="viewType" aria-selected="false" class="mode-btn" id="modeBtnType" role="tab" tabindex="-1" type="button">Type time</button>
+</div>
+<!-- Explicit AM/PM toggle (neither active by default) -->
+<div aria-label="Ante or Post Meridiem" class="am-pm-toggle" role="group">
+<button aria-pressed="false" class="ampm-btn" id="btnAM" type="button">AM</button>
+<button aria-pressed="false" class="ampm-btn" id="btnPM" type="button">PM</button>
+</div>
+</div>
+<!-- Live Draft Time Readout -->
+<div aria-live="polite" class="draft-display-bar">
+<span class="draft-preview-label">Draft:</span>
+<span class="draft-preview-time" id="draftTimeReadout">--:--</span>
+</div>
+<!-- 1. CLOCK VIEW -->
+<div aria-labelledby="modeBtnClock" class="view-clock" id="viewClock" role="tabpanel">
+<!-- Submode tabs: switch between selecting Hours vs Minutes on the same dial face -->
+<div aria-label="Dial view selection" class="dial-submode-tabs" role="tablist">
+<button aria-selected="true" class="dial-submode-btn active" id="tabDialHour" role="tab" tabindex="0" type="button">
+              Hours (<span id="clockSelectedHour">--</span>)
+            </button>
+<button aria-selected="false" class="dial-submode-btn" id="tabDialMinute" role="tab" tabindex="-1" type="button">
+              Minutes (<span id="clockSelectedMinute">--</span>)
+            </button>
+</div>
+<!-- Circular Dial Face -->
+<div aria-label="Clock face selector" class="clock-face-wrapper" id="clockFaceContainer" role="radiogroup">
+<svg aria-hidden="true" class="clock-svg-layer" viewbox="0 0 270 270">
+<!-- Dial center axis -->
+<circle cx="135" cy="135" fill="#d4af37" r="4.5"></circle>
+<!-- Hand line & tip target -->
+<g class="clock-hand no-hand" id="clockHandGroup">
+<line opacity="0.85" stroke="#d4af37" stroke-linecap="round" stroke-width="2.5" x1="135" x2="135" y1="135" y2="40"></line>
+<circle cx="135" cy="40" fill="rgba(212, 175, 55, 0.22)" r="16" stroke="#d4af37" stroke-width="1.5"></circle>
+</g>
+</svg>
+<!-- 12 Real Circular Buttons dynamically rendered in JS around the circumference -->
+<div id="dialButtonsContainer"></div>
+</div>
+<!-- Exact minute +/- stepper buttons -->
+<div class="exact-minute-bar">
+<button aria-label="Decrease minute by 1" class="step-btn" id="btnMinusMinute" type="button">−1m</button>
+<span class="step-info">Exact Minute Tuning</span>
+<button aria-label="Increase minute by 1" class="step-btn" id="btnPlusMinute" type="button">+1m</button>
+</div>
+</div>
+<!-- 2. TYPE VIEW -->
+<div aria-labelledby="modeBtnType" class="view-type" id="viewType" role="tabpanel">
+<div class="type-inputs-row">
+<div class="type-field">
+<label for="inputHour">Hour (1–12)</label>
+<input aria-label="Hour 1 to 12" autocomplete="off" class="time-input" id="inputHour" inputmode="numeric" maxlength="2" pattern="[0-9]*" placeholder="--" type="text"/>
+</div>
+<span aria-hidden="true" class="time-colon-separator">:</span>
+<div class="type-field">
+<label for="inputMinute">Min (00–59)</label>
+<input aria-label="Minute 00 to 59" autocomplete="off" class="time-input" id="inputMinute" inputmode="numeric" maxlength="2" pattern="[0-9]*" placeholder="--" type="text"/>
+</div>
+</div>
+<p class="type-hint">Type numeric hour and minute. Select AM or PM above.</p>
+<div class="validation-msg" id="typeValidationMsg" role="alert"></div>
+</div>
+<!-- Editor Action Row: Cancel / Set -->
+<div class="editor-action-row">
+<button aria-label="Cancel editing" class="btn-secondary" id="btnCancelDraft" type="button">Cancel</button>
+<button aria-label="Set birth time" class="btn-commit" disabled="" id="btnSetTime" type="button">Set time</button>
+</div>
+</section>
+<!-- Unknown Birth Time Checkbox -->
+<label class="unknown-row" for="chkUnknown">
+<input aria-describedby="unknownDesc" class="unknown-input" id="chkUnknown" type="checkbox"/>
+<span aria-hidden="true" class="custom-checkbox">
+<svg viewbox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+</span>
+<span class="unknown-label-text" id="unknownDesc">I don't know my birth time</span>
+</label>
+<!-- Confirmed Outcome Display: STRICT user-entered time ONLY or 'Birth time unknown' -->
+<div aria-live="polite" class="confirmed-outcome" id="confirmedOutcomeCard">
+<div class="outcome-detail" id="outcomeDetailText"></div>
+</div>
+</main>
+<div class="bottom-action-container">
+<button aria-label="Begin" class="btn-begin" disabled="" id="btnBegin" type="button">
+        Begin
+        <svg fill="none" height="18" stroke="currentColor" stroke-width="2.2" viewbox="0 0 24 24" width="18"><line x1="5" x2="19" y1="12" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+</button>
+</div>
+</div>
+<script>
+    (function() {
+      // Confirmed time state: null until user clicks 'Set time'
+      let confirmedTime = null; // { hour12: number, minute: number, ampm: 'AM'|'PM' }
+      let isUnknown = false;
+      let isEditorOpen = false;
+      let activeMode = 'clock'; // 'clock' | 'type'
+      let dialSubmode = 'hours'; // 'hours' | 'minutes'
+
+      // Draft state: default empty (null), required AM/PM explicit selection
+      let draft = {
+        hour12: null,
+        minute: null,
+        ampm: null
+      };
+
+      // Raw typed input strings retained across mode switches (no stale fallback overwrite)
+      let rawTyped = {
+        hour: '',
+        minute: ''
+      };
+
+      // DOM Elements
+      const timeSlotTrigger = document.getElementById('timeSlotTrigger');
+      const slotDisplay = document.getElementById('slotDisplay');
+      const slotActionText = document.getElementById('slotActionText');
+      const editorPanel = document.getElementById('birthTimeEditor');
+
+      const modeBtnClock = document.getElementById('modeBtnClock');
+      const modeBtnType = document.getElementById('modeBtnType');
+      const viewClock = document.getElementById('viewClock');
+      const viewType = document.getElementById('viewType');
+
+      const tabDialHour = document.getElementById('tabDialHour');
+      const tabDialMinute = document.getElementById('tabDialMinute');
+      const clockFaceContainer = document.getElementById('clockFaceContainer');
+      const clockHandGroup = document.getElementById('clockHandGroup');
+      const dialButtonsContainer = document.getElementById('dialButtonsContainer');
+
+      const clockSelectedHour = document.getElementById('clockSelectedHour');
+      const clockSelectedMinute = document.getElementById('clockSelectedMinute');
+      const btnMinusMinute = document.getElementById('btnMinusMinute');
+      const btnPlusMinute = document.getElementById('btnPlusMinute');
+
+      const btnAM = document.getElementById('btnAM');
+      const btnPM = document.getElementById('btnPM');
+
+      const draftTimeReadout = document.getElementById('draftTimeReadout');
+
+      const inputHour = document.getElementById('inputHour');
+      const inputMinute = document.getElementById('inputMinute');
+      const typeValidationMsg = document.getElementById('typeValidationMsg');
+
+      const btnCancelDraft = document.getElementById('btnCancelDraft');
+      const btnSetTime = document.getElementById('btnSetTime');
+      const chkUnknown = document.getElementById('chkUnknown');
+      const btnBegin = document.getElementById('btnBegin');
+
+      const confirmedOutcomeCard = document.getElementById('confirmedOutcomeCard');
+      const outcomeDetailText = document.getElementById('outcomeDetailText');
+
+      // Clear confirmed outcome helper
+      function clearOutcome() {
+        confirmedOutcomeCard.classList.remove('visible');
+        outcomeDetailText.textContent = '';
+      }
+
+      // Check if draft is fully valid: hour 1..12, minute 0..59, and explicit AM/PM
+      function isDraftValid() {
+        const hValid = draft.hour12 !== null && draft.hour12 >= 1 && draft.hour12 <= 12;
+        const mValid = draft.minute !== null && draft.minute >= 0 && draft.minute <= 59;
+        const ampmValid = draft.ampm === 'AM' || draft.ampm === 'PM';
+        return hValid && mValid && ampmValid;
+      }
+
+      function formatDraftDisplay() {
+        const hh = draft.hour12 !== null ? String(draft.hour12).padStart(2, '0') : '--';
+        const mm = draft.minute !== null ? String(draft.minute).padStart(2, '0') : '--';
+        const ap = draft.ampm !== null ? draft.ampm : '--';
+        return `${hh}:${mm} ${ap}`;
+      }
+
+      function updateDraftDisplay() {
+        draftTimeReadout.textContent = formatDraftDisplay();
+        clockSelectedHour.textContent = draft.hour12 !== null ? draft.hour12 : '--';
+        clockSelectedMinute.textContent = draft.minute !== null ? String(draft.minute).padStart(2, '0') : '--';
+
+        // AM/PM state
+        if (draft.ampm === 'AM') {
+          btnAM.classList.add('active');
+          btnAM.setAttribute('aria-pressed', 'true');
+          btnPM.classList.remove('active');
+          btnPM.setAttribute('aria-pressed', 'false');
+        } else if (draft.ampm === 'PM') {
+          btnPM.classList.add('active');
+          btnPM.setAttribute('aria-pressed', 'true');
+          btnAM.classList.remove('active');
+          btnAM.setAttribute('aria-pressed', 'false');
+        } else {
+          btnAM.classList.remove('active');
+          btnAM.setAttribute('aria-pressed', 'false');
+          btnPM.classList.remove('active');
+          btnPM.setAttribute('aria-pressed', 'false');
+        }
+
+        renderDial();
+        updateSetTimeState();
+      }
+
+      function updateSetTimeState() {
+        if (activeMode === 'type') {
+          validateTypeInputs();
+        } else {
+          btnSetTime.disabled = !isDraftValid();
+        }
+      }
+
+      // Render the circular clock dial face
+      // Center (135, 135), Radius = 95px
+      function renderDial() {
+        dialButtonsContainer.innerHTML = '';
+        const cx = 135;
+        const cy = 135;
+        const r = 95;
+
+        let selectedVal = null;
+        let handAngle = null;
+
+        if (dialSubmode === 'hours') {
+          selectedVal = draft.hour12;
+          if (selectedVal !== null) {
+            handAngle = (selectedVal % 12) * 30; // 12 -> 0 deg, 1 -> 30 deg, etc.
+          }
+
+          // 12 hours: 1 to 12
+          for (let i = 1; i <= 12; i++) {
+            const angleDeg = (i % 12) * 30;
+            const angleRad = (angleDeg - 90) * (Math.PI / 180);
+            const x = cx + r * Math.cos(angleRad);
+            const y = cy + r * Math.sin(angleRad);
+
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'dial-button' + (selectedVal === i ? ' selected' : '');
+            btn.style.left = `${x}px`;
+            btn.style.top = `${y}px`;
+            btn.textContent = String(i);
+            btn.setAttribute('role', 'radio');
+            btn.setAttribute('aria-checked', selectedVal === i ? 'true' : 'false');
+            btn.setAttribute('aria-label', `${i} o'clock`);
+            btn.setAttribute('tabindex', selectedVal === i || (selectedVal === null && i === 12) ? '0' : '-1');
+
+            btn.addEventListener('click', () => {
+              draft.hour12 = i;
+              rawTyped.hour = String(i);
+              inputHour.value = String(i);
+              // Auto-advance to minutes if minute not yet selected
+              if (draft.minute === null) {
+                setDialSubmode('minutes');
+              } else {
+                updateDraftDisplay();
+              }
+            });
+
+            btn.addEventListener('keydown', handleDialArrowNav);
+            dialButtonsContainer.appendChild(btn);
+          }
+        } else {
+          // Minutes submode: 00, 05, 10, ... 55
+          selectedVal = draft.minute;
+          if (selectedVal !== null) {
+            handAngle = (selectedVal / 60) * 360;
+          }
+
+          for (let i = 0; i < 12; i++) {
+            const minVal = i * 5;
+            const angleDeg = (minVal / 60) * 360;
+            const angleRad = (angleDeg - 90) * (Math.PI / 180);
+            const x = cx + r * Math.cos(angleRad);
+            const y = cy + r * Math.sin(angleRad);
+
+            const isSelected = selectedVal === minVal;
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'dial-button' + (isSelected ? ' selected' : '');
+            btn.style.left = `${x}px`;
+            btn.style.top = `${y}px`;
+            const textVal = String(minVal).padStart(2, '0');
+            btn.textContent = textVal;
+            btn.setAttribute('role', 'radio');
+            btn.setAttribute('aria-checked', isSelected ? 'true' : 'false');
+            btn.setAttribute('aria-label', `${textVal} minutes`);
+            btn.setAttribute('tabindex', isSelected || (selectedVal === null && minVal === 0) ? '0' : '-1');
+
+            btn.addEventListener('click', () => {
+              draft.minute = minVal;
+              rawTyped.minute = textVal;
+              inputMinute.value = textVal;
+              updateDraftDisplay();
+            });
+
+            btn.addEventListener('keydown', handleDialArrowNav);
+            dialButtonsContainer.appendChild(btn);
+          }
+        }
+
+        // Rotate Hand SVG
+        if (handAngle !== null) {
+          clockHandGroup.classList.remove('no-hand');
+          clockHandGroup.style.transform = `rotate(${handAngle}deg)`;
+        } else {
+          clockHandGroup.classList.add('no-hand');
+        }
+      }
+
+      // Keyboard arrow navigation on circular dial buttons
+      function handleDialArrowNav(e) {
+        const buttons = Array.from(dialButtonsContainer.querySelectorAll('.dial-button'));
+        const index = buttons.indexOf(e.currentTarget);
+        if (index === -1) return;
+
+        let nextIndex = null;
+        if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+          e.preventDefault();
+          nextIndex = (index + 1) % buttons.length;
+        } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+          e.preventDefault();
+          nextIndex = (index - 1 + buttons.length) % buttons.length;
+        }
+
+        if (nextIndex !== null) {
+          buttons.forEach(b => b.setAttribute('tabindex', '-1'));
+          buttons[nextIndex].setAttribute('tabindex', '0');
+          buttons[nextIndex].focus();
+        }
+      }
+
+      // Dial submode switch (Hour dial vs Minute dial)
+      function setDialSubmode(submode) {
+        dialSubmode = submode;
+        if (submode === 'hours') {
+          tabDialHour.classList.add('active');
+          tabDialHour.setAttribute('aria-selected', 'true');
+          tabDialHour.setAttribute('tabindex', '0');
+          tabDialMinute.classList.remove('active');
+          tabDialMinute.setAttribute('aria-selected', 'false');
+          tabDialMinute.setAttribute('tabindex', '-1');
+        } else {
+          tabDialMinute.classList.add('active');
+          tabDialMinute.setAttribute('aria-selected', 'true');
+          tabDialMinute.setAttribute('tabindex', '0');
+          tabDialHour.classList.remove('active');
+          tabDialHour.setAttribute('aria-selected', 'false');
+          tabDialHour.setAttribute('tabindex', '-1');
+        }
+        updateDraftDisplay();
+      }
+
+      tabDialHour.addEventListener('click', () => setDialSubmode('hours'));
+      tabDialMinute.addEventListener('click', () => setDialSubmode('minutes'));
+
+      // Arrow navigation between submode tabs
+      tabDialHour.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight') {
+          e.preventDefault();
+          setDialSubmode('minutes');
+          tabDialMinute.focus();
+        }
+      });
+      tabDialMinute.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft') {
+          e.preventDefault();
+          setDialSubmode('hours');
+          tabDialHour.focus();
+        }
+      });
+
+      // Stepper for exact minute (+1m / -1m)
+      btnMinusMinute.addEventListener('click', () => {
+        const cur = draft.minute !== null ? draft.minute : 0;
+        draft.minute = (cur - 1 + 60) % 60;
+        rawTyped.minute = String(draft.minute).padStart(2, '0');
+        inputMinute.value = rawTyped.minute;
+        setDialSubmode('minutes');
+      });
+
+      btnPlusMinute.addEventListener('click', () => {
+        const cur = draft.minute !== null ? draft.minute : 0;
+        draft.minute = (cur + 1) % 60;
+        rawTyped.minute = String(draft.minute).padStart(2, '0');
+        inputMinute.value = rawTyped.minute;
+        setDialSubmode('minutes');
+      });
+
+      // AM/PM buttons
+      btnAM.addEventListener('click', () => {
+        draft.ampm = 'AM';
+        clearOutcome();
+        updateDraftDisplay();
+      });
+
+      btnPM.addEventListener('click', () => {
+        draft.ampm = 'PM';
+        clearOutcome();
+        updateDraftDisplay();
+      });
+
+      // Mode switching (Clock vs Type)
+      function setMode(mode, shouldFocusInput = false) {
+        activeMode = mode;
+        if (mode === 'clock') {
+          modeBtnClock.classList.add('active');
+          modeBtnClock.setAttribute('aria-selected', 'true');
+          modeBtnClock.setAttribute('tabindex', '0');
+          modeBtnType.classList.remove('active');
+          modeBtnType.setAttribute('aria-selected', 'false');
+          modeBtnType.setAttribute('tabindex', '-1');
+          viewClock.style.display = 'block';
+          viewType.style.display = 'none';
+          updateDraftDisplay();
+        } else {
+          modeBtnType.classList.add('active');
+          modeBtnType.setAttribute('aria-selected', 'true');
+          modeBtnType.setAttribute('tabindex', '0');
+          modeBtnClock.classList.remove('active');
+          modeBtnClock.setAttribute('aria-selected', 'false');
+          modeBtnClock.setAttribute('tabindex', '-1');
+          viewClock.style.display = 'none';
+          viewType.style.display = 'flex';
+
+          // Preserve raw typed state
+          inputHour.value = rawTyped.hour;
+          inputMinute.value = rawTyped.minute;
+
+          validateTypeInputs();
+
+          // Synchronous focus to summon software keyboard directly
+          if (shouldFocusInput) {
+            inputHour.focus();
+            if (rawTyped.hour) {
+              inputHour.select();
+            }
+          }
+        }
+      }
+
+      modeBtnClock.addEventListener('click', () => setMode('clock', false));
+      modeBtnType.addEventListener('click', () => setMode('type', true));
+
+      // Arrow navigation on Mode Tabs
+      modeBtnClock.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight') {
+          e.preventDefault();
+          setMode('type', true);
+          modeBtnType.focus();
+        }
+      });
+      modeBtnType.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft') {
+          e.preventDefault();
+          setMode('clock', false);
+          modeBtnClock.focus();
+        }
+      });
+
+      // Validate typed inputs: strictly 1–12, 00–59, and explicit AM/PM
+      function validateTypeInputs() {
+        typeValidationMsg.textContent = '';
+        inputHour.classList.remove('invalid');
+        inputMinute.classList.remove('invalid');
+
+        const hStr = inputHour.value.trim();
+        const mStr = inputMinute.value.trim();
+
+        let hVal = null;
+        let mVal = null;
+        let valid = true;
+
+        if (hStr !== '') {
+          const parsedH = parseInt(hStr, 10);
+          if (isNaN(parsedH) || parsedH < 1 || parsedH > 12) {
+            inputHour.classList.add('invalid');
+            typeValidationMsg.textContent = 'Hour must be between 1 and 12.';
+            valid = false;
+          } else {
+            hVal = parsedH;
+          }
+        } else {
+          valid = false;
+        }
+
+        if (mStr !== '') {
+          const parsedM = parseInt(mStr, 10);
+          if (isNaN(parsedM) || parsedM < 0 || parsedM > 59) {
+            inputMinute.classList.add('invalid');
+            if (!typeValidationMsg.textContent) {
+              typeValidationMsg.textContent = 'Minute must be between 00 and 59.';
+            }
+            valid = false;
+          } else {
+            mVal = parsedM;
+          }
+        } else {
+          valid = false;
+        }
+
+        if (!draft.ampm && valid) {
+          typeValidationMsg.textContent = 'Select AM or PM above.';
+          valid = false;
+        }
+
+        // Update draft representation without stale valid fallbacks
+        draft.hour12 = hVal;
+        draft.minute = mVal;
+        draftTimeReadout.textContent = formatDraftDisplay();
+
+        btnSetTime.disabled = !(valid && draft.ampm);
+      }
+
+      // Input listeners for typed mode
+      inputHour.addEventListener('input', () => {
+        inputHour.value = inputHour.value.replace(/[^0-9]/g, '');
+        rawTyped.hour = inputHour.value;
+        clearOutcome();
+        validateTypeInputs();
+      });
+
+      inputMinute.addEventListener('input', () => {
+        inputMinute.value = inputMinute.value.replace(/[^0-9]/g, '');
+        rawTyped.minute = inputMinute.value;
+        clearOutcome();
+        validateTypeInputs();
+      });
+
+      // Open / Close Editor
+      function openEditor() {
+        if (isUnknown) return;
+        isEditorOpen = true;
+        editorPanel.classList.add('open');
+        timeSlotTrigger.setAttribute('aria-expanded', 'true');
+        slotActionText.textContent = 'Editing…';
+
+        clearOutcome();
+        btnBegin.disabled = true; // Disabled during editing
+
+        // If previously confirmed, pre-populate draft; else start fresh empty
+        if (confirmedTime) {
+          draft = {
+            hour12: confirmedTime.hour12,
+            minute: confirmedTime.minute,
+            ampm: confirmedTime.ampm
+          };
+          rawTyped.hour = String(confirmedTime.hour12);
+          rawTyped.minute = String(confirmedTime.minute).padStart(2, '0');
+        } else {
+          draft = {
+            hour12: null,
+            minute: null,
+            ampm: null
+          };
+          rawTyped.hour = '';
+          rawTyped.minute = '';
+        }
+
+        inputHour.value = rawTyped.hour;
+        inputMinute.value = rawTyped.minute;
+
+        setDialSubmode(draft.hour12 === null ? 'hours' : 'minutes');
+        setMode('clock', false);
+        updateDraftDisplay();
+
+        editorPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+
+      function closeEditor(restoreFocus = true) {
+        isEditorOpen = false;
+        editorPanel.classList.remove('open');
+        timeSlotTrigger.setAttribute('aria-expanded', 'false');
+        slotActionText.textContent = confirmedTime ? 'Change →' : 'Select →';
+        updateBeginButtonState();
+
+        if (restoreFocus) {
+          timeSlotTrigger.focus();
+        }
+      }
+
+      timeSlotTrigger.addEventListener('click', () => {
+        if (isEditorOpen) {
+          closeEditor(false);
+        } else {
+          openEditor();
+        }
+      });
+
+      // Set time action
+      btnSetTime.addEventListener('click', () => {
+        if (!isDraftValid()) return;
+
+        confirmedTime = {
+          hour12: draft.hour12,
+          minute: draft.minute,
+          ampm: draft.ampm
+        };
+
+        const hh = String(confirmedTime.hour12).padStart(2, '0');
+        const mm = String(confirmedTime.minute).padStart(2, '0');
+        const formatted = `${hh}:${mm} ${confirmedTime.ampm}`;
+
+        slotDisplay.classList.remove('empty');
+        slotDisplay.textContent = formatted;
+
+        closeEditor(true);
+      });
+
+      // Cancel action (discards draft even if no prior committed time existed)
+      btnCancelDraft.addEventListener('click', () => {
+        // Discard uncommitted changes
+        if (confirmedTime) {
+          draft = {
+            hour12: confirmedTime.hour12,
+            minute: confirmedTime.minute,
+            ampm: confirmedTime.ampm
+          };
+          rawTyped.hour = String(confirmedTime.hour12);
+          rawTyped.minute = String(confirmedTime.minute).padStart(2, '0');
+        } else {
+          draft = { hour12: null, minute: null, ampm: null };
+          rawTyped.hour = '';
+          rawTyped.minute = '';
+        }
+        closeEditor(true);
+      });
+
+      // Unknown checkbox
+      chkUnknown.addEventListener('change', (e) => {
+        isUnknown = e.target.checked;
+        clearOutcome();
+
+        if (isUnknown) {
+          if (isEditorOpen) {
+            closeEditor(false);
+          }
+          timeSlotTrigger.classList.add('disabled');
+          timeSlotTrigger.setAttribute('tabindex', '-1');
+          timeSlotTrigger.setAttribute('aria-disabled', 'true');
+          slotDisplay.classList.add('empty');
+          slotDisplay.textContent = 'Time unknown';
+          slotActionText.textContent = '—';
+        } else {
+          timeSlotTrigger.classList.remove('disabled');
+          timeSlotTrigger.setAttribute('tabindex', '0');
+          timeSlotTrigger.removeAttribute('aria-disabled');
+          // Preserve retained known time when toggled off
+          if (confirmedTime) {
+            const hh = String(confirmedTime.hour12).padStart(2, '0');
+            const mm = String(confirmedTime.minute).padStart(2, '0');
+            slotDisplay.classList.remove('empty');
+            slotDisplay.textContent = `${hh}:${mm} ${confirmedTime.ampm}`;
+            slotActionText.textContent = 'Change →';
+          } else {
+            slotDisplay.classList.add('empty');
+            slotDisplay.textContent = 'Tap to select time';
+            slotActionText.textContent = 'Select →';
+          }
+        }
+        updateBeginButtonState();
+      });
+
+      // Update Begin button enabled state
+      function updateBeginButtonState() {
+        if (isEditorOpen) {
+          btnBegin.disabled = true;
+          return;
+        }
+        if (isUnknown) {
+          btnBegin.disabled = false;
+        } else {
+          btnBegin.disabled = confirmedTime === null;
+        }
+      }
+
+      // Begin button click: Shows ONLY the actual entered time or 'Birth time unknown'
+      btnBegin.addEventListener('click', () => {
+        if (btnBegin.disabled) return;
+
+        if (isUnknown) {
+          outcomeDetailText.textContent = 'Birth time unknown';
+        } else if (confirmedTime) {
+          const hh = String(confirmedTime.hour12).padStart(2, '0');
+          const mm = String(confirmedTime.minute).padStart(2, '0');
+          outcomeDetailText.textContent = `${hh}:${mm} ${confirmedTime.ampm}`;
+        }
+        confirmedOutcomeCard.classList.add('visible');
+        confirmedOutcomeCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      });
+
+      // Initial state
+      updateDraftDisplay();
+      updateBeginButtonState();
+    })();
+  </script>
+</body></html>

@@ -1,0 +1,32 @@
+[
+  {
+    "file": "01-empty-and-typed.mp4",
+    "duration_seconds": 2.0,
+    "bytes": 222444
+  },
+  {
+    "file": "02-invalid-and-cancel.mp4",
+    "duration_seconds": 3.4,
+    "bytes": 378180
+  },
+  {
+    "file": "03-boundaries-and-unknown.mp4",
+    "duration_seconds": 4.0,
+    "bytes": 347248
+  },
+  {
+    "file": "04-clock-and-empty-cancel.mp4",
+    "duration_seconds": 4.8,
+    "bytes": 407053
+  },
+  {
+    "file": "05-narrow-layout.mp4",
+    "duration_seconds": 2.28,
+    "bytes": 281790
+  },
+  {
+    "file": "06-clock-actions-and-desktop.mp4",
+    "duration_seconds": 2.88,
+    "bytes": 335563
+  }
+]

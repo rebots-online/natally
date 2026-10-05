@@ -1,5 +1,11 @@
 # natally — architecture (Gate 2 document 1 of 3)
 
+**Current verification authority (2026-10-05, D24):** no unit or smoke testing.
+Historical unit/conformance/check.sh instructions below are superseded for this
+work. Runtime acceptance uses the precommitted rubric and direct screenshots /
+screencast only. Existing test results are historical evidence, not acceptance.
+Birth-time repair design is specified in §23; production integration is pending.
+
 Normative for the **local-app product** (Android is the authoritative primary target;
 Linux and Windows are additional installed legs. In this implementation portion,
 `apps/local` in the browser/PWA is only a convenience test harness for shared React UI and
@@ -993,3 +999,100 @@ blocked a task was surfaced and resolved before this file was written. Arriving 
 checklist with an unresolved blocker means the snapshot pass was incomplete — the fix is
 to complete the snapshot first, then the recipe; never an in-code improvisation (I-4/I-6,
 CLAUDE.md Architecture Law).
+
+## 23. Birth-time editor amendment (2026-10-05, D24/D25)
+
+Scope is the original local app's first-light time step. No Alby/hosted-product
+change. This section supersedes §18.6.1's **native time-picker** requirement only;
+the structured native date picker, sequential four prompts, existing look,
+gazetteer, persistence boundary and single final submission remain authoritative.
+The observed Android native time dialog has no usable confirmation action.
+Application-owned controls make explicit confirmation part of the app itself.
+
+### 23.1 Source chain and exact artifacts
+
+1. Figma `TmZDFVgkUeeL1VEYWtuaJL`, frame `15:148`, retrieved 2026-10-05; its
+   known/unknown semantics survive, while §18.6.1 supplies the newer layout.
+2. Google Stitch project `8460014353109836944`, original Natally, design system
+   `assets/eccd2173f2a54547b55286bbb1f92b85`. Initial screen
+   `bc0be9d09f3546dfb0e384e75d5cf439`; refined screen
+   `07a9a049170c488b9c56283d45055389` supplies the actual controls.
+3. `LIBS/UI/STITCH-birth-time-v1.35/index.html` is the runnable adapted export.
+   `stitch-refined-source.html.txt` is the immutable downloaded source record;
+   `stitch-export.html` and preview PNGs preserve the rejected first iteration.
+   They are historical design evidence, not approved runnable entrypoints.
+4. Local changes retain generated DOM IDs and event connections, self-host
+   fonts, use the existing Playfair/charcoal/vellum treatment, resize the dial
+   proportionally, retain focus through dial rerenders, and convert to HH:mm.
+   `DESIGN.md` and `PROTOTYPE-RUBRIC.md` in this directory define intent/evidence.
+
+The generated picture from the earlier conversation was not used as a control
+implementation. No runtime dependence on Figma/Stitch asset URLs or font CDNs.
+
+### 23.2 Closed entity and binding table
+
+New production-file line anchors mean line 1 when created; existing file rows
+use their named exported declaration as the stable anchor. This section is a
+specification, not a claim that those production entities have been implemented.
+
+| Entity | Exact target / source anchor | Signature / fields / role | Content provenance |
+|---|---|---|---|
+| `BirthTimeDraft` | `apps/local/src/screens/first-light/birth-time.ts:1` (new) | `{hour:string; minute:string; period:'AM' \| 'PM' \| null}`; raw strings retained, including invalid/incomplete values | User input |
+| `BirthTimeValue` | same new file | `string \| null`; nonnull must match canonical HH:mm, null means no committed time | Computed normalization / honest absence |
+| `parseBirthTime` | same new file | `(value:BirthTimeValue):BirthTimeDraft`; valid HH:mm → 12-hour draft; null/invalid input → empty strings and null period, never current clock time | Computed |
+| `toBirthTimeValue` | same new file | `(draft:BirthTimeDraft):BirthTimeValue`; exact one/two digits only, hour 1–12, minute 0–59, explicit period; otherwise null. Hour `%12 + (PM?12:0)`, zero-pad both fields | Computed |
+| `BirthTimeEditorProps` | `apps/local/src/screens/first-light/BirthTimeEditor.tsx:1` (new) | `{value:BirthTimeValue; disabled:boolean; onCommit:(value:string)=>void; onEditingChange:(editing:boolean)=>void}` | Input boundary |
+| `BirthTimeEditor` | same new file | `(props:BirthTimeEditorProps)=>JSX.Element`; owns draft/open state, clock/type mode and hour/minute dial mode; adopts the exported controls below | User input and interface labels |
+| `FirstLight` / `IntakeDraft` / `FirstLightProps` | `apps/local/src/screens/first-light/FirstLight.tsx`, existing declarations | Keep external signatures unchanged. Mount editor only in time step. `onCommit` updates `answers.time`; `onEditingChange` updates `isTimeEditing:boolean`; disable Begin while editing, otherwise existing validity/busy/submission guards. Unknown emits `time:null,unknownTime:true` | User input / honest absence |
+| Birth-time styling | `apps/local/src/screens/first-light/first-light.css`, append scoped `.first-light-time-*` selectors | Adapt exported editor/dial/input/action rules; local fonts, ≥44px targets, ≥12px text, visible focus, scrollable narrow/keyboard-height viewports, reduced-motion | Authored design |
+| Prototype `toCanonicalTime` | `LIBS/UI/STITCH-birth-time-v1.35/index.html`, named function | `{hour12,minute,ampm}` → canonical HH:mm; records normalization behavior for production `toBirthTimeValue` | Computed |
+| Prototype `birth-time-submit` | same export, Begin click handler | `CustomEvent<{time:string\|null;unknownTime:boolean}>` dispatched on document; visible outcome contains only submitted input; production uses existing `onCreate`, not this demo event | User input |
+
+The production type/mode closed sets are `AM|PM|null`, `clock|type`, and
+`hours|minutes`. There are no implicit time-zone or current-time defaults.
+
+| Exported control ID | Production binding / invariant |
+|---|---|
+| `timeSlotTrigger` | Use existing `first-light-time` identity for the outer button; open a draft copied from the committed value. `aria-expanded`/`aria-controls` follow actual visibility. |
+| `birthTimeEditor` | Editor region; prefix ID `first-light-time-editor` to avoid collisions; open/close notifies `onEditingChange`. Unknown/busy disabling closes and discards the draft. |
+| `modeBtnClock`, `modeBtnType` | `clock|type`; preserve raw invalid input across switches. Direct Type time activation synchronously focuses the real hour input. |
+| `inputHour`, `inputMinute` | Controlled text inputs with numeric inputmode and maxlength 2; explicit labels; no native input[type=time] modal. |
+| `btnAM`, `btnPM` | Explicit period buttons with aria-pressed; no default selection for a new value. |
+| `tabDialHour`, `tabDialMinute`, `clockFaceContainer`, `dialButtonsContainer`, `clockHandGroup` | Single circular dial, 12 real buttons per face, SVG hand driven by draft; hour selection may advance to minute face; preserve focus after rerender. Arrow keys navigate, Enter/Space selects. |
+| `btnMinusMinute`, `btnPlusMinute` | One-minute adjustment modulo 60, no implied hour change; all 60 minute values reachable. From blank, deliberate +/- activation selects 59/01. |
+| `draftTimeReadout`, `clockSelectedHour`, `clockSelectedMinute`, `typeValidationMsg` | Reflect actual draft and validation only; missing segments shown as dashes. |
+| `btnSetTime` | Enabled only when normalization is nonnull; commit once, close, return focus to trigger. |
+| `btnCancelDraft` | Discard draft, leave committed value unchanged, close, restore focus. Initial uncommitted Cancel reopens empty. |
+| `chkUnknown` | Existing parent unknown-time checkbox; disables editor, closes/discards draft, retains prior known value for unchecking. Submission uses null while checked. |
+| `btnBegin` | Existing final Begin; valid confirmed time OR explicit unknown; unavailable during edit, busy or submitted. Existing parent error allows retry. |
+| `confirmedOutcomeCard`, `outcomeDetailText` | Prototype-only display of actual submitted input; do not port to production or imply chart/companion completion. |
+
+### 23.3 Interaction and failure contracts
+
+Opening is not a commit. Switching modes neither sanitizes invalid values into
+valid ones nor resurrects an earlier valid draft. Cancel, Back, or unknown-time
+selection discards only the uncommitted draft. Repeated Begin/Enter may invoke
+the existing `onCreate` at most once until a real parent error permits retry.
+Known values stay as local civil HH:mm; gazetteer/date logic owns time-zone
+resolution. 12 AM maps to 00; 12 PM stays 12. No claim of UTC calibration appears.
+
+The isolated prototype's controls are observed in the rubric record at
+`dist/rubric-runs/birth-time-prototype-20261005/REPORT.md`. Android keyboard and
+production integration remain unverified. The prototype is not a replacement
+for the full product rubric, and is not a release artifact.
+
+### 23.4 State of the rest of 1.34 and next planning boundary
+
+The September 27 source reviews identify unresolved companion context/tool
+wiring, token-fence timing, voice catalogue integration, navigation, silent
+memory-only persistence fallback, trial gates and license bridge mismatches.
+See `ANALYSIS-REPORT-2026-09-27-v1.34.33290.md` and
+`natally-static-analysis-supplement-27sep2026-06h43.md`. These are source-based
+findings, not a current full runtime certification. The prior live v1.31 visit
+reached a natal chart but did not verify model download → reply → speech →
+remembered conversation. A birth-time-only change cannot certify those systems.
+
+D25's deployment prerequisite takes precedence over §22's general task-order
+rule. The new 1.35 checklist must be derived from the resulting architecture
+after the existing build is deployed to the requested domain. Preserve the old
+checklist separately at that time; do not carry its stale test commands forward.

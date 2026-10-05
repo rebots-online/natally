@@ -1,5 +1,14 @@
 # natally — test rubric / gauntlet (Gate 2 document 3 of 3)
 
+**2026-10-05 operator amendment, D24:** do not run unit tests or smoke tests.
+Historical fixture/assert/script rows below retain their intended requirements,
+but their non-UI execution methods are superseded for the current task. Obtain
+runtime acceptance only through precommitted rubric UI journeys with screenshots
+and screencast; an unobservable requirement remains unverified, never silently
+passed or replaced by a unit test. The isolated birth-time design observation
+rubric is `LIBS/UI/STITCH-birth-time-v1.35/PROTOTYPE-RUBRIC.md`; its evidence cannot
+grant the integrated product a SHIP-READY verdict. Production code remains unchanged.
+
 Pre-committed 2026-09-11 before CODE begins (GR-1, SC4). Task-level Verify lines in
 `CHECKLIST.md` are the executable subset of this rubric; this document is the cross-task
 acceptance matrix that decides the terminal verdict. Authority: GR-1..GR-7 (manual

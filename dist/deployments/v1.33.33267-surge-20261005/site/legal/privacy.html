@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>natally — Privacy Policy</title>
+<style>
+/* Token block mirrored from LIBS/UI/FIGMA/TOKENS.md (frozen complement) — regenerate on token change (SC3). */
+:root {
+  --color-midnight: #120C1C; --color-midnight-2: #1C1428; --color-midnight-3: #271C36;
+  --color-hairline: #322641; --color-vellum: #F1E8D8; --color-vellum-muted: #A99DAE;
+  --color-gilt: #D4AF37; --color-orbglow: #F2A38C; --color-moonlight: #9FB4FF; --color-ember: #E2604F;
+  --radius-plate: 12px; --radius-button: 10px; --radius-chip: 8px;
+  --spacing-1: 4px; --spacing-2: 8px; --spacing-3: 12px; --spacing-4: 16px; --spacing-6: 24px; --spacing-8: 32px;
+  --stroke-hairline: 1px;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--color-midnight); color: var(--color-vellum);
+  font: 400 16px/24px "Nunito Sans", system-ui, sans-serif; }
+main { max-width: 720px; margin: 0 auto; padding: var(--spacing-8) var(--spacing-4) 96px; }
+h1 { font-family: Fraunces, Georgia, serif; font-weight: 600; font-size: 28px; line-height: 34px; margin: 0 0 var(--spacing-2); }
+h2 { font-family: Fraunces, Georgia, serif; font-weight: 600; font-size: 22px; line-height: 28px;
+  margin: var(--spacing-8) 0 var(--spacing-3); padding-top: var(--spacing-4); border-top: var(--stroke-hairline) solid var(--color-hairline); }
+h2:first-of-type { border-top: none; }
+h2 .backtop { float: right; font-family: "IBM Plex Mono", monospace; font-size: 12px; line-height: 28px;
+  color: var(--color-moonlight); text-decoration: none; font-weight: 400; }
+h2 .backtop:hover { color: var(--color-orbglow); }
+p { margin: 0 0 var(--spacing-3); }
+p.meta { font-family: "IBM Plex Mono", monospace; font-size: 12px; line-height: 16px; color: var(--color-vellum-muted); }
+.summary { background: var(--color-midnight-2); border: var(--stroke-hairline) solid var(--color-hairline);
+  border-radius: var(--radius-plate); padding: var(--spacing-4) var(--spacing-6); }
+table { width: 100%; border-collapse: collapse; margin: var(--spacing-3) 0; font-size: 14px; line-height: 20px; }
+th { text-align: left; font-family: "Nunito Sans", sans-serif; font-weight: 600; font-size: 12px; letter-spacing: .04em;
+  color: var(--color-vellum-muted); border-bottom: var(--stroke-hairline) solid var(--color-hairline); padding: var(--spacing-2); }
+td { border-bottom: var(--stroke-hairline) solid var(--color-hairline); padding: var(--spacing-2); vertical-align: top; }
+strong.quasi { color: var(--color-gilt); }
+a { color: var(--color-moonlight); }
+ul { margin: 0 0 var(--spacing-3); padding-left: var(--spacing-6); }
+li { margin-bottom: var(--spacing-2); }
+</style>
+</head>
+<body id="top">
+<main>
+<h1>natally — Privacy Policy</h1>
+<p class="meta">Effective date: 2026-09-17 · Operator: Robin L. M. Cheung, MBA (mba.robin) · Applies to: the natally web app (natally.robin.mba), this website, the landing page, and all order/checkout pages.</p>
+
+<section class="summary" id="summary">
+<h2>Summary <a class="backtop" href="#top">↑ Back to Top</a></h2>
+<p>natally is designed so your personal information stays on your device. The web app stores your data in your own browser storage. We operate no user accounts, no telemetry, no analytics, and no crash reporting. The only network connections the app makes are: downloading the AI models and voice files it needs from public Hugging Face repositories (unauthenticated — no account, no identifying request), and the license/checkout calls needed if you choose to buy something. If you never purchase, the app never contacts our servers at all.</p>
+</section>
+
+<h2 id="who">1. Who we are <a class="backtop" href="#top">↑ Back to Top</a></h2>
+<p>The operator and data controller is Robin L. M. Cheung, MBA ("we", "us"), publishing natally at natally.robin.mba. Contact: the address published on the landing page contact block.</p>
+
+<h2 id="stored">2. Exactly what is stored, and where <a class="backtop" href="#top">↑ Back to Top</a></h2>
+<p>Everything below is stored <strong>on your device</strong>, in your browser's local storage (IndexedDB/OPFS) and the app's service-worker caches. It is not transmitted to us.</p>
+<table>
+<tr><th>Record</th><th>Fields</th><th>Notes</th></tr>
+<tr><td>Person (you or someone you add, e.g. for a compatibility reading)</td><td>name, birth date, birth time or "unknown", birth place, time-zone identifier</td><td>classification: <strong class="quasi">birth data is quasi-PII (§12)</strong> — it identifies an individual when combined and must be treated as sensitive personal information</td></tr>
+<tr><td>Conversations (sessions and turns)</td><td>every message you send and natally sends back, with timestamps; records of in-app actions natally performed at your request</td><td>tool-action records are part of the transcript</td></tr>
+<tr><td>Computed charts</td><td>the astronomical positions calculated from birth data</td><td>derived from the ephemeris engine; content-addressed</td></tr>
+<tr><td>natally's memory ("lore")</td><td>summaries, facts, and vector embeddings derived from your conversations</td><td>derived data; generated memory, never presented as astronomical fact</td></tr>
+<tr><td>Usage ledger</td><td>reading counts, dates, chart references</td><td>append-only for billing integrity</td></tr>
+<tr><td>Redeemed codes</td><td>hashed code values, redemption times</td><td>hashed, not the codes themselves</td></tr>
+<tr><td>License material</td><td>your signed license confirmation and a cached revocation list</td><td>stored wrapped/encrypted in browser storage — never plaintext</td></tr>
+<tr><td>Downloaded models/voice files</td><td>public AI model files, hash-verified</td><td>not personal data; may be shared with other compatible apps on your device</td></tr>
+</table>
+<p><strong>Third-party birth data:</strong> if you add another person (for example for a synastry/compatibility reading), you confirm you have that person's permission to enter their birth data.</p>
+<p><strong>Minors:</strong> natally is not directed to children under 13 (or the equivalent minimum age in your jurisdiction), and you must not enter birth data of such children.</p>
+
+<h2 id="egress">3. What ever leaves your device <a class="backtop" href="#top">↑ Back to Top</a></h2>
+<p>Exactly two categories, and nothing else:</p>
+<ol>
+<li><strong>Model downloads (inbound only).</strong> The app downloads its AI model and voice files directly from public, unauthenticated Hugging Face repositories. No account is created, no identifying information is sent. Files are SHA-256-verified before use.</li>
+<li><strong>License and checkout (only if you choose to purchase or redeem).</strong> The app contacts our license service and the payment processor you select. Payment processors may include Stripe, RevenueCat, Polar, Lemon Squeezy, PayPal, and Square, as presented in your checkout. <strong>We never receive or store your card details</strong> — we receive only a cryptographically signed license confirmation and a purchase reference. The signed revocation list is fetched at app start, before any checkout or restore, and at most once every 24 hours.</li>
+</ol>
+<p>Voice synthesis runs entirely in your browser; your text is never sent anywhere to be spoken. There are no tracking cookies, no advertising identifiers, and no third-party scripts on the app, the website, the landing page, or the order pages.</p>
+
+<h2 id="roche">4. $ROCHE credits (order pages) <a class="backtop" href="#top">↑ Back to Top</a></h2>
+<p>If you buy $ROCHE chat credits, your balance is held by the payment/revenue platform on your account there. Each billed chat request reserves the quoted maximum before it runs and settles once when it completes; failures are refunded. A depleted balance never revokes an unlimited purchase, and we never silently switch you to paid remote features.</p>
+
+<h2 id="rights">5. Your rights <a class="backtop" href="#top">↑ Back to Top</a></h2>
+<ul>
+<li><strong>Export:</strong> Settings › Data exports all of your data (people, conversations, charts, natally's memory, code history) as one plain-text JSON document you own.</li>
+<li><strong>Delete everything:</strong> Settings › Data performs real deletion — records, derived memory, and vectors are erased, not hidden. Shared model files are not personal data and may remain for other apps on your device.</li>
+<li><strong>Remove one person:</strong> removes that person, natally's memory of them, and their cached charts; the broader conversation transcript remains until you delete everything.</li>
+<li><strong>Correction:</strong> birth data can be edited at any time; charts recompute from the corrected inputs.</li>
+</ul>
+<p>The usage ledger is append-only (with correcting entries) for financial-integrity reasons; it contains no conversation content.</p>
+
+<h2 id="retention">6. Retention, changes, contact <a class="backtop" href="#top">↑ Back to Top</a></h2>
+<p>Your data persists exactly until you delete it; nothing is retained server-side because nothing is stored server-side. If this policy changes, the effective date above changes and the previous version remains available on request at the landing-page contact address.</p>
+<p><a href="terms.html">Terms of Use</a></p>
+</main>
+</body>
+</html>
